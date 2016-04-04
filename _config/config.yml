@@ -1,0 +1,7 @@
+---
+Name: clubmaster
+---
+# Extend LeftAndMain
+LeftAndMain:
+  extensions:
+    - CustomLeftAndMain

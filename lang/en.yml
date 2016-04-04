@@ -1,6 +1,6 @@
 en:
   ClubCategory:
-    SINGULARNAME: "Club Groups"
+    SINGULARNAME: "Club Group"
     DESCRIPTION: "Manage your groups"
   ClubMember:
     SINGULARNAME: "Club Member"
