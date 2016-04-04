@@ -1,0 +1,16 @@
+de:
+  ClubAdmin:
+    MENUTITLE: "Mitgliederverwaltung"
+    SELECTONE: "Bitte wählen"
+
+  ClubCategory:
+    SINGULARNAME: "Gruppen"
+    DESCRIPTION: "Verwalte Gruppen"
+
+  ClubMember:
+    SINGULARNAME: "Mitglieder"
+    DESCRIPTION: "Verwalte Mitglieder"
+    FIRSTNAME: "Vorname"
+    LASTNAME: "Nachname"
+    AGE: "Alter"
+    ACTIVE: "Aktiv"

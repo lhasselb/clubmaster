@@ -20,52 +20,41 @@ class ClubAdmin extends ModelAdmin {
 
     public function getSearchContext() {
         $context = parent::getSearchContext();
-
-        $rangeDropDownField = DropdownField::create('AgeRange','Age Range',array(
-            'A' => 'From 0 to 10',
-            'B' => 'From 11 to 18',
-            'C'=> 'Over 18'
-        )
-);
-
-        $dateField = new DateField("q[FromDate]", "From Date");
-        // Get the DateField portion of the DatetimeField and
-        // Explicitly set the desired date format and show a date picker
-        $dateField->setConfig('dateformat', 'dd/MM/yyyy')->setConfig('showcalendar', true);
-        $context->getFields()->push($dateField);
-        $dateField = new DateField("q[ToDate]", "To Date");
-        // Get the DateField portion of the DatetimeField and
-        // Explicitly set the desired date format and show a date picker
-        $dateField->setConfig('dateformat', 'dd/MM/yyyy')->setConfig('showcalendar', true);
-
+        $rangeDropDownField = DropdownField::create('q[AgeRange]','Age Range',
+            array(
+                'A' => 'Less than 18',
+                'B' => 'Equal or more than 18 '
+            )
+        )->setEmptyString( _t("ClubAdmin.SELECTONE","Select one") );
         $context->getFields()->push($rangeDropDownField);
         return $context;
     }
 
     public function getList() {
         $list = parent::getList();
-        SS_Log::log("Class=".$this->modelClass,SS_Log::WARN);
-        if($this->modelClass == 'ClubMember') {
-            //$list = $list->add($age);
-        }
+        /*
+        $it = $list->getIterator();
+        while ($it->valid()) {
+            $member = $it->current();
+            SS_Log::log("Before key=".$it->key()." lastname=".$member->LastName,SS_Log::WARN);
+            $it->next();
+        }*/
 
-        $params = $this->request->requestVar('q'); // use this to access search parameters
-        if(isset($params['FromDate']) && $params['FromDate']) {
-            $list = $list->exclude('Created:LessThan', $params['FromDate']);
-        }
-        if(isset($params['ToDate']) && $params['ToDate']) {
-            //split UK date into day month year variables
-            list($day,$month,$year) = sscanf($params['ToDate'], "%d/%d/%d");
-            //date functions expect US date format, create new date object
-            $date = new Datetime("$month/$day/$year");
-            //create interval of Plus 1 Day (P1D)
-            $interval = new DateInterval('P1D');
-            //add interval to the date
-            $date->add($interval);
-            //use the new date value as the GreaterThan exclusion filter
-            $list = $list->filter('Created:LessThan', date_format($date, 'd/m/Y'));
-        }
+        $params = $this->request->requestVar('q'); // should be Array defined above
+        //SS_Log::log("params=".$params,SS_Log::WARN);
+        if($this->modelClass == 'ClubMember' && isset($params['AgeRange']) && $params['AgeRange'] ) {
 
+            if($params['AgeRange'] == "A")
+            {
+            SS_Log::log("params=".$params['AgeRange'],SS_Log::WARN);
+                $list = $list->exclude("Age:LessThan","18");
+            }
+            elseif($params['AgeRange'] == "B")
+            {
+            SS_Log::log("params=".$params['AgeRange'],SS_Log::WARN);
+                $list = $list->exclude("Age:GreaterThanOrEqualFilter","18");
+            }
+        }
         return $list;
     }
 
@@ -75,8 +64,68 @@ class ClubAdmin extends ModelAdmin {
         // is managed by this ModelAdmin, the GridField for it will also be named 'ClubMember'
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
         $gridField = $form->Fields()->fieldByName($gridFieldName);
+        $printButton = $gridField->getConfig()->getComponentByType("GridFieldPrintButton");
+        $printButton->setPrintColumns(
+            array(
+            'Salutation',
+            'FirstName',
+            'LastName',
+            'Birthday',
+            'Nationality',
+            'Street',
+            'Streetnumber',
+            'Zip',
+            'City',
+            'Email',
+            'Mobil',
+            'Phone',
+            'Type',
+            'Since',
+            'AccountHolderFirstName',
+            'AccountHolderLastName',
+            'AccountHolderStreet',
+            'AccountHolderStreetnumber',
+            'AccountHolderZip',
+            'AccountHolderCity',
+            'Iban',
+            'Bic',
+            'Active',
+            'Age'
+            )
+        );
+
         // modify the list view.
 //        $gridField->getConfig()->addComponent(new GridFieldFilterHeader());
         return $form;
+    }
+
+    public function getExportFields() {
+        // field => title
+        return array(
+            'Salutation',
+            'FirstName',
+            'LastName',
+            'Birthday',
+            'Nationality',
+            'Street',
+            'Streetnumber',
+            'Zip',
+            'City',
+            'Email',
+            'Mobil',
+            'Phone',
+            'Type',
+            'Since',
+            'AccountHolderFirstName',
+            'AccountHolderLastName',
+            'AccountHolderStreet',
+            'AccountHolderStreetnumber',
+            'AccountHolderZip',
+            'AccountHolderCity',
+            'Iban',
+            'Bic',
+            'Active',
+            'Age'
+        );
     }
 }

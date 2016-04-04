@@ -1,7 +1,16 @@
 en:
+  ClubAdmin:
+    MENUTITLE: "Clubmanager"
+    SELECTONE: "Select one"
+
   ClubCategory:
     SINGULARNAME: "Club Group"
     DESCRIPTION: "Manage your groups"
+
   ClubMember:
     SINGULARNAME: "Club Member"
     DESCRIPTION: "Manage your member"
+    FIRSTNAME: "First name"
+    LASTNAME: "Family name"
+    AGE: "Age"
+    ACTIVE: "Active"
