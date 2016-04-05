@@ -1,14 +1,28 @@
 <?php
 
-class ClubCategory extends DataObject
+class ClubMemberType extends DataObject
 {
 
     private static $db = array(
-        'Title' => 'Varchar(255)'
+        'TypeName' => 'Varchar(255)'
     );
 
     private static $has_many = array(
         'ClubMembers' => 'ClubMember'
+    );
+
+    private static $summary_fields = array(
+        "TypeName"
+    );
+
+    function fieldLabels($includerelations = true) {
+        $labels = parent::fieldLabels($includerelations);
+        $labels['TypeName'] = _t('ClubMemberType.TYPENAME', 'TypeName');
+        return $labels;
+    }
+
+    private static $searchable_fields = array(
+        /* "CategoryName" */
     );
 
     public function canView($member = null) {

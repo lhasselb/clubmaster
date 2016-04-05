@@ -3,14 +3,39 @@ de:
     MENUTITLE: "Mitgliederverwaltung"
     SELECTONE: "Bitte wählen"
 
-  ClubCategory:
-    SINGULARNAME: "Gruppen"
-    DESCRIPTION: "Verwalte Gruppen"
+  ClubMemberType:
+    SINGULARNAME: "Typ"
+    DESCRIPTION: "Verwalte Typen"
+    TYPENAME: "Typname"
 
   ClubMember:
     SINGULARNAME: "Mitglieder"
     DESCRIPTION: "Verwalte Mitglieder"
+
+    SALUTATION: "Anrede"
     FIRSTNAME: "Vorname"
     LASTNAME: "Nachname"
+    BIRTHDAY: "Geburtstag"
+    NATIONALITY: "Nationalität"
+    STREET: "Strasse"
+    STREETNUMBER: "Hausnummer"
+    ZIP: "Postleitzahl"
+    CITY: "Wohnort"
+    EMAIL: "E-Mail"
+    MOBIL: "Mobiltelefon"
+    PHONE: "Telefon"
+    TYPE: "Antragtyp"
+    SINCE: "Mitglied seit"
+    ACCOUNTHOLDERFIRSTNAME: "Kontoinhaber Vorname"
+    ACCOUNTHOLDERLASTNAME: "Kontoinhaber Nachname"
+    ACCOUNTHOLDERSTREET: "Kontoinhaber Strasse"
+    ACCOUNTHOLDERSTREETNUMBER: "Kontoinhaber Hausnummer"
+    ACCOUNTHOLDERZIP: "Kontoinhaber Postleitzahl"
+    ACCOUNTHOLDERCITY: "Kontoinhaber Wohnort"
+    IBAN: "IBAN"
+    BIC: "BIC"
     AGE: "Alter"
     ACTIVE: "Aktiv"
+
+  GridFieldActivateClubMemberAction:
+    ACTIVATEMEMBER: "Activiere Mitglied"

@@ -4,7 +4,7 @@ class ClubAdmin extends ModelAdmin {
 
     private static $managed_models = array(
         'ClubMember',
-        'ClubCategory'
+        'ClubMemberType'
     );
 
     private static $url_segment = 'clubmanager';
@@ -20,13 +20,18 @@ class ClubAdmin extends ModelAdmin {
 
     public function getSearchContext() {
         $context = parent::getSearchContext();
-        $rangeDropDownField = DropdownField::create('q[AgeRange]','Age Range',
-            array(
-                'A' => 'Less than 18',
-                'B' => 'Equal or more than 18 '
-            )
-        )->setEmptyString( _t("ClubAdmin.SELECTONE","Select one") );
-        $context->getFields()->push($rangeDropDownField);
+
+        if($this->modelClass == 'ClubMember')
+        {
+            $rangeDropDownField = DropdownField::create('q[AgeRange]','Age Range',
+                array(
+                    'A' => 'Less than 18',
+                    'B' => 'Equal or more than 18 '
+                )
+            )->setEmptyString( _t("ClubAdmin.SELECTONE","Select one") );
+            $context->getFields()->push($rangeDropDownField);
+        }
+
         return $context;
     }
 
@@ -70,32 +75,33 @@ class ClubAdmin extends ModelAdmin {
             'Salutation',
             'FirstName',
             'LastName',
-            'Birthday',
-            'Nationality',
+            //'Birthday',
+            //'Nationality',
             'Street',
             'Streetnumber',
             'Zip',
             'City',
-            'Email',
-            'Mobil',
-            'Phone',
-            'Type',
+            //'Email',
+            //'Mobil',
+            //'Phone',
+            //'Type',
             'Since',
-            'AccountHolderFirstName',
-            'AccountHolderLastName',
-            'AccountHolderStreet',
-            'AccountHolderStreetnumber',
-            'AccountHolderZip',
-            'AccountHolderCity',
-            'Iban',
-            'Bic',
-            'Active',
+            //'AccountHolderFirstName',
+            //'AccountHolderLastName',
+            //'AccountHolderStreet',
+            //'AccountHolderStreetnumber',
+            //'AccountHolderZip',
+            //'AccountHolderCity',
+            //'Iban',
+            //'Bic',
+            //'Active',
             'Age'
             )
         );
 
         // modify the list view.
 //        $gridField->getConfig()->addComponent(new GridFieldFilterHeader());
+        $gridField->getConfig()->addComponent(new GridFieldActivateClubMemberAction());
         return $form;
     }
 
@@ -124,7 +130,7 @@ class ClubAdmin extends ModelAdmin {
             'AccountHolderCity',
             'Iban',
             'Bic',
-            'Active',
+            //'Active',
             'Age'
         );
     }

@@ -3,14 +3,39 @@ en:
     MENUTITLE: "Clubmanager"
     SELECTONE: "Select one"
 
-  ClubCategory:
-    SINGULARNAME: "Club Group"
-    DESCRIPTION: "Manage your groups"
+  ClubMemberType:
+    SINGULARNAME: "Type"
+    DESCRIPTION: "Manage your types"
+    TYPENAME: "Type name"
 
   ClubMember:
     SINGULARNAME: "Club Member"
     DESCRIPTION: "Manage your member"
+
+    SALUTATION: "Salutation"
     FIRSTNAME: "First name"
     LASTNAME: "Family name"
+    BIRTHDAY: "Birthday"
+    NATIONALITY: "Nationality"
+    STREET: "Street"
+    STREETNUMBER: "Streetnumber"
+    ZIP: "Postal code"
+    CITY: "City"
+    EMAIL: "E-Mail"
+    MOBIL: "Cellphone"
+    PHONE: "Phone"
+    TYPE: "Type"
+    SINCE: "Member since"
+    ACCOUNTHOLDERFIRSTNAME: "Accountholder first name"
+    ACCOUNTHOLDERLASTNAME: "Accountholder family name"
+    ACCOUNTHOLDERSTREET: "Accountholder street"
+    ACCOUNTHOLDERSTREETNUMBER: "Accountholder streetnumber"
+    ACCOUNTHOLDERZIP: "Accountholder postal code"
+    ACCOUNTHOLDERCITY: "Accountholder city"
+    IBAN: "IBAN"
+    BIC: "BIC"
     AGE: "Age"
     ACTIVE: "Active"
+
+  GridFieldActivateClubMemberAction:
+    ACTIVATEMEMBER: "Activate member"
