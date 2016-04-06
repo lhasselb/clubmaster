@@ -1,15 +1,23 @@
 en:
   ClubAdmin:
     MENUTITLE: "Clubmanager"
+    #Filter
     SELECTONE: "Select one"
+    AGERANGE: "Age Range"
+    LESSTHAN18: "Less than 18"
+    MOREEQUAL18: "18 and more"
+    #BulkAction
+    GRIDFIELDBULKDROPDOWNACTIVATE: "Activate"
 
   ClubMemberType:
     SINGULARNAME: "Type"
+    PLURALNAME: "Types"
     DESCRIPTION: "Manage your types"
     TYPENAME: "Type name"
 
   ClubMember:
     SINGULARNAME: "Club Member"
+    PLURALNAME: "Club members"
     DESCRIPTION: "Manage your member"
 
     SALUTATION: "Salutation"
@@ -39,3 +47,6 @@ en:
 
   GridFieldActivateClubMemberAction:
     ACTIVATEMEMBER: "Activate member"
+    DEACTIVATEMEMBER: "De-Activate member"
+    ACTIVATEMEMBERDONE: "Activate Member Action Done."
+    DEACTIVATEMEMBERDONE: "De-Activate Member Action Done."

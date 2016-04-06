@@ -39,13 +39,6 @@ class ClubMember extends DataObject
         //'Age' => 'Int'
     );
 
-    public function getAge()
-    {
-        $time = SS_Datetime::now()->Format('U');
-        $ago = abs($time - strtotime($this->dbObject('Birthday')->value));
-        return  round($ago/86400/365);
-    }
-
     private static $summary_fields = array(
         "Salutation",
         "FirstName",
@@ -94,12 +87,6 @@ class ClubMember extends DataObject
         return $labels;
     }
 
-    public function onBeforeWrite()
-    {
-        parent::onBeforeWrite();
-        $this->Age = $this->getAge();
-    }
-
     function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -132,4 +119,21 @@ class ClubMember extends DataObject
         return $fields;
     }
 
+    public function getAge()
+    {
+        $time = SS_Datetime::now()->Format('U');
+        $ago = abs($time - strtotime($this->dbObject('Birthday')->value));
+        return  round($ago/86400/365);
+    }
+
+    public function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+        $this->Age = $this->getAge();
+    }
+
+    public function isActive()
+    {
+        return $this->Active;
+    }
 }

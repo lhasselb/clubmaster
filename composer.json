@@ -1,0 +1,22 @@
+{
+    "name": "lhasselb/clubmaster",
+    "description": "Club management module",
+    "type": "silverstripe-module",
+    "license": "BSD-3-Clause",
+    "keywords": ["silverstripe", "club", "management"],
+    "authors": [
+    {
+        "name": "guggelimehl",
+        "email": "guggelimehl@gmail.com"
+    }
+    ],
+    "require":
+    {
+        "silverstripe/framework": "3.*",
+        "silverstripe/cms": "3.*",
+        "unclecheese/betterbuttons": "*"
+    },
+    "suggest": {
+        "": "*"
+    }
+}

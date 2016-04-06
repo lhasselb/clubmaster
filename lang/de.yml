@@ -1,15 +1,23 @@
 de:
   ClubAdmin:
     MENUTITLE: "Mitgliederverwaltung"
+    #Filter
     SELECTONE: "Bitte wählen"
+    AGERANGE: "Altersbereich"
+    LESSTHAN18: "Jünger als 18 Jahre"
+    MOREEQUAL18: "18 Jahre und älter"
+    #BulkAction
+    GRIDFIELDBULKDROPDOWNACTIVATE: "Aktivieren"
 
   ClubMemberType:
     SINGULARNAME: "Typ"
+    PLURALNAME: "Typen"
     DESCRIPTION: "Verwalte Typen"
     TYPENAME: "Typname"
 
   ClubMember:
-    SINGULARNAME: "Mitglieder"
+    SINGULARNAME: "Mitglied"
+    PLURALNAME: "Mitglieder"
     DESCRIPTION: "Verwalte Mitglieder"
 
     SALUTATION: "Anrede"
@@ -38,4 +46,7 @@ de:
     ACTIVE: "Aktiv"
 
   GridFieldActivateClubMemberAction:
-    ACTIVATEMEMBER: "Activiere Mitglied"
+    ACTIVATEMEMBER: "Aktiviere Mitglied"
+    DEACTIVATEMEMBER: "Deaktiviere Mitglied"
+    ACTIVATEMEMBERDONE: "Mitglied aktiviert."
+    DEACTIVATEMEMBERDONE: "Mitglied deaktiviert."

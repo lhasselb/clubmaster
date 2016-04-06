@@ -23,10 +23,10 @@ class ClubAdmin extends ModelAdmin {
 
         if($this->modelClass == 'ClubMember')
         {
-            $rangeDropDownField = DropdownField::create('q[AgeRange]','Age Range',
+            $rangeDropDownField = DropdownField::create('q[AgeRange]', _t("ClubAdmin.AGERANGE","AgeRange"),
                 array(
-                    'A' => 'Less than 18',
-                    'B' => 'Equal or more than 18 '
+                    'A' => _t("ClubAdmin.LESSTHAN18","LessThan 18"),
+                    'B' => _t("ClubAdmin.MOREEQUAL18","GreaterThanOrEqual 18")
                 )
             )->setEmptyString( _t("ClubAdmin.SELECTONE","Select one") );
             $context->getFields()->push($rangeDropDownField);
@@ -52,12 +52,14 @@ class ClubAdmin extends ModelAdmin {
             if($params['AgeRange'] == "A")
             {
             SS_Log::log("params=".$params['AgeRange'],SS_Log::WARN);
-                $list = $list->exclude("Age:LessThan","18");
+                //Attention: EXCLUDE
+                $list = $list->exclude("Age:GreaterThanOrEqual","18");
             }
             elseif($params['AgeRange'] == "B")
             {
             SS_Log::log("params=".$params['AgeRange'],SS_Log::WARN);
-                $list = $list->exclude("Age:GreaterThanOrEqualFilter","18");
+                //Attention: EXCLUDE
+                $list = $list->exclude("Age:LessThan","18");
             }
         }
         return $list;
@@ -69,6 +71,21 @@ class ClubAdmin extends ModelAdmin {
         // is managed by this ModelAdmin, the GridField for it will also be named 'ClubMember'
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
         $gridField = $form->Fields()->fieldByName($gridFieldName);
+
+        // Get gridfield config
+        $config = $gridField->getConfig();
+        // Add GridFieldBulkManager
+        $config->addComponent(new GridFieldBulkManager());
+        // Set editable fields
+        //$config->getComponentByType('GridFieldBulkManager')->setConfig("editableFields", "Active");
+        // Add action
+        $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
+            _t("ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE","Activate"), 'GridFieldBulkActionActivateMemberHandler');
+        // Remove action
+        $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
+        $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
+        //$bulkManagerConfig = $config->getComponentByType('GridFieldBulkManager')->getConfig();
+
         $printButton = $gridField->getConfig()->getComponentByType("GridFieldPrintButton");
         $printButton->setPrintColumns(
             array(

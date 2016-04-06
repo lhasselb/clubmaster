@@ -30,32 +30,60 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
      * @return string - the HTML for the column
      */
     public function getColumnContent($gridField, $record, $columnName) {
-        if(!$record->canEdit()) return;
-
-        $field = GridField_FormAction::create($gridField, 'ActivateMemberAction'.$record->ID,
-            _t("GridFieldActivateClubMemberAction.ACTIVATEMEMBER",'ActivateMember'),
-            "activateMemberAction", array('RecordID' => $record->ID)
-        )->setAttribute('data-icon', 'accept');
-
+        //SS_Log::log("record=".$record,SS_Log::WARN);
+        if(!$record->canEdit() || $record != "ClubMember" ) return;
+        if(!$record->isActive())
+        {
+            $field = GridField_FormAction::create($gridField, 'ActivateMember'.$record->ID, false,
+                "activatemember", array('RecordID' => $record->ID))
+            ->addExtraClass('gridfield-button-activate')
+            ->setAttribute('title', _t('GridFieldActivateClubMemberAction.ACTIVATEMEMBER',"ActivateMember"))
+            ->setAttribute('data-icon', 'accept')
+            ->setDescription( _t('GridFieldActivateClubMemberAction.ACTIVATEMEMBER',"ActivateMember"));
+        }
+        elseif($record->isActive())
+        {
+            $field = GridField_FormAction::create($gridField, 'DeActivateMember'.$record->ID, false,
+                "deactivatemember", array('RecordID' => $record->ID))
+            ->addExtraClass('gridfield-button-deactivate')
+            ->setAttribute('title', _t('GridFieldActivateClubMemberAction.DEACTIVATEMEMBER',"DeActivateMember"))
+            ->setAttribute('data-icon', 'decline')
+            ->setDescription( _t('GridFieldActivateClubMemberAction.DEACTIVATEMEMBER',"DeActivateMember"));
+        }
         return $field->Field();
     }
 
     public function getActions($gridField) {
-        return array('activateMemberAction');
+        return array('activatemember','deactivatemember');
     }
 
     public function handleAction(GridField $gridField, $actionName, $arguments, $data) {
-        if($actionName == 'activateMemberAction') {
+        //SS_Log::log("handleAction() called, action name =".$actionName,SS_Log::WARN);
+        if($actionName == 'activatemember')
+        {
             // perform your action here
             $item = $gridField->getList()->byID($arguments['RecordID']);
             if(!$item) {
                 return;
             }
-
+            //SS_Log::log("handleAction item=".$item->FirstName,SS_Log::WARN);
             $item->Active = 1;
-            $item->save();
+            $item->write();
             // output a success message to the user
-            Controller::curr()->getResponse()->setStatusCode(200, 'Activate Member Action Done.');
+            Controller::curr()->getResponse()->setStatusCode(200, _t("GridFieldActivateClubMemberAction.ACTIVATEMEMBERDONE",'ActivateMember Done.') );
+        }
+        elseif($actionName == 'deactivatemember')
+        {
+            // perform your action here
+            $item = $gridField->getList()->byID($arguments['RecordID']);
+            if(!$item) {
+                return;
+            }
+            //SS_Log::log("handleAction item=".$item->FirstName,SS_Log::WARN);
+            $item->Active = 0;
+            $item->write();
+            // output a success message to the user
+            Controller::curr()->getResponse()->setStatusCode(200, _t("GridFieldActivateClubMemberAction.DEACTIVATEMEMBERDONE",'ActivateMember Done.') );
         }
     }
 }
