@@ -11,8 +11,11 @@ class ClubAdmin extends ModelAdmin {
 
     private static $menu_title = 'Clubmanager';
 
-    private static $allowed_actions = array(
-    );
+    private static $allowed_actions = array();
+
+    //To override with a more specific importer implementation,
+    //use the ModelAdmin::$model_importers static.
+    private static $model_importers = array("ClubMember" => "ClubMemberCsvBulkLoader");
 
     private static $menu_icon = 'clubmaster/images/clubmaster.png';
 
@@ -35,6 +38,13 @@ class ClubAdmin extends ModelAdmin {
         return $context;
     }
 
+    /**
+     * Get a result list
+     * The results list are retrieved from SearchContext::getResults(), based on the parameters passed through the search
+     * form. If no search parameters are given, the results will show every record. Results are a DataList instance, so can
+     * be customized by additional SQL filters, joins.
+     * @return [type] [description]
+     */
     public function getList() {
         $list = parent::getList();
         /*
@@ -65,6 +75,14 @@ class ClubAdmin extends ModelAdmin {
         return $list;
     }
 
+    /**
+     * Alter look & feel for EditForm
+     * To alter how the results are displayed (via GridField), you can also overload the getEditForm() method.
+     * For example, to add or remove a new component.
+     * @param  [type] $id     [description]
+     * @param  [type] $fields [description]
+     * @return [type]         [description]
+     */
     public function getEditForm($id = null, $fields = null) {
         $form = parent::getEditForm($id, $fields);
         // $gridFieldName is generated from the ModelClass, eg if the Class 'ClubMember'
@@ -74,17 +92,21 @@ class ClubAdmin extends ModelAdmin {
 
         // Get gridfield config
         $config = $gridField->getConfig();
-        // Add GridFieldBulkManager
-        $config->addComponent(new GridFieldBulkManager());
-        // Set editable fields
-        //$config->getComponentByType('GridFieldBulkManager')->setConfig("editableFields", "Active");
-        // Add action
-        $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
-            _t("ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE","Activate"), 'GridFieldBulkActionActivateMemberHandler');
-        // Remove action
-        $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
-        $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
-        //$bulkManagerConfig = $config->getComponentByType('GridFieldBulkManager')->getConfig();
+
+        if($gridFieldName =="ClubMember")
+        {
+            // Add GridFieldBulkManager
+            $config->addComponent(new GridFieldBulkManager());
+            // Set editable fields
+            //$config->getComponentByType('GridFieldBulkManager')->setConfig("editableFields", "Active");
+            // Add action
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
+                _t("ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE","Activate"), 'GridFieldBulkActionActivateMemberHandler');
+            // Remove action
+            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
+            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
+            //$bulkManagerConfig = $config->getComponentByType('GridFieldBulkManager')->getConfig();
+        }
 
         $printButton = $gridField->getConfig()->getComponentByType("GridFieldPrintButton");
         $printButton->setPrintColumns(
@@ -122,6 +144,12 @@ class ClubAdmin extends ModelAdmin {
         return $form;
     }
 
+    /**
+     * Customize exported columns
+     * Export is available as a CSV format through a button at the end of a results list.
+     * You can also export search results. This is handled through the GridFieldExportButton component.
+     * @return Array of fields listed
+     */
     public function getExportFields() {
         // field => title
         return array(
@@ -148,7 +176,8 @@ class ClubAdmin extends ModelAdmin {
             'Iban',
             'Bic',
             //'Active',
-            'Age'
+            //'Age'
         );
     }
+
 }
