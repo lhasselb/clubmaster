@@ -107,33 +107,36 @@ class ClubAdmin extends ModelAdmin {
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
             $config->addComponent(new GridFieldActivateClubMemberAction());
 
-            $printButton = $gridField->getConfig()->getComponentByType("GridFieldPrintButton");
+            $printButton = $config->getComponentByType("GridFieldPrintButton");
+            SS_Log::log("printButton=".$printButton->getTitle($gridField),SS_Log::WARN);
+
             $printButton->setPrintColumns(
+                //array("LastName" => _t("ClubMember.LASTNAME", "LastName"))
                 array(
-                'Salutation',
-                'FirstName',
-                'LastName',
-                //'Birthday',
-                //'Nationality',
-                'Street',
-                'Streetnumber',
-                'Zip',
-                'City',
-                //'Email',
-                //'Mobil',
-                //'Phone',
-                //'Type',
-                'Since',
-                //'AccountHolderFirstName',
-                //'AccountHolderLastName',
-                //'AccountHolderStreet',
-                //'AccountHolderStreetnumber',
-                //'AccountHolderZip',
-                //'AccountHolderCity',
-                //'Iban',
-                //'Bic',
-                //'Active',
-                'Age'
+                    "Salutation" => _t("ClubMember.SALUTATION", "Salutation"),
+                    "FirstName"  => _t("ClubMember.FIRSTNAME", "FirstName"),
+                    "LastName"   => _t("ClubMember.LASTNAME", "LastName"),
+                    //"Birthday" => _t("ClubMember.Birthday", "Birthday"),
+                    //"Nationality"  => _t("ClubMember.Nationality", "Nationality"),
+                    "Street"  => _t("ClubMember.STREET", "Street"),
+                    "Streetnumber"  => _t("ClubMember.STREETNUMBER", "Streetnumber"),
+                    "Zip"  => _t("ClubMember.ZIP", "Zip"),
+                    "City"  => _t("ClubMember.CITY", "City"),
+                    //"Email"  => _t("ClubMember.EMAIL", "Email"),
+                    //"Mobil"  => _t("ClubMember.MOBIL", "Mobil"),
+                    //"Phone"  => _t("ClubMember.PHONE", "Phone"),
+                    //"Type"  => _t("ClubMember.TYPE", "Type"),
+                    "Since"  => _t("ClubMember.SINCE", "Since"),
+                    //"AccountHolderFirstName"  => _t("ClubMember.ACCOUNTHOLDERFIRSTNAME", "AccountHolderFirstName"),
+                    //"AccountHolderLastName"  => _t("ClubMember.AccountHolderLastName", "AccountHolderLastName"),
+                    //"AccountHolderStreet"  => _t("ClubMember.ACCOUNTHOLDERSTREET", "AccountHolderStreet"),
+                    //"AccountHolderStreetnumber"  => _t("ClubMember.ACCOUNTHOLDERSTREETNUMBER", "AccountHolderStreetnumber"),
+                    //"AccountHolderZip"  => _t("ClubMember.AccountHolderZip", "AccountHolderZip"),
+                    //"AccountHolderCity"  => _t("ClubMember.ACCOUNTHOLDERCITY", "AccountHolderCity"),
+                    //"Iban"  => _t("ClubMember.IBAN", "Iban"),
+                    //"Bic"  => _t("ClubMember.BIC", "Bic"),
+                    //"Active"  => _t("ClubMember.ACTIVE", "Active"),
+                    "Age"  => _t("ClubMember.AGE", "Age")
                 )
             );
         }
