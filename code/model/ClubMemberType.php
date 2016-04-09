@@ -15,15 +15,25 @@ class ClubMemberType extends DataObject
         "TypeName"
     );
 
+    private static $searchable_fields = array(
+        "TypeName"
+    );
+
     function fieldLabels($includerelations = true) {
         $labels = parent::fieldLabels($includerelations);
         $labels['TypeName'] = _t('ClubMemberType.TYPENAME', 'TypeName');
+        $labels['ClubMembers'] = _t('ClubMemberType.CLUBMEMBERS', 'ClubMembers');
         return $labels;
     }
 
-    private static $searchable_fields = array(
-        /* "CategoryName" */
-    );
+    function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+
+        return $fields;
+    }
+
+
 
     public function canView($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);

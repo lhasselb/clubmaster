@@ -105,42 +105,45 @@ class ClubAdmin extends ModelAdmin {
             // Remove action
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
-            //$bulkManagerConfig = $config->getComponentByType('GridFieldBulkManager')->getConfig();
+            $config->addComponent(new GridFieldActivateClubMemberAction());
+
+            $printButton = $gridField->getConfig()->getComponentByType("GridFieldPrintButton");
+            $printButton->setPrintColumns(
+                array(
+                'Salutation',
+                'FirstName',
+                'LastName',
+                //'Birthday',
+                //'Nationality',
+                'Street',
+                'Streetnumber',
+                'Zip',
+                'City',
+                //'Email',
+                //'Mobil',
+                //'Phone',
+                //'Type',
+                'Since',
+                //'AccountHolderFirstName',
+                //'AccountHolderLastName',
+                //'AccountHolderStreet',
+                //'AccountHolderStreetnumber',
+                //'AccountHolderZip',
+                //'AccountHolderCity',
+                //'Iban',
+                //'Bic',
+                //'Active',
+                'Age'
+                )
+            );
         }
-
-        $printButton = $gridField->getConfig()->getComponentByType("GridFieldPrintButton");
-        $printButton->setPrintColumns(
-            array(
-            'Salutation',
-            'FirstName',
-            'LastName',
-            //'Birthday',
-            //'Nationality',
-            'Street',
-            'Streetnumber',
-            'Zip',
-            'City',
-            //'Email',
-            //'Mobil',
-            //'Phone',
-            //'Type',
-            'Since',
-            //'AccountHolderFirstName',
-            //'AccountHolderLastName',
-            //'AccountHolderStreet',
-            //'AccountHolderStreetnumber',
-            //'AccountHolderZip',
-            //'AccountHolderCity',
-            //'Iban',
-            //'Bic',
-            //'Active',
-            'Age'
-            )
-        );
-
+        if($gridFieldName =="ClubMemberType")
+        {
+            $config->removeComponentsByType("GridFieldPrintButton");
+            $config->removeComponentsByType("GridFieldExportButton");
+        }
         // modify the list view.
 //        $gridField->getConfig()->addComponent(new GridFieldFilterHeader());
-        $gridField->getConfig()->addComponent(new GridFieldActivateClubMemberAction());
         return $form;
     }
 

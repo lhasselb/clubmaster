@@ -14,9 +14,10 @@ en:
     PLURALNAME: "Types"
     DESCRIPTION: "Manage your types"
     TYPENAME: "Type name"
+    CLUBMEMBERS: "Club members"
 
   ClubMember:
-    SINGULARNAME: "Club Member"
+    SINGULARNAME: "Club member"
     PLURALNAME: "Club members"
     DESCRIPTION: "Manage your member"
 

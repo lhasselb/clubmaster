@@ -15,7 +15,6 @@ class ClubMember extends DataObject
         'Email' => 'Varchar(254)',// See RFC 5321, Section 4.5.3.1.3. (256 minus the < and > character)
         'Mobil' => 'Varchar(255)',
         'Phone' => 'Varchar(255)',
-        //'Type' => 'Enum("Limited,Full","Full")',
         'Since' => 'Date',
         'AccountHolderFirstName' => 'Varchar(255)',
         'AccountHolderLastName' => 'Varchar(255)',
@@ -35,10 +34,6 @@ class ClubMember extends DataObject
 
     static $default_country = 'DE';
 
-    private static $casting = array(
-        //'Age' => 'Int'
-    );
-
     private static $summary_fields = array(
         "Salutation",
         "FirstName",
@@ -48,9 +43,9 @@ class ClubMember extends DataObject
     );
 
     private static $searchable_fields = array(
-        /*'FirstName',
-        'LastName',
-        'Age'*/
+        "FirstName",
+        "LastName",
+        "Age"
     );
 
     /**
@@ -93,7 +88,7 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main', CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
         $fields->addFieldToTab('Root.Main', TextField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation')));
         $fields->addFieldToTab('Root.Main', TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName')));
-        $fields->addFieldToTab('Root.Main', TextField::create('LastName', _t('ClubMember.FIRSTNAME', 'LastName')));
+        $fields->addFieldToTab('Root.Main', TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName')));
         $fields->addFieldToTab('Root.Main', DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true) );
         $fields->addFieldToTab('Root.Main', CountryDropdownField::create('Nationality',_t('ClubMember.NATIONALITY', 'Nationality')));
         $fields->addFieldToTab('Root.Main', TextField::create('Street', _t('ClubMember.STREET', 'Street')));
@@ -121,6 +116,7 @@ class ClubMember extends DataObject
 
     public function getAge()
     {
+        if(!$this->dbObject('Birthday')->value) return 0;
         $time = SS_Datetime::now()->Format('U');
         $ago = abs($time - strtotime($this->dbObject('Birthday')->value));
         return  round($ago/86400/365);
