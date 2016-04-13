@@ -51,3 +51,7 @@ en:
     DEACTIVATEMEMBER: "De-Activate member"
     ACTIVATEMEMBERDONE: "Activate Member Action Done."
     DEACTIVATEMEMBERDONE: "De-Activate Member Action Done."
+
+  EnrollPage:
+    SINGULARNAME: "Enroll"
+    DESCRIPTION: "Page with form to enroll"
