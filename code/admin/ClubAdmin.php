@@ -108,7 +108,7 @@ class ClubAdmin extends ModelAdmin {
             $config->addComponent(new GridFieldActivateClubMemberAction());
 
             $printButton = $config->getComponentByType("GridFieldPrintButton");
-            SS_Log::log("printButton=".$printButton->getTitle($gridField),SS_Log::WARN);
+            //SS_Log::log("printButton=".$printButton->getTitle($gridField),SS_Log::WARN);
 
             $printButton->setPrintColumns(
                 //array("LastName" => _t("ClubMember.LASTNAME", "LastName"))

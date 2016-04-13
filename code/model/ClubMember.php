@@ -90,7 +90,7 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main', TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName')));
         $fields->addFieldToTab('Root.Main', TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName')));
         $fields->addFieldToTab('Root.Main', DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true) );
-        $fields->addFieldToTab('Root.Main', CountryDropdownField::create('Nationality',_t('ClubMember.NATIONALITY', 'Nationality')));
+        $fields->addFieldToTab('Root.Main', CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')));
         $fields->addFieldToTab('Root.Main', TextField::create('Street', _t('ClubMember.STREET', 'Street')));
         $fields->addFieldToTab('Root.Main', TextField::create('Streetnumber', _t('ClubMember.STREETNUMBER', 'Streetnumber')));
         $fields->addFieldToTab('Root.Main', NumericField::create('Zip', _t('ClubMember.ZIP', 'Zip')));
@@ -98,7 +98,7 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main', EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main', TextField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil')));//PhoneNumberField
         $fields->addFieldToTab('Root.Main', TextField::create('Phone', _t('ClubMember.PHONE', 'Phone')));//PhoneNumberField
-        $fields->addFieldToTab('Root.Main',  DropdownField::create('TypeID',_t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
+        $fields->addFieldToTab('Root.Main',  DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
         $fields->addFieldToTab('Root.Main', DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true) );
         $fields->addFieldToTab('Root.Main', TextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')));
         $fields->addFieldToTab('Root.Main', TextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')));

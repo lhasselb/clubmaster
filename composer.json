@@ -14,7 +14,8 @@
     {
         "silverstripe/framework": "3.*",
         "silverstripe/cms": "3.*",
-        "unclecheese/betterbuttons": "*"
+        "unclecheese/betterbuttons": "*",
+        "colymba/gridfield-bulk-editing-tools": "*"
     },
     "suggest": {
         "": "*"
