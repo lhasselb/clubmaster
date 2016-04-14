@@ -44,7 +44,7 @@ class EnrollPage_Controller extends Page_Controller {
             TextField::create('AccountHolderStreetnumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetnumber')),
             NumericField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
             TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
-            TextField::create('Iban', _t('ClubMember.IBAN', 'Iban')),
+            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban')),//TextField::create('Iban', _t('ClubMember.IBAN', 'Iban')),
             TextField::create('Bic', _t('ClubMember.BIC', 'Bic'))
         );
 

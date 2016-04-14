@@ -109,10 +109,14 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main', TextField::create('Iban', _t('ClubMember.IBAN', 'Iban')));
         $fields->addFieldToTab('Root.Main', TextField::create('Bic', _t('ClubMember.BIC', 'Bic')));
         $fields->addFieldToTab('Root.Main', NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
-
-
         return $fields;
     }
+
+    /*public function getCMSValidator() {
+        return new RequiredFields(array(
+            'MyRequiredField'
+        ));
+    }*/
 
     public function getAge()
     {
