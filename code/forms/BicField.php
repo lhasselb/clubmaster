@@ -8,7 +8,7 @@
  * @package forms
  * @subpackage fields-formattedinput
  */
-class IbanField extends TextField {
+class BicField extends TextField {
 
     /**
      * Add default attributes for use on all inputs.
@@ -21,8 +21,8 @@ class IbanField extends TextField {
             parent::getAttributes(),
             array(
                 'autocomplete' => 'off',
-                'maxlength' => 31,
-                'size' => 31
+                'maxlength' => 11,
+                'size' => 11
             )
         );
     }
