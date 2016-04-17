@@ -1,6 +1,6 @@
 <?php
 
-class ClubMember extends DataObject implements Serializable
+class ClubMember extends DataObject
 {
     private static $db = array(
         'Salutation' => 'Varchar(255)',
@@ -140,14 +140,14 @@ class ClubMember extends DataObject implements Serializable
         $this->Age = $this->getAge();
     }
 
-
+/*
     public function serialize() {
         return serialize(
             array(
                 $this->Salutation,
                 $this->FirstName,
                 $this->LastName,
-                /*$this->Birthday,
+                $this->Birthday,
                 $this->Nationality,
                 $this->Street,
                 $this->Streetnumber,
@@ -163,7 +163,7 @@ class ClubMember extends DataObject implements Serializable
                 $this->AccountHolderStreet,
                 $this->AccountHolderStreetnumber,
                 $this->AccountHolderZip,
-                $this->AccountHolderCity,*/
+                $this->AccountHolderCity,
                 $this->Iban,
                 $this->Bic
             )
@@ -175,7 +175,7 @@ class ClubMember extends DataObject implements Serializable
         $this->Salutation = $data['Salutation'];
         $this->FirstName = $data['FirstName'];
         $this->LastName = $data['LastName'];
-        /*$this->id = $data['Birthday'];
+        $this->id = $data['Birthday'];
         $this->id = $data['Nationality'];
         $this->id = $data['Street'];
         $this->id = $data['Streetnumber'];
@@ -191,11 +191,11 @@ class ClubMember extends DataObject implements Serializable
         $this->id = $data['AccountHolderStreet'];
         $this->id = $data['AccountHolderStreetnumber'];
         $this->id = $data['AccountHolderZip'];
-        $this->id = $data['AccountHolderCity'];*/
+        $this->id = $data['AccountHolderCity'];
         $this->Iban = $data['Iban'];
         $this->Bic = $data['Bic'];
     }
-
+*/
     /**
      * Find an existing objects based on one or more uniqueness columns
      * specified via {@link self::$duplicateChecks}.

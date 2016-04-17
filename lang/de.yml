@@ -55,3 +55,8 @@ de:
   EnrollPage:
     SINGULARNAME: "Mitgliedsantrag"
     DESCRIPTION: "Seite mit Formular für den Mitgliedsantrag"
+
+    BicField:
+      VALIDATIONBICNUMBER: "Bitte prüfen Sie die korrekte Eingabe BIC {number}"
+    IbanField:
+      VALIDATIONIBANNUMBER: "Bitte prüfen Sie die korrekte Eingabe IBAN {number}"

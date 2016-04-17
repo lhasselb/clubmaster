@@ -14,6 +14,7 @@
     {
         "silverstripe/framework": "3.*",
         "silverstripe/cms": "3.*",
+        "globalcitizen/php-iban": "*",
         "unclecheese/betterbuttons": "*",
         "colymba/gridfield-bulk-editing-tools": "*"
     },

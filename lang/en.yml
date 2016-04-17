@@ -55,3 +55,8 @@ en:
   EnrollPage:
     SINGULARNAME: "Enroll"
     DESCRIPTION: "Page with form to enroll"
+
+  BicField:
+    VALIDATIONBICNUMBER: "Problem with {number}.Please ensure you have entered the BIC number correctly"
+  IbanField:
+    VALIDATIONIBANNUMBER: "Problem with {number}.Please ensure you have entered the IBAN number correctly"

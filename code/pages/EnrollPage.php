@@ -72,15 +72,25 @@ class EnrollPage_Controller extends Page_Controller {
 
         $clubMember = new ClubMember();
         $form->saveInto($clubMember);
-        $s = serialize($clubMember);
-        $path = 'C:/temp/';
-        $file = $path.'member'.date('Y_m_d_H_i_s');
-        // $s irgendwo ablegen, wo page2.php dies finden kann.
-        file_put_contents($file, $s);
 
-        $newObject = unserialize($s);
+        $serialized = serialize($clubMember);
+
+        if(getenv('OS') == "Windows_NT") {
+            $path = "C:/temp/";
+        } else {
+            $path = "/Applications/MAMP/logs/";
+        }
+
+        $file = $path.'member'.date('Y_m_d_H_i_s');
+        file_put_contents($file, $serialized);
+
+        $newObject = unserialize($serialized);
+/*
         SS_Log::log("Class=".gettype($newObject),SS_Log::WARN);
-        /*
+        SS_Log::log("Sal=".$newObject->Salutation,SS_Log::WARN);
+        SS_Log::log("Sal=".$newObject->FirstName,SS_Log::WARN);
+        SS_Log::log("Sal=".$newObject->LastName,SS_Log::WARN);
+*/        /*
         $clubMember->write();
         */
         return $this->redirectBack();
