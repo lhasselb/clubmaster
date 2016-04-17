@@ -42,7 +42,7 @@ class BicField extends TextField {
             $validator->validationError(
                 $this->name,
                 _t(
-                    'BicField.VALIDATIONBICNUMBER',
+                    "BicField.VALIDATIONBICNUMBER",
                     "Please ensure you have entered the {number} BIC number correctly",
                     array('number' => $this->value)
                 ),
