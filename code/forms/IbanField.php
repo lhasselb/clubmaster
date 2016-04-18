@@ -22,8 +22,8 @@ class IbanField extends TextField {
             parent::getAttributes(),
             array(
                 'autocomplete' => 'off',
-                'maxlength' => 34,
-                'size' => 34
+                'maxlength' => 34/*,
+                'size' => 34*/
             )
         );
     }
@@ -33,7 +33,7 @@ class IbanField extends TextField {
         /* Include https://github.com/globalcitizen/php-iban
          * Valid number DE12500105170648489890
          * Simple validator rule [a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}
-        */
+         */
         require_once BASE_PATH . '/vendor/globalcitizen/php-iban/php-iban.php';
 
         if(!$this->value)

@@ -24,7 +24,6 @@ class EnrollPage_Controller extends Page_Controller {
     public function EnrollForm() {
 
         $fields = new FieldList(
-
             TextField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation')),
             TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName')),
             TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName')),
@@ -94,5 +93,30 @@ class EnrollPage_Controller extends Page_Controller {
         $clubMember->write();
         */
         return $this->redirectBack();
+    }
+
+    function init()
+    {
+        parent::init();
+        SS_Log::log("init() called for ".$this->ClassName,SS_Log::WARN);
+        //Add javascript here
+        Requirements::javascript("framework/thirdparty/jquery/jquery.js");
+        Requirements::javascript("clubmaster/javascript/jquery-validate/jquery.validate.js");
+        Requirements::javascript("clubmaster/javascript/jquery-validate/additional-methods.js");
+        Requirements::javascript("clubmaster/javascript/jquery-validate/localization/messages_de.js");
+        Requirements::customScript('
+                jQuery(document).ready(function() {
+                    jQuery("#Form_EnrollForm").validate({
+                        //lang: "de",
+                        rules: {
+                            Salutation: {required: true, minlength: 3},
+                            FirstName: {required: true, minlength: 3},
+                            LastName:  {required: true, minlength: 3},
+                            Iban: {required: true, iban: true},
+                            Bic: {required: true, bic: true},
+                        }
+                    });
+                });
+            ');
     }
 }

@@ -4,7 +4,6 @@
  * including generic validation of its value.
  * https://de.wikipedia.org/wiki/ISO_9362
  *
- * @todo Validate
  *
  * @package forms
  * @subpackage fields-formattedinput
@@ -22,20 +21,22 @@ class BicField extends TextField {
             parent::getAttributes(),
             array(
                 'autocomplete' => 'off',
-                'maxlength' => 11,
-                'size' => 11
+                'maxlength' => 11/*,
+                'size' => 11*/
             )
         );
     }
 
     public function validate($validator)
     {
+
+        /* Valid number PBNKDEFF
+         * Simple validator rule ^([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)$
+         */
         if(!$this->value)
         {
             return true;
         }
-
-        SS_Log::log("text="._t('BicField.VALIDATIONBICNUMBER'),SS_Log::WARN);
 
         if(!verify_bic($this->value))
         {
