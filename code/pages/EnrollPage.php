@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Enoll page folding the form
+ *
+ * @package clubmaster
+ * @subpackage pages
+ *
+ */
 class EnrollPage extends Page
 {
     private static $singular_name = 'Enroll';
@@ -22,13 +29,17 @@ class EnrollPage_Controller extends Page_Controller {
     );
 
     public function EnrollForm() {
+        $today = SS_Datetime::now()->FormatI18N("%d.%m.%Y");
 
         $fields = new FieldList(
-            TextField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation')),
-            TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName')),
-            TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName')),
+            DropdownField::create(
+                'Salutation', _t('ClubMember.SALUTATION', 'Salutation'),
+                singleton('ClubMember')->dbObject('Salutation')->enumValues()
+                )->setAttribute('placeholder', 'Herr'),
+            TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('placeholder', _t('ClubMember.FIRSTNAME', 'Firstname')),
+            TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))->setAttribute('placeholder', _t('ClubMember.LASTNAME', 'Lastname')),
+            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true)->setAttribute('placeholder',$today),
 /*
-            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true),
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')),
             TextField::create('Street', _t('ClubMember.STREET', 'Street')),
             TextField::create('Streetnumber', _t('ClubMember.STREETNUMBER', 'Streetnumber')),
@@ -46,8 +57,8 @@ class EnrollPage_Controller extends Page_Controller {
             NumericField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
             TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
 */
-            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban')),//TextField::create('Iban', _t('ClubMember.IBAN', 'Iban')),
-            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))
+            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->setAttribute('placeholder', "DE12500105170648489890")->addExtraClass("text"),
+            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->setAttribute('placeholder', "VOBADEXX")->addExtraClass("text")
         );
 
         $actions = new FieldList(
@@ -80,7 +91,7 @@ class EnrollPage_Controller extends Page_Controller {
             $path = "/Applications/MAMP/logs/";
         }
 
-        $file = $path.'member'.date('Y_m_d_H_i_s');
+        $file = $path.'Antrag_Mitglied_'.date('d.m.Y_H_i_s');
         file_put_contents($file, $serialized);
 
         $newObject = unserialize($serialized);
@@ -109,7 +120,7 @@ class EnrollPage_Controller extends Page_Controller {
                     jQuery("#Form_EnrollForm").validate({
                         //lang: "de",
                         rules: {
-                            Salutation: {required: true, minlength: 3},
+                            Salutation: {required: true},
                             FirstName: {required: true, minlength: 3},
                             LastName:  {required: true, minlength: 3},
                             Iban: {required: true, iban: true},

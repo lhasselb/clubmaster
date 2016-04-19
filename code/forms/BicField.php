@@ -4,9 +4,8 @@
  * including generic validation of its value.
  * https://de.wikipedia.org/wiki/ISO_9362
  *
- *
- * @package forms
- * @subpackage fields-formattedinput
+ * @package clubmaster
+ * @subpackage forms
  */
 class BicField extends TextField {
 
@@ -20,9 +19,11 @@ class BicField extends TextField {
         return array_merge(
             parent::getAttributes(),
             array(
+            /*
                 'autocomplete' => 'off',
-                'maxlength' => 11/*,
-                'size' => 11*/
+                'maxlength' => 11,
+                'size' => 11
+            */
             )
         );
     }

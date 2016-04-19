@@ -4,10 +4,8 @@
  * including generic validation of its value.
  * https://de.wikipedia.org/wiki/IBAN
  *
- * @todo Validate
- *
- * @package forms
- * @subpackage fields-formattedinput
+ * @package clubmaster
+ * @subpackage forms
  */
 class IbanField extends TextField {
 
@@ -21,9 +19,11 @@ class IbanField extends TextField {
         return array_merge(
             parent::getAttributes(),
             array(
+            /*
                 'autocomplete' => 'off',
-                'maxlength' => 34/*,
-                'size' => 34*/
+                'maxlength' => 34,
+                'size' => 34
+            */
             )
         );
     }

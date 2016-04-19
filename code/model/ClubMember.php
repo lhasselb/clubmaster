@@ -3,7 +3,7 @@
 class ClubMember extends DataObject
 {
     private static $db = array(
-        'Salutation' => 'Varchar(255)',
+        'Salutation' => 'Enum("Frau,Herr,Schülerin,Schüler")',
         'FirstName' => 'Varchar(255)',
         'LastName' => 'Varchar(255)',
         'Birthday' => 'Date',
@@ -89,7 +89,11 @@ class ClubMember extends DataObject
     {
         $fields = parent::getCMSFields();
         $fields->addFieldToTab('Root.Main', CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
-        $fields->addFieldToTab('Root.Main', TextField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation')));
+        $fields->addFieldToTab('Root.Main', DropdownField::create(
+            'Salutation', _t('ClubMember.SALUTATION', 'Salutation'),
+            singleton('ClubMember')->dbObject('Salutation')->enumValues()
+            )
+        );
         $fields->addFieldToTab('Root.Main', TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName')));
         $fields->addFieldToTab('Root.Main', TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName')));
         $fields->addFieldToTab('Root.Main', DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true) );

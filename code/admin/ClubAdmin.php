@@ -13,8 +13,7 @@ class ClubAdmin extends ModelAdmin {
 
     private static $allowed_actions = array();
 
-    //To override with a more specific importer implementation,
-    //use the ModelAdmin::$model_importers static.
+    //Override with a more specific importer implementation,
     private static $model_importers = array("ClubMember" => "ClubMemberCsvBulkLoader");
 
     private static $menu_icon = 'clubmaster/images/clubmaster.png';
@@ -85,6 +84,9 @@ class ClubAdmin extends ModelAdmin {
      */
     public function getEditForm($id = null, $fields = null) {
         $form = parent::getEditForm($id, $fields);
+
+
+
         // $gridFieldName is generated from the ModelClass, eg if the Class 'ClubMember'
         // is managed by this ModelAdmin, the GridField for it will also be named 'ClubMember'
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
