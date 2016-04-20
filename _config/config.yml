@@ -5,3 +5,7 @@ Name: clubmaster
 LeftAndMain:
   extensions:
     - CustomLeftAndMain
+
+File:
+  allowed_extensions:
+    - mem

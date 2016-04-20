@@ -3,7 +3,7 @@
 class ClubAdmin extends ModelAdmin {
 
     private static $managed_models = array(
-        "ClubMemberRequest",
+        //"ClubMemberRequest",
         'ClubMember',
         'ClubMemberType'
     );
@@ -93,11 +93,14 @@ class ClubAdmin extends ModelAdmin {
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
         $gridField = $form->Fields()->fieldByName($gridFieldName);
 
+        SS_Log::log("gridFieldName=".$gridFieldName,SS_Log::WARN);
+
         // Get gridfield config
         $config = $gridField->getConfig();
 
         if($gridFieldName =="ClubMember")
         {
+            $config->removeComponentsByType("GridFieldExportButton");
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
             // Set editable fields
@@ -114,7 +117,6 @@ class ClubAdmin extends ModelAdmin {
             //SS_Log::log("printButton=".$printButton->getTitle($gridField),SS_Log::WARN);
 
             $printButton->setPrintColumns(
-                //array("LastName" => _t("ClubMember.LASTNAME", "LastName"))
                 array(
                     "Salutation" => _t("ClubMember.SALUTATION", "Salutation"),
                     "FirstName"  => _t("ClubMember.FIRSTNAME", "FirstName"),
@@ -150,9 +152,14 @@ class ClubAdmin extends ModelAdmin {
         }
         elseif($gridFieldName =="ClubMemberRequest")
         {
+            $columns = $gridField->getColumns();
+            foreach ($columns as $column) {
+                SS_Log::log("column=".$column,SS_Log::WARN);
+            }
+
             $config->removeComponentsByType("GridFieldPrintButton");
             $config->removeComponentsByType("GridFieldExportButton");
-            $config->removeComponentsByType("GridFieldAddNewButton");
+            //$config->removeComponentsByType("GridFieldAddNewButton");
             $config->removeComponentsByType("GridFieldFilterHeader");
         }
         // modify the list view.

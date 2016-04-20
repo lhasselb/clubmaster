@@ -90,21 +90,22 @@ class EnrollPage_Controller extends Page_Controller {
 
         $serialized = serialize($clubMember);
 
-        if(getenv('OS') == "Windows_NT") {
-            $path = "C:/temp/";
-        } else {
-            $path = "/Applications/MAMP/logs/";
-        }
+        //@TODO: sync /assets/requests
+        $folder = Folder::find_or_make('requests');
+        SS_Log::log("path=".$folder->getFullPath(),SS_Log::WARN);
 
-        $file = $path.'Antrag_Mitglied_'.date('d.m.Y_H_i_s');
+        $file = $folder->getFullPath().'Antrag_'.date('d.m.Y_H_i_s').'.mem';
+        SS_Log::log("file=".$file,SS_Log::WARN);
+
         file_put_contents($file, $serialized);
 
         $newObject = unserialize($serialized);
-
+        /*
         SS_Log::log("Class=".gettype($newObject),SS_Log::WARN);
         SS_Log::log("Sal=".$newObject->Salutation,SS_Log::WARN);
         SS_Log::log("Sal=".$newObject->FirstName,SS_Log::WARN);
         SS_Log::log("Sal=".$newObject->LastName,SS_Log::WARN);
+        */
         /*
         $clubMember->write();
         */
@@ -114,7 +115,6 @@ class EnrollPage_Controller extends Page_Controller {
     function init()
     {
         parent::init();
-        SS_Log::log("init() called for ".$this->ClassName,SS_Log::WARN);
         //Add javascript here
         Requirements::javascript("framework/thirdparty/jquery/jquery.js");
         Requirements::javascript("clubmaster/javascript/jquery-validate/jquery.validate.js");
