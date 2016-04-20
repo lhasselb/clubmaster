@@ -9,6 +9,9 @@ de:
     #BulkAction
     GRIDFIELDBULKDROPDOWNACTIVATE: "Aktivieren"
 
+  ClubMemberRequest:
+    SINGULARNAME: "Mitgliedsantrag"
+
   ClubMemberType:
     SINGULARNAME: "Typ"
     PLURALNAME: "Typen"

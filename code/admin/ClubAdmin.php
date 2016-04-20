@@ -3,6 +3,7 @@
 class ClubAdmin extends ModelAdmin {
 
     private static $managed_models = array(
+        "ClubMemberRequest",
         'ClubMember',
         'ClubMemberType'
     );
@@ -84,7 +85,7 @@ class ClubAdmin extends ModelAdmin {
      */
     public function getEditForm($id = null, $fields = null) {
         $form = parent::getEditForm($id, $fields);
-
+        //$main = $fields->fieldByName('Root')->fieldByName('Main')->setTitle('TEST');
 
 
         // $gridFieldName is generated from the ModelClass, eg if the Class 'ClubMember'
@@ -142,10 +143,17 @@ class ClubAdmin extends ModelAdmin {
                 )
             );
         }
-        if($gridFieldName =="ClubMemberType")
+        elseif($gridFieldName =="ClubMemberType")
         {
             $config->removeComponentsByType("GridFieldPrintButton");
             $config->removeComponentsByType("GridFieldExportButton");
+        }
+        elseif($gridFieldName =="ClubMemberRequest")
+        {
+            $config->removeComponentsByType("GridFieldPrintButton");
+            $config->removeComponentsByType("GridFieldExportButton");
+            $config->removeComponentsByType("GridFieldAddNewButton");
+            $config->removeComponentsByType("GridFieldFilterHeader");
         }
         // modify the list view.
 //        $gridField->getConfig()->addComponent(new GridFieldFilterHeader());

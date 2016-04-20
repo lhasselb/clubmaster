@@ -32,13 +32,16 @@ class EnrollPage_Controller extends Page_Controller {
         $today = SS_Datetime::now()->FormatI18N("%d.%m.%Y");
 
         $fields = new FieldList(
-            DropdownField::create(
-                'Salutation', _t('ClubMember.SALUTATION', 'Salutation'),
-                singleton('ClubMember')->dbObject('Salutation')->enumValues()
-                )->setAttribute('placeholder', 'Herr'),
-            TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('placeholder', _t('ClubMember.FIRSTNAME', 'Firstname')),
-            TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))->setAttribute('placeholder', _t('ClubMember.LASTNAME', 'Lastname')),
-            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true)->setAttribute('placeholder',$today),
+            DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),
+                singleton('ClubMember')->dbObject('Salutation')->enumValues())
+            ->setAttribute('placeholder', 'Herr'),
+            TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))
+            ->setAttribute('placeholder', _t('ClubMember.FIRSTNAME', 'Firstname')),
+            TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))
+            ->setAttribute('placeholder', _t('ClubMember.LASTNAME', 'Lastname')),
+            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))
+            ->setConfig('showcalendar', true)
+            ->setAttribute('placeholder', $today),
 /*
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')),
             TextField::create('Street', _t('ClubMember.STREET', 'Street')),
@@ -57,8 +60,10 @@ class EnrollPage_Controller extends Page_Controller {
             NumericField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
             TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
 */
-            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->setAttribute('placeholder', "DE12500105170648489890")->addExtraClass("text"),
-            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->setAttribute('placeholder', "VOBADEXX")->addExtraClass("text")
+            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))
+            ->setAttribute('placeholder', "DE12500105170648489890")->addExtraClass("text"),
+            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))
+            ->setAttribute('placeholder', "VOBADEXX")->addExtraClass("text")
         );
 
         $actions = new FieldList(
@@ -95,12 +100,12 @@ class EnrollPage_Controller extends Page_Controller {
         file_put_contents($file, $serialized);
 
         $newObject = unserialize($serialized);
-/*
+
         SS_Log::log("Class=".gettype($newObject),SS_Log::WARN);
         SS_Log::log("Sal=".$newObject->Salutation,SS_Log::WARN);
         SS_Log::log("Sal=".$newObject->FirstName,SS_Log::WARN);
         SS_Log::log("Sal=".$newObject->LastName,SS_Log::WARN);
-*/        /*
+        /*
         $clubMember->write();
         */
         return $this->redirectBack();
