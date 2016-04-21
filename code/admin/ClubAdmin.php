@@ -3,7 +3,7 @@
 class ClubAdmin extends ModelAdmin {
 
     private static $managed_models = array(
-        //"ClubMemberRequest",
+        "ClubMemberRequest",
         'ClubMember',
         'ClubMemberType'
     );
@@ -201,6 +201,12 @@ class ClubAdmin extends ModelAdmin {
             //'Active',
             //'Age'
         );
+    }
+
+    function init()
+    {
+        parent::init();
+        SS_Log::log("ClubAdmin init()",SS_Log::WARN);
     }
 
 }
