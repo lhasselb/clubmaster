@@ -94,10 +94,10 @@ class EnrollPage_Controller extends Page_Controller {
         $folder = Folder::find_or_make('requests');
         SS_Log::log("path=".$folder->getFullPath(),SS_Log::WARN);
 
-        $file = $folder->getFullPath().'Antrag_'.date('d.m.Y_H_i_s').'.mem';
+        $path = $folder->getFullPath().'Antrag_'.date('d.m.Y_H_i_s').'.mem';
         SS_Log::log("file=".$file,SS_Log::WARN);
 
-        file_put_contents($file, $serialized);
+        file_put_contents($path, $serialized);
 
         $newObject = unserialize($serialized);
         /*

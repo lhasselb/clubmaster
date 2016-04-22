@@ -3,7 +3,7 @@
 class ClubAdmin extends ModelAdmin {
 
     private static $managed_models = array(
-        "ClubMemberRequest",
+        'ClubMemberPending',
         'ClubMember',
         'ClubMemberType'
     );
@@ -15,7 +15,7 @@ class ClubAdmin extends ModelAdmin {
     private static $allowed_actions = array();
 
     //Override with a more specific importer implementation,
-    private static $model_importers = array("ClubMember" => "ClubMemberCsvBulkLoader");
+    private static $model_importers = array('ClubMember' => 'ClubMemberCsvBulkLoader');
 
     private static $menu_icon = 'clubmaster/images/clubmaster.png';
 
@@ -26,12 +26,12 @@ class ClubAdmin extends ModelAdmin {
 
         if($this->modelClass == 'ClubMember')
         {
-            $rangeDropDownField = DropdownField::create('q[AgeRange]', _t("ClubAdmin.AGERANGE","AgeRange"),
+            $rangeDropDownField = DropdownField::create('q[AgeRange]', _t('ClubAdmin.AGERANGE','AgeRange'),
                 array(
-                    'A' => _t("ClubAdmin.LESSTHAN18","LessThan 18"),
-                    'B' => _t("ClubAdmin.MOREEQUAL18","GreaterThanOrEqual 18")
+                    'A' => _t('ClubAdmin.LESSTHAN18','LessThan 18'),
+                    'B' => _t('ClubAdmin.MOREEQUAL18','GreaterThanOrEqual 18')
                 )
-            )->setEmptyString( _t("ClubAdmin.SELECTONE","Select one") );
+            )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
             $context->getFields()->push($rangeDropDownField);
         }
 
@@ -51,25 +51,25 @@ class ClubAdmin extends ModelAdmin {
         $it = $list->getIterator();
         while ($it->valid()) {
             $member = $it->current();
-            SS_Log::log("Before key=".$it->key()." lastname=".$member->LastName,SS_Log::WARN);
+            SS_Log::log('Before key='.$it->key().' lastname='.$member->LastName,SS_Log::WARN);
             $it->next();
         }*/
 
         $params = $this->request->requestVar('q'); // should be Array defined above
-        //SS_Log::log("params=".$params,SS_Log::WARN);
+        //SS_Log::log('params='.$params,SS_Log::WARN);
         if($this->modelClass == 'ClubMember' && isset($params['AgeRange']) && $params['AgeRange'] ) {
 
-            if($params['AgeRange'] == "A")
+            if($params['AgeRange'] == 'A')
             {
-            SS_Log::log("params=".$params['AgeRange'],SS_Log::WARN);
+            SS_Log::log('params='.$params['AgeRange'],SS_Log::WARN);
                 //Attention: EXCLUDE
-                $list = $list->exclude("Age:GreaterThanOrEqual","18");
+                $list = $list->exclude('Age:GreaterThanOrEqual','18');
             }
-            elseif($params['AgeRange'] == "B")
+            elseif($params['AgeRange'] == 'B')
             {
-            SS_Log::log("params=".$params['AgeRange'],SS_Log::WARN);
+            SS_Log::log('params='.$params['AgeRange'],SS_Log::WARN);
                 //Attention: EXCLUDE
-                $list = $list->exclude("Age:LessThan","18");
+                $list = $list->exclude('Age:LessThan','18');
             }
         }
         return $list;
@@ -93,74 +93,74 @@ class ClubAdmin extends ModelAdmin {
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
         $gridField = $form->Fields()->fieldByName($gridFieldName);
 
-        SS_Log::log("gridFieldName=".$gridFieldName,SS_Log::WARN);
+        SS_Log::log('gridFieldName='.$gridFieldName,SS_Log::WARN);
 
         // Get gridfield config
         $config = $gridField->getConfig();
 
-        if($gridFieldName =="ClubMember")
+        if($gridFieldName =='ClubMember')
         {
-            $config->removeComponentsByType("GridFieldExportButton");
+            $config->removeComponentsByType('GridFieldExportButton');
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
             // Set editable fields
-            //$config->getComponentByType('GridFieldBulkManager')->setConfig("editableFields", "Active");
+            //$config->getComponentByType('GridFieldBulkManager')->setConfig('editableFields', 'Active');
             // Add action
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
-                _t("ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE","Activate"), 'GridFieldBulkActionActivateMemberHandler');
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
             // Remove action
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
             $config->addComponent(new GridFieldActivateClubMemberAction());
 
-            $printButton = $config->getComponentByType("GridFieldPrintButton");
-            //SS_Log::log("printButton=".$printButton->getTitle($gridField),SS_Log::WARN);
+            $printButton = $config->getComponentByType('GridFieldPrintButton');
+            //SS_Log::log('printButton='.$printButton->getTitle($gridField),SS_Log::WARN);
 
             $printButton->setPrintColumns(
                 array(
-                    "Salutation" => _t("ClubMember.SALUTATION", "Salutation"),
-                    "FirstName"  => _t("ClubMember.FIRSTNAME", "FirstName"),
-                    "LastName"   => _t("ClubMember.LASTNAME", "LastName"),
-                    //"Birthday" => _t("ClubMember.Birthday", "Birthday"),
-                    //"Nationality"  => _t("ClubMember.Nationality", "Nationality"),
-                    "Street"  => _t("ClubMember.STREET", "Street"),
-                    "Streetnumber"  => _t("ClubMember.STREETNUMBER", "Streetnumber"),
-                    "Zip"  => _t("ClubMember.ZIP", "Zip"),
-                    "City"  => _t("ClubMember.CITY", "City"),
-                    //"Email"  => _t("ClubMember.EMAIL", "Email"),
-                    //"Mobil"  => _t("ClubMember.MOBIL", "Mobil"),
-                    //"Phone"  => _t("ClubMember.PHONE", "Phone"),
-                    //"Type"  => _t("ClubMember.TYPE", "Type"),
-                    "Since"  => _t("ClubMember.SINCE", "Since"),
-                    //"AccountHolderFirstName"  => _t("ClubMember.ACCOUNTHOLDERFIRSTNAME", "AccountHolderFirstName"),
-                    //"AccountHolderLastName"  => _t("ClubMember.AccountHolderLastName", "AccountHolderLastName"),
-                    //"AccountHolderStreet"  => _t("ClubMember.ACCOUNTHOLDERSTREET", "AccountHolderStreet"),
-                    //"AccountHolderStreetnumber"  => _t("ClubMember.ACCOUNTHOLDERSTREETNUMBER", "AccountHolderStreetnumber"),
-                    //"AccountHolderZip"  => _t("ClubMember.AccountHolderZip", "AccountHolderZip"),
-                    //"AccountHolderCity"  => _t("ClubMember.ACCOUNTHOLDERCITY", "AccountHolderCity"),
-                    //"Iban"  => _t("ClubMember.IBAN", "Iban"),
-                    //"Bic"  => _t("ClubMember.BIC", "Bic"),
-                    //"Active"  => _t("ClubMember.ACTIVE", "Active"),
-                    "Age"  => _t("ClubMember.AGE", "Age")
+                    'Salutation' => _t('ClubMember.SALUTATION', 'Salutation'),
+                    'FirstName'  => _t('ClubMember.FIRSTNAME', 'FirstName'),
+                    'LastName'   => _t('ClubMember.LASTNAME', 'LastName'),
+                    //'Birthday' => _t('ClubMember.Birthday', 'Birthday'),
+                    //'Nationality'  => _t('ClubMember.Nationality', 'Nationality'),
+                    'Street'  => _t('ClubMember.STREET', 'Street'),
+                    'Streetnumber'  => _t('ClubMember.STREETNUMBER', 'Streetnumber'),
+                    'Zip'  => _t('ClubMember.ZIP', 'Zip'),
+                    'City'  => _t('ClubMember.CITY', 'City'),
+                    //'Email'  => _t('ClubMember.EMAIL', 'Email'),
+                    //'Mobil'  => _t('ClubMember.MOBIL', 'Mobil'),
+                    //'Phone'  => _t('ClubMember.PHONE', 'Phone'),
+                    //'Type'  => _t('ClubMember.TYPE', 'Type'),
+                    'Since'  => _t('ClubMember.SINCE', 'Since'),
+                    //'AccountHolderFirstName'  => _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName'),
+                    //'AccountHolderLastName'  => _t('ClubMember.AccountHolderLastName', 'AccountHolderLastName'),
+                    //'AccountHolderStreet'  => _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet'),
+                    //'AccountHolderStreetnumber'  => _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetnumber'),
+                    //'AccountHolderZip'  => _t('ClubMember.AccountHolderZip', 'AccountHolderZip'),
+                    //'AccountHolderCity'  => _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'),
+                    //'Iban'  => _t('ClubMember.IBAN', 'Iban'),
+                    //'Bic'  => _t('ClubMember.BIC', 'Bic'),
+                    //'Active'  => _t('ClubMember.ACTIVE', 'Active'),
+                    'Age'  => _t('ClubMember.AGE', 'Age')
                 )
             );
         }
-        elseif($gridFieldName =="ClubMemberType")
+        elseif($gridFieldName =='ClubMemberType')
         {
-            $config->removeComponentsByType("GridFieldPrintButton");
-            $config->removeComponentsByType("GridFieldExportButton");
+            $config->removeComponentsByType('GridFieldPrintButton');
+            $config->removeComponentsByType('GridFieldExportButton');
         }
-        elseif($gridFieldName =="ClubMemberRequest")
+        elseif($gridFieldName =='ClubMemberPending')
         {
             $columns = $gridField->getColumns();
             foreach ($columns as $column) {
-                SS_Log::log("column=".$column,SS_Log::WARN);
+                SS_Log::log('column='.$column,SS_Log::WARN);
             }
 
-            $config->removeComponentsByType("GridFieldPrintButton");
-            $config->removeComponentsByType("GridFieldExportButton");
-            //$config->removeComponentsByType("GridFieldAddNewButton");
-            $config->removeComponentsByType("GridFieldFilterHeader");
+            $config->removeComponentsByType('GridFieldPrintButton');
+            $config->removeComponentsByType('GridFieldExportButton');
+            $config->removeComponentsByType('GridFieldAddNewButton');
+            $config->removeComponentsByType('GridFieldFilterHeader');
         }
         // modify the list view.
 //        $gridField->getConfig()->addComponent(new GridFieldFilterHeader());
@@ -206,7 +206,29 @@ class ClubAdmin extends ModelAdmin {
     function init()
     {
         parent::init();
-        SS_Log::log("ClubAdmin init()",SS_Log::WARN);
+
+        SS_Log::log('ClubAdmin init()',SS_Log::WARN);
+        //TODO: Make it configurable
+        $folder = Folder::find_or_make('requests');
+        $folder->syncChildren();
+        $files = DataObject::get('File', "ParentID = '{$folder->ID}'");
+        foreach ($files as $file) {
+            SS_Log::log('ID='.$file->ID.' type='.$file->ClassName.' Title='.$file->Title,SS_Log::WARN);
+            $data = file_get_contents($file->getFullPath());
+            $object = unserialize($data);//new CubMemberPending();
+            $pending = new ClubMemberPending();
+            $pending->Salutation = $object->Salutation;
+            $pending->FirstName = $object->FirstName;
+            $pending->LastName = $object->LastName;
+            $exists = ClubMember::findExistingObject($pending);
+            SS_Log::log('exists='.$exists,SS_Log::WARN);
+            $pending->write();
+            SS_Log::log('Class='.gettype($pending),SS_Log::WARN);
+            SS_Log::log('Sal='.$pending->Salutation,SS_Log::WARN);
+            SS_Log::log('First='.$pending->FirstName,SS_Log::WARN);
+            SS_Log::log('Last='.$pending->LastName,SS_Log::WARN);
+        }
+        //$requestMemberFile = new MemberFile();
     }
 
 }
