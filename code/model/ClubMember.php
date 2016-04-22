@@ -35,9 +35,6 @@ class ClubMember extends DataObject
     //Meaningless following user settings?
     static $default_country = 'DE';
 
-    public $objectClass = 'ClubMember';
-
-
     // Check for duplicates while adding
     static $duplicateCheck = array('FirstName','LastName');
 
@@ -233,10 +230,7 @@ class ClubMember extends DataObject
      * @return mixed
      */
     public function findExistingObject($record) {
-        SS_Log::log("class=".$this->objectClass,SS_Log::WARN);
-
-
-        $SNG_objectClass = singleton($this->objectClass);
+        $SNG_objectClass = singleton('ClubMember');
         // checking for existing records (only if not already found)
         foreach($this->duplicateChecks as $fieldName => $duplicateCheck) {
             if(is_string($duplicateCheck)) {
