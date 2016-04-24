@@ -67,7 +67,7 @@ class EnrollPage_Controller extends Page_Controller {
         );
 
         $actions = new FieldList(
-            FormAction::create("doEnroll")->setTitle("Enroll")
+            FormAction::create('doEnroll')->setTitle(_t('EnrollPage.ENROLL','Enroll'))
         );
 
         $required = new RequiredFields('Salutation','FirstName','LastName','Birthday','Nationality','Street','Streetnumber','Zip','City','Email','Mobil','Phone','TypeID','Since','AccountHolderFirstName','AccountHolderLastName','AccountHolderStreet','AccountHolderStreetnumber','AccountHolderZip','AccountHolderCity','Iban','Bic');

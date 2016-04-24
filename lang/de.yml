@@ -61,6 +61,7 @@ de:
   EnrollPage:
     SINGULARNAME: "Mitgliedsantrag"
     DESCRIPTION: "Seite mit Formular für den Mitgliedsantrag"
+    ENROLL: "Antrag absenden"
 
   BicField:
     VALIDATIONBICNUMBER: "Bitte prüfen Sie die korrekte Eingabe BIC {number}"
