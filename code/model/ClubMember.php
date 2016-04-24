@@ -3,7 +3,7 @@
 class ClubMember extends DataObject
 {
     private static $db = array(
-        'Salutation' => 'Enum("Frau,Herr,Schülerin,Schüler")',
+        'Salutation' => 'Enum("Frau,Herr,Schülerin,Schüler","Frau")',
         'FirstName' => 'Varchar(255)',
         'LastName' => 'Varchar(255)',
         'Birthday' => 'Date',
@@ -24,32 +24,35 @@ class ClubMember extends DataObject
         'AccountHolderCity' => 'Varchar(255)',
         'Iban' => 'Varchar(255)',
         'Bic' => 'Varchar(255)',
+        // Special Meaning
         'Active' => 'Boolean',
-        'Age' => 'Int'
+        'Age' => 'Int',
+        // Form based
+        'SerializedFileName' => 'Varchar(255)',
+        //'FormClaimDate' => 'SS_Datetime',
+        // Distinguish Formular,Import,Händisch
+        'CreationType' => 'Varchar(255)'
     );
 
     private static $has_one = array(
         'Type' => 'ClubMemberType'
     );
 
-    //Meaningless following user settings?
-    static $default_country = 'DE';
-
-    // Check for duplicates while adding
-    static $duplicateCheck = array('FirstName','LastName');
+    private static $defaults = array(
+        'CreationType' => 'Händisch'
+    );
 
     private static $summary_fields = array(
-        "Salutation",
-        "FirstName",
-        "LastName",
-        "Age",
-        "Active"
+        'Salutation',
+        'FirstName',
+        'LastName',
+        'Age'
     );
 
     private static $searchable_fields = array(
-        "FirstName",
-        "LastName",
-        "Age"
+        'FirstName',
+        'LastName',
+        'Age'
     );
 
     /**
@@ -59,7 +62,6 @@ class ClubMember extends DataObject
      */
     function fieldLabels($includerelations = true) {
         $labels = parent::fieldLabels($includerelations);
-        $labels['Active'] = _t('ClubMember.ACTIVE', 'Active');
         $labels['Salutation'] = _t('ClubMember.SALUTATION', 'Salutation');
         $labels['FirstName'] = _t('ClubMember.FIRSTNAME', 'FirstName');
         $labels['LastName'] = _t('ClubMember.LASTNAME', 'LastName');
@@ -82,15 +84,18 @@ class ClubMember extends DataObject
         $labels['AccountHolderCity'] = _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity');
         $labels['Iban'] = _t('ClubMember.IBAN', 'Iban');
         $labels['Bic'] = _t('ClubMember.BIC', 'Bic');
+        //Special
+        $labels['Active'] = _t('ClubMember.ACTIVE', 'Active');
         $labels['Age'] = _t('ClubMember.AGE', 'Age');
+        $labels['SerializedFileName'] = _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName');
+        $labels['FormClaimDate'] = _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate');
+        $labels['CreationType'] = _t('ClubMember.CREATIONTYPE', 'CreationType');
         return $labels;
     }
 
     function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        $fields->addFieldToTab('Root.Main',
-            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));
         $fields->addFieldToTab('Root.Main',
@@ -132,11 +137,16 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')));
         $fields->addFieldToTab('Root.Main',
-            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass("text"));
+            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass("text") );
+            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text') );
+        //Special
         $fields->addFieldToTab('Root.Main',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
+        //$fields->addFieldToTab('Root.Main',CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active'))->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
         return $fields;
     }
 
@@ -163,102 +173,9 @@ class ClubMember extends DataObject
     {
         parent::onBeforeWrite();
         $this->Age = $this->getAge();
-    }
-
-/*
-    public function serialize() {
-        return serialize(
-            array(
-                $this->Salutation,
-                $this->FirstName,
-                $this->LastName,
-                $this->Birthday,
-                $this->Nationality,
-                $this->Street,
-                $this->Streetnumber,
-                $this->Zip,
-                $this->City,
-                $this->Email,
-                $this->Mobil,
-                $this->Phone,
-                $this->TypeID,
-                $this->Since,
-                $this->AccountHolderFirstName,
-                $this->AccountHolderLastName,
-                $this->AccountHolderStreet,
-                $this->AccountHolderStreetnumber,
-                $this->AccountHolderZip,
-                $this->AccountHolderCity,
-                $this->Iban,
-                $this->Bic
-            )
-        );
-    }
-
-    public function unserialize($data) {
-        $data = unserialize($data);
-        $this->Salutation = $data['Salutation'];
-        $this->FirstName = $data['FirstName'];
-        $this->LastName = $data['LastName'];
-        $this->id = $data['Birthday'];
-        $this->id = $data['Nationality'];
-        $this->id = $data['Street'];
-        $this->id = $data['Streetnumber'];
-        $this->id = $data['Zip'];
-        $this->id = $data['City'];
-        $this->id = $data['Email'];
-        $this->id = $data['Mobil'];
-        $this->id = $data['Phone'];
-        $this->id = $data['TypeID'];
-        $this->id = $data['Since'];
-        $this->id = $data['AccountHolderFirstName'];
-        $this->id = $data['AccountHolderLastName'];
-        $this->id = $data['AccountHolderStreet'];
-        $this->id = $data['AccountHolderStreetnumber'];
-        $this->id = $data['AccountHolderZip'];
-        $this->id = $data['AccountHolderCity'];
-        $this->Iban = $data['Iban'];
-        $this->Bic = $data['Bic'];
-    }
-*/
-    /**
-     * Find an existing objects based on one or more uniqueness columns
-     * specified via {@link self::$duplicateChecks}.
-     *
-     * @param array $record
-     *
-     * @return mixed
-     */
-    public function findExistingObject($record) {
-        $SNG_objectClass = singleton('ClubMember');
-        // checking for existing records (only if not already found)
-        foreach($this->duplicateChecks as $fieldName => $duplicateCheck) {
-            if(is_string($duplicateCheck)) {
-                // Skip current duplicate check if field value is empty
-                if(empty($record[$duplicateCheck])) continue;
-                // Check existing record with this value
-                $dbFieldValue = $record[$duplicateCheck];
-                $existingRecord = DataObject::get($this->objectClass)
-                    ->filter($duplicateCheck, $dbFieldValue)
-                    ->first();
-                if($existingRecord) return $existingRecord;
-            } elseif(is_array($duplicateCheck) && isset($duplicateCheck['callback'])) {
-                if($this->hasMethod($duplicateCheck['callback'])) {
-                    $existingRecord = $this->{$duplicateCheck['callback']}($record[$fieldName], $record);
-                } elseif($SNG_objectClass->hasMethod($duplicateCheck['callback'])) {
-                    $existingRecord = $SNG_objectClass->{$duplicateCheck['callback']}($record[$fieldName], $record);
-                } else {
-                    user_error("ClubMember::processRecord():"
-                        . " {$duplicateCheck['callback']} not found on object class.", E_USER_ERROR);
-                }
-                if($existingRecord) {
-                    return $existingRecord;
-                }
-            } else {
-                user_error('ClubMember::processRecord(): Wrong format for $duplicateChecks', E_USER_ERROR);
-            }
-        }
-        return false;
+        //Check CreationType
+        if($this->CreationType == 'Händisch')
+        $this->Active = true;
     }
 
     public function canView($member = null) {

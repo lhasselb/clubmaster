@@ -15,9 +15,7 @@ class ClubMemberType extends DataObject
         "TypeName"
     );
 
-    private static $searchable_fields = array(
-        "TypeName"
-    );
+    private static $searchable_fields = array();
 
     function fieldLabels($includerelations = true) {
         $labels = parent::fieldLabels($includerelations);

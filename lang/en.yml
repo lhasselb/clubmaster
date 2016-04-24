@@ -9,7 +9,7 @@ en:
     #BulkAction
     GRIDFIELDBULKDROPDOWNACTIVATE: "Activate"
 
-  ClubMemberRequest:
+  ClubMemberPending:
     SINGULARNAME: "Member request"
 
   ClubMemberType:
@@ -48,6 +48,9 @@ en:
     BIC: "BIC"
     AGE: "Age"
     ACTIVE: "Active"
+    SERIALIZEDFILENAME: "Filename"
+    FormClaimDate: "Date (Form)"
+    CreationType: "Created by"
 
   GridFieldActivateClubMemberAction:
     ACTIVATEMEMBER: "Activate member"

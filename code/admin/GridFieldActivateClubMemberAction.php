@@ -31,7 +31,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
      */
     public function getColumnContent($gridField, $record, $columnName) {
         //SS_Log::log("record=".$record,SS_Log::WARN);
-        if(!$record->canEdit() || $record != "ClubMember" ) return;
+        if(!$record->canEdit() || $record != "ClubMemberPending" ) return;
         if(!$record->isActive())
         {
             $field = GridField_FormAction::create($gridField, 'ActivateMember'.$record->ID, false,

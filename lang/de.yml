@@ -7,14 +7,14 @@ de:
     LESSTHAN18: "Jünger als 18 Jahre"
     MOREEQUAL18: "18 Jahre und älter"
     #BulkAction
-    GRIDFIELDBULKDROPDOWNACTIVATE: "Aktivieren"
+    GRIDFIELDBULKDROPDOWNACTIVATE: "Antrag zustimmen"
 
-  ClubMemberRequest:
+  ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"
 
   ClubMemberType:
-    SINGULARNAME: "Typ"
-    PLURALNAME: "Typen"
+    SINGULARNAME: "Antragtyp"
+    PLURALNAME: "Antragtypen"
     DESCRIPTION: "Verwalte Typen"
     TYPENAME: "Typname"
     CLUBMEMBERS: "Mitglieder"
@@ -48,11 +48,14 @@ de:
     BIC: "BIC"
     AGE: "Alter"
     ACTIVE: "Aktiv"
+    SERIALIZEDFILENAME: "Dateiname"
+    FORMCLAIMDATE: "Antragsdatum (Formular)"
+    CREATIONTYPE: "Angelegt mit"
 
   GridFieldActivateClubMemberAction:
-    ACTIVATEMEMBER: "Aktiviere Mitglied"
+    ACTIVATEMEMBER: "Antrag zustimmen"
     DEACTIVATEMEMBER: "Deaktiviere Mitglied"
-    ACTIVATEMEMBERDONE: "Mitglied aktiviert."
+    ACTIVATEMEMBERDONE: "Mitglied angelegt."
     DEACTIVATEMEMBERDONE: "Mitglied deaktiviert."
 
   EnrollPage:

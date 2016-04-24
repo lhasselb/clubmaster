@@ -47,6 +47,17 @@ class ClubAdmin extends ModelAdmin {
      */
     public function getList() {
         $list = parent::getList();
+
+        // Filter only active
+        if($this->modelClass == 'ClubMember')
+        {
+            $list = $list->filter('Active','1');
+        }
+        elseif($this->modelClass == 'ClubMemberPending')
+        {
+            $list = $list->filter('Active','0');
+        }
+
         /*
         $it = $list->getIterator();
         while ($it->valid()) {
@@ -61,13 +72,13 @@ class ClubAdmin extends ModelAdmin {
 
             if($params['AgeRange'] == 'A')
             {
-            SS_Log::log('params='.$params['AgeRange'],SS_Log::WARN);
+            //SS_Log::log('params='.$params['AgeRange'],SS_Log::WARN);
                 //Attention: EXCLUDE
                 $list = $list->exclude('Age:GreaterThanOrEqual','18');
             }
             elseif($params['AgeRange'] == 'B')
             {
-            SS_Log::log('params='.$params['AgeRange'],SS_Log::WARN);
+            //SS_Log::log('params='.$params['AgeRange'],SS_Log::WARN);
                 //Attention: EXCLUDE
                 $list = $list->exclude('Age:LessThan','18');
             }
@@ -93,7 +104,7 @@ class ClubAdmin extends ModelAdmin {
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
         $gridField = $form->Fields()->fieldByName($gridFieldName);
 
-        SS_Log::log('gridFieldName='.$gridFieldName,SS_Log::WARN);
+        //SS_Log::log('gridFieldName='.$gridFieldName,SS_Log::WARN);
 
         // Get gridfield config
         $config = $gridField->getConfig();
@@ -102,20 +113,19 @@ class ClubAdmin extends ModelAdmin {
         {
             $config->removeComponentsByType('GridFieldExportButton');
             // Add GridFieldBulkManager
-            $config->addComponent(new GridFieldBulkManager());
+            //$config->addComponent(new GridFieldBulkManager());
             // Set editable fields
             //$config->getComponentByType('GridFieldBulkManager')->setConfig('editableFields', 'Active');
             // Add action
-            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
+            //$config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
+            //    _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
             // Remove action
-            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
-            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
-            $config->addComponent(new GridFieldActivateClubMemberAction());
+            //$config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
+            //$config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
+            //$config->addComponent(new GridFieldActivateClubMemberAction());
 
             $printButton = $config->getComponentByType('GridFieldPrintButton');
             //SS_Log::log('printButton='.$printButton->getTitle($gridField),SS_Log::WARN);
-
             $printButton->setPrintColumns(
                 array(
                     'Salutation' => _t('ClubMember.SALUTATION', 'Salutation'),
@@ -154,13 +164,24 @@ class ClubAdmin extends ModelAdmin {
         {
             $columns = $gridField->getColumns();
             foreach ($columns as $column) {
-                SS_Log::log('column='.$column,SS_Log::WARN);
+                //SS_Log::log('column='.$column,SS_Log::WARN);
             }
 
             $config->removeComponentsByType('GridFieldPrintButton');
             $config->removeComponentsByType('GridFieldExportButton');
             $config->removeComponentsByType('GridFieldAddNewButton');
             $config->removeComponentsByType('GridFieldFilterHeader');
+            // Add GridFieldBulkManager
+            $config->addComponent(new GridFieldBulkManager());
+            // Add action
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
+            // Remove action
+            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
+            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
+            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
+            $config->addComponent(new GridFieldActivateClubMemberAction());
+
         }
         // modify the list view.
 //        $gridField->getConfig()->addComponent(new GridFieldFilterHeader());
@@ -207,28 +228,43 @@ class ClubAdmin extends ModelAdmin {
     {
         parent::init();
 
-        SS_Log::log('ClubAdmin init()',SS_Log::WARN);
+        //SS_Log::log('ClubAdmin init()',SS_Log::WARN);
         //TODO: Make it configurable
-        $folder = Folder::find_or_make('requests');
+        $folder = Folder::find_or_make('antraege');
         $folder->syncChildren();
         $files = DataObject::get('File', "ParentID = '{$folder->ID}'");
+        $clubMembers = ClubMember::get();
         foreach ($files as $file) {
-            SS_Log::log('ID='.$file->ID.' type='.$file->ClassName.' Title='.$file->Title,SS_Log::WARN);
-            $data = file_get_contents($file->getFullPath());
-            $object = unserialize($data);//new CubMemberPending();
-            $pending = new ClubMemberPending();
-            $pending->Salutation = $object->Salutation;
-            $pending->FirstName = $object->FirstName;
-            $pending->LastName = $object->LastName;
-            $exists = ClubMember::findExistingObject($pending);
-            SS_Log::log('exists='.$exists,SS_Log::WARN);
-            $pending->write();
-            SS_Log::log('Class='.gettype($pending),SS_Log::WARN);
-            SS_Log::log('Sal='.$pending->Salutation,SS_Log::WARN);
-            SS_Log::log('First='.$pending->FirstName,SS_Log::WARN);
-            SS_Log::log('Last='.$pending->LastName,SS_Log::WARN);
+            //SS_Log::log('ID='.$file->ID.' type='.$file->ClassName.' Title='.$file->Title,SS_Log::WARN);
+            $clubMember = $clubMembers->find('SerializedFileName',$file->Title);
+            //if($clubMember) SS_Log::log('found='.$clubMember->ID,SS_Log::WARN);
+            $serialized = file_get_contents($file->getFullPath());
+            $data = unserialize($serialized);
+            $pendingMember = new ClubMemberPending();
+            $pendingMember->SerializedFileName = $file->Title;
+            $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Title);
+            $pendingMember->fillPendingMember($data);
+            if(!$clubMember) $pendingMember->write();
         }
-        //$requestMemberFile = new MemberFile();
     }
-
+/*
+    private function dateFromFilename($filename)
+    {
+        $date = new SS_DateTime();
+        // XX_dd.mm.yyyy_hh_mm_ss.antrag
+        if (preg_match('/^([A-Z]{2})_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/', $filename, $matches)) {
+            $day   = intval($matches[2]);
+            $month = intval($matches[3]);
+            $year  = intval($matches[4]);
+            $hour  = intval($matches[5]);
+            $minute  = intval($matches[6]);
+            $second  = intval($matches[7]);
+            $date->setValue($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+            //SS_Log::log('date='.$date->format('d.m.Y H:i:s'),SS_Log::WARN);
+            return $date;
+        } else {
+            return false;
+        }
+    }
+*/
 }

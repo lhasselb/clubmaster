@@ -82,33 +82,22 @@ class EnrollPage_Controller extends Page_Controller {
         $form->sessionMessage('Hello '. $data['FirstName'], 'success');
 
         foreach ($data as $key => $value) {
-            SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
+            //SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
         }
-
+        // Create a ClubMember object
         $clubMember = new ClubMember();
+        // Save data into object
         $form->saveInto($clubMember);
-
+        // Serialize object
         $serialized = serialize($clubMember);
-
-        //@TODO: sync /assets/requests
-        $folder = Folder::find_or_make('requests');
-        SS_Log::log("path=".$folder->getFullPath(),SS_Log::WARN);
-
-        $path = $folder->getFullPath().'Antrag_'.date('d.m.Y_H_i_s').'.mem';
-        SS_Log::log("file=".$file,SS_Log::WARN);
-
+        // Get the desired folder to store the serialized object
+        $folder = Folder::find_or_make('antraege');
+        // Get the path for the folder and add a filename
+        $path = $folder->getFullPath().$data['FirstName'][0].$data['LastName'][0].'_'.date('d.m.Y_H_i_s').'.antrag';
+        //SS_Log::log("path=".$path,SS_Log::WARN);
+        // Store the object at calculated the path
         file_put_contents($path, $serialized);
 
-        $newObject = unserialize($serialized);
-        /*
-        SS_Log::log("Class=".gettype($newObject),SS_Log::WARN);
-        SS_Log::log("Sal=".$newObject->Salutation,SS_Log::WARN);
-        SS_Log::log("Sal=".$newObject->FirstName,SS_Log::WARN);
-        SS_Log::log("Sal=".$newObject->LastName,SS_Log::WARN);
-        */
-        /*
-        $clubMember->write();
-        */
         return $this->redirectBack();
     }
 
