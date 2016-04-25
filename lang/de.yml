@@ -62,6 +62,8 @@ de:
     SINGULARNAME: "Mitgliedsantrag"
     DESCRIPTION: "Seite mit Formular für den Mitgliedsantrag"
     ENROLL: "Antrag absenden"
+    REQUESTSFOLDER: "Verzeichnis für Anträge:"
+    REQUESTSFOLDERDESCRIPTION: "Verzeichnis zum speichern der Antragsdateien (generiert vom Formular)"
 
   BicField:
     VALIDATIONBICNUMBER: "Bitte prüfen Sie die korrekte Eingabe BIC {number}"

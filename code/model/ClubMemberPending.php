@@ -38,10 +38,8 @@ class ClubMemberPending extends ClubMember
             $second  = intval($matches[7]);
             $date->setValue($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
             //SS_Log::log('date='.$date->format('d.m.Y H:i:s'),SS_Log::WARN);
-            return $date;
-        } else {
-            return false;
         }
+        return $date;
     }
 
     public function fillPendingMember($data)

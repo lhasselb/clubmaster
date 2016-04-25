@@ -62,6 +62,8 @@ en:
     SINGULARNAME: "Enroll"
     DESCRIPTION: "Page with form to enroll"
     ENROLL: "Enroll"
+    REQUESTSFOLDER: "Folder"
+    REQUESTSFOLDERDESCRIPTION: "Folder to store files created by form"
 
   BicField:
     VALIDATIONBICNUMBER: "Problem with {number}.Please ensure you have entered the BIC number correctly"

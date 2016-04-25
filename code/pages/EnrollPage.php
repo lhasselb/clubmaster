@@ -13,12 +13,77 @@ class EnrollPage extends Page
     private static $description = 'Enroll page using a form';
     private static $icon = 'pageimages/images/enrollform.png';
     private static $db = array();
-    private static $has_one = array();
+
+    // Store relation to folder(FolderID)
+    private static $has_one = array(
+        // Store selected folder
+        "Folder" => "Folder"
+    );
+
+    /**
+     * @config
+     */
+    private static $request_folder = 'antraege';
+
+    function onBeforeWrite() {
+        parent::onBeforeWrite();
+        if($this->Folder()->ID == '0')
+        {
+            //SS_Log::log('Folder()->ID='.$this->Folder()->ID,SS_Log::WARN);
+            Config::inst()->get('EnrollPage', 'request_folder');
+            $defaultFolderID = Folder::find_or_make('antraege')->ID;
+            //SS_Log::log('set Folder to ID='.$defaultFolderID,SS_Log::WARN);
+            $this->owner->FolderID = $defaultFolderID;
+        }
+    }
 
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
         return $fields;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettingsFields()
+    {
+        $fields = parent::getSettingsFields();
+        // Get the current member
+        $member = $this->getMember();
+
+        // Limit user access to settings by permission for "Change site structure" (SITETREE_REORGANISE)
+        if (Permission::checkMember($member, 'SITETREE_REORGANISE'))
+        {
+            // Add folder to be selectable from settings (Root.Settings)
+            $requestFolderTreeDropDown = TreeDropdownField::create('FolderID',
+                _t('EnrollPage.REQUESTSFOLDER', 'Folder:'),'Folder')
+            ->setDescription(_t('EnrollPage.REQUESTSFOLDERDESCRIPTION', 'Folder to store files created by form'),'Folder to store files created by form');
+
+            $fields->addFieldToTab("Root.Settings", $requestFolderTreeDropDown);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Obtain a Member
+     *
+     * @param null|int|Member $member
+     *
+     * @return null|Member
+     */
+    protected function getMember($member = null)
+    {
+        if (! $member) {
+            $member = Member::currentUser();
+        }
+
+        if (is_numeric($member)) {
+            $member = Member::get()->byID($member);
+        }
+
+        return $member;
     }
 }
 
@@ -94,8 +159,11 @@ class EnrollPage_Controller extends Page_Controller {
         $folder = Folder::find_or_make('antraege');
         // Get the path for the folder and add a filename
         $path = $folder->getFullPath().$data['FirstName'][0].$data['LastName'][0].'_'.date('d.m.Y_H_i_s').'.antrag';
-        //SS_Log::log("path=".$path,SS_Log::WARN);
-        // Store the object at calculated the path
+        SS_Log::log("path=".$path,SS_Log::WARN);
+        /* Store the object at calculated the path
+         * If filename does not exist, the file is created. Otherwise, the existing file is overwritten,
+         * unless the FILE_APPEND flag is set.
+         */
         file_put_contents($path, $serialized);
 
         return $this->redirectBack();
