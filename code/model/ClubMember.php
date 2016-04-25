@@ -3,6 +3,7 @@
 class ClubMember extends DataObject
 {
     private static $db = array(
+        //Form-Fields
         'Salutation' => 'Enum("Frau,Herr,Schülerin,Schüler","Frau")',
         'FirstName' => 'Varchar(255)',
         'LastName' => 'Varchar(255)',
@@ -25,11 +26,13 @@ class ClubMember extends DataObject
         'Iban' => 'Varchar(255)',
         'Bic' => 'Varchar(255)',
         // Special Meaning
-        'Active' => 'Boolean',
+        'Active' => 'Boolean(1)',
+        'Insurance' => 'Boolean',
+        // Calculated
         'Age' => 'Int',
-        // Form based
+        'Sex' => 'Enum("w,m","w")',
+        // File created by Webform
         'SerializedFileName' => 'Varchar(255)',
-        //'FormClaimDate' => 'SS_Datetime',
         // Distinguish Formular,Import,Händisch
         'CreationType' => 'Varchar(255)'
     );
@@ -86,7 +89,9 @@ class ClubMember extends DataObject
         $labels['Bic'] = _t('ClubMember.BIC', 'Bic');
         //Special
         $labels['Active'] = _t('ClubMember.ACTIVE', 'Active');
+        $labels['Insurance'] = _t('ClubMember.INSURANCE', 'Insurance');
         $labels['Age'] = _t('ClubMember.AGE', 'Age');
+        $labels['Sex'] = _t('ClubMember.SEX', 'Sex');
         $labels['SerializedFileName'] = _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName');
         $labels['FormClaimDate'] = _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate');
         $labels['CreationType'] = _t('ClubMember.CREATIONTYPE', 'CreationType');
@@ -142,19 +147,21 @@ class ClubMember extends DataObject
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text') );
         //Special
         $fields->addFieldToTab('Root.Main',
+            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active'))->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',
+            CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance'))->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
-        //$fields->addFieldToTab('Root.Main',CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',
+            TextField::create('Sex', _t('ClubMember.SEX', 'Sex'))->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',
+            TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',
+            DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',
+            TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
         return $fields;
     }
-
-    /*public function getCMSValidator() {
-        return new RequiredFields(array(
-            'MyRequiredField'
-        ));
-    }*/
 
     public function getAge()
     {
@@ -162,6 +169,12 @@ class ClubMember extends DataObject
         $time = SS_Datetime::now()->Format('U');
         $ago = abs($time - strtotime($this->dbObject('Birthday')->value));
         return  round($ago/86400/365);
+    }
+    public function getSex()
+    {
+        if(!$this->dbObject('Salutation')->value) return '';
+        if($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin')
+        return  ($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin')? 'w' : 'm';
     }
 
     public function isActive()

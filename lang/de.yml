@@ -7,7 +7,9 @@ de:
     LESSTHAN18: "Jünger als 18 Jahre"
     MOREEQUAL18: "18 Jahre und älter"
     #BulkAction
-    GRIDFIELDBULKDROPDOWNACTIVATE: "Antrag zustimmen"
+    GRIDFIELDBULKDROPDOWNACTIVATE: "Mitglied aktivieren"
+    GRIDFIELDBULKDROPDOWNDEACTIVATE: "Mitglied de-aktivieren"
+    GRIDFIELDBULKDROPDOWNAPPROVE: "Antrag zustimmen"
 
   ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"
@@ -46,17 +48,23 @@ de:
     ACCOUNTHOLDERCITY: "Kontoinhaber Wohnort"
     IBAN: "IBAN"
     BIC: "BIC"
-    AGE: "Alter"
     ACTIVE: "Aktiv"
+    INSURANCE: "Versicherung (BLSV)"
+    AGE: "Alter"
+    SEX: "Geschlecht"
     SERIALIZEDFILENAME: "Dateiname"
     FORMCLAIMDATE: "Antragsdatum (Formular)"
     CREATIONTYPE: "Angelegt mit"
 
   GridFieldActivateClubMemberAction:
-    ACTIVATEMEMBER: "Antrag zustimmen"
+    ACTIVATEMEMBER: "Aktiviere Mitglied"
     DEACTIVATEMEMBER: "Deaktiviere Mitglied"
-    ACTIVATEMEMBERDONE: "Mitglied angelegt."
+    ACTIVATEMEMBERDONE: "Mitglied aktiviert."
     DEACTIVATEMEMBERDONE: "Mitglied deaktiviert."
+
+  GridFieldApproveClubMemberAction:
+    APPROVEMEMBER: "Antrag zustimmen"
+    APPROVEMEMBERDONE: "Mitglied angelegt."
 
   EnrollPage:
     SINGULARNAME: "Mitgliedsantrag"

@@ -14,13 +14,17 @@ class ClubAdmin extends ModelAdmin {
 
     private static $allowed_actions = array();
 
-    //Override with a more specific importer implementation,
+    // Override with a more specific importer implementation
     private static $model_importers = array('ClubMember' => 'ClubMemberCsvBulkLoader');
 
     private static $menu_icon = 'clubmaster/images/clubmaster.png';
 
     public $showImportForm = array('ClubMember');
 
+    /**
+     * [getSearchContext description]
+     * @return [type] [description]
+     */
     public function getSearchContext() {
         $context = parent::getSearchContext();
 
@@ -49,6 +53,7 @@ class ClubAdmin extends ModelAdmin {
         $list = parent::getList();
 
         // Filter only active
+/*
         if($this->modelClass == 'ClubMember')
         {
             $list = $list->filter('Active','1');
@@ -57,7 +62,7 @@ class ClubAdmin extends ModelAdmin {
         {
             $list = $list->filter('Active','0');
         }
-
+*/
         /*
         $it = $list->getIterator();
         while ($it->valid()) {
@@ -113,16 +118,19 @@ class ClubAdmin extends ModelAdmin {
         {
             $config->removeComponentsByType('GridFieldExportButton');
             // Add GridFieldBulkManager
-            //$config->addComponent(new GridFieldBulkManager());
+            $config->addComponent(new GridFieldBulkManager());
             // Set editable fields
             //$config->getComponentByType('GridFieldBulkManager')->setConfig('editableFields', 'Active');
             // Add action
-            //$config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
-            //    _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('deactivateMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE','Deactivate'), 'GridFieldBulkActionActivateMemberHandler');
             // Remove action
-            //$config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
-            //$config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
-            //$config->addComponent(new GridFieldActivateClubMemberAction());
+            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
+            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
+            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
+            $config->addComponent(new GridFieldActivateClubMemberAction());
 
             $printButton = $config->getComponentByType('GridFieldPrintButton');
             //SS_Log::log('printButton='.$printButton->getTitle($gridField),SS_Log::WARN);
@@ -171,16 +179,18 @@ class ClubAdmin extends ModelAdmin {
             $config->removeComponentsByType('GridFieldExportButton');
             $config->removeComponentsByType('GridFieldAddNewButton');
             $config->removeComponentsByType('GridFieldFilterHeader');
+            $config->removeComponentsByType('GridFieldDeleteAction');
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
             // Add action
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNAPPROVE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
             // Remove action
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
-            $config->addComponent(new GridFieldActivateClubMemberAction());
+            //$config->addComponent(new GridFieldActivateClubMemberAction());
+            $config->addComponent(new GridFieldApproveClubMemberAction());
 
         }
         // modify the list view.
