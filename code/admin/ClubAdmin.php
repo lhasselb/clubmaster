@@ -9,17 +9,13 @@ class ClubAdmin extends ModelAdmin {
     );
 
     private static $url_segment = 'clubmanager';
-
-    private static $menu_title = 'Clubmanager';
-
-    private static $allowed_actions = array();
-
-    // Override with a more specific importer implementation
-    private static $model_importers = array('ClubMember' => 'ClubMemberCsvBulkLoader');
-
     private static $menu_icon = 'clubmaster/images/clubmaster.png';
-
+    private static $menu_title = 'Clubmanager';
+    // Specific importer implementation
+    private static $model_importers = array('ClubMember' => 'ClubMemberCsvBulkLoader');
     public $showImportForm = array('ClubMember');
+    //private static $url_rule = '/$Action';
+    private static $allowed_actions = array('approvemember','activatemember','deactivatemember');
 
     /**
      * [getSearchContext description]
@@ -53,16 +49,16 @@ class ClubAdmin extends ModelAdmin {
         $list = parent::getList();
 
         // Filter only active
-/*
+
         if($this->modelClass == 'ClubMember')
         {
             $list = $list->filter('Active','1');
         }
         elseif($this->modelClass == 'ClubMemberPending')
         {
-            $list = $list->filter('Active','0');
+            $list = $list->filter('Pending','1');
         }
-*/
+
         /*
         $it = $list->getIterator();
         while ($it->valid()) {
@@ -243,18 +239,28 @@ class ClubAdmin extends ModelAdmin {
         $folder = Folder::find_or_make('antraege');
         $folder->syncChildren();
         $files = DataObject::get('File', "ParentID = '{$folder->ID}'");
-        $clubMembers = ClubMember::get();
+
+        $pendingClubMembers = ClubMemberPending::get();
+        SS_Log::log('count='.$pendingClubMembers->count(),SS_Log::WARN);
         foreach ($files as $file) {
+            SS_Log::log('current title='.$file->Title,SS_Log::WARN);
             //SS_Log::log('ID='.$file->ID.' type='.$file->ClassName.' Title='.$file->Title,SS_Log::WARN);
-            $clubMember = $clubMembers->find('SerializedFileName',$file->Title);
+            $pendingClubMember = $pendingClubMembers->find('SerializedFileName',$file->Title);
             //if($clubMember) SS_Log::log('found='.$clubMember->ID,SS_Log::WARN);
-            $serialized = file_get_contents($file->getFullPath());
-            $data = unserialize($serialized);
-            $pendingMember = new ClubMemberPending();
-            $pendingMember->SerializedFileName = $file->Title;
-            $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Title);
-            $pendingMember->fillPendingMember($data);
-            if(!$clubMember) $pendingMember->write();
+            SS_Log::log('pendingClubMember ID ='.$pendingClubMember->ID,SS_Log::WARN);
+
+            if(!$this->pendingExists($pendingMember))
+            {
+            SS_Log::log('found='.$pendingClubMember->SerializedFileName,SS_Log::WARN);
+                $serialized = file_get_contents($file->getFullPath());
+                $data = unserialize(base64_decode($serialized));
+                $pendingMember = new ClubMemberPending();
+                $pendingMember->SerializedFileName =$file->Title;
+                $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Title);
+                $pendingMember->fillPendingMember($data);
+                $pendingMember->write();
+            }
+
         }
     }
 /*
@@ -277,4 +283,8 @@ class ClubAdmin extends ModelAdmin {
         }
     }
 */
+    // Function for basic field validation (present and neither empty nor only white space
+    function pendingExists($member){
+        return (isset($member) || trim($member)!=='');
+    }
 }

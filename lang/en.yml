@@ -53,8 +53,9 @@ en:
     AGE: "Age"
     SEX: "Sex"
     SERIALIZEDFILENAME: "Filename"
-    FormClaimDate: "Date (Form)"
-    CreationType: "Created by"
+    FORMCLAIMDATE: "Date (Form)"
+    CREATIONTYPE: "Created by"
+    PENDING: "Pending"
 
   GridFieldActivateClubMemberAction:
     ACTIVATEMEMBER: "Activate member"

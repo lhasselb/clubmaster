@@ -17,16 +17,16 @@ class ClubMember extends DataObject
         'Mobil' => 'Varchar(255)',
         'Phone' => 'Varchar(255)',
         'Since' => 'Date',
-        'AccountHolderFirstName' => 'Varchar(255)',
-        'AccountHolderLastName' => 'Varchar(255)',
+        'AccountHolderFirstName' => 'Varchar(16)',
+        'AccountHolderLastName' => 'Varchar(16)',
         'AccountHolderStreet' => 'Varchar(255)',
-        'AccountHolderStreetnumber' => 'Varchar(255)', // Nummer 34B?
+        'AccountHolderStreetnumber' => 'Varchar(10)', // Nummer 34B?
         'AccountHolderZip' => 'Int(5)',
         'AccountHolderCity' => 'Varchar(255)',
-        'Iban' => 'Varchar(255)',
-        'Bic' => 'Varchar(255)',
+        'Iban' => 'Varchar(34)',
+        'Bic' => 'Varchar(11)', //ISO_9362
         // Special Meaning
-        'Active' => 'Boolean(1)',
+        'Active' => 'Boolean(1)', //Hide from print/export
         'Insurance' => 'Boolean',
         // Calculated
         'Age' => 'Int',
@@ -34,17 +34,12 @@ class ClubMember extends DataObject
         // File created by Webform
         'SerializedFileName' => 'Varchar(255)',
         // Distinguish Formular,Import,Händisch
-        'CreationType' => 'Varchar(255)'
+        'CreationType' => 'Varchar(10)',
+        'Pending' => 'Boolean(0)'
     );
 
-    private static $has_one = array(
-        'Type' => 'ClubMemberType'
-    );
-
-    private static $defaults = array(
-        'CreationType' => 'Händisch'
-    );
-
+    private static $has_one = array('Type' => 'ClubMemberType');
+    private static $defaults = array('CreationType' => 'Händisch');
     private static $summary_fields = array(
         'Salutation',
         'FirstName',
@@ -52,17 +47,9 @@ class ClubMember extends DataObject
         'Age'
     );
 
-    private static $searchable_fields = array(
-        'FirstName',
-        'LastName',
-        'Age'
-    );
 
-    /**
-     * Translate field labels
-     * @param  boolean $includerelations [description]
-     * @return [type]                    [description]
-     */
+    private static $searchable_fields = array('FirstName','LastName','Age');
+
     function fieldLabels($includerelations = true) {
         $labels = parent::fieldLabels($includerelations);
         $labels['Salutation'] = _t('ClubMember.SALUTATION', 'Salutation');
@@ -95,6 +82,7 @@ class ClubMember extends DataObject
         $labels['SerializedFileName'] = _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName');
         $labels['FormClaimDate'] = _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate');
         $labels['CreationType'] = _t('ClubMember.CREATIONTYPE', 'CreationType');
+        $labels['Pending'] = _t('ClubMember.PENDING', 'Pending');
         return $labels;
     }
 
@@ -160,6 +148,8 @@ class ClubMember extends DataObject
             DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Main',
             TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Main',
+            CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
         return $fields;
     }
 

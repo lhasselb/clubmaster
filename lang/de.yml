@@ -48,13 +48,14 @@ de:
     ACCOUNTHOLDERCITY: "Kontoinhaber Wohnort"
     IBAN: "IBAN"
     BIC: "BIC"
-    ACTIVE: "Aktiv"
+    ACTIVE: "Aktiv (Sichtbar bei Export oder Druck)"
     INSURANCE: "Versicherung (BLSV)"
     AGE: "Alter"
     SEX: "Geschlecht"
     SERIALIZEDFILENAME: "Dateiname"
     FORMCLAIMDATE: "Antragsdatum (Formular)"
     CREATIONTYPE: "Angelegt mit"
+    PENDING: "Mitgliedschaft anhängig"
 
   GridFieldActivateClubMemberAction:
     ACTIVATEMEMBER: "Aktiviere Mitglied"
