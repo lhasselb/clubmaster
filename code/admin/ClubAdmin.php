@@ -52,7 +52,7 @@ class ClubAdmin extends ModelAdmin {
 
         if($this->modelClass == 'ClubMember')
         {
-            $list = $list->filter('Active','1');
+            $list = $list->filter(array('Active'=>'1','Pending'=>'0'));
         }
         elseif($this->modelClass == 'ClubMemberPending')
         {
@@ -234,30 +234,40 @@ class ClubAdmin extends ModelAdmin {
     {
         parent::init();
 
-        //SS_Log::log('ClubAdmin init()',SS_Log::WARN);
-        //TODO: Make it configurable
         $folder = Folder::find_or_make('antraege');
         $folder->syncChildren();
         $files = DataObject::get('File', "ParentID = '{$folder->ID}'");
 
-        $pendingClubMembers = ClubMemberPending::get();
-        SS_Log::log('count='.$pendingClubMembers->count(),SS_Log::WARN);
+        $clubMembers = ClubMember::get();
+        $clubMembersCount = $clubMembers->count();
+        SS_Log::log('count='.$clubMembers->count(),SS_Log::WARN);
         foreach ($files as $file) {
-            SS_Log::log('current title='.$file->Title,SS_Log::WARN);
-            //SS_Log::log('ID='.$file->ID.' type='.$file->ClassName.' Title='.$file->Title,SS_Log::WARN);
-            $pendingClubMember = $pendingClubMembers->find('SerializedFileName',$file->Title);
-            //if($clubMember) SS_Log::log('found='.$clubMember->ID,SS_Log::WARN);
-            SS_Log::log('pendingClubMember ID ='.$pendingClubMember->ID,SS_Log::WARN);
+            $file_parts = pathinfo($file->Title);
 
-            if(!$this->pendingExists($pendingMember))
+            if(!isset($file_parts['extension']) || $file_parts['extension']!== 'antrag')
             {
-            SS_Log::log('found='.$pendingClubMember->SerializedFileName,SS_Log::WARN);
+                //SS_Log::log('current file extension='.$file->Title,SS_Log::WARN);
+                continue;
+            }
+            //SS_Log::log('current file title='.$file->Title,SS_Log::WARN);
+            $existingClubMember = null;
+            // Do we have pending members?
+            if($clubMembers->count() > 0)
+            {
+                // Find an existing member for the current file
+                $existingClubMember = $clubMembers->find('SerializedFileName',$file->Title);
+                SS_Log::log('pendingClubMember exists ID ='.$existingClubMember->ID,SS_Log::WARN);
+            }
+            // No member found
+            if(!$this->pendingExists($existingClubMember))
+            {
                 $serialized = file_get_contents($file->getFullPath());
                 $data = unserialize(base64_decode($serialized));
+                // Create a new pending member
                 $pendingMember = new ClubMemberPending();
                 $pendingMember->SerializedFileName =$file->Title;
                 $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Title);
-                $pendingMember->fillPendingMember($data);
+                $pendingMember->fillWith($data);
                 $pendingMember->write();
             }
 

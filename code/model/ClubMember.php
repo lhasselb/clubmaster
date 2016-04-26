@@ -137,7 +137,7 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Main',
-            CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance'))->performReadonlyTransformation());
+            CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
         $fields->addFieldToTab('Root.Main',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Main',
@@ -151,6 +151,11 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
         return $fields;
+    }
+
+    public function getFormClaimDate() {
+        $date = $this->dateFromFilename($this->SerializedFileName);
+        return $date->FormatI18N('%d.%m.%Y %H:%M:%S');
     }
 
     public function getAge()
@@ -170,6 +175,23 @@ class ClubMember extends DataObject
     public function isActive()
     {
         return $this->Active;
+    }
+
+    public function dateFromFilename($filename)
+    {
+        $date = new SS_DateTime();
+        // XX_dd.mm.yyyy_hh_mm_ss.antrag
+        if (preg_match('/^[A-Z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/', $filename, $matches)) {
+            $day   = intval($matches[1]);
+            $month = intval($matches[2]);
+            $year  = intval($matches[3]);
+            $hour  = intval($matches[4]);
+            $minute  = intval($matches[5]);
+            $second  = intval($matches[6]);
+            $date->setValue($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+            //SS_Log::log('date='.$date->format('d.m.Y H:i:s'),SS_Log::WARN);
+        }
+        return $date;
     }
 
     public function onBeforeWrite()

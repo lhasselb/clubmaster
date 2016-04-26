@@ -1,42 +1,9 @@
 <?php
 
-class ClubMemberPending extends DataObject
+class ClubMemberPending extends ClubMember
 {
-    private static $db = array(
-        //Form-Fields
-        'Salutation' => 'Enum("Frau,Herr,Schülerin,Schüler","Frau")',
-        'FirstName' => 'Varchar(255)',
-        'LastName' => 'Varchar(255)',
-        'Birthday' => 'Date',
-        'Nationality' => 'Varchar(255)', //CountryDropdownField
-        'Street' => 'Varchar(255)',
-        'Streetnumber' => 'Varchar(255)', // Nummer 34B?
-        'Zip' => 'Int(5)',
-        'City' => 'Varchar(255)',
-        'Email' => 'Varchar(254)',// See RFC 5321, Section 4.5.3.1.3. (256 minus the < and > character)
-        'Mobil' => 'Varchar(255)',
-        'Phone' => 'Varchar(255)',
-        'Since' => 'Date',
-        'AccountHolderFirstName' => 'Varchar(16)',
-        'AccountHolderLastName' => 'Varchar(16)',
-        'AccountHolderStreet' => 'Varchar(255)',
-        'AccountHolderStreetnumber' => 'Varchar(10)', // Nummer 34B?
-        'AccountHolderZip' => 'Int(5)',
-        'AccountHolderCity' => 'Varchar(255)',
-        'Iban' => 'Varchar(34)',
-        'Bic' => 'Varchar(11)', //ISO_9362
-        // Special & Calculated
-        'Age' => 'Int',
-        'Sex' => 'Enum("w,m","w")',
-        // File created by Webform
-        'SerializedFileName' => 'Varchar(255)',
-        // Distinguish Formular,Import,Händisch
-        'CreationType' => 'Varchar(10)',
-        'Pending' => 'Boolean(1)'
-    );
 
-    private static $has_one = array('Type' => 'ClubMemberType');
-    private static $defaults = array('CreationType' => 'Formular');
+    private static $defaults = array('CreationType' => 'Formular','Active' => '0');
     private static $summary_fields = array(
         'Salutation',
         'FirstName',
@@ -47,45 +14,7 @@ class ClubMemberPending extends DataObject
 
     private static $searchable_fields = array();
 
-    function fieldLabels($includerelations = true) {
-        $labels = parent::fieldLabels($includerelations);
-        $labels['Salutation'] = _t('ClubMember.SALUTATION', 'Salutation');
-        $labels['FirstName'] = _t('ClubMember.FIRSTNAME', 'FirstName');
-        $labels['LastName'] = _t('ClubMember.LASTNAME', 'LastName');
-        $labels['Birthday'] = _t('ClubMember.BIRTHDAY', 'Birthday');
-        $labels['Nationality'] = _t('ClubMember.NATIONALITY', 'Nationality');
-        $labels['Street'] = _t('ClubMember.STREET', 'Street');
-        $labels['Streetnumber'] = _t('ClubMember.STREETNUMBER', 'Streetnumber');
-        $labels['Zip'] = _t('ClubMember.ZIP', 'Zip');
-        $labels['City'] = _t('ClubMember.CITY', 'City');
-        $labels['Email'] = _t('ClubMember.EMAIL', 'Email');
-        $labels['Mobil'] = _t('ClubMember.MOBIL', 'Mobil');
-        $labels['Phone'] = _t('ClubMember.PHONE', 'Phone');
-        $labels['Type'] = _t('ClubMember.TYPE', 'Type');
-        $labels['Since'] = _t('ClubMember.SINCE', 'Since');
-        $labels['AccountHolderFirstName'] = _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName');
-        $labels['AccountHolderLastName'] = _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName');
-        $labels['AccountHolderStreet'] = _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet');
-        $labels['AccountHolderStreetnumber'] = _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetnumber');
-        $labels['AccountHolderZip'] = _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip');
-        $labels['AccountHolderCity'] = _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity');
-        $labels['Iban'] = _t('ClubMember.IBAN', 'Iban');
-        $labels['Bic'] = _t('ClubMember.BIC', 'Bic');
-        //Special
-        $labels['Age'] = _t('ClubMember.AGE', 'Age');
-        $labels['Sex'] = _t('ClubMember.SEX', 'Sex');
-        $labels['SerializedFileName'] = _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName');
-        $labels['FormClaimDate'] = _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate');
-        $labels['CreationType'] = _t('ClubMember.CREATIONTYPE', 'CreationType');
-        $labels['Pending'] = _t('ClubMember.PENDING', 'Pending');
-        return $labels;
-    }
-
-    public function getFormClaimDate() {
-        $date = $this->dateFromFilename($this->owner->SerializedFileName);
-        return $date->FormatI18N('%d.%m.%Y %H:%M:%S');
-    }
-
+/*
     function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -148,30 +77,11 @@ class ClubMemberPending extends DataObject
             CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
         return $fields;
     }
+*/
 
-    public function dateFromFilename($filename)
-    {
-        $date = new SS_DateTime();
-        // XX_dd.mm.yyyy_hh_mm_ss.antrag
-        if (preg_match('/^[A-Z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/', $filename, $matches)) {
-            $day   = intval($matches[1]);
-            $month = intval($matches[2]);
-            $year  = intval($matches[3]);
-            $hour  = intval($matches[4]);
-            $minute  = intval($matches[5]);
-            $second  = intval($matches[6]);
-            $date->setValue($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
-            //SS_Log::log('date='.$date->format('d.m.Y H:i:s'),SS_Log::WARN);
-        }
-        return $date;
-    }
-
-    public function fillPendingMember($data)
+    public function fillWith($data)
     {
         if($data === NULL) return false;
-
-        SS_Log::log('first='.$data->FirstName,SS_Log::WARN);
-
         $this->Salutation = $data->Salutation;
         $this->FirstName = $data->FirstName;
         $this->LastName = $data->LastName;
@@ -197,6 +107,11 @@ class ClubMemberPending extends DataObject
         //Special
         $this->CreationType = 'Formular';
         $this->Pending = 1;
+    }
+
+    public function isPending()
+    {
+        return $this->Pending;
     }
 
     public function canView($member = null) {
