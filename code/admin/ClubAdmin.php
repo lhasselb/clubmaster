@@ -262,7 +262,10 @@ class ClubAdmin extends ModelAdmin {
             {
                 // Find an existing member for the current file
                 $existingClubMember = $clubMembers->find('SerializedFileName',$file->Title);
-                SS_Log::log('pendingClubMember exists ID ='.$existingClubMember->ID,SS_Log::WARN);
+                if($existingClubMember)
+                {
+                    SS_Log::log('pendingClubMember exists ID ='.$existingClubMember->ID,SS_Log::WARN);
+                }
             }
             // No member found
             if(!$this->pendingExists($existingClubMember))

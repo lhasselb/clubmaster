@@ -39,13 +39,9 @@ class ClubMember extends DataObject
     private static $has_one = array('Type' => 'ClubMemberType');
 
     private static $defaults = array(
-        'CreationType' => 'Händisch'
+        'CreationType' => 'Händisch',
+        'Active' => '1'
     );
-
-    public function populateDefaults() {
-        $this->Since = SS_Datetime::now();
-        parent::populateDefaults();
-    }
 
     private static $summary_fields = array(
         'Salutation',
@@ -54,6 +50,11 @@ class ClubMember extends DataObject
         'Age'
     );
 
+    public function populateDefaults() {
+        //$this->Since = SS_Datetime::now();
+        $this->Since = date('d.m.Y');
+        parent::populateDefaults();
+    }
 
     private static $searchable_fields = array('FirstName','LastName','Age');
 
@@ -92,6 +93,33 @@ class ClubMember extends DataObject
         $labels['CreationType'] = _t('ClubMember.CREATIONTYPE', 'CreationType');
         $labels['Pending'] = _t('ClubMember.PENDING', 'Pending');
         return $labels;
+    }
+
+    public function getCMSValidator() {
+        return new RequiredFields(array(
+        'Salutation',
+        'FirstName',
+        'LastName',
+        'Birthday',
+        'Nationality',
+        'Street',
+        'StreetNumber',
+        'Zip',
+        'City',
+        'EqualAddress',
+        'Email',
+        'Mobil',
+        'Phone',
+        'Since',
+        'AccountHolderFirstName',
+        'AccountHolderLastName',
+        'AccountHolderStreet',
+        'AccountHolderStreetNumber',
+        'AccountHolderZip',
+        'AccountHolderCity',
+        'Iban',
+        'Bic'
+        ));
     }
 
     function getCMSFields()

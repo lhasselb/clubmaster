@@ -50,13 +50,13 @@ de:
     IBAN: "IBAN"
     BIC: "BIC"
     ACTIVE: "Aktiv (Sichtbar bei Export oder Druck)"
-    INSURANCE: "Versicherung (BLSV)"
+    INSURANCE: "Versicherung (BLSV) gemeldet?"
     AGE: "Alter"
     SEX: "Geschlecht"
     SERIALIZEDFILENAME: "Dateiname"
     FORMCLAIMDATE: "Antragsdatum (Formular)"
     CREATIONTYPE: "Angelegt mit"
-    PENDING: "Mitgliedschaft anhängig"
+    PENDING: "Mitgliedschaft anhängig?"
 
   GridField:
     NewRecord: 'Neues %s'

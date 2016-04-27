@@ -12,6 +12,10 @@
 (function($) {
     $.entwine('ss', function($) {
 
+        $(document).ready(function() {
+            $('form:first *:input[type!=hidden]:first').focus();
+        });
+
         /**
          * Class: Form_ItemEditForm_EqualAddress_Holder input
          *
