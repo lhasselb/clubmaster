@@ -10,9 +10,10 @@ class ClubMember extends DataObject
         'Birthday' => 'Date',
         'Nationality' => 'Varchar(255)', //CountryDropdownField
         'Street' => 'Varchar(255)',
-        'Streetnumber' => 'Varchar(255)', // Nummer 34B?
+        'StreetNumber' => 'Varchar(255)', // Nummer 34B?
         'Zip' => 'Int(5)',
         'City' => 'Varchar(255)',
+        'EqualAddress' => 'Boolean(0)',
         'Email' => 'Varchar(254)',// See RFC 5321, Section 4.5.3.1.3. (256 minus the < and > character)
         'Mobil' => 'Varchar(255)',
         'Phone' => 'Varchar(255)',
@@ -20,7 +21,7 @@ class ClubMember extends DataObject
         'AccountHolderFirstName' => 'Varchar(16)',
         'AccountHolderLastName' => 'Varchar(16)',
         'AccountHolderStreet' => 'Varchar(255)',
-        'AccountHolderStreetnumber' => 'Varchar(10)', // Nummer 34B?
+        'AccountHolderStreetNumber' => 'Varchar(10)', // Nummer 34B?
         'AccountHolderZip' => 'Int(5)',
         'AccountHolderCity' => 'Varchar(255)',
         'Iban' => 'Varchar(34)',
@@ -28,18 +29,24 @@ class ClubMember extends DataObject
         // Special Meaning
         'Active' => 'Boolean(1)', //Hide from print/export
         'Insurance' => 'Boolean',
-        // Calculated
-        'Age' => 'Int',
-        'Sex' => 'Enum("w,m","w")',
-        // File created by Webform
-        'SerializedFileName' => 'Varchar(255)',
-        // Distinguish Formular,Import,Händisch
-        'CreationType' => 'Varchar(10)',
+        'Age' => 'Int', // Calculated
+        'Sex' => 'Enum("w,m","w")', // Calculated
+        'SerializedFileName' => 'Varchar(255)', // File created by Webform
+        'CreationType' => 'Enum("Formular,Import,Händisch")', // Distinguish Formular,Import,Händisch
         'Pending' => 'Boolean(0)'
     );
 
     private static $has_one = array('Type' => 'ClubMemberType');
-    private static $defaults = array('CreationType' => 'Händisch');
+
+    private static $defaults = array(
+        'CreationType' => 'Händisch'
+    );
+
+    public function populateDefaults() {
+        $this->Since = SS_Datetime::now();
+        parent::populateDefaults();
+    }
+
     private static $summary_fields = array(
         'Salutation',
         'FirstName',
@@ -58,9 +65,10 @@ class ClubMember extends DataObject
         $labels['Birthday'] = _t('ClubMember.BIRTHDAY', 'Birthday');
         $labels['Nationality'] = _t('ClubMember.NATIONALITY', 'Nationality');
         $labels['Street'] = _t('ClubMember.STREET', 'Street');
-        $labels['Streetnumber'] = _t('ClubMember.STREETNUMBER', 'Streetnumber');
+        $labels['StreetNumber'] = _t('ClubMember.STREETNUMBER', 'StreetNumber');
         $labels['Zip'] = _t('ClubMember.ZIP', 'Zip');
         $labels['City'] = _t('ClubMember.CITY', 'City');
+        $labels['EqualAddress'] = _t('ClubMember.EQUALADDRESS', 'EqualAddress');
         $labels['Email'] = _t('ClubMember.EMAIL', 'Email');
         $labels['Mobil'] = _t('ClubMember.MOBIL', 'Mobil');
         $labels['Phone'] = _t('ClubMember.PHONE', 'Phone');
@@ -69,7 +77,7 @@ class ClubMember extends DataObject
         $labels['AccountHolderFirstName'] = _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName');
         $labels['AccountHolderLastName'] = _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName');
         $labels['AccountHolderStreet'] = _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet');
-        $labels['AccountHolderStreetnumber'] = _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetnumber');
+        $labels['AccountHolderStreetNumber'] = _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber');
         $labels['AccountHolderZip'] = _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip');
         $labels['AccountHolderCity'] = _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity');
         $labels['Iban'] = _t('ClubMember.IBAN', 'Iban');
@@ -89,6 +97,9 @@ class ClubMember extends DataObject
     function getCMSFields()
     {
         $fields = parent::getCMSFields();
+
+        Requirements::javascript(CLUBMASTER_DIR . "/javascript/ClubAdmin.js");
+
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));
         $fields->addFieldToTab('Root.Main',
@@ -102,11 +113,13 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             TextField::create('Street', _t('ClubMember.STREET', 'Street')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('Streetnumber', _t('ClubMember.STREETNUMBER', 'Streetnumber')));
+            TextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber')));
         $fields->addFieldToTab('Root.Main',
             NumericField::create('Zip', _t('ClubMember.ZIP', 'Zip')));
         $fields->addFieldToTab('Root.Main',
             TextField::create('City', _t('ClubMember.CITY', 'City')));
+        $fields->addFieldToTab('Root.Main',
+            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
         $fields->addFieldToTab('Root.Main',
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main',
@@ -124,7 +137,7 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             TextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderStreetnumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetnumber')));
+            TextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')));
         $fields->addFieldToTab('Root.Main',
             NumericField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')));
         $fields->addFieldToTab('Root.Main',
@@ -135,7 +148,7 @@ class ClubMember extends DataObject
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text') );
         //Special
         $fields->addFieldToTab('Root.Main',
-            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active'))->performReadonlyTransformation());
+            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
         $fields->addFieldToTab('Root.Main',
             CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
         $fields->addFieldToTab('Root.Main',
@@ -148,9 +161,20 @@ class ClubMember extends DataObject
             DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Main',
             TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
-            CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
+        //$fields->addFieldToTab('Root.Main',
+        //    CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
+        //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
+        $fields->removeByName('Pending');
+        if($this->CreationType !== 'Formular')
+        {
+            $fields->removeByName(array('SerializedFileName','FormClaimDate'));
+        }
         return $fields;
+    }
+
+    public function getTitle()
+    {
+        return $this->FirstName.' '.$this->LastName;
     }
 
     public function getFormClaimDate() {
@@ -165,10 +189,9 @@ class ClubMember extends DataObject
         $ago = abs($time - strtotime($this->dbObject('Birthday')->value));
         return  round($ago/86400/365);
     }
+
     public function getSex()
     {
-        if(!$this->dbObject('Salutation')->value) return '';
-        if($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin')
         return  ($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin')? 'w' : 'm';
     }
 
@@ -198,7 +221,8 @@ class ClubMember extends DataObject
     {
         parent::onBeforeWrite();
         $this->Age = $this->getAge();
-        //Check CreationType
+        SS_Log::log('Sex='.$this->getSex(),SS_Log::WARN);
+        $this->Sex = $this->getSex();
         if($this->CreationType == 'Händisch')
         $this->Active = true;
     }

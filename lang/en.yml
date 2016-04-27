@@ -15,8 +15,8 @@ en:
     SINGULARNAME: "Member request"
 
   ClubMemberType:
-    SINGULARNAME: "Type"
-    PLURALNAME: "Types"
+    SINGULARNAME: "Clubmember type"
+    PLURALNAME: "Clubmember type"
     DESCRIPTION: "Manage your types"
     TYPENAME: "Type name"
     CLUBMEMBERS: "Club members"
@@ -35,6 +35,7 @@ en:
     STREETNUMBER: "Streetnumber"
     ZIP: "Postal code"
     CITY: "City"
+    EQUALADDRESS: "Member is Accountholder"
     EMAIL: "E-Mail"
     MOBIL: "Cellphone"
     PHONE: "Phone"
@@ -56,6 +57,9 @@ en:
     FORMCLAIMDATE: "Date (Form)"
     CREATIONTYPE: "Created by"
     PENDING: "Pending"
+
+#  GridField:
+#    NewRecord: 'New %s'
 
   GridFieldActivateClubMemberAction:
     ACTIVATEMEMBER: "Activate member"

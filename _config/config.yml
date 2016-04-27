@@ -1,11 +1,14 @@
 ---
 Name: clubmaster
 ---
-# Extend LeftAndMain
+# Extend LeftAndMain (Hide Help)
 LeftAndMain:
   extensions:
     - CustomLeftAndMain
-
+# Add extension to allowed extensions
 File:
   allowed_extensions:
     - antrag
+
+ClubMemberPending:
+  better_buttons_enabled: false

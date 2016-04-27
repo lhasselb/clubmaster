@@ -35,6 +35,7 @@ de:
     STREETNUMBER: "Hausnummer"
     ZIP: "Postleitzahl"
     CITY: "Wohnort"
+    EQUALADDRESS: "Mitgliedsadresse ist Kontoadresse"
     EMAIL: "E-Mail"
     MOBIL: "Mobiltelefon"
     PHONE: "Telefon"
@@ -56,6 +57,9 @@ de:
     FORMCLAIMDATE: "Antragsdatum (Formular)"
     CREATIONTYPE: "Angelegt mit"
     PENDING: "Mitgliedschaft anhängig"
+
+  GridField:
+    NewRecord: 'Neues %s'
 
   GridFieldActivateClubMemberAction:
     ACTIVATEMEMBER: "Aktiviere Mitglied"

@@ -3,9 +3,10 @@
 class ClubAdmin extends ModelAdmin {
 
     private static $managed_models = array(
-        'ClubMemberPending',
-        'ClubMember',
-        'ClubMemberType'
+        //'ClubMemberPending' => array('title' => _t('ClubAdmin.CLUBMEMBERSPENDING','ClubMembersPending')),
+        'ClubMemberPending' => array('title' => 'Anträge'),
+        'ClubMember' => array('title' => 'Mitglieder'),
+        'ClubMemberType' => array('title' => 'Mitgliedstypen')
     );
 
     private static $url_segment = 'clubmanager';
@@ -48,12 +49,12 @@ class ClubAdmin extends ModelAdmin {
     public function getList() {
         $list = parent::getList();
 
-        // Filter only active
-
+        // Show valid members
         if($this->modelClass == 'ClubMember')
         {
-            $list = $list->filter(array('Active'=>'1','Pending'=>'0'));
+            $list = $list->filter('Active','1');//array('Active'=>'1','Pending'=>'0')
         }
+        // Show pending members
         elseif($this->modelClass == 'ClubMemberPending')
         {
             $list = $list->filter('Pending','1');
@@ -112,7 +113,7 @@ class ClubAdmin extends ModelAdmin {
 
         if($gridFieldName =='ClubMember')
         {
-            $config->removeComponentsByType('GridFieldExportButton');
+            //$config->removeComponentsByType('GridFieldExportButton');
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
             // Set editable fields
@@ -225,8 +226,13 @@ class ClubAdmin extends ModelAdmin {
             'AccountHolderCity',
             'Iban',
             'Bic',
-            //'Active',
+            //'Active'
+            //'Insurance'
             //'Age'
+            //'Sex'
+            //'SerializedFileName'
+            //'CreationType'
+            //'Pending'
         );
     }
 
@@ -273,26 +279,7 @@ class ClubAdmin extends ModelAdmin {
 
         }
     }
-/*
-    private function dateFromFilename($filename)
-    {
-        $date = new SS_DateTime();
-        // XX_dd.mm.yyyy_hh_mm_ss.antrag
-        if (preg_match('/^([A-Z]{2})_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/', $filename, $matches)) {
-            $day   = intval($matches[2]);
-            $month = intval($matches[3]);
-            $year  = intval($matches[4]);
-            $hour  = intval($matches[5]);
-            $minute  = intval($matches[6]);
-            $second  = intval($matches[7]);
-            $date->setValue($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
-            //SS_Log::log('date='.$date->format('d.m.Y H:i:s'),SS_Log::WARN);
-            return $date;
-        } else {
-            return false;
-        }
-    }
-*/
+
     // Function for basic field validation (present and neither empty nor only white space
     function pendingExists($member){
         return (isset($member) || trim($member)!=='');

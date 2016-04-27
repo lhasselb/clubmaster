@@ -59,6 +59,7 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             $clubMemberPending->Pending = 0;
             $clubMemberPending->Active = 1;
             $clubMemberPending->ClassName = 'ClubMember';
+            $clubMemberPending->Since = SS_Datetime::now();
             $clubMemberPending->write();
 
             // output a success message to the user
