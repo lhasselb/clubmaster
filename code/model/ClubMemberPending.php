@@ -14,14 +14,44 @@ class ClubMemberPending extends ClubMember
 
     private static $searchable_fields = array();
 
+    public function getCMSValidator() {
+        return new RequiredFields(array(
+        'Salutation',
+        'FirstName',
+        'LastName',
+        'Birthday',
+        'Nationality',
+        'Street',
+        'StreetNumber',
+        'Zip',
+        'City',
+        //'EqualAddress',
+        'Email',
+        'Mobil',
+        'Phone',
+        'Since',
+        'AccountHolderFirstName',
+        'AccountHolderLastName',
+        'AccountHolderStreet',
+        'AccountHolderStreetNumber',
+        'AccountHolderZip',
+        'AccountHolderCity',
+        'Iban',
+        'Bic'
+        ));
+    }
 
     function getCMSFields()
     {
         $fields = parent::getCMSFields();
+
+        // Add some editing features (show/hide account related address data)
+        Requirements::javascript(CLUBMASTER_DIR . "/javascript/ClubAdmin.js");
+
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName')));
+            TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus','autofocus'));
         $fields->addFieldToTab('Root.Main',
             TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName')));
         $fields->addFieldToTab('Root.Main',
@@ -33,7 +63,7 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Main',
             TextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber')));
         $fields->addFieldToTab('Root.Main',
-            NumericField::create('Zip', _t('ClubMember.ZIP', 'Zip')));
+            ZipField::create('Zip', _t('ClubMember.ZIP', 'Zip')));
         $fields->addFieldToTab('Root.Main',
             TextField::create('City', _t('ClubMember.CITY', 'City')));
         $fields->addFieldToTab('Root.Main',
@@ -57,7 +87,7 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Main',
             TextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')));
         $fields->addFieldToTab('Root.Main',
-            NumericField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')));
+            ZipField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')));
         $fields->addFieldToTab('Root.Main',
             TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')));
         $fields->addFieldToTab('Root.Main',
@@ -81,7 +111,7 @@ class ClubMemberPending extends ClubMember
             TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Main',
             CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
-                $fields->removeByName(array('EqualAddress','Active','Insurance'));
+                $fields->removeByName(array('Active','Insurance'));
         return $fields;
     }
 

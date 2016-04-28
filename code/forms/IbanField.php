@@ -9,6 +9,10 @@
  */
 class IbanField extends TextField {
 
+    public function Type() {
+        return 'IBAN text';
+    }
+
     /**
      * Add default attributes for use on all inputs.
      *
@@ -19,11 +23,9 @@ class IbanField extends TextField {
         return array_merge(
             parent::getAttributes(),
             array(
-            /*
-                'autocomplete' => 'off',
+                //'autocomplete' => 'off',
                 'maxlength' => 34,
                 'size' => 34
-            */
             )
         );
     }

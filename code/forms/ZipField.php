@@ -1,16 +1,15 @@
 <?php
 /**
- * Allows input of BIC number via form field,
- * including generic validation of its value.
- * https://de.wikipedia.org/wiki/ISO_9362
+ * Text input field with validation for numeric values. Supports validating
+ * the numeric value.
  *
  * @package clubmaster
  * @subpackage forms
  */
-class BicField extends TextField {
+class ZipField extends TextField {
 
     public function Type() {
-        return 'BIC text';
+        return 'ZIP text';
     }
 
     /**
@@ -24,8 +23,8 @@ class BicField extends TextField {
             parent::getAttributes(),
             array(
                 //'autocomplete' => 'off',
-                'maxlength' => 11,
-                'size' => 11
+                'maxlength' => 5,
+                'size' => 5
             )
         );
     }
@@ -33,22 +32,19 @@ class BicField extends TextField {
     public function validate($validator)
     {
 
-        /* Valid number PBNKDEFF
-         * Simple validator rule ^([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)$
-         */
         if(!$this->value)
         {
             return true;
         }
 
-        if(!verify_bic($this->value))
+        if(!verify_zip($this->value))
         {
             $validator->validationError(
                 $this->name,
                 _t(
-                    "BicField.VALIDATIONBICNUMBER",
-                    "Please ensure you have entered the {number} BIC number correctly",
-                    array('number' => $this->value)
+                    'ZipField.VALIDATIONZIP',
+                    "'{value}' is not a zip number, only zip numbers can be accepted for this field",
+                    array('value' => $this->value)
                 ),
                 "validation",
                 false
@@ -59,9 +55,9 @@ class BicField extends TextField {
 
 }
 
-function verify_bic($bic)
+function verify_zip($zip)
 {
-    if (preg_match("/^([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)$/", $bic))
+    if (preg_match("/^[0-9]{5}$/", $bic))
     {
         return true;
     } else {

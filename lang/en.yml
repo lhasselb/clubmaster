@@ -83,3 +83,6 @@ en:
 
   IbanField:
     VALIDATIONIBANNUMBER: "Problem with {number}.Please ensure you have entered the IBAN number correctly"
+
+    ZipField:
+      VALIDATIONZIP: "'{value}' is not a zip number, only zip numbers can be accepted for this field"

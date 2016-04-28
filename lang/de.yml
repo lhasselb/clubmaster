@@ -83,3 +83,6 @@ de:
 
   IbanField:
     VALIDATIONIBANNUMBER: "Bitte prüfen Sie die korrekte Eingabe IBAN {number}"
+
+    ZipField:
+      VALIDATIONZIP: "'{value}' ist keine Postleitzahl, nur Postleitzahlen sind zulässig für dieses Feld."

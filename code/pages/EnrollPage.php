@@ -111,7 +111,7 @@ class EnrollPage_Controller extends Page_Controller {
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')),
             TextField::create('Street', _t('ClubMember.STREET', 'Street')),
             TextField::create('Streetnumber', _t('ClubMember.STREETNUMBER', 'Streetnumber')),
-            NumericField::create('Zip', _t('ClubMember.ZIP', 'Zip')),
+            ZipField::create('Zip', _t('ClubMember.ZIP', 'Zip')),
             TextField::create('City', _t('ClubMember.CITY', 'City')),
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')),
             TextField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil')),//PhoneNumberField
@@ -122,7 +122,7 @@ class EnrollPage_Controller extends Page_Controller {
             TextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')),
             TextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')),
             TextField::create('AccountHolderStreetnumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetnumber')),
-            NumericField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
+            ZipField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
             TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
 */
             IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))
