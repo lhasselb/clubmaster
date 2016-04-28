@@ -66,20 +66,19 @@
                     $("input[name='AccountHolderZip']").val($("input[name='Zip']").val());
                     $("#Form_ItemEditForm_AccountHolderCity_Holder").hide();
                 } else {
-                    //$('.settings').hide();
                     /*console.log('UN-Checked');*/
                     $("input[name='AccountHolderFirstName']").val('');
-                    $("#Form_ItemEditForm_AccountHolderFirstName_Holder").hide();
+                    $("#Form_ItemEditForm_AccountHolderFirstName_Holder").show();
                     $("input[name='AccountHolderLastName']").val('');
-                    $("#Form_ItemEditForm_AccountHolderLastName_Holder").hide();
+                    $("#Form_ItemEditForm_AccountHolderLastName_Holder").show();
                     $("input[name='AccountHolderStreet']").val('');
-                    $("#Form_ItemEditForm_AccountHolderStreet_Holder").hide();
+                    $("#Form_ItemEditForm_AccountHolderStreet_Holder").show();
                     $("input[name='AccountHolderStreetNumber']").val('');
-                    $("#Form_ItemEditForm_AccountHolderStreetNumber_Holder").hide();
+                    $("#Form_ItemEditForm_AccountHolderStreetNumber_Holder").show();
                     $("input[name='AccountHolderZip']").val('');
-                    $("#Form_ItemEditForm_AccountHolderZip_Holder").hide();
+                    $("#Form_ItemEditForm_AccountHolderZip_Holder").show();
                     $("input[name='AccountHolderCity']").val('');
-                    $("#Form_ItemEditForm_AccountHolderCity_Holder").hide();
+                    $("#Form_ItemEditForm_AccountHolderCity_Holder").show();
                 }
                 this._super();
             }

@@ -57,7 +57,7 @@ class ZipField extends TextField {
 
 function verify_zip($zip)
 {
-    if (preg_match("/^[0-9]{5}$/", $bic))
+    if (preg_match("/^[0-9]{5}$/", $zip))
     {
         return true;
     } else {

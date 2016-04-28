@@ -25,11 +25,11 @@ class ClubMemberPending extends ClubMember
         'StreetNumber',
         'Zip',
         'City',
-        //'EqualAddress',
         'Email',
         'Mobil',
         'Phone',
         'Since',
+        //'EqualAddress',
         'AccountHolderFirstName',
         'AccountHolderLastName',
         'AccountHolderStreet',
@@ -67,8 +67,6 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Main',
             TextField::create('City', _t('ClubMember.CITY', 'City')));
         $fields->addFieldToTab('Root.Main',
-            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main',
             TextField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil')));//PhoneNumberField
@@ -78,6 +76,8 @@ class ClubMemberPending extends ClubMember
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
         $fields->addFieldToTab('Root.Main',
             DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true) );
+        $fields->addFieldToTab('Root.Main',
+            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Main',
             TextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')));
         $fields->addFieldToTab('Root.Main',
@@ -95,21 +95,21 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Main',
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text') );
         //Special
-        //$fields->addFieldToTab('Root.Main',
+        //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
-        //$fields->addFieldToTab('Root.Main',
+        //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             TextField::create('Sex', _t('ClubMember.SEX', 'Sex'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
                 $fields->removeByName(array('Active','Insurance'));
         return $fields;

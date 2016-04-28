@@ -25,6 +25,8 @@ de:
     SINGULARNAME: "Mitglied"
     PLURALNAME: "Mitglieder"
     DESCRIPTION: "Verwalte Mitglieder"
+    MAINTITLE: "Stammdaten"
+    META: "Weitere Informationen"
 
     SALUTATION: "Anrede"
     FIRSTNAME: "Vorname"
@@ -84,5 +86,7 @@ de:
   IbanField:
     VALIDATIONIBANNUMBER: "Bitte prüfen Sie die korrekte Eingabe IBAN {number}"
 
-    ZipField:
-      VALIDATIONZIP: "'{value}' ist keine Postleitzahl, nur Postleitzahlen sind zulässig für dieses Feld."
+  ZipField:
+    VALIDATIONZIP: "'{value}' ist keine Postleitzahl, nur Postleitzahlen sind zulässig für dieses Feld."
+
+

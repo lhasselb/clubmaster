@@ -13,11 +13,11 @@ class ClubMember extends DataObject
         'StreetNumber' => 'Varchar(255)', // Nummer 34B?
         'Zip' => 'Int(5)',
         'City' => 'Varchar(255)',
-        'EqualAddress' => 'Boolean(0)',
         'Email' => 'Varchar(254)',// See RFC 5321, Section 4.5.3.1.3. (256 minus the < and > character)
         'Mobil' => 'Varchar(255)',
         'Phone' => 'Varchar(255)',
         'Since' => 'Date',
+        'EqualAddress' => 'Boolean(0)',
         'AccountHolderFirstName' => 'Varchar(16)',
         'AccountHolderLastName' => 'Varchar(16)',
         'AccountHolderStreet' => 'Varchar(255)',
@@ -69,12 +69,12 @@ class ClubMember extends DataObject
         $labels['StreetNumber'] = _t('ClubMember.STREETNUMBER', 'StreetNumber');
         $labels['Zip'] = _t('ClubMember.ZIP', 'Zip');
         $labels['City'] = _t('ClubMember.CITY', 'City');
-        $labels['EqualAddress'] = _t('ClubMember.EQUALADDRESS', 'EqualAddress');
         $labels['Email'] = _t('ClubMember.EMAIL', 'Email');
         $labels['Mobil'] = _t('ClubMember.MOBIL', 'Mobil');
         $labels['Phone'] = _t('ClubMember.PHONE', 'Phone');
         $labels['Type'] = _t('ClubMember.TYPE', 'Type');
         $labels['Since'] = _t('ClubMember.SINCE', 'Since');
+        $labels['EqualAddress'] = _t('ClubMember.EQUALADDRESS', 'EqualAddress');
         $labels['AccountHolderFirstName'] = _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName');
         $labels['AccountHolderLastName'] = _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName');
         $labels['AccountHolderStreet'] = _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet');
@@ -106,11 +106,11 @@ class ClubMember extends DataObject
         'StreetNumber',
         'Zip',
         'City',
-        'EqualAddress',
         'Email',
         'Mobil',
         'Phone',
         'Since',
+        'EqualAddress',
         'AccountHolderFirstName',
         'AccountHolderLastName',
         'AccountHolderStreet',
@@ -125,6 +125,8 @@ class ClubMember extends DataObject
     function getCMSFields()
     {
         $fields = parent::getCMSFields();
+        $main = $fields->findOrMakeTab('Root.Main')->setTitle(_t('ClubMember.MAINTITLE','Main'));
+        $fields->addFieldToTab('Root', new Tab('Meta', _t('ClubMember.META', 'Meta')));
 
         // Add some editing features (show/hide account related address data)
         Requirements::javascript(CLUBMASTER_DIR . "/javascript/ClubAdmin.js");
@@ -148,8 +150,6 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             TextField::create('City', _t('ClubMember.CITY', 'City')));
         $fields->addFieldToTab('Root.Main',
-            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
-        $fields->addFieldToTab('Root.Main',
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main',
             TextField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil')));//PhoneNumberField
@@ -159,6 +159,8 @@ class ClubMember extends DataObject
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
         $fields->addFieldToTab('Root.Main',
             DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true) );
+        $fields->addFieldToTab('Root.Main',
+            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
         $fields->addFieldToTab('Root.Main',
             TextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')));
         $fields->addFieldToTab('Root.Main',
@@ -176,19 +178,19 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text') );
         //Special
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             TextField::create('Sex', _t('ClubMember.SEX', 'Sex'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation());
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Meta',
             TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
         //$fields->addFieldToTab('Root.Main',
         //    CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());

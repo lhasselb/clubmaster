@@ -25,6 +25,8 @@ en:
     SINGULARNAME: "Club member"
     PLURALNAME: "Club members"
     DESCRIPTION: "Manage your member"
+    MAINTITLE: "Main"
+    META: "Aditional"
 
     SALUTATION: "Salutation"
     FIRSTNAME: "First name"
@@ -84,5 +86,5 @@ en:
   IbanField:
     VALIDATIONIBANNUMBER: "Problem with {number}.Please ensure you have entered the IBAN number correctly"
 
-    ZipField:
-      VALIDATIONZIP: "'{value}' is not a zip number, only zip numbers can be accepted for this field"
+  ZipField:
+    VALIDATIONZIP: "'{value}' is not a zip number, only zip numbers can be accepted for this field"
