@@ -43,6 +43,7 @@ en:
     PHONE: "Phone"
     TYPE: "Type"
     SINCE: "Member since"
+    FROM: "Member from"
     ACCOUNTHOLDERFIRSTNAME: "Accountholder first name"
     ACCOUNTHOLDERLASTNAME: "Accountholder family name"
     ACCOUNTHOLDERSTREET: "Accountholder street"

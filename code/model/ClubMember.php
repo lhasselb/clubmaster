@@ -51,8 +51,8 @@ class ClubMember extends DataObject
     );
 
     public function populateDefaults() {
-        //$this->Since = SS_Datetime::now();
         $this->Since = date('d.m.Y');
+        SS_Log::log('ClubMember populateDefaults - Since='.$this->Since,SS_Log::WARN);
         parent::populateDefaults();
     }
 

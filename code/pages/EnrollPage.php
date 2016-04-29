@@ -105,8 +105,8 @@ class EnrollPage_Controller extends Page_Controller {
             TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))
             ->setAttribute('placeholder', _t('ClubMember.LASTNAME', 'Lastname')),
             DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))
-            ->setConfig('showcalendar', true)
-            ->setAttribute('placeholder', $today),
+            ->setConfig('showcalendar', true),
+            //->setAttribute('placeholder', $today),
 /*
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')),
             TextField::create('Street', _t('ClubMember.STREET', 'Street')),
@@ -150,7 +150,7 @@ class EnrollPage_Controller extends Page_Controller {
             //SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
         }
         // Create a ClubMember object
-        $clubMember = new ClubMember();
+        $clubMember = new ClubMemberPending();
         // Save data into object
         $form->saveInto($clubMember);
         // Serialize object safely
@@ -173,23 +173,20 @@ class EnrollPage_Controller extends Page_Controller {
     {
         parent::init();
         //Add javascript here
-        Requirements::javascript("framework/thirdparty/jquery/jquery.js");
+        Requirements::javascript(THIRDPARTY_DIR . "/jquery/jquery.js");
         Requirements::javascript("clubmaster/javascript/jquery-validate/jquery.validate.js");
         Requirements::javascript("clubmaster/javascript/jquery-validate/additional-methods.js");
         Requirements::javascript("clubmaster/javascript/jquery-validate/localization/messages_de.js");
         Requirements::customScript('
                 jQuery(document).ready(function() {
                     jQuery("#Form_EnrollForm").validate({
-                        //lang: "de",
+                        ignore: ".date",
                         rules: {
-                            Salutation: {required: true},
-                            FirstName: {required: true, minlength: 3},
-                            LastName:  {required: true, minlength: 3},
                             Iban: {required: true, iban: true},
-                            Bic: {required: true, bic: true},
+                            Bic: {required: true, bic: true}
                         }
                     });
                 });
-            ');
+        ');
     }
 }

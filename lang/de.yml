@@ -43,6 +43,7 @@ de:
     PHONE: "Telefon"
     TYPE: "Antragtyp"
     SINCE: "Mitglied seit"
+    SINCE: "Mitglied ab"
     ACCOUNTHOLDERFIRSTNAME: "Kontoinhaber Vorname"
     ACCOUNTHOLDERLASTNAME: "Kontoinhaber Nachname"
     ACCOUNTHOLDERSTREET: "Kontoinhaber Strasse"

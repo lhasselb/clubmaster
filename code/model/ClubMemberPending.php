@@ -14,6 +14,12 @@ class ClubMemberPending extends ClubMember
 
     private static $searchable_fields = array();
 
+    public function populateDefaults() {
+        parent::populateDefaults();
+        $this->Since = '';
+        SS_Log::log('ClubMemberPending populateDefaults - Since='.$this->Since,SS_Log::WARN);
+    }
+
     public function getCMSValidator() {
         return new RequiredFields(array(
         'Salutation',
@@ -75,7 +81,7 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
         $fields->addFieldToTab('Root.Main',
-            DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true) );
+            DateField::create('Since', _t('ClubMember.FROM', 'From'))->setConfig('showcalendar', true) );
         $fields->addFieldToTab('Root.Main',
             CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Main',
@@ -131,7 +137,8 @@ class ClubMemberPending extends ClubMember
         $this->Email = $data->Email;
         $this->Mobil = $data->Mobil;
         $this->Phone = $data->Phone;
-        $this->Since = $data->Since;
+        SS_Log::log('fillWith data->Since='.$data->Since,SS_Log::WARN);
+        $this->Since = '';
         $this->AccountHolderFirstName = $data->AccountHolderFirstName;
         $this->AccountHolderLastName = $data->AccountHolderLastName;
         $this->AccountHolderStreet = $data->AccountHolderStreet;
