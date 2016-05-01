@@ -14,12 +14,12 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
     public function processRecord($record, $columnMap, &$results, $preview = false) {
 
         foreach ($record as $key => $value) {
-            SS_Log::log('key='.$key.' value='.$value,SS_Log::WARN);
+            //SS_Log::log('key='.$key.' value='.$value,SS_Log::WARN);
         }
 
         //skip if required data is not present
         if (!$this->hasRequiredData($record)) {
-            $results->addSkipped("Required data is missing.");
+            //$results->addSkipped("Required data is missing.");
             return;
         }
 
@@ -80,36 +80,9 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
     );
 
     public static function getTypeByTypeName(&$obj, $val, $record) {
-        SS_Log::log('val='.$val,SS_Log::WARN);
         $type = ClubMemberType::get()->filter('TypeName', $val)->First();
-        SS_Log::log('type='.$type->TypeName,SS_Log::WARN);
         return $type;
     }
-
-    public $transforms = array(
-        'Salutation' => array('required' => true),
-        'FirstName' => array('required' => true),
-        'LastName' => array('required' => true),
-        'Birthday' => array('required' => true),
-        'Nationality' => array('required' => true),
-        'Street' => array('required' => true),
-        'StreetNumber' => array('required' => true),
-        'Zip' => array('required' => true),
-        'City' => array('required' => true),
-        'Email' => array('required' => true),
-        'Mobil' => array('required' => true),
-        'Phone' => array('required' => true),
-        'Type' => array('required' => true),
-        'Since' => array('required' => true),
-        'AccountHolderFirstName' => array('required' => true),
-        'AccountHolderLastName' => array('required' => true),
-        'AccountHolderStreet' => array('required' => true),
-        'AccountHolderStreetNumber' => array('required' => true),
-        'AccountHolderZip' => array('required' => true),
-        'AccountHolderCity' => array('required' => true),
-        'Iban' => array('required' => true),
-        'Bic' => array('required' => true)
-    );
 
     public function getImportSpec()
     {
@@ -130,18 +103,11 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
      */
     protected function hasRequiredData($mappedrecord)
     {
-        if (!is_array($mappedrecord) || empty($mappedrecord) || !array_filter($mappedrecord)) {
+        if (!is_array($mappedrecord) || empty($mappedrecord)) {
             return false;
-        }
-        foreach ($this->transforms as $field => $t) {
-            if (
-                is_array($t) &&
-                isset($t['required']) &&
-                $t['required'] === true &&
-                (!isset($mappedrecord[$field]) ||
-                empty($mappedrecord[$field]))
-            ) {
-                return false;
+        } else {
+            foreach ($mappedrecord as $key => $value) {
+                if (!isset($value) || empty($value)) return false;
             }
         }
 
