@@ -36,30 +36,45 @@ class ClubMember extends DataObject
         'Pending' => 'Boolean(0)'
     );
 
-    private static $has_one = array('Type' => 'ClubMemberType');
+    private static $has_one = array(
+        'Type' => 'ClubMemberType'
+    );
 
     private static $defaults = array(
         'CreationType' => 'Händisch',
         'Active' => '1'
     );
 
+    /**
+     * Fields display in Table head
+     * @var array
+     */
     private static $summary_fields = array(
-        'Salutation',
+        //'Salutation',
         'FirstName',
         'LastName',
-        'Age'
+        'Age',
+        'Sex'
     );
 
     public function populateDefaults() {
         $this->Since = date('d.m.Y');
-        SS_Log::log('ClubMember populateDefaults - Since='.$this->Since,SS_Log::WARN);
         parent::populateDefaults();
     }
 
-    private static $searchable_fields = array('FirstName','LastName','Age');
+    /**
+     * Fields Searchable with top Filter
+     * @var array
+     */
+    private static $searchable_fields = array(
+        //'Type.ID'
+    );
 
     function fieldLabels($includerelations = true) {
         $labels = parent::fieldLabels($includerelations);
+        // Relation has_one
+        $labels['Type.ID'] = _t('ClubMember.TYPES', 'Types');
+        // Properties
         $labels['Salutation'] = _t('ClubMember.SALUTATION', 'Salutation');
         $labels['FirstName'] = _t('ClubMember.FIRSTNAME', 'FirstName');
         $labels['LastName'] = _t('ClubMember.LASTNAME', 'LastName');
@@ -252,7 +267,7 @@ class ClubMember extends DataObject
     {
         parent::onBeforeWrite();
         $this->Age = $this->getAge();
-        SS_Log::log('Sex='.$this->getSex(),SS_Log::WARN);
+        //SS_Log::log('Sex='.$this->getSex(),SS_Log::WARN);
         $this->Sex = $this->getSex();
         if($this->CreationType == 'Händisch')
         $this->Active = true;
@@ -268,7 +283,7 @@ class ClubMember extends DataObject
     }
 
     public function canDelete($member = null) {
-        return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
+        return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
 
     public function canCreate($member = null) {

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Gridfield action handler for activating/deactivating records.
+ *
+ * @author Lars Hasselbach
+ */
 class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider {
 
     public function augmentColumns($gridField, &$columns) {

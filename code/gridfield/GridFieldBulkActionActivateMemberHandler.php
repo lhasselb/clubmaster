@@ -1,6 +1,6 @@
 <?php
 /**
- * Bulk action handler for activating records.
+ * Bulk action handler for activating/deactivating records.
  *
  * @author Lars Hasselbach
  */

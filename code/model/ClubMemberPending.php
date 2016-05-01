@@ -16,8 +16,7 @@ class ClubMemberPending extends ClubMember
 
     public function populateDefaults() {
         parent::populateDefaults();
-        $this->Since = '';
-        SS_Log::log('ClubMemberPending populateDefaults - Since='.$this->Since,SS_Log::WARN);
+        //$this->Since = '';
     }
 
     public function getCMSValidator() {
@@ -137,7 +136,6 @@ class ClubMemberPending extends ClubMember
         $this->Email = $data->Email;
         $this->Mobil = $data->Mobil;
         $this->Phone = $data->Phone;
-        SS_Log::log('fillWith data->Since='.$data->Since,SS_Log::WARN);
         $this->Since = '';
         $this->AccountHolderFirstName = $data->AccountHolderFirstName;
         $this->AccountHolderLastName = $data->AccountHolderLastName;
@@ -167,7 +165,7 @@ class ClubMemberPending extends ClubMember
     }
 
     public function canDelete($member = null) {
-        return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
+        return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
 
     public function canCreate($member = null) {

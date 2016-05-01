@@ -3,7 +3,6 @@
 class ClubAdmin extends ModelAdmin {
 
     private static $managed_models = array(
-        //'ClubMemberPending' => array('title' => _t('ClubAdmin.CLUBMEMBERSPENDING','ClubMembersPending')),
         'ClubMemberPending' => array('title' => 'Anträge'),
         'ClubMember' => array('title' => 'Mitglieder'),
         'ClubMemberType' => array('title' => 'Mitgliedstypen')
@@ -14,13 +13,18 @@ class ClubAdmin extends ModelAdmin {
     private static $menu_title = 'Clubmanager';
     // Specific importer implementation
     private static $model_importers = array('ClubMember' => 'ClubMemberCsvBulkLoader');
+    // Show importer for ClubMember only
     public $showImportForm = array('ClubMember');
     //private static $url_rule = '/$Action';
-    private static $allowed_actions = array('approvemember','activatemember','deactivatemember');
+    private static $allowed_actions = array('approvemember','activatemember','deactivatemember','ImportForm');
 
     /**
-     * [getSearchContext description]
-     * @return [type] [description]
+     * @config
+     */
+    private static $items_per_page = '20';
+
+    /**
+     *  Prepare search
      */
     public function getSearchContext() {
         $context = parent::getSearchContext();
@@ -29,11 +33,21 @@ class ClubAdmin extends ModelAdmin {
         {
             $rangeDropDownField = DropdownField::create('q[AgeRange]', _t('ClubAdmin.AGERANGE','AgeRange'),
                 array(
-                    'A' => _t('ClubAdmin.LESSTHAN18','LessThan 18'),
-                    'B' => _t('ClubAdmin.MOREEQUAL18','GreaterThanOrEqual 18')
+                    'U16' => _t('ClubAdmin.LESSTHAN16','LessThan 16'),
+                    'U26' => _t('ClubAdmin.LESSTHAN26','LessThan 26'),
+                    'U60' => _t('ClubAdmin.LESSTHAN60','LessThan 60'),
                 )
             )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
+
+            $showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Midgliedsstatus'),
+                array(
+                    'A' => _t('ClubAdmin.SHOWACTIVE','Zeige Aktive'),
+                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive')
+                )
+            )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
+
             $context->getFields()->push($rangeDropDownField);
+            $context->getFields()->push($showInactiveDropDownField);
         }
 
         return $context;
@@ -44,19 +58,18 @@ class ClubAdmin extends ModelAdmin {
      * The results list are retrieved from SearchContext::getResults(), based on the parameters passed through the search
      * form. If no search parameters are given, the results will show every record. Results are a DataList instance, so can
      * be customized by additional SQL filters, joins.
-     * @return [type] [description]
      */
     public function getList() {
         $list = parent::getList();
 
+        $params = $this->request->requestVar('q');
+
         // Show valid members
-        if($this->modelClass == 'ClubMember')
-        {
+        if($this->modelClass == 'ClubMember' && !isset($params)){
             $list = $list->filter('Active','1');//array('Active'=>'1','Pending'=>'0')
         }
         // Show pending members
-        elseif($this->modelClass == 'ClubMemberPending')
-        {
+        elseif($this->modelClass == 'ClubMemberPending'){
             $list = $list->filter('Pending','1');
         }
 
@@ -68,69 +81,69 @@ class ClubAdmin extends ModelAdmin {
             $it->next();
         }*/
 
-        $params = $this->request->requestVar('q'); // should be Array defined above
-        //SS_Log::log('params='.$params,SS_Log::WARN);
         if($this->modelClass == 'ClubMember' && isset($params['AgeRange']) && $params['AgeRange'] ) {
-
-            if($params['AgeRange'] == 'A')
-            {
-            //SS_Log::log('params='.$params['AgeRange'],SS_Log::WARN);
-                //Attention: EXCLUDE
-                $list = $list->exclude('Age:GreaterThanOrEqual','18');
+            if($params['AgeRange'] == 'U16'){
+                $list = $list->exclude('Age:GreaterThan','16');
             }
-            elseif($params['AgeRange'] == 'B')
-            {
-            //SS_Log::log('params='.$params['AgeRange'],SS_Log::WARN);
-                //Attention: EXCLUDE
-                $list = $list->exclude('Age:LessThan','18');
+            elseif($params['AgeRange'] == 'U26'){
+                $list = $list->exclude('Age:GreaterThan','26');
+            }
+            elseif($params['AgeRange'] == 'U60'){
+                $list = $list->exclude('Age:GreaterThan','60');
             }
         }
+
+        if($this->modelClass == 'ClubMember' && isset($params['State']) && $params['State'] ) {
+            if($params['State'] == 'A'){
+                $list = $list->filter('Active','1');
+            }
+            elseif($params['State'] == 'I'){
+                $list = $list->filter(array('Active'=>'0','Pending'=>'0'));
+            }
+        }
+
         return $list;
     }
 
     /**
      * Alter look & feel for EditForm
-     * To alter how the results are displayed (via GridField), you can also overload the getEditForm() method.
+     * To alter how the results are displayed (via GridField),
+     * you can also overload the getEditForm() method.
      * For example, to add or remove a new component.
-     * @param  [type] $id     [description]
-     * @param  [type] $fields [description]
-     * @return [type]         [description]
      */
     public function getEditForm($id = null, $fields = null) {
         $form = parent::getEditForm($id, $fields);
-        //$main = $fields->fieldByName('Root')->fieldByName('Main')->setTitle('TEST');
-
 
         // $gridFieldName is generated from the ModelClass, eg if the Class 'ClubMember'
         // is managed by this ModelAdmin, the GridField for it will also be named 'ClubMember'
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
         $gridField = $form->Fields()->fieldByName($gridFieldName);
 
-        //SS_Log::log('gridFieldName='.$gridFieldName,SS_Log::WARN);
-
         // Get gridfield config
         $config = $gridField->getConfig();
 
         if($gridFieldName =='ClubMember')
         {
-            //$config->removeComponentsByType('GridFieldExportButton');
+            $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page');
+            $config->getComponentByType('GridFieldPaginator')->setItemsPerPage($itemsPerPage);
+            // Add Filter header
+            $config->addComponent(new GridFieldFilterHeader());
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
-            // Set editable fields
-            //$config->getComponentByType('GridFieldBulkManager')->setConfig('editableFields', 'Active');
-            // Add action
-            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
-            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('deactivateMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE','Deactivate'), 'GridFieldBulkActionActivateMemberHandler');
-            // Remove action
+            // Remove bulk actions
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
-            $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
+            //$config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
+            // Add bulk action activateMember
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
+            // Add bulk action deactivateMember
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('deactivateMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE','Deactivate'), 'GridFieldBulkActionActivateMemberHandler');
+            // Add action activate/deactivateMember
             $config->addComponent(new GridFieldActivateClubMemberAction());
-
+            /* PRINT */
             $printButton = $config->getComponentByType('GridFieldPrintButton');
-            //SS_Log::log('printButton='.$printButton->getTitle($gridField),SS_Log::WARN);
             $printButton->setPrintColumns(
                 array(
                     'Salutation' => _t('ClubMember.SALUTATION', 'Salutation'),
@@ -186,12 +199,10 @@ class ClubAdmin extends ModelAdmin {
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
-            //$config->addComponent(new GridFieldActivateClubMemberAction());
             $config->addComponent(new GridFieldApproveClubMemberAction());
 
         }
-        // modify the list view.
-//        $gridField->getConfig()->addComponent(new GridFieldFilterHeader());
+
         return $form;
     }
 
@@ -228,7 +239,7 @@ class ClubAdmin extends ModelAdmin {
             'Bic',
             //'Active'
             //'Insurance'
-            //'Age'
+            'Age',
             //'Sex'
             //'SerializedFileName'
             //'CreationType'
@@ -236,8 +247,16 @@ class ClubAdmin extends ModelAdmin {
         );
     }
 
-    function init()
-    {
+    /* Disable default import form */
+    public function ImportForm() {
+        $form = null;
+        if (Permission::checkMember(Member::currentUser(), 'CMS_ACCESS_LeftAndMain')) {
+                $form = parent::ImportForm();
+        }
+        return $form;
+    }
+
+    public function init() {
         parent::init();
 
         $folder = Folder::find_or_make('antraege');
@@ -246,7 +265,7 @@ class ClubAdmin extends ModelAdmin {
 
         $clubMembers = ClubMember::get();
         $clubMembersCount = $clubMembers->count();
-        SS_Log::log('count='.$clubMembers->count(),SS_Log::WARN);
+        //SS_Log::log('count='.$clubMembers->count(),SS_Log::WARN);
         foreach ($files as $file) {
             $file_parts = pathinfo($file->Title);
 
@@ -264,7 +283,7 @@ class ClubAdmin extends ModelAdmin {
                 $existingClubMember = $clubMembers->find('SerializedFileName',$file->Title);
                 if($existingClubMember)
                 {
-                    SS_Log::log('pendingClubMember exists ID ='.$existingClubMember->ID,SS_Log::WARN);
+                    //SS_Log::log('pendingClubMember exists ID ='.$existingClubMember->ID,SS_Log::WARN);
                 }
             }
             // No member found

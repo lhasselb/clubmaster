@@ -31,6 +31,11 @@ class ClubMemberType extends DataObject
         return $fields;
     }
 
+    public function getTitle()
+    {
+        return  $this->TypeName;
+    }
+
     public function canView($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
@@ -40,7 +45,7 @@ class ClubMemberType extends DataObject
     }
 
     public function canDelete($member = null) {
-        return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
+        return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
 
     public function canCreate($member = null) {

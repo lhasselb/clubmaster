@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Gridfield action handler for approving records.
+ *
+ * @author Lars Hasselbach
+ */
 class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider {
 
     public function augmentColumns($gridField, &$columns) {

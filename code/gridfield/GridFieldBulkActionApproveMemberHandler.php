@@ -2,7 +2,7 @@
 /**
  * Bulk action handler for approving records.
  *
- * @author
+ * @author Lars Hasselbach
  */
 class GridFieldBulkActionApproveMemberHandler extends GridFieldBulkActionHandler
 {

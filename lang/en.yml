@@ -4,8 +4,12 @@ en:
     #Filter
     SELECTONE: "Select one"
     AGERANGE: "Age Range"
-    LESSTHAN18: "Less than 18"
-    MOREEQUAL18: "18 and more"
+    LESSTHAN16: "Less than 16"
+    LESSTHAN26: "Less than 26"
+    LESSTHAN60: "Less than 60"
+    STATE: "Member state"
+    SHOWACTIVE: "Show active"
+    SHOWINACTIVE: "Show inactive"
     #BulkAction
     GRIDFIELDBULKDROPDOWNACTIVATE: "Activate"
     GRIDFIELDBULKDROPDOWNDEACTIVATE: "Deactive"
@@ -27,7 +31,7 @@ en:
     DESCRIPTION: "Manage your member"
     MAINTITLE: "Main"
     META: "Aditional"
-
+    TYPES: "Types"
     SALUTATION: "Salutation"
     FIRSTNAME: "First name"
     LASTNAME: "Family name"
@@ -53,6 +57,7 @@ en:
     IBAN: "IBAN"
     BIC: "BIC"
     ACTIVE: "Active"
+    INACTIVE: "Inactive"
     INSURANCE: "Insurance"
     AGE: "Age"
     SEX: "Sex"

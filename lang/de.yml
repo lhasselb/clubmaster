@@ -4,11 +4,15 @@ de:
     #Filter
     SELECTONE: "Bitte wählen"
     AGERANGE: "Altersbereich"
-    LESSTHAN18: "Jünger als 18 Jahre"
-    MOREEQUAL18: "18 Jahre und älter"
+    LESSTHAN16: "Jünger als 16 Jahre"
+    LESSTHAN26: "Jünger als 26 Jahre"
+    LESSTHAN60: "Jünger als 60 Jahre"
+    STATE: "Midgliedsstatus"
+    SHOWACTIVE: "Zeige Aktive"
+    SHOWINACTIVE: "Zeige Inaktive"
     #BulkAction
-    GRIDFIELDBULKDROPDOWNACTIVATE: "Mitglied aktivieren"
-    GRIDFIELDBULKDROPDOWNDEACTIVATE: "Mitglied de-aktivieren"
+    GRIDFIELDBULKDROPDOWNACTIVATE: "Mitglieder aktivieren"
+    GRIDFIELDBULKDROPDOWNDEACTIVATE: "Mitglieder de-aktivieren"
     GRIDFIELDBULKDROPDOWNAPPROVE: "Antrag zustimmen"
 
   ClubMemberPending:
@@ -27,7 +31,7 @@ de:
     DESCRIPTION: "Verwalte Mitglieder"
     MAINTITLE: "Stammdaten"
     META: "Weitere Informationen"
-
+    TYPES: "Mitgliedstypen"
     SALUTATION: "Anrede"
     FIRSTNAME: "Vorname"
     LASTNAME: "Nachname"
@@ -52,7 +56,8 @@ de:
     ACCOUNTHOLDERCITY: "Kontoinhaber Wohnort"
     IBAN: "IBAN"
     BIC: "BIC"
-    ACTIVE: "Aktiv (Sichtbar bei Export oder Druck)"
+    ACTIVE: "Aktiv"
+    INACTIVE: "Inaktiv"
     INSURANCE: "Versicherung (BLSV) gemeldet?"
     AGE: "Alter"
     SEX: "Geschlecht"
@@ -89,5 +94,3 @@ de:
 
   ZipField:
     VALIDATIONZIP: "'{value}' ist keine Postleitzahl, nur Postleitzahlen sind zulässig für dieses Feld."
-
-
