@@ -17,7 +17,7 @@ class EnrollPage extends Page
     // Store relation to folder(FolderID)
     private static $has_one = array(
         // Store selected folder
-        "Folder" => "Folder"
+        'Folder' => 'Folder'
     );
 
     /**
@@ -156,7 +156,9 @@ class EnrollPage_Controller extends Page_Controller {
         // Serialize object safely
         $serialized = base64_encode(serialize($clubMember));
         // Get the desired folder to store the serialized object
-        $folder = Folder::find_or_make('antraege');
+        //$folder = Folder::find_or_make('antraege');
+        $folder = $this->Folder();
+
         // Get the path for the folder and add a filename
         $path = $folder->getFullPath().$data['FirstName'][0].$data['LastName'][0].'_'.$data['Birthday'].'_'.date('d.m.Y_H_i_s').'.antrag';
         SS_Log::log("path=".$path,SS_Log::WARN);

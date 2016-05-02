@@ -5,7 +5,8 @@ class ClubAdmin extends ModelAdmin {
     private static $managed_models = array(
         'ClubMemberPending' => array('title' => 'Anträge'),
         'ClubMember' => array('title' => 'Mitglieder'),
-        'ClubMemberType' => array('title' => 'Mitgliedstypen')
+        'ClubMemberType' => array('title' => 'Mitgliedstypen'),
+        'ClubMemberSettings' => array('title' => 'Einstellungen')
     );
 
     private static $url_segment = 'clubmanager';
@@ -190,19 +191,19 @@ class ClubAdmin extends ModelAdmin {
                     'Age'  => _t('ClubMember.AGE', 'Age')
                 )
             );
-        }
-        elseif($gridFieldName =='ClubMemberType')
-        {
+        } elseif($gridFieldName =='ClubMemberType') {
             $config->removeComponentsByType('GridFieldPrintButton');
             $config->removeComponentsByType('GridFieldExportButton');
-        }
-        elseif($gridFieldName =='ClubMemberPending')
-        {
+        } elseif($gridFieldName =='ClubMemberSettings') {
+            $config->removeComponentsByType('GridFieldPrintButton');
+            $config->removeComponentsByType('GridFieldExportButton');
+            $config->removeComponentsByType('GridFieldAddNewButton');
+            $config->removeComponentsByType('GridFieldDeleteAction');
+        } elseif($gridFieldName =='ClubMemberPending') {
             /*$columns = $gridField->getColumns();
             foreach ($columns as $column) {
                 SS_Log::log('column='.$column,SS_Log::WARN);
             }*/
-
             $config->removeComponentsByType('GridFieldPrintButton');
             $config->removeComponentsByType('GridFieldExportButton');
             $config->removeComponentsByType('GridFieldAddNewButton');

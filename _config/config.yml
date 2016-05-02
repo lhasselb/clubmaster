@@ -13,3 +13,5 @@ File:
 ClubMemberPending:
   better_buttons_enabled: false
 
+ClubMemberSettings:
+  better_buttons_enabled: false

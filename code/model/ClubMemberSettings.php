@@ -1,39 +1,40 @@
 <?php
 
-class ClubMemberType extends DataObject
+class ClubMemberSettings extends DataObject
 {
 
     private static $db = array(
-        'TypeName' => 'Varchar(255)'
     );
 
-    private static $has_many = array(
-        'ClubMembers' => 'ClubMember'
+    // Store relation to folder(FolderID)
+    private static $has_one = array(
+        // Store selected folder
+        'Folder' => 'Folder'
     );
 
     private static $summary_fields = array(
-        'TypeName'
+        'Title'
     );
 
     private static $searchable_fields = array();
 
     function fieldLabels($includerelations = true) {
         $labels = parent::fieldLabels($includerelations);
-        $labels['TypeName'] = _t('ClubMemberType.TYPENAME', 'TypeName');
-        $labels['ClubMembers'] = _t('ClubMemberType.CLUBMEMBERS', 'ClubMembers');
+        $labels['Folder'] = _t('ClubMemberSettings.FOLDER', 'Folder');
         return $labels;
     }
 
     function getCMSFields()
     {
         $fields = parent::getCMSFields();
-
+        $fields->removeByName('Folder');
+        $fields->addFieldToTab('Root.Main',
+            TreeDropdownField::create('FolderID', _t('ClubMemberSettings.FOLDER', 'Folder'),'Folder')->setTreeBaseID('0'));
         return $fields;
     }
 
-    public function getTitle()
-    {
-        return  $this->TypeName;
+    public function getTitle() {
+        return  $this->Folder()->getTitle();
     }
 
     public function canView($member = null) {

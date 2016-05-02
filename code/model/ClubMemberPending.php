@@ -4,6 +4,7 @@ class ClubMemberPending extends ClubMember
 {
 
     private static $defaults = array('CreationType' => 'Formular','Active' => '0');
+
     private static $summary_fields = array(
         'Salutation',
         'FirstName',
@@ -14,10 +15,6 @@ class ClubMemberPending extends ClubMember
 
     private static $searchable_fields = array();
 
-    public function populateDefaults() {
-        parent::populateDefaults();
-        //$this->Since = '';
-    }
 
     public function getCMSValidator() {
         return new RequiredFields(array(
@@ -156,9 +153,9 @@ class ClubMemberPending extends ClubMember
     public function onBeforeDelete(){
 
         $fileName = $this->SerializedFileName;
-        SS_Log::log('onBeforeDelete filename='.$fileName.' ID='.$fileName->ID,SS_Log::WARN);
-
-        //$file = DataObject::get_by_id('File', $fileName->ID); //we have to make sure it is a Dataobject object
+        SS_Log::log('onBeforeDelete filename='.$fileName.' ID='.$this->ID,SS_Log::WARN);
+        $file = File::find($fileName);
+        SS_Log::log('onBeforeDelete file='.$file->ID,SS_Log::WARN);
         if ($file && $file->exists()) {
                 $file->delete();
                 $file->destroy();
