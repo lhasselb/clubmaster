@@ -31,6 +31,9 @@ class ClubAdmin extends ModelAdmin {
 
         if($this->modelClass == 'ClubMember')
         {
+            $startNumericField = new ZipField("q[StartPlz]",  _t('ClubAdmin.ZIPSTART','zipStart'));
+            $endNumericField = new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND','zipEnd'));
+
             $rangeDropDownField = DropdownField::create('q[AgeRange]', _t('ClubAdmin.AGERANGE','AgeRange'),
                 array(
                     'U16' => _t('ClubAdmin.LESSTHAN16','LessThan 16'),
@@ -48,6 +51,8 @@ class ClubAdmin extends ModelAdmin {
 
             $context->getFields()->push($rangeDropDownField);
             $context->getFields()->push($showInactiveDropDownField);
+            $context->getFields()->push($startNumericField);
+            $context->getFields()->push($endNumericField);
         }
 
         return $context;
@@ -60,46 +65,58 @@ class ClubAdmin extends ModelAdmin {
      * be customized by additional SQL filters, joins.
      */
     public function getList() {
+        // Get all including inactive
         $list = parent::getList();
 
+        // Get parameters
         $params = $this->request->requestVar('q');
 
-        // Show valid members
-        if($this->modelClass == 'ClubMember' && !isset($params)){
-            $list = $list->filter('Active','1');//array('Active'=>'1','Pending'=>'0')
-        }
-        // Show pending members
-        elseif($this->modelClass == 'ClubMemberPending'){
-            $list = $list->filter('Pending','1');
-        }
+        if($params) {
 
-        /*
-        $it = $list->getIterator();
-        while ($it->valid()) {
-            $member = $it->current();
-            SS_Log::log('Before key='.$it->key().' lastname='.$member->LastName,SS_Log::WARN);
-            $it->next();
-        }*/
-
-        if($this->modelClass == 'ClubMember' && isset($params['AgeRange']) && $params['AgeRange'] ) {
-            if($params['AgeRange'] == 'U16'){
-                $list = $list->exclude('Age:GreaterThan','16');
-            }
-            elseif($params['AgeRange'] == 'U26'){
-                $list = $list->exclude('Age:GreaterThan','26');
-            }
-            elseif($params['AgeRange'] == 'U60'){
-                $list = $list->exclude('Age:GreaterThan','60');
-            }
-        }
-
-        if($this->modelClass == 'ClubMember' && isset($params['State']) && $params['State'] ) {
-            if($params['State'] == 'A'){
+            // Show or hide active / inactive
+            if($this->modelClass == 'ClubMember' && isset($params['State']) && $params['State'] ) {
+                if($params['State'] == 'A'){
+                    $list = $list->filter('Active','1');
+                }
+                elseif($params['State'] == 'I'){
+                    $list = $list->filter(array('Active'=>'0','Pending'=>'0'));
+                }
+            } else {
                 $list = $list->filter('Active','1');
             }
-            elseif($params['State'] == 'I'){
-                $list = $list->filter(array('Active'=>'0','Pending'=>'0'));
+
+            // Filter by Zip / PLZ
+            if($this->modelClass == 'ClubMember' && isset($params['StartPlz']) && $params['StartPlz']) {
+                $list = $list->exclude('Zip:LessThan', $params['StartPlz']);
             }
+            if($this->modelClass == 'ClubMember' && isset($params['EndPlz']) && $params['EndPlz']) {
+                $list = $list->exclude('Zip:GreaterThan', $params['EndPlz']);
+            }
+
+            // Filter by Age / Alter range
+            if($this->modelClass == 'ClubMember' && isset($params['AgeRange']) && $params['AgeRange'] ) {
+                if($params['AgeRange'] == 'U16'){
+                    $list = $list->exclude('Age:GreaterThan','16');
+                }
+                elseif($params['AgeRange'] == 'U26'){
+                    $list = $list->exclude('Age:GreaterThan','26');
+                }
+                elseif($params['AgeRange'] == 'U60'){
+                    $list = $list->exclude('Age:GreaterThan','60');
+                }
+            }
+
+        } else {
+
+            // Show valid members
+            if($this->modelClass == 'ClubMember') {
+                $list = $list->filter('Active','1');//array('Active'=>'1','Pending'=>'0')
+            }
+            // Show pending members
+            elseif($this->modelClass == 'ClubMemberPending'){
+                $list = $list->filter('Pending','1');
+            }
+
         }
 
         return $list;
@@ -138,8 +155,9 @@ class ClubAdmin extends ModelAdmin {
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
                 _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
             // Add bulk action deactivateMember
+            $frontEndConfig = array( 'isAjax' => true, 'icon' => 'decline', 'isDestructive' => false );
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('deactivateMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE','Deactivate'), 'GridFieldBulkActionActivateMemberHandler');
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE','Deactivate'), 'GridFieldBulkActionActivateMemberHandler',$frontEndConfig);
             // Add action activate/deactivateMember
             $config->addComponent(new GridFieldActivateClubMemberAction());
             /* PRINT */
@@ -152,7 +170,7 @@ class ClubAdmin extends ModelAdmin {
                     //'Birthday' => _t('ClubMember.Birthday', 'Birthday'),
                     //'Nationality'  => _t('ClubMember.Nationality', 'Nationality'),
                     'Street'  => _t('ClubMember.STREET', 'Street'),
-                    'Streetnumber'  => _t('ClubMember.STREETNUMBER', 'Streetnumber'),
+                    'StreetNumber'  => _t('ClubMember.STREETNUMBER', 'StreetNumber'),
                     'Zip'  => _t('ClubMember.ZIP', 'Zip'),
                     'City'  => _t('ClubMember.CITY', 'City'),
                     //'Email'  => _t('ClubMember.EMAIL', 'Email'),
@@ -163,7 +181,7 @@ class ClubAdmin extends ModelAdmin {
                     //'AccountHolderFirstName'  => _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName'),
                     //'AccountHolderLastName'  => _t('ClubMember.AccountHolderLastName', 'AccountHolderLastName'),
                     //'AccountHolderStreet'  => _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet'),
-                    //'AccountHolderStreetnumber'  => _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetnumber'),
+                    //'AccountHolderStreetNumber'  => _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber'),
                     //'AccountHolderZip'  => _t('ClubMember.AccountHolderZip', 'AccountHolderZip'),
                     //'AccountHolderCity'  => _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'),
                     //'Iban'  => _t('ClubMember.IBAN', 'Iban'),
@@ -180,16 +198,16 @@ class ClubAdmin extends ModelAdmin {
         }
         elseif($gridFieldName =='ClubMemberPending')
         {
-            $columns = $gridField->getColumns();
+            /*$columns = $gridField->getColumns();
             foreach ($columns as $column) {
-                //SS_Log::log('column='.$column,SS_Log::WARN);
-            }
+                SS_Log::log('column='.$column,SS_Log::WARN);
+            }*/
 
             $config->removeComponentsByType('GridFieldPrintButton');
             $config->removeComponentsByType('GridFieldExportButton');
             $config->removeComponentsByType('GridFieldAddNewButton');
             $config->removeComponentsByType('GridFieldFilterHeader');
-            $config->removeComponentsByType('GridFieldDeleteAction');
+            //$config->removeComponentsByType('GridFieldDeleteAction');
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
             // Add action

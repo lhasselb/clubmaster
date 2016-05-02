@@ -10,6 +10,8 @@ de:
     STATE: "Midgliedsstatus"
     SHOWACTIVE: "Zeige Aktive"
     SHOWINACTIVE: "Zeige Inaktive"
+    ZIPSTART: "Postleitzahlen von"
+    ZIPEND: "Postleitzahlen bis"
     #BulkAction
     GRIDFIELDBULKDROPDOWNACTIVATE: "Mitglieder aktivieren"
     GRIDFIELDBULKDROPDOWNDEACTIVATE: "Mitglieder de-aktivieren"

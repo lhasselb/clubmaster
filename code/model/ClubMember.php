@@ -110,6 +110,7 @@ class ClubMember extends DataObject
         return $labels;
     }
 
+    /* List all required fields */
     public function getCMSValidator() {
         return new RequiredFields(array(
         'Salutation',
@@ -272,6 +273,9 @@ class ClubMember extends DataObject
         if($this->CreationType == 'Händisch')
         $this->Active = true;
     }
+
+    public function onBeforeDelete()
+    {}
 
     public function canView($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
