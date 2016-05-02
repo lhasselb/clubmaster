@@ -158,7 +158,7 @@ class ClubMemberPending extends ClubMember
         $fileName = $this->SerializedFileName;
         SS_Log::log('onBeforeDelete filename='.$fileName.' ID='.$fileName->ID,SS_Log::WARN);
 
-        $file = DataObject::get_by_id('File', $fileName->ID); //we have to make sure it is a Dataobject object
+        //$file = DataObject::get_by_id('File', $fileName->ID); //we have to make sure it is a Dataobject object
         if ($file && $file->exists()) {
                 $file->delete();
                 $file->destroy();

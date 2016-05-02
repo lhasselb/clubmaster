@@ -274,9 +274,6 @@ class ClubMember extends DataObject
         $this->Active = true;
     }
 
-    public function onBeforeDelete()
-    {}
-
     public function canView($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
