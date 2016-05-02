@@ -46,8 +46,7 @@ class ClubMemberPending extends ClubMember
         ));
     }
 
-    function getCMSFields()
-    {
+    function getCMSFields() {
         $fields = parent::getCMSFields();
 
         // Add some editing features (show/hide account related address data)
@@ -121,8 +120,7 @@ class ClubMemberPending extends ClubMember
     }
 
 
-    public function fillWith($data)
-    {
+    public function fillWith($data) {
         if($data === NULL) return false;
         $this->Salutation = $data->Salutation;
         $this->FirstName = $data->FirstName;
@@ -151,9 +149,21 @@ class ClubMemberPending extends ClubMember
         $this->Pending = 1;
     }
 
-    public function isPending()
-    {
+    public function isPending() {
         return $this->Pending;
+    }
+
+    public function onBeforeDelete(){
+
+        $fileName = $this->SerializedFileName;
+        SS_Log::log('onBeforeDelete filename='.$fileName.' ID='.$fileName->ID,SS_Log::WARN);
+
+        $file = DataObject::get_by_id('File', $fileName->ID); //we have to make sure it is a Dataobject object
+        if ($file && $file->exists()) {
+                $file->delete();
+                $file->destroy();
+        }
+        return parent::onBeforeDelete();
     }
 
     public function canView($member = null) {
