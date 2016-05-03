@@ -15,3 +15,7 @@ ClubMemberPending:
 
 ClubMemberSettings:
   better_buttons_enabled: false
+
+SiteConfig:
+  extensions:
+    - ClubAdminSiteConfig

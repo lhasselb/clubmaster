@@ -26,13 +26,12 @@ class EnrollPage extends Page
     private static $request_folder = 'antraege';
 
     function onBeforeWrite() {
+
         parent::onBeforeWrite();
-        if($this->Folder()->ID == '0')
-        {
-            //SS_Log::log('Folder()->ID='.$this->Folder()->ID,SS_Log::WARN);
+        // Create a default folder to store forms
+        if($this->Folder()->ID == '0') {
             Config::inst()->get('EnrollPage', 'request_folder');
             $defaultFolderID = Folder::find_or_make('antraege')->ID;
-            //SS_Log::log('set Folder to ID='.$defaultFolderID,SS_Log::WARN);
             $this->owner->FolderID = $defaultFolderID;
         }
     }
@@ -53,8 +52,7 @@ class EnrollPage extends Page
         $member = $this->getMember();
 
         // Limit user access to settings by permission for "Change site structure" (SITETREE_REORGANISE)
-        if (Permission::checkMember($member, 'SITETREE_REORGANISE'))
-        {
+        if (Permission::checkMember($member, 'SITETREE_REORGANISE')) {
             // Add folder to be selectable from settings (Root.Settings)
             $requestFolderTreeDropDown = TreeDropdownField::create('FolderID',
                 _t('EnrollPage.REQUESTSFOLDER', 'Folder:'),'Folder')
@@ -156,7 +154,6 @@ class EnrollPage_Controller extends Page_Controller {
         // Serialize object safely
         $serialized = base64_encode(serialize($clubMember));
         // Get the desired folder to store the serialized object
-        //$folder = Folder::find_or_make('antraege');
         $folder = $this->Folder();
 
         // Get the path for the folder and add a filename

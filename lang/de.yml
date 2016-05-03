@@ -17,6 +17,9 @@ de:
     GRIDFIELDBULKDROPDOWNDEACTIVATE: "Mitglieder de-aktivieren"
     GRIDFIELDBULKDROPDOWNAPPROVE: "Antrag zustimmen"
 
+  ClubAdminSiteConfig:
+    PENDINGFOLDER: "Verzeichnis für Anträge"
+
   ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"
 

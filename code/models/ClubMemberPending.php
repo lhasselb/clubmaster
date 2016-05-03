@@ -152,29 +152,34 @@ class ClubMemberPending extends ClubMember
 
     public function onBeforeDelete(){
 
+        $siteConfig = SiteConfig::current_site_config();
+        $folder = $siteConfig->PendingFolder();
         $fileName = $this->SerializedFileName;
-        SS_Log::log('onBeforeDelete filename='.$fileName.' ID='.$this->ID,SS_Log::WARN);
-        $file = File::find($fileName);
-        SS_Log::log('onBeforeDelete file='.$file->ID,SS_Log::WARN);
+        $file = File::get()->filter(array(
+            'Name' => $fileName,
+            'ParentID' => $folder->ID
+        ))->first();
+
         if ($file && $file->exists()) {
                 $file->delete();
                 $file->destroy();
         }
+
         return parent::onBeforeDelete();
     }
-
+    /* Only clubadmins are allowed */
     public function canView($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
-
+    /* Only clubadmins are allowed */
     public function canEdit($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
-
+    /* Only admins (Group Administrators) are allowed */
     public function canDelete($member = null) {
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
-
+    /* Only clubadmins are allowed */
     public function canCreate($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }

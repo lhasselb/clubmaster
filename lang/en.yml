@@ -17,6 +17,9 @@ en:
     GRIDFIELDBULKDROPDOWNDEACTIVATE: "Deactive"
     GRIDFIELDBULKDROPDOWNAPPROVE: "Approve"
 
+  ClubAdminSiteConfig:
+    PENDINGFOLDER: "Pending folder"
+
   ClubMemberPending:
     SINGULARNAME: "Member request"
 

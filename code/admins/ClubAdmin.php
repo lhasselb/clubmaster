@@ -5,8 +5,7 @@ class ClubAdmin extends ModelAdmin {
     private static $managed_models = array(
         'ClubMemberPending' => array('title' => 'Anträge'),
         'ClubMember' => array('title' => 'Mitglieder'),
-        'ClubMemberType' => array('title' => 'Mitgliedstypen'),
-        'ClubMemberSettings' => array('title' => 'Einstellungen')
+        'ClubMemberType' => array('title' => 'Mitgliedstypen')
     );
 
     private static $url_segment = 'clubmanager';
@@ -197,7 +196,7 @@ class ClubAdmin extends ModelAdmin {
         } elseif($gridFieldName =='ClubMemberSettings') {
             $config->removeComponentsByType('GridFieldPrintButton');
             $config->removeComponentsByType('GridFieldExportButton');
-            $config->removeComponentsByType('GridFieldAddNewButton');
+            //$config->removeComponentsByType('GridFieldAddNewButton');
             $config->removeComponentsByType('GridFieldDeleteAction');
         } elseif($gridFieldName =='ClubMemberPending') {
             /*$columns = $gridField->getColumns();
@@ -276,53 +275,55 @@ class ClubAdmin extends ModelAdmin {
     }
 
     public function init() {
+
         parent::init();
 
-        $folder = Folder::find_or_make('antraege');
-        $folder->syncChildren();
-        $files = DataObject::get('File', "ParentID = '{$folder->ID}'");
-
-        $clubMembers = ClubMember::get();
-        $clubMembersCount = $clubMembers->count();
-        //SS_Log::log('count='.$clubMembers->count(),SS_Log::WARN);
-        foreach ($files as $file) {
-            $file_parts = pathinfo($file->Title);
-
-            if(!isset($file_parts['extension']) || $file_parts['extension']!== 'antrag')
-            {
-                //SS_Log::log('current file extension='.$file->Title,SS_Log::WARN);
-                continue;
+        //$this->sanitiseClassName($this->modelClass) == 'ClubMember' ||
+        if($this->sanitiseClassName($this->modelClass) == 'ClubMemberPending') {
+            // Get the SiteConfig
+            $siteConfig = SiteConfig::current_site_config();
+            $folder = $siteConfig->PendingFolder();
+            // Check if not configured (FolderID=0)
+            if($folder->ID == '0') {
+                // Create a default within assets/antraege
+                $folder = Folder::find_or_make('antraege');
+                $siteConfig->PendingFolderID = $folder->ID;
+                $siteConfig->write();
             }
-            //SS_Log::log('current file title='.$file->Title,SS_Log::WARN);
-            $existingClubMember = null;
-            // Do we have pending members?
-            if($clubMembers->count() > 0)
-            {
-                // Find an existing member for the current file
-                $existingClubMember = $clubMembers->find('SerializedFileName',$file->Title);
-                if($existingClubMember)
-                {
-                    //SS_Log::log('pendingClubMember exists ID ='.$existingClubMember->ID,SS_Log::WARN);
+
+            // Synchronize files with database
+            $folder->syncChildren();
+            // Get all files
+            $files = DataObject::get('File', "ParentID = '{$folder->ID}'");
+            // Iterate the files found
+            foreach ($files as $file) {
+                $file_parts = pathinfo($file->Title);
+                // Skip all files except those with extension antrag
+                if(!isset($file_parts['extension']) || $file_parts['extension']!== 'antrag') {
+                    //SS_Log::log('current file extension='.$file->Title,SS_Log::WARN);
+                    continue;
+                }
+
+                $existingClubMember = null;
+                // Do we have alreay members
+                if(ClubMember::get()->count() > 0) {
+                    // Find an existing member created with current file
+                    $existingClubMember = ClubMember::get()->find('SerializedFileName',$file->Title);
+                }
+                // No member found
+                if(!$existingClubMember) {
+                    $serialized = file_get_contents($file->getFullPath());
+                    $data = unserialize(base64_decode($serialized));
+                    // Create a new pending member
+                    $pendingMember = new ClubMemberPending();
+                    $pendingMember->SerializedFileName =$file->Title;
+                    $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Title);
+                    $pendingMember->fillWith($data);
+                    $pendingMember->write();
                 }
             }
-            // No member found
-            if(!$this->pendingExists($existingClubMember))
-            {
-                $serialized = file_get_contents($file->getFullPath());
-                $data = unserialize(base64_decode($serialized));
-                // Create a new pending member
-                $pendingMember = new ClubMemberPending();
-                $pendingMember->SerializedFileName =$file->Title;
-                $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Title);
-                $pendingMember->fillWith($data);
-                $pendingMember->write();
-            }
-
         }
+
     }
 
-    // Function for basic field validation (present and neither empty nor only white space
-    function pendingExists($member){
-        return (isset($member) || trim($member)!=='');
-    }
 }

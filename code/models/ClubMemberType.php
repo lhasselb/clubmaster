@@ -24,30 +24,29 @@ class ClubMemberType extends DataObject
         return $labels;
     }
 
-    function getCMSFields()
-    {
+    function getCMSFields() {
         $fields = parent::getCMSFields();
 
         return $fields;
     }
 
-    public function getTitle()
-    {
+    public function getTitle() {
         return  $this->TypeName;
     }
 
+    /* Only clubadmins are allowed */
     public function canView($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
-
+    /* Only clubadmins are allowed */
     public function canEdit($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
-
+    /* Only clubadmins are allowed */
     public function canDelete($member = null) {
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
-
+    /* Only clubadmins are allowed */
     public function canCreate($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
