@@ -8,8 +8,10 @@ de:
     LESSTHAN26: "Jünger als 26 Jahre"
     LESSTHAN60: "Jünger als 60 Jahre"
     STATE: "Midgliedsstatus"
-    SHOWACTIVE: "Zeige Aktive"
-    SHOWINACTIVE: "Zeige Inaktive"
+    SHOWACTIVE: "Zeige Aktive Mitglieder"
+    SHOWINACTIVE: "Zeige Inaktive Mitglieder"
+    SHOWALL: "Zeige alle Mitglieder"
+    SHOWNOINSURANCE: "Zeige unversicherte Mitglieder"
     ZIPSTART: "Postleitzahlen von"
     ZIPEND: "Postleitzahlen bis"
     #BulkAction

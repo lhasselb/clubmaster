@@ -19,3 +19,4 @@ ClubMemberSettings:
 SiteConfig:
   extensions:
     - ClubAdminSiteConfig
+

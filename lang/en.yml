@@ -10,6 +10,8 @@ en:
     STATE: "Member state"
     SHOWACTIVE: "Show active"
     SHOWINACTIVE: "Show inactive"
+    SHOWALL: "Show all"
+    SHOWNOINSURANCE: "No insurance"
     ZIPSTART: "Zip from"
     ZIPEND: "Zip to"
     #BulkAction

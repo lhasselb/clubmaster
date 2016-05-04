@@ -45,7 +45,9 @@ class ClubAdmin extends ModelAdmin {
             $showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Midgliedsstatus'),
                 array(
                     'A' => _t('ClubAdmin.SHOWACTIVE','Zeige Aktive'),
-                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive')
+                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive'),
+                    'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle'),
+                    'UV' => _t('ClubAdmin.SHOWNOINSURANCE','Zeige ohne Versicherung')
                 )
             )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
 
@@ -72,14 +74,16 @@ class ClubAdmin extends ModelAdmin {
         $params = $this->request->requestVar('q');
 
         if($params) {
-
             // Show or hide active / inactive
             if($this->modelClass == 'ClubMember' && isset($params['State']) && $params['State'] ) {
                 if($params['State'] == 'A'){
                     $list = $list->filter('Active','1');
-                }
-                elseif($params['State'] == 'I'){
+                } elseif($params['State'] == 'I'){
                     $list = $list->filter(array('Active'=>'0','Pending'=>'0'));
+                } elseif($params['State'] == 'AI') {
+                    $list = $list->filter(array('Pending'=>'0'));
+                } elseif($params['State'] == 'UV') {
+                    $list = $list->filter(array('Insurance'=>'0','Pending'=>'0'));
                 }
             } else {
                 $list = $list->filter('Active','1');
@@ -110,7 +114,7 @@ class ClubAdmin extends ModelAdmin {
 
             // Show valid members
             if($this->modelClass == 'ClubMember') {
-                $list = $list->filter('Active','1');//array('Active'=>'1','Pending'=>'0')
+                $list = $list->filter(array('Active'=>'1'));//array('Active'=>'1','Pending'=>'0')
             }
             // Show pending members
             elseif($this->modelClass == 'ClubMemberPending'){
@@ -131,6 +135,10 @@ class ClubAdmin extends ModelAdmin {
     public function getEditForm($id = null, $fields = null) {
         $form = parent::getEditForm($id, $fields);
 
+        /*foreach ($fields as $field) {
+            SS_Log::log('field='.$field,SS_Log::WARN);
+            //SS_Log::log('field='.$key.' value='.$value,SS_Log::WARN);
+        }*/
         // $gridFieldName is generated from the ModelClass, eg if the Class 'ClubMember'
         // is managed by this ModelAdmin, the GridField for it will also be named 'ClubMember'
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
@@ -150,7 +158,12 @@ class ClubAdmin extends ModelAdmin {
             // Remove bulk actions
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
-            //$config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
+
+            // Remove bulk delete action from non Administrators
+            if(!$this->canDeleteClubmember()) {
+                $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
+            }
+
             // Add bulk action activateMember
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
                 _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
@@ -326,4 +339,9 @@ class ClubAdmin extends ModelAdmin {
 
     }
 
+    // Add a new permission
+    function canDeleteClubmember() {
+        $member = Member::currentUser();
+        return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
+    }
 }

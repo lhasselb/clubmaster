@@ -60,16 +60,8 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             if(!$clubMemberPending) {
                 return;
             }
-            Config::inst()->update('ClubMemberPending', 'validation_enabled', true);
 
-            if(Config::inst()->get('DataObject', 'validation_enabled')) {
-                SS_Log::log('validation enabled',SS_Log::WARN);
-                //$valid = $clubMemberPending->validate();
-                //SS_Log::log('validation '.$valid,SS_Log::WARN);
-            }
-
-            //$clubMemberPending->write();
-
+            // Move ClubMemberPending to ClubMember
             $clubMemberPending->Pending = 0;
             $clubMemberPending->Active = 1;
             $clubMemberPending->ClassName = 'ClubMember';
