@@ -5,8 +5,7 @@ class ClubAdmin extends ModelAdmin {
     private static $managed_models = array(
         'ClubMemberPending' => array('title' => 'Anträge'),
         'ClubMember' => array('title' => 'Mitglieder'),
-        'ClubMemberType' => array('title' => 'Mitgliedstypen'),
-        'ClubMemberImport' => array('title' => 'Import'),
+        'ClubMemberType' => array('title' => 'Mitgliedstypen')
     );
 
     private static $url_segment = 'clubmanager';
@@ -289,7 +288,7 @@ class ClubAdmin extends ModelAdmin {
         if (Permission::checkMember(Member::currentUser(), 'CMS_ACCESS_LeftAndMain')) {
                 $form = parent::ImportForm();
         }
-        return null;
+        return $form;
     }
 
     public function init() {
