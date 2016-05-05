@@ -4,14 +4,14 @@
  *
  * @author Lars Hasselbach
  */
-class GridFieldBulkActionApproveMemberHandler extends GridFieldBulkActionHandler
+class GridFieldBulkActionInsuranceMemberHandler extends GridFieldBulkActionHandler
 {
     /**
      * RequestHandler allowed actions.
      *
      * @var array
      */
-    private static $allowed_actions = array('approveMember');
+    private static $allowed_actions = array('insureMember');
 
     /**
      * RequestHandler url => action map.
@@ -19,7 +19,7 @@ class GridFieldBulkActionApproveMemberHandler extends GridFieldBulkActionHandler
      * @var array
      */
     private static $url_handlers = array(
-    'approveMember' => 'approveMember'
+    'insureMember' => 'insureMember'
 
     );
 
@@ -30,16 +30,13 @@ class GridFieldBulkActionApproveMemberHandler extends GridFieldBulkActionHandler
      *
      * @return SS_HTTPResponse List of avtivated records ID
      */
-    public function approveMember(SS_HTTPRequest $request)
+    public function insureMember(SS_HTTPRequest $request)
     {
         $ids = array();
 
         foreach ($this->getRecords() as $record) {
             array_push($ids, $record->ID);
-            $record->Pending = 0;
-            $record->Active = 1;
-            $record->ClassName = 'ClubMember';
-            $record->Since = SS_Datetime::now();
+            $record->Insurance = 1;
             $record->write();
         }
 

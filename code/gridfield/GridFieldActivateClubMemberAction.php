@@ -7,6 +7,7 @@
 class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider {
 
     public function augmentColumns($gridField, &$columns) {
+
         if(!in_array('Actions', $columns)) {
             $columns[] = 'Actions';
         }
@@ -34,10 +35,9 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
      * @return string - the HTML for the column
      */
     public function getColumnContent($gridField, $record, $columnName) {
-        //SS_Log::log("record=".$record,SS_Log::WARN);
+
         if(!$record->canEdit() || $record != "ClubMember" ) return;
-        if(!$record->isActive())
-        {
+        if(!$record->isActive()) {
             $field = GridField_FormAction::create($gridField, 'ActivateMember'.$record->ID, false,
                 "activatemember", array('RecordID' => $record->ID))
             ->addExtraClass('gridfield-button-activate')
@@ -45,8 +45,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
             ->setAttribute('data-icon', 'accept')
             ->setDescription( _t('GridFieldActivateClubMemberAction.ACTIVATEMEMBER',"ActivateMember"));
         }
-        elseif($record->isActive())
-        {
+        elseif($record->isActive()) {
             $field = GridField_FormAction::create($gridField, 'DeActivateMember'.$record->ID, false,
                 "deactivatemember", array('RecordID' => $record->ID))
             ->addExtraClass('gridfield-button-deactivate')
@@ -62,7 +61,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
     }
 
     public function handleAction(GridField $gridField, $actionName, $arguments, $data) {
-        //SS_Log::log("handleAction() called, action name =".$actionName,SS_Log::WARN);
+        SS_Log::log("handleAction() called, action name =".$actionName,SS_Log::WARN);
         if($actionName == 'activatemember')
         {
             // perform your action here

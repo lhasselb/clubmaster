@@ -10,6 +10,9 @@ File:
   allowed_extensions:
     - antrag
 
+ClubMember:
+  better_buttons_enabled: false
+
 ClubMemberPending:
   better_buttons_enabled: false
 

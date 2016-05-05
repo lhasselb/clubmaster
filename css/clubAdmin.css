@@ -1,0 +1,6 @@
+.cms table.ss-gridfield-table tr td.col-FirstName,
+.cms table.ss-gridfield-table tr td.col-LastName,
+.cms table.ss-gridfield-table tr td.col-Age,
+.cms table.ss-gridfield-table tr td.col-Sex{
+    color: black;
+}

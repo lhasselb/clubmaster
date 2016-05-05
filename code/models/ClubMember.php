@@ -54,7 +54,8 @@ class ClubMember extends DataObject
         'FirstName',
         'LastName',
         'Age',
-        'Sex'
+        'Sex',
+        'Type.TypeName'
     );
 
     public function populateDefaults() {
@@ -73,7 +74,8 @@ class ClubMember extends DataObject
     function fieldLabels($includerelations = true) {
         $labels = parent::fieldLabels($includerelations);
         // Relation has_one
-        $labels['Type.ID'] = _t('ClubMember.TYPES', 'Types');
+        $labels['Type.ID'] = _t('ClubMember.TYPE', 'Type');
+        $labels['Type.TypeName'] = _t('ClubMember.TYPE', 'Type');
         // Properties
         $labels['Salutation'] = _t('ClubMember.SALUTATION', 'Salutation');
         $labels['FirstName'] = _t('ClubMember.FIRSTNAME', 'FirstName');
@@ -145,7 +147,7 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root', new Tab('Meta', _t('ClubMember.META', 'Meta')));
 
         // Add some editing features (show/hide account related address data)
-        Requirements::javascript(CLUBMASTER_DIR . "/javascript/ClubAdmin.js");
+        Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
 
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));
@@ -195,7 +197,7 @@ class ClubMember extends DataObject
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text') );
         //Special
         $fields->addFieldToTab('Root.Meta',
-            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
+            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
         $fields->addFieldToTab('Root.Meta',
@@ -219,8 +221,7 @@ class ClubMember extends DataObject
         return $fields;
     }
 
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->FirstName.' '.$this->LastName;
     }
 
@@ -229,26 +230,22 @@ class ClubMember extends DataObject
         return $date->FormatI18N('%d.%m.%Y %H:%M:%S');
     }
 
-    public function getAge()
-    {
+    public function getAge() {
         if(!$this->dbObject('Birthday')->value) return 0;
         $time = SS_Datetime::now()->Format('U');
         $ago = abs($time - strtotime($this->dbObject('Birthday')->value));
         return  round($ago/86400/365);
     }
 
-    public function getSex()
-    {
+    public function getSex() {
         return  ($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin')? 'w' : 'm';
     }
 
-    public function isActive()
-    {
+    public function isActive() {
         return $this->Active;
     }
 
-    public function dateFromFilename($filename)
-    {
+    public function dateFromFilename($filename) {
         $date = new SS_DateTime();
         // XX_dd.mm.yyyy_hh_mm_ss.antrag
         if (preg_match('/^[A-Z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/', $filename, $matches)) {
@@ -264,15 +261,19 @@ class ClubMember extends DataObject
         return $date;
     }
 
-    public function onBeforeWrite()
-    {
+    public function onBeforeWrite() {
         parent::onBeforeWrite();
+
+        // Set Age
         $this->Age = $this->getAge();
-        //SS_Log::log('Sex='.$this->getSex(),SS_Log::WARN);
+
+        // Set Sex
         $this->Sex = $this->getSex();
-        if($this->CreationType == 'Händisch')
-        $this->Active = true;
+        /*if($this->CreationType == 'Händisch'){
+            $this->Active = true;
+        }*/
     }
+
     /* Only clubadmins are allowed */
     public function canView($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);

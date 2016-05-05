@@ -5,7 +5,8 @@ class ClubAdmin extends ModelAdmin {
     private static $managed_models = array(
         'ClubMemberPending' => array('title' => 'Anträge'),
         'ClubMember' => array('title' => 'Mitglieder'),
-        'ClubMemberType' => array('title' => 'Mitgliedstypen')
+        'ClubMemberType' => array('title' => 'Mitgliedstypen'),
+        'ClubMemberImport' => array('title' => 'Import'),
     );
 
     private static $url_segment = 'clubmanager';
@@ -16,7 +17,7 @@ class ClubAdmin extends ModelAdmin {
     // Show importer for ClubMember only
     public $showImportForm = array('ClubMember');
     //private static $url_rule = '/$Action';
-    private static $allowed_actions = array('approvemember','activatemember','deactivatemember','ImportForm');
+    //private static $allowed_actions = array('approvemember','activatemember','deactivatemember','ImportForm');
 
     /**
      * @config
@@ -49,7 +50,7 @@ class ClubAdmin extends ModelAdmin {
                     'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle'),
                     'UV' => _t('ClubAdmin.SHOWNOINSURANCE','Zeige ohne Versicherung')
                 )
-            )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
+            );//->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
 
             $context->getFields()->push($rangeDropDownField);
             $context->getFields()->push($showInactiveDropDownField);
@@ -114,7 +115,7 @@ class ClubAdmin extends ModelAdmin {
 
             // Show valid members
             if($this->modelClass == 'ClubMember') {
-                $list = $list->filter(array('Active'=>'1'));//array('Active'=>'1','Pending'=>'0')
+                $list = $list->filter('Active','1');//array('Active'=>'1','Pending'=>'0')
             }
             // Show pending members
             elseif($this->modelClass == 'ClubMemberPending'){
@@ -133,6 +134,7 @@ class ClubAdmin extends ModelAdmin {
      * For example, to add or remove a new component.
      */
     public function getEditForm($id = null, $fields = null) {
+
         $form = parent::getEditForm($id, $fields);
 
         /*foreach ($fields as $field) {
@@ -147,8 +149,9 @@ class ClubAdmin extends ModelAdmin {
         // Get gridfield config
         $config = $gridField->getConfig();
 
-        if($gridFieldName =='ClubMember')
-        {
+        if($gridFieldName =='ClubMember') {
+
+            // Set rows displayed
             $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page');
             $config->getComponentByType('GridFieldPaginator')->setItemsPerPage($itemsPerPage);
             // Add Filter header
@@ -164,15 +167,21 @@ class ClubAdmin extends ModelAdmin {
                 $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
             }
 
-            // Add bulk action activateMember
+            // Add ACTION activate/deactivateMember
+            $config->addComponent(new GridFieldActivateClubMemberAction());
+            // Add BULK action activateMember
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
                 _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
-            // Add bulk action deactivateMember
+            // Add BULK action deactivateMember
             $frontEndConfig = array( 'isAjax' => true, 'icon' => 'decline', 'isDestructive' => false );
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('deactivateMember',
                 _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE','Deactivate'), 'GridFieldBulkActionActivateMemberHandler',$frontEndConfig);
-            // Add action activate/deactivateMember
-            $config->addComponent(new GridFieldActivateClubMemberAction());
+
+
+            // Add BULK action insureMember
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('insureMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNINSURANCE','Insurance'), 'GridFieldBulkActionInsuranceMemberHandler');
+
             /* PRINT */
             $printButton = $config->getComponentByType('GridFieldPrintButton');
             $printButton->setPrintColumns(
@@ -203,14 +212,10 @@ class ClubAdmin extends ModelAdmin {
                     'Age'  => _t('ClubMember.AGE', 'Age')
                 )
             );
+
         } elseif($gridFieldName =='ClubMemberType') {
             $config->removeComponentsByType('GridFieldPrintButton');
             $config->removeComponentsByType('GridFieldExportButton');
-        } elseif($gridFieldName =='ClubMemberSettings') {
-            $config->removeComponentsByType('GridFieldPrintButton');
-            $config->removeComponentsByType('GridFieldExportButton');
-            //$config->removeComponentsByType('GridFieldAddNewButton');
-            $config->removeComponentsByType('GridFieldDeleteAction');
         } elseif($gridFieldName =='ClubMemberPending') {
             /*$columns = $gridField->getColumns();
             foreach ($columns as $column) {
@@ -224,8 +229,8 @@ class ClubAdmin extends ModelAdmin {
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
             // Add action
-            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNAPPROVE','Activate'), 'GridFieldBulkActionActivateMemberHandler');
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('approveMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNAPPROVE','Approve'), 'GridFieldBulkActionApproveMemberHandler');
             // Remove action
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
@@ -284,12 +289,14 @@ class ClubAdmin extends ModelAdmin {
         if (Permission::checkMember(Member::currentUser(), 'CMS_ACCESS_LeftAndMain')) {
                 $form = parent::ImportForm();
         }
-        return $form;
+        return null;
     }
 
     public function init() {
 
         parent::init();
+
+        Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
 
         //$this->sanitiseClassName($this->modelClass) == 'ClubMember' ||
         if($this->sanitiseClassName($this->modelClass) == 'ClubMemberPending') {

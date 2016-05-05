@@ -158,7 +158,7 @@ class EnrollPage_Controller extends Page_Controller {
 
         // Get the path for the folder and add a filename
         $path = $folder->getFullPath().$data['FirstName'][0].$data['LastName'][0].'_'.$data['Birthday'].'_'.date('d.m.Y_H_i_s').'.antrag';
-        SS_Log::log("path=".$path,SS_Log::WARN);
+        //SS_Log::log("path=".$path,SS_Log::WARN);
         /* Store the object at calculated path
          * If filename does not exist, the file is created. Otherwise,
          * the existing file is overwritten, unless the FILE_APPEND flag is set.
