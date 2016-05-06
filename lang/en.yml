@@ -12,6 +12,7 @@ en:
     SHOWINACTIVE: "Show inactive"
     SHOWALL: "Show all"
     SHOWNOINSURANCE: "No insurance"
+    ZIPSEARCH: "Zip"
     ZIPSTART: "Zip from"
     ZIPEND: "Zip to"
     #BulkAction

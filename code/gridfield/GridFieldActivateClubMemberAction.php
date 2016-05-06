@@ -42,7 +42,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
                 "activatemember", array('RecordID' => $record->ID))
             ->addExtraClass('gridfield-button-activate')
             ->setAttribute('title', _t('GridFieldActivateClubMemberAction.ACTIVATEMEMBER',"ActivateMember"))
-            ->setAttribute('data-icon', 'accept')
+            ->setAttribute('data-icon', 'decline')
             ->setDescription( _t('GridFieldActivateClubMemberAction.ACTIVATEMEMBER',"ActivateMember"));
         }
         elseif($record->isActive()) {
@@ -50,7 +50,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
                 "deactivatemember", array('RecordID' => $record->ID))
             ->addExtraClass('gridfield-button-deactivate')
             ->setAttribute('title', _t('GridFieldActivateClubMemberAction.DEACTIVATEMEMBER',"DeActivateMember"))
-            ->setAttribute('data-icon', 'decline')
+            ->setAttribute('data-icon', 'accept')
             ->setDescription( _t('GridFieldActivateClubMemberAction.DEACTIVATEMEMBER',"DeActivateMember"));
         }
         return $field->Field();
@@ -61,7 +61,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
     }
 
     public function handleAction(GridField $gridField, $actionName, $arguments, $data) {
-        SS_Log::log("handleAction() called, action name =".$actionName,SS_Log::WARN);
+
         if($actionName == 'activatemember')
         {
             // perform your action here

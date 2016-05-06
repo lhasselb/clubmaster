@@ -31,8 +31,14 @@ class ClubAdmin extends ModelAdmin {
 
         if($this->modelClass == 'ClubMember')
         {
-            $startNumericField = new ZipField("q[StartPlz]",  _t('ClubAdmin.ZIPSTART','zipStart'));
-            $endNumericField = new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND','zipEnd'));
+            $zipFieldGroup = FieldGroup::create(
+                HeaderField::create(_t('ClubAdmin.ZIPSEARCH','Postleitzahlen')),
+                new ZipField("q[StartPlz]",  _t('ClubAdmin.ZIPSTART','zipStart')),
+                new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND','zipEnd'))
+            );
+
+            //$startNumericField = new ZipField("q[StartPlz]",  _t('ClubAdmin.ZIPSTART','zipStart'));
+            //$endNumericField = new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND','zipEnd'));
 
             $rangeDropDownField = DropdownField::create('q[AgeRange]', _t('ClubAdmin.AGERANGE','AgeRange'),
                 array(
@@ -46,15 +52,16 @@ class ClubAdmin extends ModelAdmin {
                 array(
                     'A' => _t('ClubAdmin.SHOWACTIVE','Zeige Aktive'),
                     'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive'),
-                    'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle'),
+                    //'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle'),
                     'UV' => _t('ClubAdmin.SHOWNOINSURANCE','Zeige ohne Versicherung')
                 )
-            );//->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
+            )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
 
             $context->getFields()->push($rangeDropDownField);
             $context->getFields()->push($showInactiveDropDownField);
-            $context->getFields()->push($startNumericField);
-            $context->getFields()->push($endNumericField);
+            //$context->getFields()->push($startNumericField);
+            //$context->getFields()->push($endNumericField);
+            $context->getFields()->push($zipFieldGroup);
         }
 
         return $context;
@@ -114,7 +121,7 @@ class ClubAdmin extends ModelAdmin {
 
             // Show valid members
             if($this->modelClass == 'ClubMember') {
-                $list = $list->filter('Active','1');//array('Active'=>'1','Pending'=>'0')
+                $list = $list->filter('Pending','0');//array('Active'=>'1','Pending'=>'0')
             }
             // Show pending members
             elseif($this->modelClass == 'ClubMemberPending'){

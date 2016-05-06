@@ -197,7 +197,7 @@ class ClubMember extends DataObject
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text') );
         //Special
         $fields->addFieldToTab('Root.Meta',
-            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active'))->performReadonlyTransformation());
+            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));//->performReadonlyTransformation()
         $fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
         $fields->addFieldToTab('Root.Meta',
