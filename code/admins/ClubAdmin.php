@@ -77,56 +77,50 @@ class ClubAdmin extends ModelAdmin {
         // Get all including inactive
         $list = parent::getList();
 
+        // Limit list to valid members
+        if($this->modelClass == 'ClubMember') {
+            $list = $list->filter('Pending','0');
+        }
+        // Limit list to pending members
+        elseif($this->modelClass == 'ClubMemberPending'){
+            $list = $list->filter('Pending','1');
+        }
+
         // Get parameters
         $params = $this->request->requestVar('q');
 
-        if($params) {
-            // Show or hide active / inactive
-            if($this->modelClass == 'ClubMember' && isset($params['State']) && $params['State'] ) {
+        if($params && $this->modelClass == 'ClubMember') {
+            // Limit to active or inactive
+            if(isset($params['State']) && $params['State'] ) {
                 if($params['State'] == 'A'){
                     $list = $list->filter('Active','1');
                 } elseif($params['State'] == 'I'){
-                    $list = $list->filter(array('Active'=>'0','Pending'=>'0'));
-                } elseif($params['State'] == 'AI') {
-                    $list = $list->filter(array('Pending'=>'0'));
+                    $list = $list->filter('Active','0');
                 } elseif($params['State'] == 'UV') {
-                    $list = $list->filter(array('Insurance'=>'0','Pending'=>'0'));
+                    $list = $list->filter('Insurance','0');
                 }
-            } else {
-                $list = $list->filter('Active','1');
             }
 
-            // Filter by Zip / PLZ
-            if($this->modelClass == 'ClubMember' && isset($params['StartPlz']) && $params['StartPlz']) {
+            // Filter by Zip
+            if(isset($params['StartPlz']) && $params['StartPlz']) {
                 $list = $list->exclude('Zip:LessThan', $params['StartPlz']);
             }
-            if($this->modelClass == 'ClubMember' && isset($params['EndPlz']) && $params['EndPlz']) {
+            if(isset($params['EndPlz']) && $params['EndPlz']) {
                 $list = $list->exclude('Zip:GreaterThan', $params['EndPlz']);
             }
 
-            // Filter by Age / Alter range
-            if($this->modelClass == 'ClubMember' && isset($params['AgeRange']) && $params['AgeRange'] ) {
+            // Filter by Age range
+            if(isset($params['AgeRange']) && $params['AgeRange'] ) {
                 if($params['AgeRange'] == 'U16'){
                     $list = $list->exclude('Age:GreaterThan','16');
-                }
-                elseif($params['AgeRange'] == 'U26'){
+                } elseif($params['AgeRange'] == 'U26'){
                     $list = $list->exclude('Age:GreaterThan','26');
-                }
-                elseif($params['AgeRange'] == 'U60'){
+                } elseif($params['AgeRange'] == 'U60'){
                     $list = $list->exclude('Age:GreaterThan','60');
                 }
             }
 
         } else {
-
-            // Show valid members
-            if($this->modelClass == 'ClubMember') {
-                $list = $list->filter('Pending','0');//array('Active'=>'1','Pending'=>'0')
-            }
-            // Show pending members
-            elseif($this->modelClass == 'ClubMemberPending'){
-                $list = $list->filter('Pending','1');
-            }
 
         }
 
