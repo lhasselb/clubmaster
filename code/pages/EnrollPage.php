@@ -105,7 +105,7 @@ class EnrollPage_Controller extends Page_Controller {
             DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))
             ->setConfig('showcalendar', true),
             //->setAttribute('placeholder', $today),
-/*
+
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')),
             TextField::create('Street', _t('ClubMember.STREET', 'Street')),
             TextField::create('Streetnumber', _t('ClubMember.STREETNUMBER', 'Streetnumber')),
@@ -115,14 +115,14 @@ class EnrollPage_Controller extends Page_Controller {
             TextField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil')),//PhoneNumberField
             TextField::create('Phone', _t('ClubMember.PHONE', 'Phone')),//PhoneNumberField
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')),
-            DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true)->setValue(SS_Datetime::now()->FormatI18N('%e %b %Y')),
+            DateField::create('Since', _t('ClubMember.FROM', 'From'))->setConfig('showcalendar', true)->setValue(SS_Datetime::now()->FormatI18N('%d.%m.%Y')),
             TextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')),
             TextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')),
             TextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')),
             TextField::create('AccountHolderStreetnumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetnumber')),
             ZipField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
             TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
-*/
+
             IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))
             ->setAttribute('placeholder', "DE12500105170648489890")->addExtraClass("text"),
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))
