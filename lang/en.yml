@@ -88,6 +88,10 @@ en:
     APPROVEMEMBER: "Approve member"
     ACTIVATEMEMBERDONE: "Approve Member Action Done."
 
+  GridFieldShowHideButton:
+    SHOW: "Show inactive"
+    HIDE: "Hide inactive"
+
   EnrollPage:
     SINGULARNAME: "Enroll"
     DESCRIPTION: "Page with form to enroll"

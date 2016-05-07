@@ -50,8 +50,8 @@ class ClubAdmin extends ModelAdmin {
 
             $showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Midgliedsstatus'),
                 array(
-                    'A' => _t('ClubAdmin.SHOWACTIVE','Zeige Aktive'),
-                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive'),
+                    //'A' => _t('ClubAdmin.SHOWACTIVE','Zeige Aktive'),
+                    //'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive'),
                     //'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle'),
                     'UV' => _t('ClubAdmin.SHOWNOINSURANCE','Zeige ohne Versicherung')
                 )
@@ -120,9 +120,7 @@ class ClubAdmin extends ModelAdmin {
                 }
             }
 
-        } else {
-
-        }
+        } else { /* Nothing */}
 
         return $list;
     }
@@ -150,7 +148,7 @@ class ClubAdmin extends ModelAdmin {
         $config = $gridField->getConfig();
 
         if($gridFieldName =='ClubMember') {
-
+            $config->addComponent(new GridFieldShowHideButton('before'));
             // Set rows displayed
             $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page');
             $config->getComponentByType('GridFieldPaginator')->setItemsPerPage($itemsPerPage);
@@ -182,8 +180,9 @@ class ClubAdmin extends ModelAdmin {
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('insureMember',
                 _t('ClubAdmin.GRIDFIELDBULKDROPDOWNINSURANCE','Insurance'), 'GridFieldBulkActionInsuranceMemberHandler');
 
-            /* PRINT */
-            $printButton = $config->getComponentByType('GridFieldPrintButton');
+            /* PRINT disabled */
+            $config->removeComponentsByType('GridFieldPrintButton');
+            /*$printButton = $config->getComponentByType('GridFieldPrintButton');
             $printButton->setPrintColumns(
                 array(
                     'Salutation' => _t('ClubMember.SALUTATION', 'Salutation'),
@@ -211,7 +210,7 @@ class ClubAdmin extends ModelAdmin {
                     //'Active'  => _t('ClubMember.ACTIVE', 'Active'),
                     'Age'  => _t('ClubMember.AGE', 'Age')
                 )
-            );
+            );*/
 
         } elseif($gridFieldName =='ClubMemberType') {
             $config->removeComponentsByType('GridFieldPrintButton');

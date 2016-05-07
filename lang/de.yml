@@ -88,6 +88,10 @@ de:
     APPROVEMEMBER: "Antrag zustimmen"
     APPROVEMEMBERDONE: "Mitglied angelegt."
 
+  GridFieldShowHideButton:
+    SHOW: "Zeige auch inaktive Mitglieder"
+    HIDE: "Zeige nur aktive Mitglieder"
+
   EnrollPage:
     SINGULARNAME: "Mitgliedsantrag"
     DESCRIPTION: "Seite mit Formular für den Mitgliedsantrag"
