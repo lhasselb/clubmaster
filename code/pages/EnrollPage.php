@@ -92,48 +92,54 @@ class EnrollPage_Controller extends Page_Controller {
     );
 
     public function EnrollForm() {
+
+        Requirements::javascript(CLUBMASTER_DIR . "/javascript/Enroll.js");
+
         $today = SS_Datetime::now()->FormatI18N("%d.%m.%Y");
 
         $fields = new FieldList(
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),
                 singleton('ClubMember')->dbObject('Salutation')->enumValues())
-            ->setAttribute('placeholder', 'Herr'),
+                ->setAttribute('placeholder', 'Herr'),
             TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))
-            ->setAttribute('placeholder', _t('ClubMember.FIRSTNAME', 'Firstname')),
+                ->setAttribute('placeholder', _t('ClubMember.FIRSTNAME', 'Firstname')),
             TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))
-            ->setAttribute('placeholder', _t('ClubMember.LASTNAME', 'Lastname')),
+                ->setAttribute('placeholder', _t('ClubMember.LASTNAME', 'Lastname')),
             DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))
-            ->setConfig('showcalendar', true),
+                ->setConfig('showcalendar', true),
             //->setAttribute('placeholder', $today),
 
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')),
             TextField::create('Street', _t('ClubMember.STREET', 'Street')),
-            TextField::create('Streetnumber', _t('ClubMember.STREETNUMBER', 'Streetnumber')),
+            TextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber')),
             ZipField::create('Zip', _t('ClubMember.ZIP', 'Zip')),
             TextField::create('City', _t('ClubMember.CITY', 'City')),
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')),
             TextField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil')),//PhoneNumberField
             TextField::create('Phone', _t('ClubMember.PHONE', 'Phone')),//PhoneNumberField
-            DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')),
-            DateField::create('Since', _t('ClubMember.FROM', 'From'))->setConfig('showcalendar', true)->setValue(SS_Datetime::now()->FormatI18N('%d.%m.%Y')),
+            DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))
+                ->setSource(ClubMemberType::get()->map('ID','TypeName')),
+            DateField::create('Since', _t('ClubMember.FROM', 'From'))->setConfig('showcalendar', true)
+                ->setValue(SS_Datetime::now()->FormatI18N('%d.%m.%Y')),
+            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress'))
+                ->setValue(true),
             TextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')),
             TextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')),
             TextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')),
-            TextField::create('AccountHolderStreetnumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetnumber')),
+            TextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')),
             ZipField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
             TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
-
             IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))
-            ->setAttribute('placeholder', "DE12500105170648489890")->addExtraClass("text"),
+                ->setAttribute('placeholder', "DE12500105170648489890")->addExtraClass("text"),
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))
-            ->setAttribute('placeholder', "VOBADEXX")->addExtraClass("text")
+                ->setAttribute('placeholder', "VOBADEXX")->addExtraClass("text")
         );
 
         $actions = new FieldList(
             FormAction::create('doEnroll')->setTitle(_t('EnrollPage.ENROLL','Enroll'))
         );
 
-        $required = new RequiredFields('Salutation','FirstName','LastName','Birthday','Nationality','Street','Streetnumber','Zip','City','Email','Mobil','Phone','TypeID','Since','AccountHolderFirstName','AccountHolderLastName','AccountHolderStreet','AccountHolderStreetnumber','AccountHolderZip','AccountHolderCity','Iban','Bic');
+        $required = new RequiredFields('Salutation','FirstName','LastName','Birthday','Nationality','Street','StreetNumber','Zip','City','Email','Mobil','Phone','TypeID','Since','AccountHolderFirstName','AccountHolderLastName','AccountHolderStreet','AccountHolderStreetNumber','AccountHolderZip','AccountHolderCity','Iban','Bic');
 
         $form = new Form($this, 'EnrollForm', $fields, $actions, $required);
         $form->setFormMethod('POST', true);
@@ -142,11 +148,12 @@ class EnrollPage_Controller extends Page_Controller {
     }
 
     public function doEnroll($data, Form $form) {
+
         $form->sessionMessage('Hello '. $data['FirstName'], 'success');
 
-        foreach ($data as $key => $value) {
-            //SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
-        }
+        /*foreach ($data as $key => $value) {
+            SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
+        }*/
         // Create a ClubMember object
         $clubMember = new ClubMemberPending();
         // Save data into object

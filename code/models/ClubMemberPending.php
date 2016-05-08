@@ -125,7 +125,7 @@ class ClubMemberPending extends ClubMember
         $this->Birthday = $data->Birthday;
         $this->Nationality = $data->Nationality;
         $this->Street = $data->Street;
-        $this->Streetnumber = $data->Streetnumber;
+        $this->StreetNumber = $data->StreetNumber;
         $this->Zip = $data->Zip;
         $this->City = $data->City;
         $this->Email = $data->Email;
@@ -135,7 +135,7 @@ class ClubMemberPending extends ClubMember
         $this->AccountHolderFirstName = $data->AccountHolderFirstName;
         $this->AccountHolderLastName = $data->AccountHolderLastName;
         $this->AccountHolderStreet = $data->AccountHolderStreet;
-        $this->AccountHolderStreetnumber = $data->AccountHolderStreetnumber;
+        $this->AccountHolderStreetNumber = $data->AccountHolderStreetNumber;
         $this->AccountHolderZip = $data->AccountHolderZip;
         $this->AccountHolderCity = $data->AccountHolderCity;
         $this->Iban = $data->Iban;
@@ -144,6 +144,11 @@ class ClubMemberPending extends ClubMember
         //Special
         $this->CreationType = 'Formular';
         $this->Pending = 1;
+
+        if( $this->Zip == $this->AccountHolderZip && $this->City == $this->AccountHolderCity &&
+            $this->Street == $this->AccountHolderStreet && $this->StreetNumber == $this->AccountHolderStreetNumber) {
+            $this->EqualAddress = 1;
+        }
     }
 
     public function isPending() {

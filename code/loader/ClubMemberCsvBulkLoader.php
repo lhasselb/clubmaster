@@ -28,7 +28,8 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
         // Verify equal address
         if(in_array($record['Street'],$record, true)
             && in_array($record['StreetNumber'],$record, true)
-            && in_array($record['Zip'],$record, true)){
+            && in_array($record['Zip'],$record, true)
+            && in_array($record['City'],$record, true)) {
             $record['EqualAddress'] = '1';
         }
 
