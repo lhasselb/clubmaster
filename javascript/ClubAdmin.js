@@ -12,6 +12,8 @@
 (function($) {
     $.entwine('ss', function($) {
 
+        console.log('Here');
+        console.log('checkbox' + $.trim($('#Form_ItemEditForm_EqualAddress').text().toLowerCase()));
         /**
          * ID: Form_ItemEditForm_EqualAddress
          *
@@ -19,8 +21,8 @@
          */
         $('#Form_ItemEditForm_EqualAddress').entwine({
             onmatch: function() {
-                /*console.log('FOUND');
-                console.log($.trim(this.text().toLowerCase()));*/
+                //console.log('FOUND');
+                //console.log($.trim(this.text().toLowerCase()));
                 var equalAddress = $.trim(this.text().toLowerCase());
                 if (equalAddress == 'ja' || equalAddress == 'yes') {
                     $("#Form_ItemEditForm_AccountHolderFirstName_Holder").hide();

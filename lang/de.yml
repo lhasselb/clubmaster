@@ -74,7 +74,7 @@ de:
     FORMCLAIMDATE: "Antragsdatum (Formular)"
     CREATIONTYPE: "Angelegt mit"
     PENDING: "Mitgliedschaft anhängig?"
-    PHONEHINT: "Erlaubt sind 0-9, \"+\" und \"-\"."
+    PHONEHINT: "Erlaubt sind 0-9, \" \" (Leerzeichen), \"+\" und \"-\"."
     IBANHINT: "IBAN, z.B. DE21301204000000015228"
     BICHINT: "BIC, z.B. VOBADEXX"
 

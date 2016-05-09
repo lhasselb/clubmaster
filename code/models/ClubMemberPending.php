@@ -52,58 +52,58 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus','autofocus'));
+            EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus','autofocus')->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName')));
+            EUNameTextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true) );
         $fields->addFieldToTab('Root.Main',
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('Street', _t('ClubMember.STREET', 'Street')));
+            EUNameTextField::create('Street', _t('ClubMember.STREET', 'Street'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber')));
+            EUNameTextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             ZipField::create('Zip', _t('ClubMember.ZIP', 'Zip')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('City', _t('ClubMember.CITY', 'City')));
+            EUNameTextField::create('City', _t('ClubMember.CITY', 'City'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil')));//PhoneNumberField
+            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));//PhoneNumberField
         $fields->addFieldToTab('Root.Main',
-            TextField::create('Phone', _t('ClubMember.PHONE', 'Phone')));//PhoneNumberField
+            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));//PhoneNumberField
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
         $fields->addFieldToTab('Root.Main',
-            DateField::create('Since', _t('ClubMember.FROM', 'From'))->setConfig('showcalendar', true) );
+            DateField::create('Since', _t('ClubMember.FROM', 'Since'))->setConfig('showcalendar', true));
         $fields->addFieldToTab('Root.Main',
-            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress'))->performReadonlyTransformation());
+            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')));
+            EUNameTextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')));
+            EUNameTextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')));
+            EUNameTextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')));
+            EUNameTextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             ZipField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')));
+            EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text'));
+            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT','IBAN hint')));
         $fields->addFieldToTab('Root.Main',
-            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text') );
+            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT','BIC hint')));
         //Special
-        //$fields->addFieldToTab('Root.Meta',
-        //    CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
-        //$fields->addFieldToTab('Root.Meta',
-        //    CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
+        /*$fields->addFieldToTab('Root.Meta',
+            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
+        $fields->addFieldToTab('Root.Meta',
+            CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));*/
         $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
-            TextField::create('Sex', _t('ClubMember.SEX', 'Sex'))->performReadonlyTransformation());
+            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'),singleton('ClubMember')->dbObject('Sex')->enumValues())->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
             TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
@@ -112,7 +112,9 @@ class ClubMemberPending extends ClubMember
             TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
-                $fields->removeByName(array('Active','Insurance'));
+
+        $fields->removeByName(array('Active','Insurance'));
+
         return $fields;
     }
 
@@ -131,7 +133,7 @@ class ClubMemberPending extends ClubMember
         $this->Email = $data->Email;
         $this->Mobil = $data->Mobil;
         $this->Phone = $data->Phone;
-        $this->Since = '';
+        $this->Since = date('d.m.Y');
         $this->AccountHolderFirstName = $data->AccountHolderFirstName;
         $this->AccountHolderLastName = $data->AccountHolderLastName;
         $this->AccountHolderStreet = $data->AccountHolderStreet;
@@ -148,7 +150,7 @@ class ClubMemberPending extends ClubMember
         if( $this->Zip == $this->AccountHolderZip && $this->City == $this->AccountHolderCity &&
             $this->Street == $this->AccountHolderStreet && $this->StreetNumber == $this->AccountHolderStreetNumber) {
             $this->EqualAddress = 1;
-        }
+        } else {$this->EqualAddress = 0;}
     }
 
     public function isPending() {

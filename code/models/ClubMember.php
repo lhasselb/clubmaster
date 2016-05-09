@@ -17,7 +17,7 @@ class ClubMember extends DataObject
         'Mobil' => 'Varchar(255)',
         'Phone' => 'Varchar(255)',
         'Since' => 'Date',
-        'EqualAddress' => 'Boolean(0)',
+        'EqualAddress' => 'Boolean(1)',
         'AccountHolderFirstName' => 'Varchar(16)',
         'AccountHolderLastName' => 'Varchar(16)',
         'AccountHolderStreet' => 'Varchar(255)',
@@ -180,30 +180,29 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
         $fields->addFieldToTab('Root.Main',
-            EUNameTextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')));
+            EUNameTextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            EUNameTextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')));
+            EUNameTextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            EUNameTextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')));
+            EUNameTextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            EUNameTextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')));
+            EUNameTextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             ZipField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')));
         $fields->addFieldToTab('Root.Main',
-            EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')));
+            EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT','IBAN hint')));
         $fields->addFieldToTab('Root.Main',
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT','BIC hint')));
         //Special
         $fields->addFieldToTab('Root.Meta',
-            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));//->performReadonlyTransformation()
+            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
         $fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
         $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
-            //TextField::create('Sex', _t('ClubMember.SEX', 'Sex'))->performReadonlyTransformation());
             DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'),singleton('ClubMember')->dbObject('Sex')->enumValues())->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
             TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
@@ -245,6 +244,10 @@ class ClubMember extends DataObject
     public function isActive() {
         return $this->Active;
     }
+
+    /*public function getToday() {
+        return SS_Datetime::now()->FormatI18N('%d.%m.%Y');
+    }*/
 
     public function dateFromFilename($filename) {
         $date = new SS_DateTime();

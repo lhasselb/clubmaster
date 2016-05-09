@@ -11,12 +11,12 @@ File:
     - antrag
 
 ClubMember:
-  better_buttons_enabled: false
+  better_buttons_enabled: true
 
 ClubMemberPending:
   better_buttons_enabled: false
 
-ClubMemberSettings:
+ClubMemberType:
   better_buttons_enabled: false
 
 SiteConfig:
