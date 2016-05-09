@@ -13,9 +13,9 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
      */
     public function processRecord($record, $columnMap, &$results, $preview = false) {
 
-        foreach ($record as $key => $value) {
-            //SS_Log::log('key='.$key.' value='.$value,SS_Log::WARN);
-        }
+        /*foreach ($record as $key => $value) {
+            SS_Log::log('key='.$key.' value='.$value,SS_Log::WARN);
+        }*/
 
         //skip if required data is not present
         if (!$this->hasRequiredData($record)) {
@@ -36,11 +36,37 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
         return parent::processRecord($record, $columnMap, $results, $preview);
     }
 
-    public $duplicateChecks = array(
+    /*public $duplicateChecks = array(
         'FirstName' => 'FirstName',
         'LastName' => 'LastName',
         'Birthday' => 'Birthday'
+    );*/
+
+    /*
+     * Using a callback function to  check for unique record
+     */
+    public $duplicateChecks = array(
+        'FirstName' => array(
+            'callback' => 'checkFirstLastBirthday'
+        )
     );
+
+    /* Callback method to check for FirstName, LastName, & Birthday
+     * as unique key for a record
+     */
+    public function checkFirstLastBirthday($fieldName, $record) {
+
+        /*SS_Log::log('fieldName='.$fieldName,SS_Log::WARN);
+        foreach ($record as $key => $value) {
+            SS_Log::log('key='.$key.' value='.$value,SS_Log::WARN);
+        }*/
+        $first = $record['FirstName'];
+        $last = $record['LastName'];
+        $birthday = $record['Birthday'];
+        $member = ClubMember::get()->filter( array('FirstName'=> $first, 'LastName' => $last, 'Birthday' => $birthday) )->First();
+
+        return $member;
+    }
 
     /**
      * Map CSV column name => db column name
@@ -73,6 +99,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
         'Bic' => 'Bic'
    );
 
+    /* Fetch relations with a callback */
     public $relationCallbacks = array(
         'Type.TypeName' => array(
              'relationname' => 'Type',
@@ -85,6 +112,10 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
         return $type;
     }
 
+    /**
+     * Generate the information for show spec link
+     * @return [type] [description]
+     */
     public function getImportSpec()
     {
         //$spec = parent::getImportSpec();

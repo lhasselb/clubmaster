@@ -4,9 +4,9 @@ en:
     #Filter
     SELECTONE: "Select one"
     AGERANGE: "Age Range"
-    LESSTHAN16: "Less than 16"
-    LESSTHAN26: "Less than 26"
-    LESSTHAN60: "Less than 60"
+    LESSTHAN16: "Less/equal 16"
+    LESSTHAN26: "Less/equal 26"
+    LESSTHAN60: "Less/equal 60"
     STATE: "Member state"
     SHOWACTIVE: "Show active"
     SHOWINACTIVE: "Show inactive"
@@ -74,6 +74,9 @@ en:
     FORMCLAIMDATE: "Date (Form)"
     CREATIONTYPE: "Created by"
     PENDING: "Pending"
+    PHONEHINT: "0-9, \"+\" and \"-\" allowed."
+    IBANHINT: "IBAN, like DE21301204000000015228"
+    BICHINT: "BIC, like VOBADEXX"
 
 #  GridField:
 #    NewRecord: 'New %s'
@@ -107,3 +110,9 @@ en:
 
   ZipField:
     VALIDATIONZIP: "'{value}' is not a zip number, only zip numbers can be accepted for this field"
+
+  PhoneNumberField:
+    VALIDATIONPHONE: "'{value}' is not valid Phone numer, special charcters cannot be accepted for this field"
+
+  EUNameTextField:
+    VALIDATIONNAME: "'{value}' is not valid, special charcters cannot be accepted for this field"

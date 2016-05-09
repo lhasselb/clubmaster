@@ -291,6 +291,10 @@ class ClubAdmin extends ModelAdmin {
         return $form;
     }
 
+    /**
+     * [init description]
+     * @return [type] [description]
+     */
     public function init() {
 
         parent::init();

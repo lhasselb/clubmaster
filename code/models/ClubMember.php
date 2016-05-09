@@ -152,27 +152,27 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus','autofocus'));
+            EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus','autofocus')->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName')));
+            EUNameTextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true) );
         $fields->addFieldToTab('Root.Main',
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('Street', _t('ClubMember.STREET', 'Street')));
+            EUNameTextField::create('Street', _t('ClubMember.STREET', 'Street'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber')));
+            EUNameTextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             ZipField::create('Zip', _t('ClubMember.ZIP', 'Zip')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('City', _t('ClubMember.CITY', 'City')));
+            EUNameTextField::create('City', _t('ClubMember.CITY', 'City'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil')));//PhoneNumberField
+            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));//PhoneNumberField
         $fields->addFieldToTab('Root.Main',
-            TextField::create('Phone', _t('ClubMember.PHONE', 'Phone')));//PhoneNumberField
+            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));//PhoneNumberField
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
         $fields->addFieldToTab('Root.Main',
@@ -180,21 +180,21 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')));
+            EUNameTextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')));
+            EUNameTextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')));
+            EUNameTextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')));
+            EUNameTextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')));
         $fields->addFieldToTab('Root.Main',
             ZipField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')));
         $fields->addFieldToTab('Root.Main',
-            TextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')));
+            EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')));
         $fields->addFieldToTab('Root.Main',
-            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text'));
+            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT','IBAN hint')));
         $fields->addFieldToTab('Root.Main',
-            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text') );
+            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT','BIC hint')));
         //Special
         $fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));//->performReadonlyTransformation()
@@ -203,7 +203,8 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
-            TextField::create('Sex', _t('ClubMember.SEX', 'Sex'))->performReadonlyTransformation());
+            //TextField::create('Sex', _t('ClubMember.SEX', 'Sex'))->performReadonlyTransformation());
+            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'),singleton('ClubMember')->dbObject('Sex')->enumValues())->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
             TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',

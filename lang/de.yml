@@ -4,9 +4,9 @@ de:
     #Filter
     SELECTONE: "Bitte wählen"
     AGERANGE: "Altersbereich"
-    LESSTHAN16: "Jünger als 16 Jahre"
-    LESSTHAN26: "Jünger als 26 Jahre"
-    LESSTHAN60: "Jünger als 60 Jahre"
+    LESSTHAN16: "Bis 16 Jahre"
+    LESSTHAN26: "Bis 26 Jahre"
+    LESSTHAN60: "Bis 60 Jahre"
     STATE: "Midgliedsstatus"
     SHOWACTIVE: "Zeige nur Aktive Mitglieder"
     SHOWINACTIVE: "Zeige nur Inaktive Mitglieder"
@@ -74,6 +74,9 @@ de:
     FORMCLAIMDATE: "Antragsdatum (Formular)"
     CREATIONTYPE: "Angelegt mit"
     PENDING: "Mitgliedschaft anhängig?"
+    PHONEHINT: "Erlaubt sind 0-9, \"+\" und \"-\"."
+    IBANHINT: "IBAN, z.B. DE21301204000000015228"
+    BICHINT: "BIC, z.B. VOBADEXX"
 
   GridField:
     NewRecord: 'Neues %s'
@@ -107,3 +110,9 @@ de:
 
   ZipField:
     VALIDATIONZIP: "'{value}' ist keine Postleitzahl, nur Postleitzahlen sind zulässig für dieses Feld."
+
+  PhoneNumberField:
+    VALIDATIONPHONE: "'{value}' ist keine zulässige Telefonnummer."
+
+  EUNameTextField:
+    VALIDATIONNAME: "'{value}' ist keine zulässige Eingabe, Sonderzeichen sind nicht zulässig."

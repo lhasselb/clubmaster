@@ -4,3 +4,13 @@
 .cms table.ss-gridfield-table tr td.col-Sex{
     color: black;
 }
+
+
+button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-ui-button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.filtered
+{
+    opacity: 0.8;
+}
+button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-ui-button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.filtered:hover
+{
+    opacity: 1;
+}
