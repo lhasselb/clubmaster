@@ -15,6 +15,7 @@ de:
     ZIPSEARCH: "Postleitzahlen"
     ZIPSTART: "Postleitzahlen von"
     ZIPEND: "Postleitzahlen bis"
+    FILE: "Datei"
     #BulkAction
     GRIDFIELDBULKDROPDOWNACTIVATE: "Mitglieder aktivieren"
     GRIDFIELDBULKDROPDOWNDEACTIVATE: "Mitglieder de-aktivieren"

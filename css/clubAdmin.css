@@ -16,9 +16,20 @@ button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-
 }
 
 #Form_ItemEditForm_action_save,#Form_ItemEditForm_action_doSaveAndQuit,
-#Form_ItemEditForm_action_doSave {
+#Form_ItemEditForm_action_doSave
+{
     float:right;
 }
-#Form_ItemEditForm_action_doDelete {
+
+#Form_ItemEditForm_action_doDelete
+{
     float:left;
+}
+
+.cms .ss-gridfield .grid-show-button
+{
+    margin-bottom: 0;
+    font-size: 12px;
+    display: inline-block;
+    vertical-align: middle;
 }

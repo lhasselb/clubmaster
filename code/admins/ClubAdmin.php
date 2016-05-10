@@ -16,7 +16,7 @@ class ClubAdmin extends ModelAdmin {
     // Show importer for ClubMember only
     public $showImportForm = array('ClubMember');
     //private static $url_rule = '/$Action';
-    private static $allowed_actions = array('approvemember','activatemember','deactivatemember','ImportForm');
+    private static $allowed_actions = array('approvemember','activatemember','deactivatemember');
 
     /**
      * @config
@@ -174,7 +174,6 @@ class ClubAdmin extends ModelAdmin {
             $frontEndConfig = array( 'isAjax' => true, 'icon' => 'decline', 'isDestructive' => false );
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('deactivateMember',
                 _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE','Deactivate'), 'GridFieldBulkActionActivateMemberHandler',$frontEndConfig);
-
 
             // Add BULK action insureMember
             $config->getComponentByType('GridFieldBulkManager')->addBulkAction('insureMember',
@@ -354,4 +353,6 @@ class ClubAdmin extends ModelAdmin {
         $member = Member::currentUser();
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
+
+
 }
