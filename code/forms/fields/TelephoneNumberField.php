@@ -1,10 +1,10 @@
 <?php
 /**
- * Text input field with validation for numeric values. Supports validating
- * the numeric value.
+ * Text input field with validation for numeric (telephon) values.
+ * Supports validating the numeric value.
  *
  * @package clubmaster
- * @subpackage forms
+ * @subpackage forms/fields
  */
 class TelephoneNumberField extends TextField {
 

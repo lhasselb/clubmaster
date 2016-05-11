@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * ClubMember object
+ *
+ * @package clubmaster
+ * @subpackage models
+ */
 class ClubMember extends DataObject
 {
     private static $db = array(
@@ -214,10 +219,10 @@ class ClubMember extends DataObject
         //    CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
         //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
         $fields->removeByName('Pending');
-        if($this->CreationType !== 'Formular')
-        {
+        if($this->CreationType !== 'Formular') {
             $fields->removeByName(array('SerializedFileName','FormClaimDate'));
         }
+
         return $fields;
     }
 

@@ -5,7 +5,7 @@
  * https://de.wikipedia.org/wiki/IBAN
  *
  * @package clubmaster
- * @subpackage forms
+ * @subpackage forms/fields
  */
 class IbanField extends TextField {
 

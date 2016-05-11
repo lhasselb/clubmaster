@@ -5,7 +5,7 @@
  * https://de.wikipedia.org/wiki/ISO_9362
  *
  * @package clubmaster
- * @subpackage forms
+ * @subpackage forms/fields
  */
 class BicField extends TextField {
 

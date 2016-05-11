@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Add clubmaster specific behaviour to SiteConfig
+ *
+ * @package clubmaster
+ * @subpackage extensions
+ */
 class ClubAdminSiteConfig extends DataExtension {
 
     private static $db = array(
@@ -10,10 +15,6 @@ class ClubAdminSiteConfig extends DataExtension {
         // Store selected folder
         'PendingFolder' => 'Folder'
     );
-
-    /*public function getTitle() {
-        return  $this->Folder()->getTitle();
-    }*/
 
     public function updateCMSFields(FieldList $fields) {
 

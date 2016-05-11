@@ -4,7 +4,7 @@
  * the numeric value.
  *
  * @package clubmaster
- * @subpackage forms
+ * @subpackage forms/fields
  */
 class EUNameTextField extends TextField {
 

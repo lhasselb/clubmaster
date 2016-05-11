@@ -5,21 +5,24 @@ Name: clubmaster
 LeftAndMain:
   extensions:
     - CustomLeftAndMain
-# Add extension to allowed extensions
+# Add extension SiteConfig: add folder to store files of type "antraege"
+SiteConfig:
+  extensions:
+    - ClubAdminSiteConfig
+# Add extension ModelAdmin: remove delete all checkbox
+ModelAdmin:
+  extensions:
+    - ModelAdminExtension
+# Add file extension to allowed extensions
 File:
   allowed_extensions:
     - antrag
 
+# Enable / Disable Betterbuttons
 ClubMember:
   better_buttons_enabled: true
-
 ClubMemberPending:
   better_buttons_enabled: false
-
 ClubMemberType:
   better_buttons_enabled: false
-
-SiteConfig:
-  extensions:
-    - ClubAdminSiteConfig
 

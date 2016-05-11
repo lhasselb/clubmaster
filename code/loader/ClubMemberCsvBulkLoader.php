@@ -1,10 +1,10 @@
 <?php
 /**
  * Imports clubmember records, and checks/updates duplicates based on their
- * 'Email' property.
+ * 'FirstName + LastName + Birthday' properties.
  *
  * @package clubmaster
- * @subpackage security
+ * @subpackage loader
  */
 class ClubMemberCsvBulkLoader extends CsvBulkLoader {
 
@@ -23,7 +23,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
             return;
         }
 
-        // Add information about creation
+        // Add information about creation type
         $record['CreationType'] = 'Import';
         // Verify equal address
         if(in_array($record['Street'],$record, true)
@@ -35,12 +35,6 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
 
         return parent::processRecord($record, $columnMap, $results, $preview);
     }
-
-    /*public $duplicateChecks = array(
-        'FirstName' => 'FirstName',
-        'LastName' => 'LastName',
-        'Birthday' => 'Birthday'
-    );*/
 
     /*
      * Using a callback function to  check for unique record
@@ -116,8 +110,8 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
      * Generate the information for show spec link
      * @return [type] [description]
      */
-    public function getImportSpec()
-    {
+
+/*    public function getImportSpec() {
         //$spec = parent::getImportSpec();
         //$spec['fields'] = (array)singleton($this->objectClass)->fieldLabels(false);
         //$spec['relations'] = (array)$has_ones + (array)$has_manys + (array)$many_manys;
@@ -126,7 +120,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
         $spec['relations'] = array();
 
         return $spec;
-    }
+    }*/
 
     /**
      * Check if the given mapped record has the required data.

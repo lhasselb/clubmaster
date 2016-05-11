@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * ClubMember administration system within the CMS
+ *
+ * @package clubmaster
+ * @subpackage admins
+ */
 class ClubAdmin extends ModelAdmin {
 
     private static $managed_models = array(
@@ -148,6 +153,17 @@ class ClubAdmin extends ModelAdmin {
         $config = $gridField->getConfig();
 
         if($gridFieldName =='ClubMember') {
+/*
+            $dataColumns = $config->getComponentByType('GridFieldDataColumns');
+            //$fields = $dataColumns->getDisplayFields($gridField);
+            $dataColumns->setFieldFormatting(
+                array(
+                    'Sex' => function($value, $item) {
+                        return ($value == 'w') ? '<span class="female">'.$value.'</span>' : '<span class="male">'.$value.'</span>';
+                    }
+                )
+            );
+*/
             $config->addComponent(new GridFieldShowHideButton('before'));
             // Set rows displayed
             $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page');

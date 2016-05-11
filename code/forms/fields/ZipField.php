@@ -1,7 +1,7 @@
 <?php
 /**
- * Text input field with validation for numeric values. Supports validating
- * the numeric value.
+ * Text input field with validation for numeric (zip) values.
+ * Supports validating the numeric value.
  *
  * @package clubmaster
  * @subpackage forms

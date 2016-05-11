@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Disable Help link within LeftAndMain
+ *
+ * @package clubmaster
+ * @subpackage extensions
+ */
 class CustomLeftAndMain extends LeftAndMainExtension {
 
     public function init() {

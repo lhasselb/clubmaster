@@ -1,3 +1,4 @@
+
 .cms table.ss-gridfield-table tr td.col-FirstName,
 .cms table.ss-gridfield-table tr td.col-LastName,
 .cms table.ss-gridfield-table tr td.col-Age,
@@ -5,7 +6,7 @@
     color: black;
 }
 
-
+/* Improve visiblity for delete filter icon within GridfieldHeadFilter*/
 button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-ui-button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.filtered
 {
     opacity: 0.8;
@@ -15,21 +16,35 @@ button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-
     opacity: 1;
 }
 
+/* Move save button to the right */
 #Form_ItemEditForm_action_save,#Form_ItemEditForm_action_doSaveAndQuit,
 #Form_ItemEditForm_action_doSave
 {
     float:right;
 }
 
+/* Move delete button to the left */
 #Form_ItemEditForm_action_doDelete
 {
     float:left;
 }
 
+/* Show/hide active */
 .cms .ss-gridfield .grid-show-button
 {
     margin-bottom: 0;
     font-size: 12px;
     display: inline-block;
     vertical-align: middle;
+}
+
+.male
+{
+    color:#0000CD;
+/*font-weight: bold;*/
+}
+.female
+{
+    color:#C71585;
+/*font-weight: bold;*/
 }
