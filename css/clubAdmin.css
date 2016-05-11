@@ -48,3 +48,16 @@ button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-
     color:#C71585;
 /*font-weight: bold;*/
 }
+
+
+
+/*DL, DT, DD TAGS LIST DATA*/
+.importSpec dl {}
+
+.importSpec dl dt {
+
+    float:left;
+    font-weight:bold;
+    margin-right:10px;
+}
+.importSpec dl dd {}

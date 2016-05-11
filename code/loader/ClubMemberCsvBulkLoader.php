@@ -110,8 +110,8 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
      * Generate the information for show spec link
      * @return [type] [description]
      */
-
-/*    public function getImportSpec() {
+    public function getImportSpec() {
+        //SS_Log::log('getImportSpec()',SS_Log::WARN);
         //$spec = parent::getImportSpec();
         //$spec['fields'] = (array)singleton($this->objectClass)->fieldLabels(false);
         //$spec['relations'] = (array)$has_ones + (array)$has_manys + (array)$many_manys;
@@ -120,7 +120,76 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
         $spec['relations'] = array();
 
         return $spec;
-    }*/
+    }
+
+    /**
+     * Generate a CSV import form for a single {@link DataObject} subclass.
+     *
+     * @return Form
+     */
+    public function ImportForm() {
+        $modelSNG = singleton($this->modelClass);
+        $modelName = $modelSNG->i18n_singular_name();
+        // check if a import form should be generated
+        if(!$this->showImportForm ||
+            (is_array($this->showImportForm) && !in_array($this->modelClass, $this->showImportForm))
+        ) {
+            return false;
+        }
+
+        $importers = $this->getModelImporters();
+        if(!$importers || !isset($importers[$this->modelClass])) return false;
+
+        if(!$modelSNG->canCreate(Member::currentUser())) return false;
+
+        $fields = new FieldList(
+            new HiddenField('ClassName', _t('ModelAdmin.CLASSTYPE'), $this->modelClass),
+            new FileField('_CsvFile', false)
+        );
+
+        // get HTML specification for each import (column names etc.)
+        $importerClass = $importers[$this->modelClass];
+        $importer = new $importerClass($this->modelClass);
+        $spec = $importer->getImportSpec();
+        $specFields = new ArrayList();
+        foreach($spec['fields'] as $name => $desc) {
+            $specFields->push(new ArrayData(array('Name' => $name, 'Description' => $desc)));
+        }
+        $specRelations = new ArrayList();
+        foreach($spec['relations'] as $name => $desc) {
+            $specRelations->push(new ArrayData(array('Name' => $name, 'Description' => $desc)));
+        }
+        $specHTML = $this->customise(array(
+            'ClassName' => $this->sanitiseClassName($this->modelClass),
+            'ModelName' => Convert::raw2att($modelName),
+            'Fields' => $specFields,
+            'Relations' => $specRelations,
+        ))->renderWith('ClubAdmin_ImportSpec');
+
+        $fields->push(new LiteralField("SpecFor{$modelName}", $specHTML));
+        $fields->push(
+            new CheckboxField('EmptyBeforeImport', _t('ModelAdmin.EMPTYBEFOREIMPORT', 'Replace data'),
+                false)
+        );
+
+        $actions = new FieldList(
+            new FormAction('import', _t('ModelAdmin.IMPORT', 'Import from CSV'))
+        );
+
+        $form = new Form(
+            $this,
+            "ImportForm",
+            $fields,
+            $actions
+        );
+        $form->setFormAction(
+            Controller::join_links($this->Link($this->sanitiseClassName($this->modelClass)), 'ImportForm')
+        );
+
+        $this->extend('updateImportForm', $form);
+
+        return $form;
+    }
 
     /**
      * Check if the given mapped record has the required data.

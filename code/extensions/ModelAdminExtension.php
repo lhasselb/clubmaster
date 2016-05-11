@@ -8,9 +8,9 @@
  */
 class ModelAdminExtension extends Extension  {
 
-    //Disable the clean (delete all) checkbox during import
     public function updateImportForm(&$form) {
         $form->Fields()->removeByName('EmptyBeforeImport');
+        //$form->setTemplate('ClubAdmin_ImportSpec');
     }
 
 }
