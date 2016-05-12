@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * ClubMemberpending object
+ *
+ * @package clubmaster
+ * @subpackage models
+ */
 class ClubMemberPending extends ClubMember
 {
 
@@ -47,7 +52,7 @@ class ClubMemberPending extends ClubMember
         $fields = parent::getCMSFields();
 
         // Add some editing features (show/hide account related address data)
-        Requirements::javascript(CLUBMASTER_DIR . "/javascript/ClubAdmin.js");
+        //Requirements::javascript(CLUBMASTER_DIR . "/javascript/ClubAdmin.js");
 
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));

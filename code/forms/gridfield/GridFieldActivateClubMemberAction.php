@@ -4,7 +4,8 @@
  *
  * @author Lars Hasselbach
  */
-class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider {
+class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider
+{
 
     public function augmentColumns($gridField, &$columns) {
 

@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * ClubMemberType object
+ *
+ * @package clubmaster
+ * @subpackage models
+ */
 class ClubMemberType extends DataObject
 {
 
@@ -42,7 +47,7 @@ class ClubMemberType extends DataObject
     public function canEdit($member = null) {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
-    /* Only clubadmins are allowed */
+    /* Only admins (Group Administrators) are allowed */
     public function canDelete($member = null) {
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }

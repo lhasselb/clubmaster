@@ -139,11 +139,6 @@ class ClubAdmin extends ModelAdmin {
     public function getEditForm($id = null, $fields = null) {
 
         $form = parent::getEditForm($id, $fields);
-
-        /*foreach ($fields as $field) {
-            SS_Log::log('field='.$field,SS_Log::WARN);
-            //SS_Log::log('field='.$key.' value='.$value,SS_Log::WARN);
-        }*/
         // $gridFieldName is generated from the ModelClass, eg if the Class 'ClubMember'
         // is managed by this ModelAdmin, the GridField for it will also be named 'ClubMember'
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
@@ -153,17 +148,7 @@ class ClubAdmin extends ModelAdmin {
         $config = $gridField->getConfig();
 
         if($gridFieldName =='ClubMember') {
-/*
-            $dataColumns = $config->getComponentByType('GridFieldDataColumns');
-            //$fields = $dataColumns->getDisplayFields($gridField);
-            $dataColumns->setFieldFormatting(
-                array(
-                    'Sex' => function($value, $item) {
-                        return ($value == 'w') ? '<span class="female">'.$value.'</span>' : '<span class="male">'.$value.'</span>';
-                    }
-                )
-            );
-*/
+
             $config->addComponent(new GridFieldShowHideButton('before'));
             // Set rows displayed
             $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page');
@@ -198,7 +183,7 @@ class ClubAdmin extends ModelAdmin {
             /* PRINT disabled */
             $config->removeComponentsByType('GridFieldPrintButton');
             /*$printButton = $config->getComponentByType('GridFieldPrintButton');
-            $printButton->setPrintColumns(
+            $printButton->setPrintColumns($print_columns
                 array(
                     'Salutation' => _t('ClubMember.SALUTATION', 'Salutation'),
                     'FirstName'  => _t('ClubMember.FIRSTNAME', 'FirstName'),
@@ -314,6 +299,7 @@ class ClubAdmin extends ModelAdmin {
 
         parent::init();
 
+        Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
         Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
 
         //$this->sanitiseClassName($this->modelClass) == 'ClubMember' ||
@@ -365,10 +351,9 @@ class ClubAdmin extends ModelAdmin {
     }
 
     // Add a new permission
-    function canDeleteClubmember() {
+    public function canDeleteClubmember() {
         $member = Member::currentUser();
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
-
 
 }

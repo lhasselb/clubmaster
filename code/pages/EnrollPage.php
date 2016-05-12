@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Enoll page folding the form
+ * Enoll page
  *
  * @package clubmaster
  * @subpackage pages

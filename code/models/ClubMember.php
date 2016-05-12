@@ -50,6 +50,14 @@ class ClubMember extends DataObject
         'Active' => '1'
     );
 
+    static $casting = array(
+        'BLSV' => 'Boolean'
+    );
+
+    public function getBLSV() {
+        return ($this->Insurance == 1) ? 'Ja' : 'Nein';
+    }
+
     /**
      * Fields display in Table head
      * @var array
@@ -58,8 +66,10 @@ class ClubMember extends DataObject
         //'Salutation',
         'FirstName',
         'LastName',
+        'Zip',
         'Age',
         'Sex',
+        'BLSV',
         'Type.TypeName'
     );
 
@@ -148,11 +158,10 @@ class ClubMember extends DataObject
     function getCMSFields()
     {
         $fields = parent::getCMSFields();
+        // The Main tab
         $main = $fields->findOrMakeTab('Root.Main')->setTitle(_t('ClubMember.MAINTITLE','Main'));
+        // The Meta tab
         $fields->addFieldToTab('Root', new Tab('Meta', _t('ClubMember.META', 'Meta')));
-
-        // Add some editing features (show/hide account related address data)
-        Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
 
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));
@@ -175,9 +184,9 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main',
-            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));//PhoneNumberField
+            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));
         $fields->addFieldToTab('Root.Main',
-            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));//PhoneNumberField
+            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
         $fields->addFieldToTab('Root.Main',

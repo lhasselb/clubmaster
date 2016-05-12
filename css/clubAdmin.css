@@ -1,9 +1,11 @@
 
+.cms table.ss-gridfield-table tr td {}
 .cms table.ss-gridfield-table tr td.col-FirstName,
 .cms table.ss-gridfield-table tr td.col-LastName,
-.cms table.ss-gridfield-table tr td.col-Age,
-.cms table.ss-gridfield-table tr td.col-Sex{
-    color: black;
+/*.cms table.ss-gridfield-table tr td.col-Age,
+.cms table.ss-gridfield-table tr td.col-Sex */
+{
+    /*color: #808080;*/
 }
 
 /* Improve visiblity for delete filter icon within GridfieldHeadFilter*/
@@ -38,12 +40,12 @@ button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-
     vertical-align: middle;
 }
 
-.male
+.cms table.ss-gridfield-table tr td.col-Sex.male
 {
     color:#0000CD;
 /*font-weight: bold;*/
 }
-.female
+.cms table.ss-gridfield-table tr td.col-Sex.female
 {
     color:#C71585;
 /*font-weight: bold;*/

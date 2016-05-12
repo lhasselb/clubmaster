@@ -12,8 +12,16 @@
 (function($) {
     $.entwine('ss', function($) {
 
-        console.log('Here');
-        console.log('checkbox' + $.trim($('#Form_ItemEditForm_EqualAddress').text().toLowerCase()));
+        $('.col-Sex').entwine({
+            onmatch: function() {
+                console.log(' sex FOUND = ' + this.text().toLowerCase());
+                var sex =  this.text().toLowerCase();
+                //console.log($.trim(this.text().toLowerCase()));
+                if (sex == 'm') this.addClass('male');
+                else if (sex == 'w') this.addClass('female');
+            }
+        });
+
         /**
          * ID: Form_ItemEditForm_EqualAddress
          *
