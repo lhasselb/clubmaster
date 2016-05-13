@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Add clubmaster specific behaviour to SiteConfig
  *
