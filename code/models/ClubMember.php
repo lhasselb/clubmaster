@@ -64,13 +64,13 @@ class ClubMember extends DataObject
      * @var array
      */
     private static $summary_fields = array(
-        'FirstName',
-        'LastName',
-        'Zip',
-        'Age',
-        'Sex',
-        'Insurance',
-        'Type.TypeName'
+        'FirstName' => 'FirstName',
+        'LastName' => 'LastName',
+        'Zip' => 'Zip',
+        'Age' => 'Age',
+        'Sex' => 'Sex',
+        'Insurance' => 'Insurance',
+        'Type.TypeName' => 'Type.TypeName'
     );
 
     /**
@@ -84,7 +84,7 @@ class ClubMember extends DataObject
     function fieldLabels($includerelations = true) {
         $labels = parent::fieldLabels($includerelations);
         // Relation has_one
-        //$labels['Type.ID'] = _t('ClubMember.TYPE', 'Type');
+        $labels['Type.ID'] = _t('ClubMember.TYPE', 'Type');
         $labels['Type.TypeName'] = _t('ClubMember.TYPE', 'Type');
         // Properties
         $labels['Salutation'] = _t('ClubMember.SALUTATION', 'Salutation');
