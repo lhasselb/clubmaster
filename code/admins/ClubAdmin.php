@@ -21,7 +21,7 @@ class ClubAdmin extends ModelAdmin {
     // Show importer for ClubMember only
     public $showImportForm = array('ClubMember');
     //private static $url_rule = '/$Action';
-    private static $allowed_actions = array('approvemember','activatemember','deactivatemember');
+    private static $allowed_actions = array('approvemember','activatemember','deactivatemember','ImportForm');
 
     /**
      * @config
