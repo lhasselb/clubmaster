@@ -9,10 +9,7 @@ LeftAndMain:
 SiteConfig:
   extensions:
     - ClubAdminSiteConfig
-# Add extension ModelAdmin: remove delete all checkbox
-#ModelAdmin:
-#  extensions:
-#    - ClubAdminModelAdmin
+
 # Add file extension to allowed extensions
 File:
   allowed_extensions:

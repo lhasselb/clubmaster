@@ -22,7 +22,7 @@ class ClubAdmin extends ModelAdmin {
     // Show importer for ClubMember only
     public $showImportForm = array('ClubMember');
     //private static $url_rule = '/$Action';
-    private static $allowed_actions = array('approvemember','activatemember','deactivatemember');
+    private static $allowed_actions = array('approvemember','activatemember','deactivatemember','ImportForm');
 
     /**
      * @config
@@ -281,6 +281,15 @@ class ClubAdmin extends ModelAdmin {
             //'CreationType'
             //'Pending'
         );
+    }
+
+    /* Disable default import form */
+    public function ImportForm() {
+        $form = null;
+        if (Permission::checkMember(Member::currentUser(), 'CMS_ACCESS_LeftAndMain')) {
+                $form = parent::ImportForm();
+        }
+        return $form;
     }
 
     /**
