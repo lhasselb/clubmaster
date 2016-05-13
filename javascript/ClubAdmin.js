@@ -52,11 +52,25 @@
             onmatch: function() {
                 /*console.log('FOUND');*/
                 if (this.is(':checked')) {
+                    /*
                     $("#Form_ItemEditForm_AccountHolderFirstName_Holder").hide();
                     $("#Form_ItemEditForm_AccountHolderLastName_Holder").hide();
                     $("#Form_ItemEditForm_AccountHolderStreet_Holder").hide();
                     $("#Form_ItemEditForm_AccountHolderStreetNumber_Holder").hide();
                     $("#Form_ItemEditForm_AccountHolderZip_Holder").hide();
+                    $("#Form_ItemEditForm_AccountHolderCity_Holder").hide();
+                    */
+                    $("input[name='AccountHolderFirstName']").val($("input[name='FirstName']").val());
+                    $("#Form_ItemEditForm_AccountHolderFirstName_Holder").hide();
+                    $("input[name='AccountHolderLastName']").val($("input[name='LastName']").val());
+                    $("#Form_ItemEditForm_AccountHolderLastName_Holder").hide();
+                    $("input[name='AccountHolderStreet']").val($("input[name='Street']").val());
+                    $("#Form_ItemEditForm_AccountHolderStreet_Holder").hide();
+                    $("input[name='AccountHolderStreetNumber']").val($("input[name='StreetNumber']").val());
+                    $("#Form_ItemEditForm_AccountHolderStreetNumber_Holder").hide();
+                    $("input[name='AccountHolderCity']").val($("input[name='City']").val());
+                    $("#Form_ItemEditForm_AccountHolderZip_Holder").hide();
+                    $("input[name='AccountHolderZip']").val($("input[name='Zip']").val());
                     $("#Form_ItemEditForm_AccountHolderCity_Holder").hide();
                 }
             },

@@ -37,7 +37,7 @@ class ClubMember extends DataObject
         'Age' => 'Int', // Calculated
         'Sex' => 'Enum("w,m","w")', // Calculated
         'SerializedFileName' => 'Varchar(255)', // File created by Webform
-        'CreationType' => 'Enum("Formular,Import,Händisch")', // Distinguish Formular,Import,Händisch
+        'CreationType' => 'Enum("Formular,Import,Händisch","Händisch")', // Distinguish Formular,Import,Händisch
         'Pending' => 'Boolean(0)'
     );
 
@@ -48,7 +48,7 @@ class ClubMember extends DataObject
 
     /* Defaults for object instance */
     private static $defaults = array(
-        'CreationType' => 'Händisch',
+        //'CreationType' => 'Händisch',
         'Active' => '1',
         'EqualAddress' => '1'
     );
@@ -283,7 +283,6 @@ class ClubMember extends DataObject
 
         // Set Age
         $this->Age = $this->getAge();
-
         // Set Sex
         $this->Sex = $this->getSex();
         /*if($this->CreationType == 'Händisch'){
