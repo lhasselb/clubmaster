@@ -14,7 +14,7 @@
 
         $('.col-Sex').entwine({
             onmatch: function() {
-                console.log(' sex FOUND = ' + this.text().toLowerCase());
+                //console.log(' sex FOUND = ' + this.text().toLowerCase());
                 var sex =  this.text().toLowerCase();
                 //console.log($.trim(this.text().toLowerCase()));
                 if (sex == 'm') this.addClass('male');
