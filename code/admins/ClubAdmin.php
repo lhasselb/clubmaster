@@ -14,6 +14,8 @@ class ClubAdmin extends ModelAdmin {
     );
 
     private static $url_segment = 'clubmanager';
+    //private static $url_rule = '/$Action';
+
     private static $menu_icon = 'clubmaster/images/clubmaster.png';
     private static $menu_title = 'Clubmanager';
     // Specific importer implementation
@@ -27,6 +29,11 @@ class ClubAdmin extends ModelAdmin {
      * @config
      */
     private static $items_per_page = '20';
+
+    public function Link($action = null) {
+        if(!$action) $action = $this->sanitiseClassName($this->modelClass);
+        return parent::Link($action);
+    }
 
     /**
      *  Prepare search

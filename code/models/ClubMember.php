@@ -41,45 +41,40 @@ class ClubMember extends DataObject
         'Pending' => 'Boolean(0)'
     );
 
+    /* Relation to ClubMemberType */
     private static $has_one = array(
         'Type' => 'ClubMemberType'
     );
 
+    /* Defaults for object instance */
     private static $defaults = array(
         'CreationType' => 'Händisch',
-        'Active' => '1'
+        'Active' => '1',
+        'EqualAddress' => '1'
     );
 
-    static $casting = array(
-        'BLSV' => 'Boolean'
-    );
-
-    public function getBLSV() {
-        return ($this->Insurance == 1) ? 'Ja' : 'Nein';
-    }
-
-    /**
-     * Fields display in Table head
-     * @var array
-     */
-    private static $summary_fields = array(
-        //'Salutation',
-        'FirstName',
-        'LastName',
-        'Zip',
-        'Age',
-        'Sex',
-        'BLSV',
-        'Type.TypeName'
-    );
-
+    /* Dynamic defaults for object instance */
     public function populateDefaults() {
         $this->Since = date('d.m.Y');
         parent::populateDefaults();
     }
 
     /**
-     * Fields Searchable with top Filter
+     * Fields to be displayed in Table head
+     * @var array
+     */
+    private static $summary_fields = array(
+        'FirstName',
+        'LastName',
+        'Zip',
+        'Age',
+        'Sex',
+        'Insurance',
+        'Type.TypeName'
+    );
+
+    /**
+     * Fields Searchable within top Filter
      * @var array
      */
     private static $searchable_fields = array(
@@ -89,7 +84,7 @@ class ClubMember extends DataObject
     function fieldLabels($includerelations = true) {
         $labels = parent::fieldLabels($includerelations);
         // Relation has_one
-        $labels['Type.ID'] = _t('ClubMember.TYPE', 'Type');
+        //$labels['Type.ID'] = _t('ClubMember.TYPE', 'Type');
         $labels['Type.TypeName'] = _t('ClubMember.TYPE', 'Type');
         // Properties
         $labels['Salutation'] = _t('ClubMember.SALUTATION', 'Salutation');
@@ -210,10 +205,14 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT','BIC hint')));
         //Special
-        $fields->addFieldToTab('Root.Meta',
-            CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
-        $fields->addFieldToTab('Root.Meta',
-            CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
+        //$fields->addFieldToTab('Root.Meta',
+        //    CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
+        $fields->addFieldToTab("Root.Meta",
+            CheckboxSetField::create('Active', _t('ClubMember.ACTIVE', 'Active'), array('1' => '')));
+        //$fields->addFieldToTab('Root.Meta',
+        //    CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
+        $fields->addFieldToTab("Root.Meta",
+            CheckboxSetField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance'), array('1' => '')));
         $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',

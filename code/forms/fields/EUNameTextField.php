@@ -39,7 +39,7 @@ class EUNameTextField extends TextField {
  */
 
 function verify_name($name) {
-    if (preg_match("/^[a-zA-Z0-9\-'àÀâÂäÄáÁéÉèÈêÊëËìÌîÎïÏòóÒôÔöÖùúÙûÛüÜçÇ’ñß]+$/", $name)) {
+    if (preg_match("/^[a-zA-Z0-9\-'àÀâÂäÄáÁéÉèÈêÊëËìÌîÎïÏòóÒôÔöÖùúÙûÛüÜçÇ’ñß ]+$/", $name)) {
         return true;
     } else {
         return false;

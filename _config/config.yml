@@ -18,14 +18,6 @@ File:
   allowed_extensions:
     - antrag
 
-# Enable / Disable Betterbuttons
-ClubMember:
-  better_buttons_enabled: true
-ClubMemberPending:
-  better_buttons_enabled: false
-ClubMemberType:
-  better_buttons_enabled: false
-
 # Number of displayed items
 ClubAdmin:
   items_per_page: 20
