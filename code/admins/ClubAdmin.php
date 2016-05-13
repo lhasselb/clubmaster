@@ -14,7 +14,6 @@ class ClubAdmin extends ModelAdmin {
     );
 
     private static $url_segment = 'clubmanager';
-    //private static $url_rule = '/$Action';
 
     private static $menu_icon = 'clubmaster/images/clubmaster.png';
     private static $menu_title = 'Clubmanager';
@@ -23,17 +22,12 @@ class ClubAdmin extends ModelAdmin {
     // Show importer for ClubMember only
     public $showImportForm = array('ClubMember');
     //private static $url_rule = '/$Action';
-    private static $allowed_actions = array('approvemember','activatemember','deactivatemember','ImportForm');
+    private static $allowed_actions = array('approvemember','activatemember','deactivatemember');
 
     /**
      * @config
      */
     private static $items_per_page = '20';
-
-    public function Link($action = null) {
-        if(!$action) $action = $this->sanitiseClassName($this->modelClass);
-        return parent::Link($action);
-    }
 
     /**
      *  Prepare search
@@ -289,15 +283,6 @@ class ClubAdmin extends ModelAdmin {
         );
     }
 
-    /* Disable default import form */
-    public function ImportForm() {
-        $form = null;
-        if (Permission::checkMember(Member::currentUser(), 'CMS_ACCESS_LeftAndMain')) {
-                $form = parent::ImportForm();
-        }
-        return $form;
-    }
-
     /**
      * [init description]
      * @return [type] [description]
@@ -309,7 +294,7 @@ class ClubAdmin extends ModelAdmin {
         Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
         Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
 
-        //$this->sanitiseClassName($this->modelClass) == 'ClubMember' ||
+        /* Create Pending members from serialized form data */
         if($this->sanitiseClassName($this->modelClass) == 'ClubMemberPending') {
             // Get the SiteConfig
             $siteConfig = SiteConfig::current_site_config();
