@@ -37,15 +37,14 @@ class ClubAdmin extends ModelAdmin {
 
         if($this->modelClass == 'ClubMember')
         {
+            //$infoField = HeaderField::create(_t('ClubAdmin.ZIPSEARCH','Postleitzahlen'), 3);
+            // Postleitzahlen
             $zipFieldGroup = FieldGroup::create(
-                HeaderField::create(_t('ClubAdmin.ZIPSEARCH','Postleitzahlen')),
+                HeaderField::create(_t('ClubAdmin.ZIPSEARCH','Postleitzahlen'), 4),
                 new ZipField("q[StartPlz]",  _t('ClubAdmin.ZIPSTART','zipStart')),
                 new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND','zipEnd'))
             );
-
-            //$startNumericField = new ZipField("q[StartPlz]",  _t('ClubAdmin.ZIPSTART','zipStart'));
-            //$endNumericField = new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND','zipEnd'));
-
+            // Alter
             $rangeDropDownField = DropdownField::create('q[AgeRange]', _t('ClubAdmin.AGERANGE','AgeRange'),
                 array(
                     'U16' => _t('ClubAdmin.LESSTHAN16','LessThan 16'),
@@ -53,20 +52,30 @@ class ClubAdmin extends ModelAdmin {
                     'U60' => _t('ClubAdmin.LESSTHAN60','LessThan 60'),
                 )
             )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
-
-            $showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Midgliedsstatus'),
+            // Active / Imactive
+            /*$showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Midgliedsstatus'),
                 array(
-                    //'A' => _t('ClubAdmin.SHOWACTIVE','Zeige Aktive'),
-                    //'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive'),
-                    //'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle'),
-                    'UV' => _t('ClubAdmin.SHOWNOINSURANCE','Zeige ohne Versicherung')
+                    'A' => _t('ClubAdmin.SHOWACTIVE','Zeige Aktive'),
+                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive'),
+                    'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle')
+                )
+            )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );*/
+            // Versicherung
+            $showInsuranceDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.INSURANCE','Insurance'),
+                array(
+                    'UV' => _t('ClubAdmin.SHOWNOINSURANCE','Zeige ohne Versicherung'),
+                    'V' => _t('ClubAdmin.SHOWINSURANCE','Zeige mit Versicherung')
                 )
             )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
+            // Type
+            //$typeList = ClubMemberType::get()->map()->toArray();
+            $typeDropDownField = DropdownField::create('q[Type]', _t('ClubMember.TYPE','Type'))
+                ->setSource(ClubMemberType::get()->map()->toArray())
+                ->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
 
             $context->getFields()->push($rangeDropDownField);
-            $context->getFields()->push($showInactiveDropDownField);
-            //$context->getFields()->push($startNumericField);
-            //$context->getFields()->push($endNumericField);
+            $context->getFields()->push($showInsuranceDropDownField);
+            $context->getFields()->push($typeDropDownField);
             $context->getFields()->push($zipFieldGroup);
         }
 
@@ -98,15 +107,15 @@ class ClubAdmin extends ModelAdmin {
         if($params && $this->modelClass == 'ClubMember') {
             // Limit to active or inactive
             if(isset($params['State']) && $params['State'] ) {
-                if($params['State'] == 'A'){
-                    $list = $list->filter('Active','1');
-                } elseif($params['State'] == 'I'){
-                    $list = $list->filter('Active','0');
-                } elseif($params['State'] == 'UV') {
+                /*if($params['State'] == 'A'){ $list = $list->filter('Active','1');
+                } elseif($params['State'] == 'I'){$list = $list->filter('Active','0');
+                }*/
+                if($params['State'] == 'V') {
+                    $list = $list->filter('Insurance','1');
+                }elseif($params['State'] == 'UV') {
                     $list = $list->filter('Insurance','0');
                 }
             }
-
             // Filter by Zip
             if(isset($params['StartPlz']) && $params['StartPlz']) {
                 $list = $list->exclude('Zip:LessThan', $params['StartPlz']);
@@ -114,7 +123,6 @@ class ClubAdmin extends ModelAdmin {
             if(isset($params['EndPlz']) && $params['EndPlz']) {
                 $list = $list->exclude('Zip:GreaterThan', $params['EndPlz']);
             }
-
             // Filter by Age range
             if(isset($params['AgeRange']) && $params['AgeRange'] ) {
                 if($params['AgeRange'] == 'U16'){
@@ -124,6 +132,10 @@ class ClubAdmin extends ModelAdmin {
                 } elseif($params['AgeRange'] == 'U60'){
                     $list = $list->exclude('Age:GreaterThan','60');
                 }
+            }
+            // Filter by Type
+            if(isset($params['Type']) && $params['Type'] ) {
+                $list = $list->filter('TypeID',$params['Type']);
             }
 
         } else { /* Nothing */}
@@ -154,10 +166,10 @@ class ClubAdmin extends ModelAdmin {
             // Set rows displayed
             $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page');
             $config->getComponentByType('GridFieldPaginator')->setItemsPerPage($itemsPerPage);
-            // Add Filter header
-            $config->addComponent(new GridFieldFilterHeader());
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
+            // Add Filter header
+            $config->addComponent(new GridFieldFilterHeader());
             // Remove bulk actions
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');

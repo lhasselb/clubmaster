@@ -51,8 +51,6 @@ button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-
 /*font-weight: bold;*/
 }
 
-
-
 /*DL, DT, DD TAGS LIST DATA*/
 .importSpec dl {}
 
@@ -63,3 +61,8 @@ button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-
     margin-right:10px;
 }
 .importSpec dl dd {}
+
+.cms table.ss-gridfield-table tr th div.fieldgroup
+{
+    min-width: 50px;
+}

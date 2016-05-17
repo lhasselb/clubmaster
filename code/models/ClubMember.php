@@ -69,8 +69,8 @@ class ClubMember extends DataObject
         'Zip' => 'Zip',
         'Age' => 'Age',
         'Sex' => 'Sex',
-        'Insurance' => 'Insurance',
-        'Type.TypeName' => 'Type.TypeName'
+        //'Insurance' => 'Insurance',
+        //'Type.TypeName' => 'Type.TypeName'
     );
 
     /**
@@ -208,11 +208,11 @@ class ClubMember extends DataObject
         //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
         $fields->addFieldToTab("Root.Meta",
-            CheckboxSetField::create('Active', _t('ClubMember.ACTIVE', 'Active'), array('1' => '')));
+            CheckboxSetField::create('Active', _t('ClubMember.ACTIVE', 'Active'), array('1' => 'Mitglied ist aktiv?')));
         //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
         $fields->addFieldToTab("Root.Meta",
-            CheckboxSetField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance'), array('1' => '')));
+            CheckboxSetField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance'), array('1' => 'BLSV gemeldet?')));
         $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
