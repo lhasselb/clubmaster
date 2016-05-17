@@ -20,3 +20,7 @@ ClubAdmin:
   items_per_page: 20
   extensions:
     - ClubAdminImport
+
+# Betterbuttons (unclecheese/silverstripe-gridfield-betterbuttons)
+ClubMemberPending:
+  better_buttons_enabled: false
