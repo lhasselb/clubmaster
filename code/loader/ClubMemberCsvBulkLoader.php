@@ -25,12 +25,17 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
 
         // Add information about creation type
         $record['CreationType'] = 'Import';
+
         // Verify equal address
-        if(in_array($record['Street'],$record, true)
-            && in_array($record['StreetNumber'],$record, true)
-            && in_array($record['Zip'],$record, true)
-            && in_array($record['City'],$record, true)) {
+        if(
+            $record['Street'] == $record['AccountHolderStreet'] &&
+            $record['StreetNumber'] == $record['AccountHolderStreetNumber'] &&
+            $record['Zip'] == $record['AccountHolderZip'] &&
+            $record['City'] == $record['AccountHolderCity']
+        ) {
             $record['EqualAddress'] = '1';
+        } else {
+            $record['EqualAddress'] = '0';
         }
 
         return parent::processRecord($record, $columnMap, $results, $preview);

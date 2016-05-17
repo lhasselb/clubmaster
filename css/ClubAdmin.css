@@ -62,7 +62,13 @@ button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-
 }
 .importSpec dl dd {}
 
+/* width for gridfield filter header */
 .cms table.ss-gridfield-table tr th div.fieldgroup
 {
     min-width: 50px;
+}
+
+#Form_SearchForm label.left
+{
+    font-weight: bold;
 }

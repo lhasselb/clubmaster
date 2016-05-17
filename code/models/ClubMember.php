@@ -38,7 +38,8 @@ class ClubMember extends DataObject
         'Sex' => 'Enum("w,m","w")', // Calculated
         'SerializedFileName' => 'Varchar(255)', // File created by Webform
         'CreationType' => 'Enum("Formular,Import,Händisch","Händisch")', // Distinguish Formular,Import,Händisch
-        'Pending' => 'Boolean(0)'
+        'Pending' => 'Boolean(0)',
+        'MandateReference' => 'Varchar(35)' // max 35 char. (A-z0-9) TODO: has_one? (Multiple members might share one)
     );
 
     /* Relation to ClubMemberType */
@@ -119,6 +120,7 @@ class ClubMember extends DataObject
         $labels['FormClaimDate'] = _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate');
         $labels['CreationType'] = _t('ClubMember.CREATIONTYPE', 'CreationType');
         $labels['Pending'] = _t('ClubMember.PENDING', 'Pending');
+        //$labels['MandateReference'] = 'TODO';
         return $labels;
     }
 
@@ -228,7 +230,7 @@ class ClubMember extends DataObject
         //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
         $fields->removeByName('Pending');
         if($this->CreationType !== 'Formular') {
-            $fields->removeByName(array('SerializedFileName','FormClaimDate'));
+            $fields->removeByName(array('SerializedFileName','FormClaimDate','MandateReference'));
         }
 
         return $fields;

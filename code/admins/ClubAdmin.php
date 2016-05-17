@@ -22,7 +22,7 @@ class ClubAdmin extends ModelAdmin {
     // Show importer for ClubMember only
     public $showImportForm = array('ClubMember');
     //private static $url_rule = '/$Action';
-    private static $allowed_actions = array('approvemember','activatemember','deactivatemember','ImportForm');
+    private static $allowed_actions = array('approvemember','activatemember','deactivatemember');
 
     /**
      * @config
@@ -45,7 +45,7 @@ class ClubAdmin extends ModelAdmin {
                 new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND','zipEnd'))
             );
             // Alter
-            $rangeDropDownField = DropdownField::create('q[AgeRange]', _t('ClubAdmin.AGERANGE','AgeRange'),
+            $ageRangeDropDownField = DropdownField::create('q[AgeRange]', _t('ClubAdmin.AGERANGE','AgeRange'),
                 array(
                     'U16' => _t('ClubAdmin.LESSTHAN16','LessThan 16'),
                     'U26' => _t('ClubAdmin.LESSTHAN26','LessThan 26'),
@@ -61,7 +61,7 @@ class ClubAdmin extends ModelAdmin {
                 )
             )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );*/
             // Versicherung
-            $showInsuranceDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.INSURANCE','Insurance'),
+            $insuranceDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.INSURANCE','Insurance'),
                 array(
                     'UV' => _t('ClubAdmin.SHOWNOINSURANCE','Zeige ohne Versicherung'),
                     'V' => _t('ClubAdmin.SHOWINSURANCE','Zeige mit Versicherung')
@@ -73,8 +73,8 @@ class ClubAdmin extends ModelAdmin {
                 ->setSource(ClubMemberType::get()->map()->toArray())
                 ->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
 
-            $context->getFields()->push($rangeDropDownField);
-            $context->getFields()->push($showInsuranceDropDownField);
+            $context->getFields()->push($ageRangeDropDownField);
+            $context->getFields()->push($insuranceDropDownField);
             $context->getFields()->push($typeDropDownField);
             $context->getFields()->push($zipFieldGroup);
         }
@@ -256,8 +256,6 @@ class ClubAdmin extends ModelAdmin {
 
     /**
      * Customize exported columns
-     * Export is available as a CSV format through a button at the end of a results list.
-     * You can also export search results. This is handled through the GridFieldExportButton component.
      * @return Array of fields listed
      */
     public function getExportFields() {
@@ -293,15 +291,6 @@ class ClubAdmin extends ModelAdmin {
             //'CreationType'
             //'Pending'
         );
-    }
-
-    /* Disable default import form */
-    public function ImportForm() {
-        $form = null;
-        if (Permission::checkMember(Member::currentUser(), 'CMS_ACCESS_LeftAndMain')) {
-                $form = parent::ImportForm();
-        }
-        return $form;
     }
 
     /**
