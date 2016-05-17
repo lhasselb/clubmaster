@@ -8,10 +8,12 @@ class ClubAdminImport extends Extension
     public function updateImportForm(&$form)
     {
         if (!Permission::checkMember(Member::currentUser(), 'CMS_ACCESS_LeftAndMain')) {
-                $form = null;
+            $form = null;
+        } else {
+            // Remove checkbox
+            $form->Fields()->removeByName('EmptyBeforeImport');
         }
-        // Remove checkbox
-        $form->Fields()->removeByName('EmptyBeforeImport');
+
     }
 
 }
