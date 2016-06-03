@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Text input field with validation for numeric (telephon) values.
  * Supports validating the numeric value.
@@ -6,22 +7,22 @@
  * @package clubmaster
  * @subpackage forms/fields
  */
-class TelephoneNumberField extends TextField {
+class TelephoneNumberField extends TextField
+{
 
-    public function Type() {
+    public function Type()
+    {
         return 'Telephone number';
     }
 
     public function validate($validator)
     {
 
-        if(!$this->value)
-        {
+        if (!$this->value) {
             return true;
         }
 
-        if(!verify_phone($this->value))
-        {
+        if (!verify_phone($this->value)) {
             $validator->validationError(
                 $this->name,
                 _t(
@@ -39,7 +40,8 @@ class TelephoneNumberField extends TextField {
 }
 
 
-function verify_phone($phone) {
+function verify_phone($phone)
+{
     if (preg_match("/^[0-9 \+\-]+$/", $phone)) {
         return true;
     } else {

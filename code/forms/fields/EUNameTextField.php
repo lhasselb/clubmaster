@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Text input field with validation for numeric values. Supports validating
  * the numeric value.
@@ -6,18 +7,17 @@
  * @package clubmaster
  * @subpackage forms/fields
  */
-class EUNameTextField extends TextField {
+class EUNameTextField extends TextField
+{
 
     public function validate($validator)
     {
 
-        if(!$this->value)
-        {
+        if (!$this->value) {
             return true;
         }
 
-        if(!verify_name($this->value))
-        {
+        if (!verify_name($this->value)) {
             $validator->validationError(
                 $this->name,
                 _t(
@@ -38,7 +38,8 @@ class EUNameTextField extends TextField {
  * ^[a-zA-Z0-9\-'àÀâÂäÄáÁéÉèÈêÊëËìÌîÎïÏòóÒôÔöÖùúÙûÛüÜçÇ’ñß]$
  */
 
-function verify_name($name) {
+function verify_name($name)
+{
     if (preg_match("/^[a-zA-Z0-9\-'àÀâÂäÄáÁéÉèÈêÊëËìÌîÎïÏòóÒôÔöÖùúÙûÛüÜçÇ’ñß ]+$/", $name)) {
         return true;
     } else {

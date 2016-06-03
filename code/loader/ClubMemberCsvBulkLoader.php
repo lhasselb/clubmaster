@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Imports clubmember records, and checks/updates duplicates based on
  * FirstName + LastName + Birthday.
@@ -6,12 +7,14 @@
  * @package clubmaster
  * @subpackage loader
  */
-class ClubMemberCsvBulkLoader extends CsvBulkLoader {
+class ClubMemberCsvBulkLoader extends CsvBulkLoader
+{
 
     /**
      * Overwrite processRecord
      */
-    public function processRecord($record, $columnMap, &$results, $preview = false) {
+    public function processRecord($record, $columnMap, &$results, $preview = false)
+    {
 
         /*foreach ($record as $key => $value) {
             SS_Log::log('key='.$key.' value='.$value,SS_Log::WARN);
@@ -27,7 +30,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
         $record['CreationType'] = 'Import';
 
         // Verify equal address
-        if(
+        if (
             $record['Street'] == $record['AccountHolderStreet'] &&
             $record['StreetNumber'] == $record['AccountHolderStreetNumber'] &&
             $record['Zip'] == $record['AccountHolderZip'] &&
@@ -53,7 +56,8 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
     /* Callback method to check for FirstName, LastName, & Birthday
      * as unique key for a record
      */
-    public function checkFirstLastBirthday($fieldName, $record) {
+    public function checkFirstLastBirthday($fieldName, $record)
+    {
 
         /*SS_Log::log('fieldName='.$fieldName,SS_Log::WARN);
         foreach ($record as $key => $value) {
@@ -62,7 +66,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
         $first = $record['FirstName'];
         $last = $record['LastName'];
         $birthday = $record['Birthday'];
-        $member = ClubMember::get()->filter( array('FirstName'=> $first, 'LastName' => $last, 'Birthday' => $birthday) )->First();
+        $member = ClubMember::get()->filter(array('FirstName' => $first, 'LastName' => $last, 'Birthday' => $birthday))->First();
 
         return $member;
     }
@@ -96,17 +100,18 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
         'AccountHolderCity' => 'AccountHolderCity',
         'Iban' => 'Iban',
         'Bic' => 'Bic'
-   );
+    );
 
     /* Fetch relations with a callback */
     public $relationCallbacks = array(
         'Type.TypeName' => array(
-             'relationname' => 'Type',
-             'callback' => 'getTypeByTypeName'
+            'relationname' => 'Type',
+            'callback' => 'getTypeByTypeName'
         )
     );
 
-    public static function getTypeByTypeName(&$obj, $val, $record) {
+    public static function getTypeByTypeName(&$obj, $val, $record)
+    {
         $type = ClubMemberType::get()->filter('TypeName', $val)->First();
         return $type;
     }
@@ -115,7 +120,8 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader {
      * Generate the information for show spec link
      * @return [type] [description]
      */
-    public function getImportSpec() {
+    public function getImportSpec()
+    {
         //SS_Log::log('getImportSpec()',SS_Log::WARN);
         //$spec = parent::getImportSpec();
 

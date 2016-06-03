@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ClubMemberType object
  *
@@ -22,37 +23,47 @@ class ClubMemberType extends DataObject
 
     private static $searchable_fields = array();
 
-    function fieldLabels($includerelations = true) {
+    function fieldLabels($includerelations = true)
+    {
         $labels = parent::fieldLabels($includerelations);
         $labels['TypeName'] = _t('ClubMemberType.TYPENAME', 'TypeName');
         $labels['ClubMembers'] = _t('ClubMemberType.CLUBMEMBERS', 'ClubMembers');
         return $labels;
     }
 
-    function getCMSFields() {
+    function getCMSFields()
+    {
         $fields = parent::getCMSFields();
 
         return $fields;
     }
 
-    public function getTitle() {
-        return  $this->TypeName;
+    public function getTitle()
+    {
+        return $this->TypeName;
     }
 
     // Only clubadmins are allowed
-    public function canView($member = null) {
+    public function canView($member = null)
+    {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
+
     // Only clubadmins are allowed
-    public function canEdit($member = null) {
+    public function canEdit($member = null)
+    {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
+
     // Only admins (Group Administrators) are allowed
-    public function canDelete($member = null) {
+    public function canDelete($member = null)
+    {
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
+
     // Only clubadmins are allowed
-    public function canCreate($member = null) {
+    public function canCreate($member = null)
+    {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 

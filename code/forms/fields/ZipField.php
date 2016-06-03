@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Text input field with validation for numeric (zip) values.
  * Supports validating the numeric value.
@@ -6,9 +7,11 @@
  * @package clubmaster
  * @subpackage forms
  */
-class ZipField extends TextField {
+class ZipField extends TextField
+{
 
-    public function Type() {
+    public function Type()
+    {
         return 'ZIP text';
     }
 
@@ -18,7 +21,8 @@ class ZipField extends TextField {
      * @return array List of attributes
      */
 
-    public function getAttributes() {
+    public function getAttributes()
+    {
         return array_merge(
             parent::getAttributes(),
             array(
@@ -32,13 +36,11 @@ class ZipField extends TextField {
     public function validate($validator)
     {
 
-        if(!$this->value)
-        {
+        if (!$this->value) {
             return true;
         }
 
-        if(!verify_zip($this->value))
-        {
+        if (!verify_zip($this->value)) {
             $validator->validationError(
                 $this->name,
                 _t(
@@ -57,8 +59,7 @@ class ZipField extends TextField {
 
 function verify_zip($zip)
 {
-    if (preg_match("/^[0-9]{5}$/", $zip))
-    {
+    if (preg_match("/^[0-9]{5}$/", $zip)) {
         return true;
     } else {
         return false;

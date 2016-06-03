@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Bulk action handler for activating/deactivating records.
  *
@@ -11,7 +12,7 @@ class GridFieldBulkActionActivateMemberHandler extends GridFieldBulkActionHandle
      *
      * @var array
      */
-    private static $allowed_actions = array('activateMember','deactivateMember');
+    private static $allowed_actions = array('activateMember', 'deactivateMember');
 
     /**
      * RequestHandler url => action map.
@@ -19,8 +20,8 @@ class GridFieldBulkActionActivateMemberHandler extends GridFieldBulkActionHandle
      * @var array
      */
     private static $url_handlers = array(
-    'activateMember' => 'activateMember',
-    'deactivateMember' => 'deactivateMember'
+        'activateMember' => 'activateMember',
+        'deactivateMember' => 'deactivateMember'
     );
 
     /**

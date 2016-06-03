@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ClubMember object
  *
@@ -55,7 +56,8 @@ class ClubMember extends DataObject
     );
 
     /* Dynamic defaults for object instance */
-    public function populateDefaults() {
+    public function populateDefaults()
+    {
         $this->Since = date('d.m.Y');
         parent::populateDefaults();
     }
@@ -78,11 +80,11 @@ class ClubMember extends DataObject
      * Fields Searchable within top Filter
      * @var array
      */
-    private static $searchable_fields = array(
-        //'Type.ID'
+    private static $searchable_fields = array(//'Type.ID'
     );
 
-    function fieldLabels($includerelations = true) {
+    function fieldLabels($includerelations = true)
+    {
         $labels = parent::fieldLabels($includerelations);
         // Relation has_one
         $labels['Type.ID'] = _t('ClubMember.TYPE', 'Type');
@@ -125,30 +127,31 @@ class ClubMember extends DataObject
     }
 
     /* List all required fields */
-    public function getCMSValidator() {
+    public function getCMSValidator()
+    {
         return new RequiredFields(array(
-        'Salutation',
-        'FirstName',
-        'LastName',
-        'Birthday',
-        'Nationality',
-        'Street',
-        'StreetNumber',
-        'Zip',
-        'City',
-        'Email',
-        'Mobil',
-        'Phone',
-        'Since',
-        'EqualAddress',
-        'AccountHolderFirstName',
-        'AccountHolderLastName',
-        'AccountHolderStreet',
-        'AccountHolderStreetNumber',
-        'AccountHolderZip',
-        'AccountHolderCity',
-        'Iban',
-        'Bic'
+            'Salutation',
+            'FirstName',
+            'LastName',
+            'Birthday',
+            'Nationality',
+            'Street',
+            'StreetNumber',
+            'Zip',
+            'City',
+            'Email',
+            'Mobil',
+            'Phone',
+            'Since',
+            'EqualAddress',
+            'AccountHolderFirstName',
+            'AccountHolderLastName',
+            'AccountHolderStreet',
+            'AccountHolderStreetNumber',
+            'AccountHolderZip',
+            'AccountHolderCity',
+            'Iban',
+            'Bic'
         ));
     }
 
@@ -156,18 +159,18 @@ class ClubMember extends DataObject
     {
         $fields = parent::getCMSFields();
         // The Main tab
-        $main = $fields->findOrMakeTab('Root.Main')->setTitle(_t('ClubMember.MAINTITLE','Main'));
+        $main = $fields->findOrMakeTab('Root.Main')->setTitle(_t('ClubMember.MAINTITLE', 'Main'));
         // The Meta tab
         $fields->addFieldToTab('Root', new Tab('Meta', _t('ClubMember.META', 'Meta')));
 
         $fields->addFieldToTab('Root.Main',
-            DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));
+            DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'), singleton('ClubMember')->dbObject('Salutation')->enumValues()));
         $fields->addFieldToTab('Root.Main',
-            EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus','autofocus')->addExtraClass('text'));
+            EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus', 'autofocus')->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             EUNameTextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true) );
+            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true));
         $fields->addFieldToTab('Root.Main',
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')));
         $fields->addFieldToTab('Root.Main',
@@ -181,13 +184,13 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main',
-            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));
+            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-')));
         $fields->addFieldToTab('Root.Main',
-            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));
+            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-')));
         $fields->addFieldToTab('Root.Main',
-            DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
+            DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID', 'TypeName')));
         $fields->addFieldToTab('Root.Main',
-            DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true) );
+            DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true));
         $fields->addFieldToTab('Root.Main',
             CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
         $fields->addFieldToTab('Root.Main',
@@ -203,9 +206,9 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT','IBAN hint')));
+            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT', 'IBAN hint')));
         $fields->addFieldToTab('Root.Main',
-            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT','BIC hint')));
+            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT', 'BIC hint')));
         //Special
         //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
@@ -218,7 +221,7 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
-            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'),singleton('ClubMember')->dbObject('Sex')->enumValues())->performReadonlyTransformation());
+            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'), singleton('ClubMember')->dbObject('Sex')->enumValues())->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
             TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
@@ -229,34 +232,39 @@ class ClubMember extends DataObject
         //    CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
         //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
         $fields->removeByName('Pending');
-        if($this->CreationType !== 'Formular') {
-            $fields->removeByName(array('SerializedFileName','FormClaimDate','MandateReference'));
+        if ($this->CreationType !== 'Formular') {
+            $fields->removeByName(array('SerializedFileName', 'FormClaimDate', 'MandateReference'));
         }
 
         return $fields;
     }
 
-    public function getTitle() {
-        return $this->FirstName.' '.$this->LastName;
+    public function getTitle()
+    {
+        return $this->FirstName . ' ' . $this->LastName;
     }
 
-    public function getFormClaimDate() {
+    public function getFormClaimDate()
+    {
         $date = $this->dateFromFilename($this->SerializedFileName);
         return $date->FormatI18N('%d.%m.%Y %H:%M:%S');
     }
 
-    public function getAge() {
-        if(!$this->dbObject('Birthday')->value) return 0;
+    public function getAge()
+    {
+        if (!$this->dbObject('Birthday')->value) return 0;
         $time = SS_Datetime::now()->Format('U');
         $ago = abs($time - strtotime($this->dbObject('Birthday')->value));
-        return  round($ago/86400/365);
+        return round($ago / 86400 / 365);
     }
 
-    public function getSex() {
-        return  ($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin')? 'w' : 'm';
+    public function getSex()
+    {
+        return ($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin') ? 'w' : 'm';
     }
 
-    public function isActive() {
+    public function isActive()
+    {
         return $this->Active;
     }
 
@@ -264,23 +272,25 @@ class ClubMember extends DataObject
         return SS_Datetime::now()->FormatI18N('%d.%m.%Y');
     }*/
 
-    public function dateFromFilename($filename) {
+    public function dateFromFilename($filename)
+    {
         $date = new SS_DateTime();
         // XX_dd.mm.yyyy_hh_mm_ss.antrag
         if (preg_match('/^[A-Z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/', $filename, $matches)) {
-            $day   = intval($matches[1]);
+            $day = intval($matches[1]);
             $month = intval($matches[2]);
-            $year  = intval($matches[3]);
-            $hour  = intval($matches[4]);
-            $minute  = intval($matches[5]);
-            $second  = intval($matches[6]);
-            $date->setValue($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+            $year = intval($matches[3]);
+            $hour = intval($matches[4]);
+            $minute = intval($matches[5]);
+            $second = intval($matches[6]);
+            $date->setValue($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
             //SS_Log::log('date='.$date->format('d.m.Y H:i:s'),SS_Log::WARN);
         }
         return $date;
     }
 
-    public function onBeforeWrite() {
+    public function onBeforeWrite()
+    {
         parent::onBeforeWrite();
 
         // Set Age
@@ -293,20 +303,26 @@ class ClubMember extends DataObject
     }
 
     /* Only clubadmins are allowed */
-    public function canView($member = null) {
+    public function canView($member = null)
+    {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 
     /* Only clubadmins are allowed */
-    public function canEdit($member = null) {
+    public function canEdit($member = null)
+    {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
+
     /* Only admins (Group Administrators) are allowed */
-    public function canDelete($member = null) {
+    public function canDelete($member = null)
+    {
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
+
     /* Only clubadmins are allowed */
-    public function canCreate($member = null) {
+    public function canCreate($member = null)
+    {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 }

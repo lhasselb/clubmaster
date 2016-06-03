@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Bulk action handler for approving records.
  *
@@ -19,7 +20,7 @@ class GridFieldBulkActionInsuranceMemberHandler extends GridFieldBulkActionHandl
      * @var array
      */
     private static $url_handlers = array(
-    'insureMember' => 'insureMember'
+        'insureMember' => 'insureMember'
 
     );
 

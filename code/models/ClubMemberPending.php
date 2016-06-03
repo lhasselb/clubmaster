@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ClubMemberpending object
  *
@@ -8,7 +9,7 @@
 class ClubMemberPending extends ClubMember
 {
 
-    private static $defaults = array('CreationType' => 'Formular','Active' => '0');
+    private static $defaults = array('CreationType' => 'Formular', 'Active' => '0');
 
     private static $summary_fields = array(
         'Salutation',
@@ -21,43 +22,45 @@ class ClubMemberPending extends ClubMember
     private static $searchable_fields = array();
 
 
-    public function getCMSValidator() {
+    public function getCMSValidator()
+    {
         return new RequiredFields(array(
-        'Salutation',
-        'FirstName',
-        'LastName',
-        'Birthday',
-        'Nationality',
-        'Street',
-        'StreetNumber',
-        'Zip',
-        'City',
-        'Email',
-        'Mobil',
-        'Phone',
-        'Since',
-        //'EqualAddress',
-        'AccountHolderFirstName',
-        'AccountHolderLastName',
-        'AccountHolderStreet',
-        'AccountHolderStreetNumber',
-        'AccountHolderZip',
-        'AccountHolderCity',
-        'Iban',
-        'Bic'
+            'Salutation',
+            'FirstName',
+            'LastName',
+            'Birthday',
+            'Nationality',
+            'Street',
+            'StreetNumber',
+            'Zip',
+            'City',
+            'Email',
+            'Mobil',
+            'Phone',
+            'Since',
+            //'EqualAddress',
+            'AccountHolderFirstName',
+            'AccountHolderLastName',
+            'AccountHolderStreet',
+            'AccountHolderStreetNumber',
+            'AccountHolderZip',
+            'AccountHolderCity',
+            'Iban',
+            'Bic'
         ));
     }
 
-    function getCMSFields() {
+    function getCMSFields()
+    {
         $fields = parent::getCMSFields();
         $fields->addFieldToTab('Root.Main',
-            DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),singleton('ClubMember')->dbObject('Salutation')->enumValues()));
+            DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'), singleton('ClubMember')->dbObject('Salutation')->enumValues()));
         $fields->addFieldToTab('Root.Main',
-            EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus','autofocus')->addExtraClass('text'));
+            EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus', 'autofocus')->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             EUNameTextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true) );
+            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true));
         $fields->addFieldToTab('Root.Main',
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')));
         $fields->addFieldToTab('Root.Main',
@@ -71,11 +74,11 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Main',
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main',
-            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));//PhoneNumberField
+            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-')));//PhoneNumberField
         $fields->addFieldToTab('Root.Main',
-            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT','0-9+-')));//PhoneNumberField
+            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-')));//PhoneNumberField
         $fields->addFieldToTab('Root.Main',
-            DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID','TypeName')));
+            DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID', 'TypeName')));
         $fields->addFieldToTab('Root.Main',
             DateField::create('Since', _t('ClubMember.FROM', 'Since'))->setConfig('showcalendar', true));
         $fields->addFieldToTab('Root.Main',
@@ -93,9 +96,9 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Main',
             EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
-            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT','IBAN hint')));
+            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT', 'IBAN hint')));
         $fields->addFieldToTab('Root.Main',
-            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT','BIC hint')));
+            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT', 'BIC hint')));
         //Special
         /*$fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
@@ -104,7 +107,7 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
-            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'),singleton('ClubMember')->dbObject('Sex')->enumValues())->performReadonlyTransformation());
+            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'), singleton('ClubMember')->dbObject('Sex')->enumValues())->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
             TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
@@ -114,14 +117,15 @@ class ClubMemberPending extends ClubMember
         $fields->addFieldToTab('Root.Meta',
             CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
 
-        $fields->removeByName(array('Active','Insurance'));
+        $fields->removeByName(array('Active', 'Insurance'));
 
         return $fields;
     }
 
 
-    public function fillWith($data) {
-        if($data === NULL) return false;
+    public function fillWith($data)
+    {
+        if ($data === NULL) return false;
         $this->Salutation = $data->Salutation;
         $this->FirstName = $data->FirstName;
         $this->LastName = $data->LastName;
@@ -148,17 +152,22 @@ class ClubMemberPending extends ClubMember
         $this->CreationType = 'Formular';
         $this->Pending = 1;
 
-        if( $this->Zip == $this->AccountHolderZip && $this->City == $this->AccountHolderCity &&
-            $this->Street == $this->AccountHolderStreet && $this->StreetNumber == $this->AccountHolderStreetNumber) {
+        if ($this->Zip == $this->AccountHolderZip && $this->City == $this->AccountHolderCity &&
+            $this->Street == $this->AccountHolderStreet && $this->StreetNumber == $this->AccountHolderStreetNumber
+        ) {
             $this->EqualAddress = 1;
-        } else {$this->EqualAddress = 0;}
+        } else {
+            $this->EqualAddress = 0;
+        }
     }
 
-    public function isPending() {
+    public function isPending()
+    {
         return $this->Pending;
     }
 
-    public function onBeforeDelete(){
+    public function onBeforeDelete()
+    {
 
         $siteConfig = SiteConfig::current_site_config();
         $folder = $siteConfig->PendingFolder();
@@ -169,26 +178,34 @@ class ClubMemberPending extends ClubMember
         ))->first();
 
         if ($file && $file->exists()) {
-                $file->delete();
-                $file->destroy();
+            $file->delete();
+            $file->destroy();
         }
 
         return parent::onBeforeDelete();
     }
+
     /* Only clubadmins are allowed */
-    public function canView($member = null) {
+    public function canView($member = null)
+    {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
+
     /* Only clubadmins are allowed */
-    public function canEdit($member = null) {
+    public function canEdit($member = null)
+    {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
+
     /* Only admins (Group Administrators) are allowed */
-    public function canDelete($member = null) {
+    public function canDelete($member = null)
+    {
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
+
     /* Only clubadmins are allowed */
-    public function canCreate($member = null) {
+    public function canCreate($member = null)
+    {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 }

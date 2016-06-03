@@ -6,7 +6,8 @@
  * @package forms
  * @subpackage gridfield
  */
-class GridFieldShowHideButton implements GridField_HTMLProvider, GridField_ActionProvider {
+class GridFieldShowHideButton implements GridField_HTMLProvider, GridField_ActionProvider
+{
 
     /**
      * Fragment to write the button to.
@@ -24,7 +25,8 @@ class GridFieldShowHideButton implements GridField_HTMLProvider, GridField_Actio
     /**
      * @param string $targetFragment The HTML fragment to write the button into
      */
-    public function __construct($targetFragment = "after", $state = "SHOW") {
+    public function __construct($targetFragment = "after", $state = "SHOW")
+    {
         $this->targetFragment = $targetFragment;
         $this->state = $state;
     }
@@ -36,10 +38,11 @@ class GridFieldShowHideButton implements GridField_HTMLProvider, GridField_Actio
      *
      * @return array
      */
-    public function getHTMLFragments($gridField) {
+    public function getHTMLFragments($gridField)
+    {
 
         //SS_Log::log('getHTMLFragments() state='.$this->state,SS_Log::WARN);
-        if($this->state == 'SHOW') {
+        if ($this->state == 'SHOW') {
             $button = new GridField_FormAction(
                 $gridField,
                 'hide',
@@ -48,7 +51,7 @@ class GridFieldShowHideButton implements GridField_HTMLProvider, GridField_Actio
                 null
             );
             $button->setAttribute('data-icon', 'accept');
-        } elseif($this->state == 'HIDE') {
+        } elseif ($this->state == 'HIDE') {
             $button = new GridField_FormAction(
                 $gridField,
                 'show',
@@ -71,8 +74,9 @@ class GridFieldShowHideButton implements GridField_HTMLProvider, GridField_Actio
      *
      * @return array
      */
-    public function getActions($gridField) {
-        return array('show','hide');
+    public function getActions($gridField)
+    {
+        return array('show', 'hide');
     }
 
     /**
@@ -83,12 +87,13 @@ class GridFieldShowHideButton implements GridField_HTMLProvider, GridField_Actio
      * @param array
      * @param array
      */
-    public function handleAction(GridField $gridField, $actionName, $arguments, $data) {
-        if($actionName == 'show') {
+    public function handleAction(GridField $gridField, $actionName, $arguments, $data)
+    {
+        if ($actionName == 'show') {
             $this->setState('SHOW');
-        } elseif($actionName == 'hide') {
+        } elseif ($actionName == 'hide') {
             $this->setState('HIDE');
-            $list = $gridField->getList()->filter('Active','1');
+            $list = $gridField->getList()->filter('Active', '1');
             $gridField->setList($list);
         }
     }
@@ -96,19 +101,23 @@ class GridFieldShowHideButton implements GridField_HTMLProvider, GridField_Actio
     /**
      * @return string
      */
-    public function getState() {
+    public function getState()
+    {
         return $this->state;
     }
 
     /**
      * @param string
      */
-    public function setState($state) {
+    public function setState($state)
+    {
         $this->state = $state;
 
         return $this;
     }
-    public function toggleState() {
+
+    public function toggleState()
+    {
         $this->state = !$this->state;
 
         return $this;

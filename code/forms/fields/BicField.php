@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Allows input of BIC number via form field,
  * including generic validation of its value.
@@ -7,9 +8,11 @@
  * @package clubmaster
  * @subpackage forms/fields
  */
-class BicField extends TextField {
+class BicField extends TextField
+{
 
-    public function Type() {
+    public function Type()
+    {
         return 'BIC text';
     }
 
@@ -19,7 +22,8 @@ class BicField extends TextField {
      * @return array List of attributes
      */
 
-    public function getAttributes() {
+    public function getAttributes()
+    {
         return array_merge(
             parent::getAttributes(),
             array(
@@ -36,13 +40,11 @@ class BicField extends TextField {
         /* Valid number PBNKDEFF
          * Simple validator rule ^([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)$
          */
-        if(!$this->value)
-        {
+        if (!$this->value) {
             return true;
         }
 
-        if(!verify_bic($this->value))
-        {
+        if (!verify_bic($this->value)) {
             $validator->validationError(
                 $this->name,
                 _t(
@@ -61,8 +63,7 @@ class BicField extends TextField {
 
 function verify_bic($bic)
 {
-    if (preg_match("/^([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)$/", $bic))
-    {
+    if (preg_match("/^([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)$/", $bic)) {
         return true;
     } else {
         return false;

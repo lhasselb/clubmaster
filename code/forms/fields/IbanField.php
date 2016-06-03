@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Allows input of IBAN number via form field,
  * including generic validation of its value.
@@ -7,9 +8,11 @@
  * @package clubmaster
  * @subpackage forms/fields
  */
-class IbanField extends TextField {
+class IbanField extends TextField
+{
 
-    public function Type() {
+    public function Type()
+    {
         return 'IBAN text';
     }
 
@@ -19,7 +22,8 @@ class IbanField extends TextField {
      * @return array List of attributes
      */
 
-    public function getAttributes() {
+    public function getAttributes()
+    {
         return array_merge(
             parent::getAttributes(),
             array(
@@ -38,13 +42,11 @@ class IbanField extends TextField {
          */
         require_once BASE_PATH . '/vendor/globalcitizen/php-iban/php-iban.php';
 
-        if(!$this->value)
-        {
+        if (!$this->value) {
             return true;
         }
 
-        if(!verify_iban($this->value,$machine_format_only=false))
-        {
+        if (!verify_iban($this->value, $machine_format_only = false)) {
             $validator->validationError(
                 $this->name,
                 _t(

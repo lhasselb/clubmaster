@@ -25,11 +25,12 @@ class EnrollPage extends Page
      */
     private static $request_folder = 'antraege';
 
-    function onBeforeWrite() {
+    function onBeforeWrite()
+    {
 
         parent::onBeforeWrite();
         // Create a default folder to store forms
-        if($this->Folder()->ID == '0') {
+        if ($this->Folder()->ID == '0') {
             Config::inst()->get('EnrollPage', 'request_folder');
             $defaultFolderID = Folder::find_or_make('antraege')->ID;
             $this->owner->FolderID = $defaultFolderID;
@@ -55,8 +56,8 @@ class EnrollPage extends Page
         if (Permission::checkMember($member, 'SITETREE_REORGANISE')) {
             // Add folder to be selectable from settings (Root.Settings)
             $requestFolderTreeDropDown = TreeDropdownField::create('FolderID',
-                _t('EnrollPage.REQUESTSFOLDER', 'Folder:'),'Folder')
-            ->setDescription(_t('EnrollPage.REQUESTSFOLDERDESCRIPTION', 'Folder to store files created by form'),'Folder to store files created by form');
+                _t('EnrollPage.REQUESTSFOLDER', 'Folder:'), 'Folder')
+                ->setDescription(_t('EnrollPage.REQUESTSFOLDERDESCRIPTION', 'Folder to store files created by form'), 'Folder to store files created by form');
 
             $fields->addFieldToTab("Root.Settings", $requestFolderTreeDropDown);
         }
@@ -73,7 +74,7 @@ class EnrollPage extends Page
      */
     protected function getMember($member = null)
     {
-        if (! $member) {
+        if (!$member) {
             $member = Member::currentUser();
         }
 
@@ -85,13 +86,15 @@ class EnrollPage extends Page
     }
 }
 
-class EnrollPage_Controller extends Page_Controller {
+class EnrollPage_Controller extends Page_Controller
+{
 
     private static $allowed_actions = array(
         'EnrollForm'
     );
 
-    public function EnrollForm() {
+    public function EnrollForm()
+    {
 
         Requirements::javascript(CLUBMASTER_DIR . "/javascript/Enroll.js");
 
@@ -118,7 +121,7 @@ class EnrollPage_Controller extends Page_Controller {
             TextField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil')),//PhoneNumberField
             TextField::create('Phone', _t('ClubMember.PHONE', 'Phone')),//PhoneNumberField
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))
-                ->setSource(ClubMemberType::get()->map('ID','TypeName')),
+                ->setSource(ClubMemberType::get()->map('ID', 'TypeName')),
             DateField::create('Since', _t('ClubMember.FROM', 'From'))->setConfig('showcalendar', true)
                 ->setValue(SS_Datetime::now()->FormatI18N('%d.%m.%Y')),
             CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress'))
@@ -136,10 +139,10 @@ class EnrollPage_Controller extends Page_Controller {
         );
 
         $actions = new FieldList(
-            FormAction::create('doEnroll')->setTitle(_t('EnrollPage.ENROLL','Enroll'))
+            FormAction::create('doEnroll')->setTitle(_t('EnrollPage.ENROLL', 'Enroll'))
         );
 
-        $required = new RequiredFields('Salutation','FirstName','LastName','Birthday','Nationality','Street','StreetNumber','Zip','City','Email','Mobil','Phone','TypeID','Since','AccountHolderFirstName','AccountHolderLastName','AccountHolderStreet','AccountHolderStreetNumber','AccountHolderZip','AccountHolderCity','Iban','Bic');
+        $required = new RequiredFields('Salutation', 'FirstName', 'LastName', 'Birthday', 'Nationality', 'Street', 'StreetNumber', 'Zip', 'City', 'Email', 'Mobil', 'Phone', 'TypeID', 'Since', 'AccountHolderFirstName', 'AccountHolderLastName', 'AccountHolderStreet', 'AccountHolderStreetNumber', 'AccountHolderZip', 'AccountHolderCity', 'Iban', 'Bic');
 
         $form = new Form($this, 'EnrollForm', $fields, $actions, $required);
         $form->setFormMethod('POST', true);
@@ -147,9 +150,10 @@ class EnrollPage_Controller extends Page_Controller {
         return $form;
     }
 
-    public function doEnroll($data, Form $form) {
+    public function doEnroll($data, Form $form)
+    {
 
-        $form->sessionMessage('Hello '. $data['FirstName'], 'success');
+        $form->sessionMessage('Hello ' . $data['FirstName'], 'success');
 
         /*foreach ($data as $key => $value) {
             SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
@@ -164,7 +168,7 @@ class EnrollPage_Controller extends Page_Controller {
         $folder = $this->Folder();
 
         // Get the path for the folder and add a filename
-        $path = $folder->getFullPath().$data['FirstName'][0].$data['LastName'][0].'_'.$data['Birthday'].'_'.date('d.m.Y_H_i_s').'.antrag';
+        $path = $folder->getFullPath() . $data['FirstName'][0] . $data['LastName'][0] . '_' . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
         //SS_Log::log("path=".$path,SS_Log::WARN);
         /* Store the object at calculated path
          * If filename does not exist, the file is created. Otherwise,
