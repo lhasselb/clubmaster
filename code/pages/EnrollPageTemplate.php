@@ -7,7 +7,7 @@
  * @subpackage pages
  *
  */
-class EnrollPage extends Page
+class EnrollPageTemplate extends Page
 {
     private static $singular_name = 'Enroll';
     private static $description = 'Enroll page using a form';
@@ -86,7 +86,7 @@ class EnrollPage extends Page
     }
 }
 
-class EnrollPage_Controller extends Page_Controller
+class EnrollPageTemplate_Controller extends Page_Controller
 {
 
     private static $allowed_actions = array(
