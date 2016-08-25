@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Enoll page
+ * Enroll page template
  *
  * @package clubmaster
  * @subpackage pages
@@ -9,9 +9,11 @@
  */
 class EnrollPageTemplate extends Page
 {
-    private static $singular_name = 'Enroll';
-    private static $description = 'Enroll page using a form';
-    private static $icon = 'pageimages/images/enrollform.png';
+    private static $singular_name = 'Mitgliedsantrag';
+    private static $description = 'Seite für den Mitgliedsantrag';
+    private static $can_be_root = false;
+    private static $allowed_children = array('EnrollSuccessPage');
+
     private static $db = array();
 
     // Store relation to folder(FolderID)
@@ -89,17 +91,13 @@ class EnrollPageTemplate extends Page
 class EnrollPageTemplate_Controller extends Page_Controller
 {
 
-    private static $allowed_actions = array(
-        'EnrollForm'
-    );
+    private static $allowed_actions = array('EnrollForm');
 
     public function EnrollForm()
     {
 
         Requirements::javascript(CLUBMASTER_DIR . "/javascript/Enroll.js");
-
         $today = SS_Datetime::now()->FormatI18N("%d.%m.%Y");
-
         $fields = new FieldList(
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),
                 singleton('ClubMember')->dbObject('Salutation')->enumValues())
@@ -150,11 +148,10 @@ class EnrollPageTemplate_Controller extends Page_Controller
         return $form;
     }
 
-    public function doEnroll($data, Form $form)
-    {
+    public function doEnroll($data, Form $form) {
 
-        $form->sessionMessage('Hello ' . $data['FirstName'], 'success');
-
+        // Add a success message
+        //$form->sessionMessage('Hello ' . $data['FirstName'], 'success');
         /*foreach ($data as $key => $value) {
             SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
         }*/
@@ -179,8 +176,7 @@ class EnrollPageTemplate_Controller extends Page_Controller
         return $this->redirectBack();
     }
 
-    function init()
-    {
+    function init() {
         parent::init();
         //Add javascript here
         Requirements::javascript(THIRDPARTY_DIR . "/jquery/jquery.js");

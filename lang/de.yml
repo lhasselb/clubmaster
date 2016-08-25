@@ -100,7 +100,7 @@ de:
 
   EnrollPage:
     SINGULARNAME: "Mitgliedsantrag"
-    DESCRIPTION: "Seite mit Formular für den Mitgliedsantrag"
+    DESCRIPTION: "Seite für den Mitgliedsantrag"
     ENROLL: "Antrag absenden"
     REQUESTSFOLDER: "Verzeichnis für Anträge:"
     REQUESTSFOLDERDESCRIPTION: "Verzeichnis zum speichern der Antragsdateien (generiert vom Formular)"
