@@ -250,12 +250,20 @@ class ClubMember extends DataObject
         return $date->FormatI18N('%d.%m.%Y %H:%M:%S');
     }
 
-    public function getAge()
+    /*public function getAge()
     {
         if (!$this->dbObject('Birthday')->value) return 0;
         $time = SS_Datetime::now()->Format('U');
         $ago = abs($time - strtotime($this->dbObject('Birthday')->value));
         return round($ago / 86400 / 365);
+    }*/
+    public function getAge()
+    {
+        if (!$this->dbObject('Birthday')->value) return 0;
+        $today = new DateTime(date('Y-m-d'));
+        $birthday = new DateTime($this->dbObject('Birthday')->value);
+        $diff = $birthday->diff($today)->format('%y');
+        return $diff;
     }
 
     public function getSex()
