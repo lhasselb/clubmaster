@@ -4,9 +4,9 @@ de:
     #Filter
     SELECTONE: "Bitte wählen"
     AGERANGE: "Altersbereich"
-    LESSTHAN16: "Bis 16 Jahre"
-    LESSTHAN26: "Bis 26 Jahre"
-    LESSTHAN60: "Bis 60 Jahre"
+    LESSTHAN16: "Bis 16 Jahre (einschließlich)"
+    LESSTHAN26: "Bis 26 Jahre (einschließlich)"
+    LESSTHAN60: "Bis 60 Jahre (einschließlich)"
     STATE: "Midgliedsstatus"
     SHOWACTIVE: "Zeige nur Aktive Mitglieder"
     SHOWINACTIVE: "Zeige nur Inaktive Mitglieder"
