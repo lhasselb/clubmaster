@@ -14,6 +14,7 @@ class ClubMember extends DataObject
         'NameTitle' => 'Varchar(255)',
         'FirstName' => 'Varchar(255)',
         'LastName' => 'Varchar(255)',
+        'CareOf' => 'Varchar(255)',
         'Birthday' => 'Date',
         'Nationality' => 'Varchar(255)', //CountryDropdownField
         'Street' => 'Varchar(255)',
@@ -96,6 +97,7 @@ class ClubMember extends DataObject
         $labels['NameTitle'] = _t('ClubMember.NAMETITLE', 'Title');
         $labels['FirstName'] = _t('ClubMember.FIRSTNAME', 'FirstName');
         $labels['LastName'] = _t('ClubMember.LASTNAME', 'LastName');
+        $labels['CareOf'] = _t('ClubMember.CAREOF', 'c/o');
         $labels['Birthday'] = _t('ClubMember.BIRTHDAY', 'Birthday');
         $labels['Nationality'] = _t('ClubMember.NATIONALITY', 'Nationality');
         $labels['Street'] = _t('ClubMember.STREET', 'Street');
@@ -175,6 +177,8 @@ class ClubMember extends DataObject
             EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus', 'autofocus')->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             EUNameTextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))->addExtraClass('text'));
+        $fields->addFieldToTab('Root.Main',
+            EUNameTextField::create('CareOf', _t('ClubMember.CAREOF', 'c/o'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))->setConfig('showcalendar', true));
         $fields->addFieldToTab('Root.Main',

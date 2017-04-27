@@ -49,6 +49,7 @@ de:
     NAMETITLEHINT: "z.B. Dr."
     FIRSTNAME: "Vorname"
     LASTNAME: "Nachname"
+    CAREOF: "c/o"
     BIRTHDAY: "Geburtstag"
     NATIONALITY: "Nationalität"
     STREET: "Strasse"

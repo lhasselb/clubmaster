@@ -48,6 +48,7 @@ en:
     NAMETITLEHINT: "e.g. Ph.D"
     FIRSTNAME: "First name"
     LASTNAME: "Family name"
+    CAREOF: "c/o"
     BIRTHDAY: "Birthday"
     NATIONALITY: "Nationality"
     STREET: "Street"

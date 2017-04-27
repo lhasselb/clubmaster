@@ -82,6 +82,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
         'NameTitle' => 'NameTitle',
         'FirstName' => 'FirstName',
         'LastName' => 'LastName',
+        'CareOf' => 'CareOf',
         'Birthday' => 'Birthday',
         'Nationality' => 'Nationality',
         'Street' => 'Street',
