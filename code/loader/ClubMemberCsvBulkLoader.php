@@ -79,6 +79,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
      */
     public $columnMap = array(
         'Salutation' => 'Salutation',
+        'NameTitle' => 'NameTitle',
         'FirstName' => 'FirstName',
         'LastName' => 'LastName',
         'Birthday' => 'Birthday',
@@ -92,6 +93,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
         'Phone' => 'Phone',
         'Type' => 'Type.TypeName',
         'Since' => 'Since',
+        'AccountHolderTitle' => 'AccountHolderTitle',
         'AccountHolderFirstName' => 'AccountHolderFirstName',
         'AccountHolderLastName' => 'AccountHolderLastName',
         'AccountHolderStreet' => 'AccountHolderStreet',
@@ -99,7 +101,9 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
         'AccountHolderZip' => 'AccountHolderZip',
         'AccountHolderCity' => 'AccountHolderCity',
         'Iban' => 'Iban',
-        'Bic' => 'Bic'
+        'Bic' => 'Bic',
+        'MandateReference' => 'MandateReference',
+        'Active' => 'Active'
     );
 
     /* Fetch relations with a callback */

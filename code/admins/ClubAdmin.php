@@ -288,13 +288,14 @@ class ClubAdmin extends ModelAdmin
             'AccountHolderCity',
             'Iban',
             'Bic',
-            //'Active'
-            //'Insurance'
+            //'Active',
+            //'Insurance',
             'Age',
-            //'Sex'
-            //'SerializedFileName'
-            //'CreationType'
-            //'Pending'
+            //'Sex',
+            //'SerializedFileName',
+            //'CreationType',
+            //'Pending',
+            'MandateReference'
         );
     }
 

@@ -11,6 +11,7 @@ class ClubMember extends DataObject
     private static $db = array(
         //Form-Fields
         'Salutation' => 'Enum("Frau,Herr,Schülerin,Schüler","Frau")',
+        'NameTitle' => 'Varchar(255)',
         'FirstName' => 'Varchar(255)',
         'LastName' => 'Varchar(255)',
         'Birthday' => 'Date',
@@ -24,10 +25,11 @@ class ClubMember extends DataObject
         'Phone' => 'Varchar(255)',
         'Since' => 'Date',
         'EqualAddress' => 'Boolean(1)',
-        'AccountHolderFirstName' => 'Varchar(16)',
-        'AccountHolderLastName' => 'Varchar(16)',
+        'AccountHolderTitle' => 'Varchar(255)',
+        'AccountHolderFirstName' => 'Varchar(255)',
+        'AccountHolderLastName' => 'Varchar(255)',
         'AccountHolderStreet' => 'Varchar(255)',
-        'AccountHolderStreetNumber' => 'Varchar(10)', // Nummer 34B?
+        'AccountHolderStreetNumber' => 'Varchar(255)', // Nummer 34B?
         'AccountHolderZip' => 'Int(5)',
         'AccountHolderCity' => 'Varchar(255)',
         'Iban' => 'Varchar(34)',
@@ -91,6 +93,7 @@ class ClubMember extends DataObject
         $labels['Type.TypeName'] = _t('ClubMember.TYPE', 'Type');
         // Properties
         $labels['Salutation'] = _t('ClubMember.SALUTATION', 'Salutation');
+        $labels['NameTitle'] = _t('ClubMember.NAMETITLE', 'Title');
         $labels['FirstName'] = _t('ClubMember.FIRSTNAME', 'FirstName');
         $labels['LastName'] = _t('ClubMember.LASTNAME', 'LastName');
         $labels['Birthday'] = _t('ClubMember.BIRTHDAY', 'Birthday');
@@ -105,6 +108,7 @@ class ClubMember extends DataObject
         $labels['Type'] = _t('ClubMember.TYPE', 'Type');
         $labels['Since'] = _t('ClubMember.SINCE', 'Since');
         $labels['EqualAddress'] = _t('ClubMember.EQUALADDRESS', 'EqualAddress');
+        $labels['AccountHolderTitle'] = _t('ClubMember.NAMETITLE', 'Title');
         $labels['AccountHolderFirstName'] = _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName');
         $labels['AccountHolderLastName'] = _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName');
         $labels['AccountHolderStreet'] = _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet');
@@ -122,7 +126,7 @@ class ClubMember extends DataObject
         $labels['FormClaimDate'] = _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate');
         $labels['CreationType'] = _t('ClubMember.CREATIONTYPE', 'CreationType');
         $labels['Pending'] = _t('ClubMember.PENDING', 'Pending');
-        //$labels['MandateReference'] = 'TODO';
+        $labels['MandateReference'] = _t('ClubMember.MANDATEREFERENCE', 'MandateReference');
         return $labels;
     }
 
@@ -166,6 +170,8 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'), singleton('ClubMember')->dbObject('Salutation')->enumValues()));
         $fields->addFieldToTab('Root.Main',
+            EUNameTextField::create('NameTitle', _t('ClubMember.NAMETITLE', 'Title'))->addExtraClass('text')->setDescription(_t('ClubMember.NAMETITLEHINT', 'e.g. Ph.D')));
+        $fields->addFieldToTab('Root.Main',
             EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus', 'autofocus')->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
             EUNameTextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))->addExtraClass('text'));
@@ -193,6 +199,10 @@ class ClubMember extends DataObject
             DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true));
         $fields->addFieldToTab('Root.Main',
             CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
+
+        $fields->addFieldToTab('Root.Main',
+            EUNameTextField::create('AccountHolderTitle', _t('ClubMember.ACCOUNTHOLDERTITLE', 'AccountHolderTitle'))->addExtraClass('text'));
+
         $fields->addFieldToTab('Root.Main',
             EUNameTextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
@@ -217,6 +227,8 @@ class ClubMember extends DataObject
         //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
         $fields->addFieldToTab("Root.Meta",
+            TextField::create('MandateReference', _t('ClubMember.MANDATEREFERENCE', 'Mandate')));//->performReadonlyTransformation());
+        $fields->addFieldToTab("Root.Meta",
             CheckboxSetField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance'), array('1' => 'BLSV gemeldet?')));
         $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
@@ -233,7 +245,7 @@ class ClubMember extends DataObject
         //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
         $fields->removeByName('Pending');
         if ($this->CreationType !== 'Formular') {
-            $fields->removeByName(array('SerializedFileName', 'FormClaimDate', 'MandateReference'));
+            $fields->removeByName(array('SerializedFileName', 'FormClaimDate'));//, 'MandateReference'
         }
 
         return $fields;
