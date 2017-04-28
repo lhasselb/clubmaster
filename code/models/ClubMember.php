@@ -166,6 +166,8 @@ class ClubMember extends DataObject
         $fields = parent::getCMSFields();
         // The Main tab
         $main = $fields->findOrMakeTab('Root.Main')->setTitle(_t('ClubMember.MAINTITLE', 'Main'));
+        // Account tab
+        $fields->addFieldToTab('Root', new Tab('Account', _t('ClubMember.BANKINGACCOUNT', 'Account data')));
         // The Meta tab
         $fields->addFieldToTab('Root', new Tab('Meta', _t('ClubMember.META', 'Meta')));
 
@@ -201,28 +203,30 @@ class ClubMember extends DataObject
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID', 'TypeName')));
         $fields->addFieldToTab('Root.Main',
             DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true));
-        $fields->addFieldToTab('Root.Main',
-            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
+        // Disabled after moving Account data to ts own tab
+        /*$fields->addFieldToTab('Root.Main',
+            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));*/
 
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Account',
             EUNameTextField::create('AccountHolderTitle', _t('ClubMember.ACCOUNTHOLDERTITLE', 'AccountHolderTitle'))->addExtraClass('text'));
-
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Account',
             EUNameTextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName'))->addExtraClass('text'));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Account',
             EUNameTextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName'))->addExtraClass('text'));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Account',
             EUNameTextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet'))->addExtraClass('text'));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Account',
             EUNameTextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber'))->addExtraClass('text'));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Account',
             ZipField::create('AccountHolderZip', _t('ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Account',
             EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'))->addExtraClass('text'));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Account',
             IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT', 'IBAN hint')));
-        $fields->addFieldToTab('Root.Main',
+        $fields->addFieldToTab('Root.Account',
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT', 'BIC hint')));
+        $fields->addFieldToTab("Root.Account",
+            TextField::create('MandateReference', _t('ClubMember.MANDATEREFERENCE', 'Mandate')));//->performReadonlyTransformation());
         //Special
         //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
@@ -230,8 +234,6 @@ class ClubMember extends DataObject
             CheckboxSetField::create('Active', _t('ClubMember.ACTIVE', 'Active'), array('1' => 'Mitglied ist aktiv?')));
         //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
-        $fields->addFieldToTab("Root.Meta",
-            TextField::create('MandateReference', _t('ClubMember.MANDATEREFERENCE', 'Mandate')));//->performReadonlyTransformation());
         $fields->addFieldToTab("Root.Meta",
             CheckboxSetField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance'), array('1' => 'BLSV gemeldet?')));
         $fields->addFieldToTab('Root.Meta',
@@ -249,7 +251,7 @@ class ClubMember extends DataObject
         //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
         $fields->removeByName('Pending');
         if ($this->CreationType !== 'Formular') {
-            $fields->removeByName(array('SerializedFileName', 'FormClaimDate'));//, 'MandateReference'
+            $fields->removeByName(array('SerializedFileName', 'FormClaimDate', 'EqualAddress'));//, 'MandateReference'
         }
 
         return $fields;

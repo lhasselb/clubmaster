@@ -148,7 +148,11 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
             return false;
         } else {
             foreach ($mappedrecord as $key => $value) {
-                if (!isset($value) || empty($value)) return false;
+                //if (!isset($value) || empty($value)) return false;
+                // All fields need to be there
+                if (!isset($value)) return false;
+                // Minimum requirement for an import record (to detect duplicates): FirstName, LastName and Birthday
+                if ( ($key == 'FirstName' || $key == 'LastName' || $key == 'Birthday') && empty($value)) return false;
             }
         }
 

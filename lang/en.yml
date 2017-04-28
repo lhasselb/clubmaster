@@ -41,6 +41,7 @@ en:
     PLURALNAME: "Club members"
     DESCRIPTION: "Manage your member"
     MAINTITLE: "Main"
+    BANKINGACCOUNT: "Account data"
     META: "Aditional"
     TYPES: "Types"
     SALUTATION: "Salutation"

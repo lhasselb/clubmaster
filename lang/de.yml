@@ -42,6 +42,7 @@ de:
     PLURALNAME: "Mitglieder"
     DESCRIPTION: "Verwalte Mitglieder"
     MAINTITLE: "Stammdaten"
+    BANKINGACCOUNT: "Bankverbindung"
     META: "Weitere Informationen"
     TYPES: "Mitgliedstypen"
     SALUTATION: "Anrede"

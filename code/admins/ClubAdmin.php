@@ -269,6 +269,7 @@ class ClubAdmin extends ModelAdmin
             'Salutation',
             'FirstName',
             'LastName',
+            'CareOf',
             'Birthday',
             'Nationality',
             'Street',
@@ -288,7 +289,7 @@ class ClubAdmin extends ModelAdmin
             'AccountHolderCity',
             'Iban',
             'Bic',
-            //'Active',
+            'Active',
             //'Insurance',
             'Age',
             //'Sex',
@@ -307,8 +308,8 @@ class ClubAdmin extends ModelAdmin
     {
 
         parent::init();
-
-        Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
+        // Disabled after moving account data to its own tab
+        //Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
         Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
 
         /* Create Pending members from serialized form data */
