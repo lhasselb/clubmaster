@@ -25,6 +25,7 @@ en:
 
   ClubAdminSiteConfig:
     PENDINGFOLDER: "Pending folder"
+    MEMBERSDISPLAYED: "Amount of members displayed"
 
   ClubMemberPending:
     SINGULARNAME: "Member request"

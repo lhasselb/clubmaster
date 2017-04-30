@@ -26,6 +26,7 @@ de:
 
   ClubAdminSiteConfig:
     PENDINGFOLDER: "Verzeichnis für Anträge"
+    MEMBERSDISPLAYED: "Anzahl der Mitglieder pro Seite"
 
   ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"

@@ -29,7 +29,7 @@ class ClubAdmin extends ModelAdmin
     /**
      * @config
      */
-    private static $items_per_page = '20';
+    private static $items_per_page = '25';
 
     /**
      *  Prepare search
@@ -167,8 +167,11 @@ class ClubAdmin extends ModelAdmin
         if ($gridFieldName == 'ClubMember') {
 
             $config->addComponent(new GridFieldShowHideButton('before'));
+
             // Set rows displayed
-            $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page');
+            $siteConfig = SiteConfig::current_site_config();
+            $itemsPerPage = $siteConfig->MembersDisplayed;
+            //$itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page');
             $config->getComponentByType('GridFieldPaginator')->setItemsPerPage($itemsPerPage);
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
