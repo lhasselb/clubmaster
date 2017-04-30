@@ -17,7 +17,7 @@ File:
 
 # Number of displayed items
 ClubAdmin:
-  items_per_page: 20
+  items_per_page: 25
   extensions:
     - ClubAdminImport
 

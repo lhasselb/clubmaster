@@ -194,6 +194,8 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             EUNameTextField::create('City', _t('ClubMember.CITY', 'City'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Main',
+            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
+        $fields->addFieldToTab('Root.Main',
             EmailField::create('Email', _t('ClubMember.EMAIL', 'Email')));
         $fields->addFieldToTab('Root.Main',
             TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-')));
@@ -203,10 +205,7 @@ class ClubMember extends DataObject
             DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID', 'TypeName')));
         $fields->addFieldToTab('Root.Main',
             DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true));
-        // Disabled after moving Account data to ts own tab
-        /*$fields->addFieldToTab('Root.Main',
-            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));*/
-
+        //Account tab
         $fields->addFieldToTab('Root.Account',
             EUNameTextField::create('AccountHolderTitle', _t('ClubMember.ACCOUNTHOLDERTITLE', 'AccountHolderTitle'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Account',
@@ -227,7 +226,7 @@ class ClubMember extends DataObject
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT', 'BIC hint')));
         $fields->addFieldToTab("Root.Account",
             TextField::create('MandateReference', _t('ClubMember.MANDATEREFERENCE', 'Mandate')));//->performReadonlyTransformation());
-        //Special
+        //Meta tab
         //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
         $fields->addFieldToTab("Root.Meta",
@@ -251,7 +250,7 @@ class ClubMember extends DataObject
         //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
         $fields->removeByName('Pending');
         if ($this->CreationType !== 'Formular') {
-            $fields->removeByName(array('SerializedFileName', 'FormClaimDate', 'EqualAddress'));//, 'MandateReference'
+            $fields->removeByName(array('SerializedFileName', 'FormClaimDate'));//, 'MandateReference'
         }
 
         return $fields;
