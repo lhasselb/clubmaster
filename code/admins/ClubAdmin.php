@@ -55,15 +55,15 @@ class ClubAdmin extends ModelAdmin
                 )
             )->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
             // Active / Imactive
-            /*$showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Midgliedsstatus'),
+            $showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Member state'),
                 array(
                     'A' => _t('ClubAdmin.SHOWACTIVE','Zeige Aktive'),
-                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive'),
-                    'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle')
+                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive')
+                    //'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle')
                 )
-            )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );*/
+            )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
             // Versicherung
-            $insuranceDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.INSURANCE', 'Insurance'),
+            $insuranceDropDownField = DropdownField::create('q[Insurance]', _t('ClubAdmin.INSURANCE', 'Insurance'),
                 array(
                     'UV' => _t('ClubAdmin.SHOWNOINSURANCE', 'Zeige ohne Versicherung'),
                     'V' => _t('ClubAdmin.SHOWINSURANCE', 'Zeige mit Versicherung')
@@ -79,6 +79,7 @@ class ClubAdmin extends ModelAdmin
             $context->getFields()->push($insuranceDropDownField);
             $context->getFields()->push($typeDropDownField);
             $context->getFields()->push($zipFieldGroup);
+            $context->getFields()->push($showInactiveDropDownField);
         }
 
         return $context;
@@ -107,16 +108,23 @@ class ClubAdmin extends ModelAdmin
         $params = $this->request->requestVar('q');
 
         if ($params && $this->modelClass == 'ClubMember') {
+            // Filter by active or inactive
+            if (isset($params['State']) && $params['State']) {
+                 SS_Log::log('State='.$params['State'],SS_Log::WARN);
+            }
             // Limit to active or inactive
             if (isset($params['State']) && $params['State']) {
-                /*if($params['State'] == 'A'){ $list = $list->filter('Active','1');
-                } elseif($params['State'] == 'I'){$list = $list->filter('Active','0');
-                }*/
-                if ($params['State'] == 'V') {
-                    $list = $list->filter('Insurance', '1');
-                } elseif ($params['State'] == 'UV') {
-                    $list = $list->filter('Insurance', '0');
+                if($params['State'] == 'A') {
+                    $list = $list->filter('Active','1');
+                } elseif($params['State'] == 'I') {
+                    $list = $list->filter('Active','0');
                 }
+            }
+            // Limit to insurance
+            if ($params['Insurance'] == 'V') {
+                $list = $list->filter('Insurance', '1');
+            } elseif ($params['Insurance'] == 'UV') {
+                $list = $list->filter('Insurance', '0');
             }
             // Filter by Zip
             if (isset($params['StartPlz']) && $params['StartPlz']) {
