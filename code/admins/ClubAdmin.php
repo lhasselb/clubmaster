@@ -57,11 +57,11 @@ class ClubAdmin extends ModelAdmin
             // Active / Imactive
             $showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Member state'),
                 array(
-                    'A' => _t('ClubAdmin.SHOWACTIVE','Zeige Aktive'),
-                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige Inaktive')
-                    //'AI' => _t('ClubAdmin.SHOWALL','Zeige Alle')
+                    'A' => _t('ClubAdmin.SHOWACTIVE','Zeige aktive'),
+                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige inaktive')
+                    //,'AI' => _t('ClubAdmin.SHOWALL','Zeige alle')
                 )
-            )->setEmptyString( _t('ClubAdmin.SELECTONE','Select one') );
+            )->setEmptyString(_t('ClubAdmin.SELECTONE','Select one'));
             // Versicherung
             $insuranceDropDownField = DropdownField::create('q[Insurance]', _t('ClubAdmin.INSURANCE', 'Insurance'),
                 array(
@@ -108,14 +108,14 @@ class ClubAdmin extends ModelAdmin
         $params = $this->request->requestVar('q');
 
         if ($params && $this->modelClass == 'ClubMember') {
-            // Filter by active or inactive
-            if (isset($params['State']) && $params['State']) {
-                 SS_Log::log('State='.$params['State'],SS_Log::WARN);
-            }
+            // SS_Log::log('State='.$params['State'],SS_Log::WARN);
+
             // Limit to active or inactive
             if (isset($params['State']) && $params['State']) {
                 if($params['State'] == 'A') {
                     $list = $list->filter('Active','1');
+                } elseif($params['State'] =='AI') {
+                    //$list
                 } elseif($params['State'] == 'I') {
                     $list = $list->filter('Active','0');
                 }
@@ -174,7 +174,7 @@ class ClubAdmin extends ModelAdmin
 
         if ($gridFieldName == 'ClubMember') {
 
-            $config->addComponent(new GridFieldShowHideButton('before'));
+            //$config->addComponent(new GridFieldShowHideButton('before'));
 
             // Set rows displayed
             $siteConfig = SiteConfig::current_site_config();
