@@ -53,7 +53,7 @@ class ClubMember extends DataObject
 
     /* Defaults for object instance */
     private static $defaults = array(
-        //'CreationType' => 'Händisch',
+        'CreationType' => 'Händisch',
         'Active' => '1',
         'EqualAddress' => '1'
     );
@@ -77,6 +77,7 @@ class ClubMember extends DataObject
         'Sex' => 'Sex',
         //'Insurance' => 'Insurance',
         //'Type.TypeName' => 'Type.TypeName'
+		'Email' => 'Email'
     );
 
     /**
