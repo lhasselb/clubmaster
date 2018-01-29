@@ -13,11 +13,10 @@ en:
     SHOWALL: "Show all"
     INSURANCE: "BLSV"
     SHOWNOINSURANCE: "Non insured"
-    SHOWINSURANCE: "Insured"
+    SHOWNOINSURANCE: "Insured"
     ZIPSEARCH: "Zip"
     ZIPSTART: "Zip from"
     ZIPEND: "Zip to"
-    FILE: "File"
     #BulkAction
     GRIDFIELDBULKDROPDOWNACTIVATE: "Activate"
     GRIDFIELDBULKDROPDOWNDEACTIVATE: "Deactive"
@@ -99,7 +98,7 @@ en:
 
   GridFieldApproveClubMemberAction:
     APPROVEMEMBER: "Approve member"
-    APPROVEMEMBERDONE: "Approve Member Action Done."
+    ACTIVATEMEMBERDONE: "Approve Member Action Done."
 
   GridFieldShowHideButton:
     SHOW: "Show inactive"

@@ -42,7 +42,7 @@ class ClubAdmin extends ModelAdmin
             //$infoField = HeaderField::create(_t('ClubAdmin.ZIPSEARCH','Postleitzahlen'), 3);
             // Postleitzahlen
             $zipFieldGroup = FieldGroup::create(
-                HeaderField::create(_t('ClubAdmin.ZIPSEARCH', 'Zip'), 4),
+                HeaderField::create(_t('ClubAdmin.ZIPSEARCH', 'Postleitzahlen'), 4),
                 new ZipField("q[StartPlz]", _t('ClubAdmin.ZIPSTART', 'zipStart')),
                 new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND', 'zipEnd'))
             );
@@ -54,19 +54,19 @@ class ClubAdmin extends ModelAdmin
                     'U60' => _t('ClubAdmin.LESSTHAN60', 'LessThan 60'),
                 )
             )->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
-            // Active / Inactive
+            // Active / Imactive
             $showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Member state'),
                 array(
-                    'A' => _t('ClubAdmin.SHOWACTIVE','Show active'),
-                    'I' => _t('ClubAdmin.SHOWINACTIVE','Show inactive')
-                    //'AI' => _t('ClubAdmin.SHOWALL','Show all')
+                    'A' => _t('ClubAdmin.SHOWACTIVE','Zeige aktive'),
+                    'I' => _t('ClubAdmin.SHOWINACTIVE','Zeige inaktive')
+                    //,'AI' => _t('ClubAdmin.SHOWALL','Zeige alle')
                 )
             )->setEmptyString(_t('ClubAdmin.SELECTONE','Select one'));
             // Versicherung
             $insuranceDropDownField = DropdownField::create('q[Insurance]', _t('ClubAdmin.INSURANCE', 'Insurance'),
                 array(
-                    'UV' => _t('ClubAdmin.SHOWNOINSURANCE', 'Non insured'),
-                    'V' => _t('ClubAdmin.SHOWINSURANCE', 'Insured')
+                    'UV' => _t('ClubAdmin.SHOWNOINSURANCE', 'Zeige ohne Versicherung'),
+                    'V' => _t('ClubAdmin.SHOWINSURANCE', 'Zeige mit Versicherung')
                 )
             )->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
             // Type
@@ -108,11 +108,11 @@ class ClubAdmin extends ModelAdmin
         $params = $this->request->requestVar('q');
 
         if ($params && $this->modelClass == 'ClubMember') {
+            // SS_Log::log('State='.$params['State'],SS_Log::WARN);
 
             // Limit to active or inactive
             if (isset($params['State']) && $params['State']) {
-		SS_Log::log('State='.$params['State'],SS_Log::WARN);
-		if($params['State'] == 'A') {
+                if($params['State'] == 'A') {
                     $list = $list->filter('Active','1');
                 } elseif($params['State'] =='AI') {
                     //$list
@@ -121,14 +121,11 @@ class ClubAdmin extends ModelAdmin
                 }
             }
             // Limit to insurance
-            if (isset($params['Insurance']) && $params['Insurance'] == 'V') {
-		SS_Log::log('Insurance='.$params['Insurance'],SS_Log::WARN);
-		if($params['Insurance'] == 'V') {
-			$list = $list->filter('Insurance', '1');
-		} elseif ($params['Insurance'] == 'UV') {
-			$list = $list->filter('Insurance', '0');
-		}
-		}
+            if ($params['Insurance'] == 'V') {
+                $list = $list->filter('Insurance', '1');
+            } elseif ($params['Insurance'] == 'UV') {
+                $list = $list->filter('Insurance', '0');
+            }
             // Filter by Zip
             if (isset($params['StartPlz']) && $params['StartPlz']) {
                 $list = $list->exclude('Zip:LessThan', $params['StartPlz']);
