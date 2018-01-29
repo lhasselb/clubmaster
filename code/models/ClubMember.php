@@ -75,7 +75,6 @@ class ClubMember extends DataObject
         'Zip' => 'Zip',
         'Age' => 'Age',
         'Sex' => 'Sex',
-		'Email' => 'Email',
         //'Insurance' => 'Insurance',
         //'Type.TypeName' => 'Type.TypeName'
     );
