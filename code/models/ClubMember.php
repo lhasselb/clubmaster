@@ -53,7 +53,7 @@ class ClubMember extends DataObject
 
     /* Defaults for object instance */
     private static $defaults = array(
-        'CreationType' => 'Händisch',
+        //'CreationType' => 'Händisch',
         'Active' => '1',
         'EqualAddress' => '1'
     );
