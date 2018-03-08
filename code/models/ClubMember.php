@@ -330,7 +330,7 @@ class ClubMember extends DataObject
 		if (!$this->dbObject('MandateReference')->value) {
 			$currentMax = DB::query("SELECT MAX(\"MandateReference\") FROM \"ClubMember\"")->value();
 			$mref = preg_replace_callback("|([0-9]{3,})|", function($matches) {return ++$matches[1];}, $currentMax);
-			SS_Log::log('MandateReference=empty, '.$currentMax.' new='.$mref,SS_Log::WARN);
+			//SS_Log::log('MandateReference=empty, '.$currentMax.' new='.$mref,SS_Log::WARN);
 			$this->MandateReference = $mref;
 		};
 		
