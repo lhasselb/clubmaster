@@ -256,6 +256,9 @@ class ClubAdmin extends ModelAdmin
             $config->removeComponentsByType('GridFieldAddNewButton');
             $config->removeComponentsByType('GridFieldFilterHeader');
             //$config->removeComponentsByType('GridFieldDeleteAction');
+
+            $config->addComponent(new GridFieldApproveClubMemberAction());			
+
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
             // Add action
@@ -265,7 +268,7 @@ class ClubAdmin extends ModelAdmin
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
-            $config->addComponent(new GridFieldApproveClubMemberAction());
+
 
         }
 

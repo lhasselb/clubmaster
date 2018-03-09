@@ -61,7 +61,8 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
 
     public function handleAction(GridField $gridField, $actionName, $arguments, $data)
     {
-        //SS_Log::log('handleAction() called, action name ='.$actionName,SS_Log::WARN);
+
+		//SS_Log::log('handleAction() called, action name ='.$actionName,SS_Log::WARN);
         if ($actionName == 'approvemember') {
             $clubMemberPending = ClubMemberPending::get()->byId($arguments['RecordID']);
             if (!$clubMemberPending) {
@@ -74,6 +75,15 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             $clubMemberPending->ClassName = 'ClubMember';
             $clubMemberPending->Since = SS_Datetime::now();
             $clubMemberPending->write();
+			
+			//Send an E-Mail
+			$email = new Email();
+			$data = $clubMemberPending->toMAp();
+			foreach ($data as $key => $value) {
+				SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
+			}
+			$email->setTo($clubMemberPending->Email)->setSubject('Anmeldung bei Jim e.V.')->setTemplate('ApproveMail')->populateTemplate(new ArrayData($data));
+			$email->send();
 
             // output a success message to the user
             Controller::curr()->getResponse()->setStatusCode(200, _t('GridFieldApproveClubMemberAction.APPROVEMEMBERDONE', 'ApproveMember Done.'));

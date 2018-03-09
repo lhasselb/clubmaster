@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Enroll page template
  *
@@ -27,9 +26,15 @@ class EnrollPageTemplate extends Page
      */
     private static $request_folder = 'antraege';
 
-    function onBeforeWrite()
-    {
+    public function getCMSFields() {
+        $fields = parent::getCMSFields();
+        $fields->addFieldToTab('Root.Main',LabelField::create('Das Formular wird im PHP-Code gepflegt.'),'Content');
+        $fields->removeFieldFromTab('Root.Main','Content');
+        $fields->addFieldToTab('Root.Main', HtmlEditorField::create('Content','Inhalt',$this->Content,'cms'),'Metadata');
+        return $fields;
+    }
 
+    public function onBeforeWrite() {
         parent::onBeforeWrite();
         // Create a default folder to store forms
         if ($this->Folder()->ID == '0') {
@@ -39,17 +44,10 @@ class EnrollPageTemplate extends Page
         }
     }
 
-    public function getCMSFields()
-    {
-        $fields = parent::getCMSFields();
-        return $fields;
-    }
-
     /**
      * {@inheritdoc}
      */
-    public function getSettingsFields()
-    {
+    public function getSettingsFields() {
         $fields = parent::getSettingsFields();
         // Get the current member
         $member = $this->getMember();
@@ -74,8 +72,7 @@ class EnrollPageTemplate extends Page
      *
      * @return null|Member
      */
-    protected function getMember($member = null)
-    {
+    protected function getMember($member = null) {
         if (!$member) {
             $member = Member::currentUser();
         }
@@ -90,26 +87,38 @@ class EnrollPageTemplate extends Page
 
 class EnrollPageTemplate_Controller extends Page_Controller
 {
-
+    /**
+     * An array of actions that can be accessed via a request. Each array element should be an action name, and the
+     * permissions or conditions required to allow the user to access it.
+     *
+     * <code>
+     * array (
+     *     'action', // anyone can access this action
+     *     'action' => true, // same as above
+     *     'action' => 'ADMIN', // you must have ADMIN permissions to access this action
+     *     'action' => '->checkAction' // you can only access this action if $this->checkAction() returns true
+     * );
+     * </code>
+     *
+     * @var array
+     */
     private static $allowed_actions = array('EnrollForm');
 
-    public function EnrollForm()
-    {
-
-        Requirements::javascript(CLUBMASTER_DIR . "/javascript/Enroll.js");
+    public function EnrollForm() {
         $today = SS_Datetime::now()->FormatI18N("%d.%m.%Y");
+		
         $fields = new FieldList(
             DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'),
-                singleton('ClubMember')->dbObject('Salutation')->enumValues())
-                ->setAttribute('placeholder', 'Herr'),
+                //singleton('ClubMember')->dbObject('Salutation')->enumValues())->setAttribute('placeholder', 'Herr'),
+                array('Frau'=>'Frau','Herr'=>'Herr','Schülerin'=>'Schülerin','Schüler'=>'Schüler')
+            ),
             TextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))
                 ->setAttribute('placeholder', _t('ClubMember.FIRSTNAME', 'Firstname')),
             TextField::create('LastName', _t('ClubMember.LASTNAME', 'LastName'))
                 ->setAttribute('placeholder', _t('ClubMember.LASTNAME', 'Lastname')),
             DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))
-                ->setConfig('showcalendar', true),
-            //->setAttribute('placeholder', $today),
-
+                ->setAttribute('placeholder', $today)
+                ->setAttribute('data-date-format', 'DD.MM.YYYY'),
             CountryDropdownField::create('Nationality', _t('ClubMember.NATIONALITY', 'Nationality')),
             TextField::create('Street', _t('ClubMember.STREET', 'Street')),
             TextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber')),
@@ -137,12 +146,12 @@ class EnrollPageTemplate_Controller extends Page_Controller
         );
 
         $actions = new FieldList(
-            FormAction::create('doEnroll')->setTitle(_t('EnrollPage.ENROLL', 'Enroll'))
+            FormAction::create('doEnroll')->setTitle(_t('EnrollPage.ENROLL', 'Enroll'))->setUseButtonTag(true)
         );
 
         $required = new RequiredFields('Salutation', 'FirstName', 'LastName', 'Birthday', 'Nationality', 'Street', 'StreetNumber', 'Zip', 'City', 'Email', 'Mobil', 'Phone', 'TypeID', 'Since', 'AccountHolderFirstName', 'AccountHolderLastName', 'AccountHolderStreet', 'AccountHolderStreetNumber', 'AccountHolderZip', 'AccountHolderCity', 'Iban', 'Bic');
-
         $form = new Form($this, 'EnrollForm', $fields, $actions, $required);
+        $form->setTemplate('EnrollForm');
         $form->setFormMethod('POST', true);
 
         return $form;
@@ -163,7 +172,6 @@ class EnrollPageTemplate_Controller extends Page_Controller
         $serialized = base64_encode(serialize($clubMember));
         // Get the desired folder to store the serialized object
         $folder = $this->Folder();
-
         // Get the path for the folder and add a filename
         $path = $folder->getFullPath() . $data['FirstName'][0] . $data['LastName'][0] . '_' . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
         //SS_Log::log("path=".$path,SS_Log::WARN);
@@ -173,26 +181,41 @@ class EnrollPageTemplate_Controller extends Page_Controller
          */
         file_put_contents($path, $serialized);
 
-        return $this->redirectBack();
+        //Send an E-Mail
+        /*
+		$email = new Email();
+        $email->setTo($data['Email'])->setSubject('Anmeldung bei Jim e.V.')->setTemplate('EnrollMail')->populateTemplate(new ArrayData($data));
+        $email->send();
+		*/
+
+        //return $this->redirectBack();
+        SS_Log::log(EnrollSuccessPage::get()->First()->Link(),SS_Log::WARN);
+        Session::set('Data',$data);
+        return $this->redirect(EnrollSuccessPage::get()->First()->Link());
     }
 
     function init() {
         parent::init();
+        $theme = $this->themeDir();
         //Add javascript here
-        Requirements::javascript(THIRDPARTY_DIR . "/jquery/jquery.js");
-        Requirements::javascript("clubmaster/javascript/jquery-validate/jquery.validate.js");
-        Requirements::javascript("clubmaster/javascript/jquery-validate/additional-methods.js");
-        Requirements::javascript("clubmaster/javascript/jquery-validate/localization/messages_de.js");
-        Requirements::customScript('
-                jQuery(document).ready(function() {
-                    jQuery("#Form_EnrollForm").validate({
-                        ignore: ".date",
-                        rules: {
-                            Iban: {required: true, iban: true},
-                            Bic: {required: true, bic: true}
-                        }
-                    });
-                });
-        ');
-    }
-}
+        Requirements::block(THIRDPARTY_DIR . '/jquery/jquery.js');
+        Requirements::block('framework/javascript/DateField.js');
+        Requirements::block('framework/thirdparty/jquery-ui/jquery-ui.js');
+        Requirements::block('framework/thirdparty/jquery-ui/datepicker/i18n/jquery.ui.datepicker-de.js');
+        Requirements::block(THIRDPARTY_DIR . '/jquery-ui-themes/smoothness/jquery-ui.css');
+
+        //Front-End validation
+        Requirements::javascript('mysite/javascript/jquery-validate/jquery.validate.js');
+        Requirements::javascript('mysite/javascript/jquery-validate/additional-methods.js');
+        Requirements::javascript('mysite/javascript/jquery-validate/localization/messages_de.js');
+
+        // eonasdan Datetimepicker
+        Requirements::css($theme.'/javascript/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css');
+        Requirements::javascript($theme.'/javascript/moment/min/moment-with-locales.js');
+        Requirements::javascript($theme.'/javascript/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+        if(method_exists(Requirements::backend(), 'add_dependency')){
+            Requirements::backend()->add_dependency('mysite/javascript/Enroll.js',$theme.'/javascript/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+        }
+
+    } //init
+} //eof
