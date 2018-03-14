@@ -87,6 +87,7 @@ en:
     PHONEHINT: "0-9, \"+\" and \"-\" allowed."
     IBANHINT: "IBAN, like DE21301204000000015228"
     BICHINT: "BIC, like VOBADEXX"
+    MANDATEREFERENCEHINT: "Will be created automatically after approving"
 
 #  GridField:
 #    NewRecord: 'New %s'

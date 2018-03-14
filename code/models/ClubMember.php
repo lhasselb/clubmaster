@@ -75,6 +75,7 @@ class ClubMember extends DataObject
         'Zip' => 'Zip',
         'Age' => 'Age',
         'Sex' => 'Sex',
+		'Since' => 'Since', //Since.FormatFromSettings
         //'Insurance' => 'Insurance',
         //'Type.TypeName' => 'Type.TypeName'
 		'Email' => 'Email'
@@ -207,6 +208,8 @@ class ClubMember extends DataObject
         $fields->addFieldToTab('Root.Main',
             DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true));
         //Account tab
+        //$fields->addFieldToTab('Root.Account',
+        //    CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
         $fields->addFieldToTab('Root.Account',
             EUNameTextField::create('AccountHolderTitle', _t('ClubMember.ACCOUNTHOLDERTITLE', 'AccountHolderTitle'))->addExtraClass('text'));
         $fields->addFieldToTab('Root.Account',
@@ -225,16 +228,12 @@ class ClubMember extends DataObject
             IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT', 'IBAN hint')));
         $fields->addFieldToTab('Root.Account',
             BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT', 'BIC hint')));
-        $fields->addFieldToTab("Root.Account",
-            TextField::create('MandateReference', _t('ClubMember.MANDATEREFERENCE', 'Mandate')));//->performReadonlyTransformation());
+        $fields->addFieldToTab('Root.Account',
+            TextField::create('MandateReference', _t('ClubMember.MANDATEREFERENCE', 'Mandate'))->performReadonlyTransformation());
         //Meta tab
-        //$fields->addFieldToTab('Root.Meta',
-        //    CheckboxField::create('Active', _t('ClubMember.ACTIVE', 'Active')));
-        $fields->addFieldToTab("Root.Meta",
+        $fields->addFieldToTab('Root.Meta',
             CheckboxSetField::create('Active', _t('ClubMember.ACTIVE', 'Active'), array('1' => 'Mitglied ist aktiv?')));
-        //$fields->addFieldToTab('Root.Meta',
-        //    CheckboxField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance')));
-        $fields->addFieldToTab("Root.Meta",
+        $fields->addFieldToTab('Root.Meta',
             CheckboxSetField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance'), array('1' => 'BLSV gemeldet?')));
         $fields->addFieldToTab('Root.Meta',
             NumericField::create('Age', _t('ClubMember.AGE', 'Age'))->performReadonlyTransformation());
@@ -246,7 +245,7 @@ class ClubMember extends DataObject
             DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation());
         $fields->addFieldToTab('Root.Meta',
             TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation());
-        //$fields->addFieldToTab('Root.Main',
+        //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
         //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
         $fields->removeByName('Pending');
@@ -262,6 +261,13 @@ class ClubMember extends DataObject
         return $this->FirstName . ' ' . $this->LastName;
     }
 
+	public function getSinceDate()
+	{
+		$since = $this->dbObject('Since')->value;
+		$date = new DateTime($since);
+		return $date->format('d.m.Y');
+	}
+	
     public function getFormClaimDate()
     {
         $date = $this->dateFromFilename($this->SerializedFileName);
@@ -327,7 +333,7 @@ class ClubMember extends DataObject
             $this->Active = true;
         }*/
 		// Set MandateReference for newly added members
-		if (!$this->dbObject('MandateReference')->value) {
+		if (!$this->class =="ClubMember" && !$this->dbObject('MandateReference')->value) {
 			$currentMax = DB::query("SELECT MAX(\"MandateReference\") FROM \"ClubMember\"")->value();
 			$mref = preg_replace_callback("|([0-9]{3,})|", function($matches) {return ++$matches[1];}, $currentMax);
 			//SS_Log::log('MandateReference=empty, '.$currentMax.' new='.$mref,SS_Log::WARN);

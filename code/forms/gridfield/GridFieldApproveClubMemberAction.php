@@ -79,9 +79,9 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
 			//Send an E-Mail
 			$email = new Email();
 			$data = $clubMemberPending->toMAp();
-			foreach ($data as $key => $value) {
-				SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
-			}
+			//foreach ($data as $key => $value) {
+			//	SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
+			//}
 			$email->setTo($clubMemberPending->Email)->setSubject('Anmeldung bei Jim e.V.')->setTemplate('ApproveMail')->populateTemplate(new ArrayData($data));
 			$email->send();
 
