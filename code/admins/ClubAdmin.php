@@ -111,7 +111,7 @@ class ClubAdmin extends ModelAdmin
 
             // Limit to active or inactive
             if (isset($params['State']) && $params['State']) {
-		SS_Log::log('State='.$params['State'],SS_Log::WARN);
+		//SS_Log::log('State='.$params['State'],SS_Log::WARN);
 		if($params['State'] == 'A') {
                     $list = $list->filter('Active','1');
                 } elseif($params['State'] =='AI') {
@@ -122,7 +122,7 @@ class ClubAdmin extends ModelAdmin
             }
             // Limit to insurance
             if (isset($params['Insurance']) && $params['Insurance'] == 'V') {
-		SS_Log::log('Insurance='.$params['Insurance'],SS_Log::WARN);
+		//SS_Log::log('Insurance='.$params['Insurance'],SS_Log::WARN);
 		if($params['Insurance'] == 'V') {
 			$list = $list->filter('Insurance', '1');
 		} elseif ($params['Insurance'] == 'UV') {
@@ -359,10 +359,13 @@ class ClubAdmin extends ModelAdmin
                 // Do we have alreay members
                 if (ClubMember::get()->count() > 0) {
                     // Find an existing member created with current file
+					//SS_Log::log('file title='.$file->Title,SS_Log::WARN);
                     $existingClubMember = ClubMember::get()->find('SerializedFileName', $file->Title);
+					//SS_Log::log('member?='.$existingClubMember->ID,SS_Log::WARN);
                 }
                 // No member found
                 if (!$existingClubMember) {
+					//SS_Log::log('non existing member = ',SS_Log::WARN);
                     $serialized = file_get_contents($file->getFullPath());
                     $data = unserialize(base64_decode($serialized));
                     // Create a new pending member

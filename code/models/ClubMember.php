@@ -256,6 +256,10 @@ class ClubMember extends DataObject
         return $fields;
     }
 
+	private static $casting = array(
+        'FormClaimDate' => 'SS_Datetime' 
+    );
+	
     public function getTitle()
     {
         return $this->FirstName . ' ' . $this->LastName;
@@ -308,7 +312,7 @@ class ClubMember extends DataObject
     {
         $date = new SS_DateTime();
         // XX_dd.mm.yyyy_hh_mm_ss.antrag
-        if (preg_match('/^[A-Z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/', $filename, $matches)) {
+        if (preg_match('/^[A-Za-z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/', $filename, $matches)) {
             $day = intval($matches[1]);
             $month = intval($matches[2]);
             $year = intval($matches[3]);
