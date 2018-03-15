@@ -149,8 +149,11 @@ class ClubMemberPending extends ClubMember
         $this->City = $data->City;
         $this->Email = $data->Email;
         $this->Mobil = $data->Mobil;
-        $this->Phone = $data->Phone;
-        $this->Since = date('d.m.Y');
+        $this->Phone = $data->Phone;		
+        //SS_Log::log('since ='.$data->Since,SS_Log::WARN);
+		//$this->Since = date('d.m.Y');
+		// Attention: Use the date given on the form
+		$this->Since = $data->Since;
         $this->AccountHolderFirstName = $data->AccountHolderFirstName;
         $this->AccountHolderLastName = $data->AccountHolderLastName;
         $this->AccountHolderStreet = $data->AccountHolderStreet;

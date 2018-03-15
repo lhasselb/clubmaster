@@ -101,7 +101,7 @@ class ClubAdmin extends ModelAdmin
             $list = $list->filter('Pending', '0');
         } // Limit list to pending members
         elseif ($this->modelClass == 'ClubMemberPending') {
-            $list = $list->filter('Pending', '1');
+            $list = $list->filter('Pending', '1')->sort('Since','ASC');
         }
 
         // Get parameters
