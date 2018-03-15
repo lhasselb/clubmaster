@@ -11,7 +11,7 @@ class EnrollPageTemplate extends Page
     private static $singular_name = 'Mitgliedsantrag';
     private static $description = 'Seite für den Mitgliedsantrag';
     private static $can_be_root = false;
-    private static $allowed_children = array('EnrollSuccessPage');
+    private static $allowed_children = array('EnrollPageSuccess');
 
     private static $db = array();
 

@@ -1,5 +1,5 @@
 <?php
-class EnrollSuccessPage extends Page
+class EnrollPageSuccess extends Page
 {
     private static $singular_name = 'Erfolgreicher Mitgliedsantrag';
     private static $description = 'Seite für erfolgreichen Mitgliedsantrag';
@@ -35,7 +35,7 @@ class EnrollSuccessPage extends Page
 
 }
 
-class EnrollSuccessPage_Controller extends Page_Controller
+class EnrollPageSuccess_Controller extends Page_Controller
 {
     private static $allowed_actions = array ();
 
