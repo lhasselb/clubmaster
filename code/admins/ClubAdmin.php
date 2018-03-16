@@ -29,7 +29,7 @@ class ClubAdmin extends ModelAdmin
     /**
      * @config
      */
-    private static $items_per_page = '25';
+    private static $items_per_page = '50';
 
     /**
      *  Prepare search
@@ -290,7 +290,7 @@ class ClubAdmin extends ModelAdmin
             'Birthday',
             'Nationality',
             'Street',
-            'Streetnumber',
+            'StreetNumber',
             'Zip',
             'City',
             'Email',
