@@ -264,6 +264,19 @@ class ClubMember extends DataObject
     {
         return $this->FirstName . ' ' . $this->LastName;
     }
+	
+	public function ExportType()
+    {        
+		$id = $this->TypeID;
+		if($id > 0)
+		{
+			//$type = ClubMemberType::get()->byID($id);
+			//$title = $type->Title;
+			//SS_Log::log('id='.$id.' type='.$type.' title='.$title,SS_Log::WARN);
+			return ClubMemberType::get()->byID($this->TypeID)->Title;
+		} else
+		return "";
+    }
 
 	public function getSinceDate()
 	{

@@ -34,6 +34,7 @@ class ClubMemberReport extends SS_Report {
         'Insurance' => 'Insurance',
         'Age' => 'Age', // Calculated
         'Sex' => 'Sex', // Calculated
+		'ClubMemberType' => 'ClubMemberType',
         'CreationType' => 'CreationType', // Distinguish Formular,Import,Händisch
         'MandateReference' => 'MandateReference' // max 35 char. (A-z0-9) TODO: has_one? (Multiple members might share one)			
         );

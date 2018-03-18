@@ -297,7 +297,7 @@ class ClubAdmin extends ModelAdmin
             'Email',
             'Mobil',
             'Phone',
-            'Type',
+            'ExportType' => 'Type',
             'Since',
 			'EqualAddress',
             'AccountHolderFirstName',
