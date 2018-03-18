@@ -27,6 +27,8 @@ de:
   ClubAdminSiteConfig:
     PENDINGFOLDER: "Verzeichnis für Anträge"
     MEMBERSDISPLAYED: "Anzahl der Mitglieder pro Seite"
+    ADDMANDATE: "Mandatsreferenz automatisch generieren"
+    SENDAPPROVEMAIL: "Sende eine E-Mail nach der Zustimmung zum Antrag"
 
   ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"

@@ -336,13 +336,19 @@ class ClubMember extends DataObject
         /*if($this->CreationType == 'Händisch'){
             $this->Active = true;
         }*/
+		$siteConfig = SiteConfig::current_site_config();
 		// Set MandateReference for newly added members
-		if (!$this->class =="ClubMember" && !$this->dbObject('MandateReference')->value) {
-			$currentMax = DB::query("SELECT MAX(\"MandateReference\") FROM \"ClubMember\"")->value();
-			$mref = preg_replace_callback("|([0-9]{3,})|", function($matches) {return ++$matches[1];}, $currentMax);
-			//SS_Log::log('MandateReference=empty, '.$currentMax.' new='.$mref,SS_Log::WARN);
-			$this->MandateReference = $mref;
-		};
+		$addMandate = $siteConfig->AddMandate; // set in site config
+		if(isset($addMandate))
+		{
+			//SS_Log::log('addMandate set',SS_Log::WARN);
+			if (!$this->class =="ClubMember" && !$this->dbObject('MandateReference')->value) {
+				$currentMax = DB::query("SELECT MAX(\"MandateReference\") FROM \"ClubMember\"")->value();
+				$mref = preg_replace_callback("|([0-9]{3,})|", function($matches) {return ++$matches[1];}, $currentMax);
+				//SS_Log::log('MandateReference=empty, '.$currentMax.' new='.$mref,SS_Log::WARN);
+				$this->MandateReference = $mref;
+			};
+		}
 		
     }
 

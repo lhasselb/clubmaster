@@ -30,9 +30,7 @@ class ClubMemberReport extends SS_Report {
         'StreetNumber' => 'StreetNumber',
         'Zip' => 'Zip',
         'City' => 'City',
-        'Email' => 'Email',
         'Since' => 'Date',
-        'Active' => 'Active', //Hide from print/export
         'Insurance' => 'Insurance',
         'Age' => 'Age', // Calculated
         'Sex' => 'Sex', // Calculated
@@ -49,7 +47,7 @@ class ClubMemberReport extends SS_Report {
 		//$gridField->setModelClass('');
 		$gridConfig = $gridField->getConfig();
 		//SS_Log::log('gridConfig='.$gridConfig,SS_Log::WARN);
-		$gridConfig->getComponentByType('GridFieldPaginator')->setItemsPerPage(100);
+		$gridConfig->getComponentByType('GridFieldPaginator')->setItemsPerPage(500);
 		
 		//$gridConfig->removeComponentsByType('GridFieldPrintButton');
 		//$gridConfig->removeComponentsByType('GridFieldExportButton');

@@ -27,9 +27,9 @@ class ClubAdmin extends ModelAdmin
     private static $allowed_actions = array('approvemember', 'activatemember', 'deactivatemember');
 
     /**
-     * @config
+     * @config 
      */
-    private static $items_per_page = '50';
+    private static $items_per_page = '25';
 
     /**
      *  Prepare search
@@ -178,11 +178,12 @@ class ClubAdmin extends ModelAdmin
         if ($gridFieldName == 'ClubMember') {
 
             //$config->addComponent(new GridFieldShowHideButton('before'));
-
-            // Set rows displayed
+			// Get configuration
             $siteConfig = SiteConfig::current_site_config();
-            $itemsPerPage = $siteConfig->MembersDisplayed;
-            //$itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page');
+            // Set rows displayed
+            $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page'); // default 50, _config/config.yml
+			$itemsPerPage = $siteConfig->MembersDisplayed; // set in site config
+
             $config->getComponentByType('GridFieldPaginator')->setItemsPerPage($itemsPerPage);
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
