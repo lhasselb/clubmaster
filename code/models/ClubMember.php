@@ -270,12 +270,12 @@ class ClubMember extends DataObject
 		$id = $this->TypeID;
 		if($id > 0)
 		{
-			//$type = ClubMemberType::get()->byID($id);
-			//$title = $type->Title;
-			//SS_Log::log('id='.$id.' type='.$type.' title='.$title,SS_Log::WARN);
+			$type = ClubMemberType::get()->byID($id);
+			$title = $type->Title;
+			SS_Log::log('id='.$id.' type='.$type.' title='.$title,SS_Log::WARN);
 			return ClubMemberType::get()->byID($this->TypeID)->Title;
 		} else
-		return "";
+		return "Unbekannt";
     }
 
 	public function getSinceDate()
