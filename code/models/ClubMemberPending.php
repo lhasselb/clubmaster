@@ -139,27 +139,27 @@ class ClubMemberPending extends ClubMember
     {
         if ($data === NULL) return false;
         $this->Salutation = $data->Salutation;
-        $this->FirstName = $data->FirstName;
-        $this->LastName = $data->LastName;
+        $this->FirstName = ucfirst($data->FirstName); // Uppercase first
+        $this->LastName = ucfirst($data->LastName); // Uppercase first
         $this->Birthday = $data->Birthday;
         $this->Nationality = $data->Nationality;
-        $this->Street = $data->Street;
-        $this->StreetNumber = $data->StreetNumber;
+        $this->Street = ucfirst($data->Street);
+        $this->StreetNumber = preg_replace('/[^A-Za-z0-9\- ]/', ' ',$data->StreetNumber);// Removes special chars.
         $this->Zip = $data->Zip;
-        $this->City = $data->City;
+        $this->City = ucfirst($data->City);
         $this->Email = $data->Email;
-        $this->Mobil = $data->Mobil;
-        $this->Phone = $data->Phone;		
+        $this->Mobil = preg_replace('/[^A-Za-z0-9\- ]/', ' ',$data->Mobil);// Removes special chars.
+        $this->Phone = preg_replace('/[^A-Za-z0-9\- ]/', ' ',$data->Phone);// Removes special chars.
         //SS_Log::log('since ='.$data->Since,SS_Log::WARN);
 		//$this->Since = date('d.m.Y');
 		// Attention: Use the date given on the form
 		$this->Since = $data->Since;
-        $this->AccountHolderFirstName = $data->AccountHolderFirstName;
-        $this->AccountHolderLastName = $data->AccountHolderLastName;
-        $this->AccountHolderStreet = $data->AccountHolderStreet;
-        $this->AccountHolderStreetNumber = $data->AccountHolderStreetNumber;
+        $this->AccountHolderFirstName = ucfirst($data->AccountHolderFirstName); // Uppercase first
+        $this->AccountHolderLastName = ucfirst($data->AccountHolderLastName); // Uppercase first
+        $this->AccountHolderStreet = ucfirst($data->AccountHolderStreet);
+        $this->AccountHolderStreetNumber = preg_replace('/[^A-Za-z0-9\- ]/', ' ',$data->AccountHolderStreetNumber);// Removes special chars.
         $this->AccountHolderZip = $data->AccountHolderZip;
-        $this->AccountHolderCity = $data->AccountHolderCity;
+        $this->AccountHolderCity = ucfirst($data->AccountHolderCity);
         $this->Iban = $data->Iban;
         $this->Bic = $data->Bic;
         $this->AccountHolderZip = $data->AccountHolderZip;
