@@ -7,7 +7,6 @@
 <p>$Email</p>
 <p>$Mobil</p>
 <p>$Phone</p>
-<p>$TypeID</p>
 <p>$Since</p>
 <h2>Bankverbindung</h2>
 <p>$AccountHolderFirstName $AccountHolderLastName</p>
@@ -15,7 +14,7 @@
 <p>$Iban</p>
 <p>$Bic</p>
 
-Die JIM e.V. Satzung findest du unter <https://www.jimev.de/assets/formulare/Satzung.pdf>
+Die JIM e.V. Satzung findest du <a href="https://www.jimev.de/assets/formulare/Satzung.pdf">hier</a>.
 
 Viele Grüsse
 
