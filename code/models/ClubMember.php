@@ -354,10 +354,11 @@ class ClubMember extends DataObject
 		$addMandate = $siteConfig->AddMandate; // set in site config
 		if(isset($addMandate))
 		{
-            /**SS_Log::log('addMandate set',SS_Log::WARN);
+            /*
             SS_Log::log('class='.$this->class,SS_Log::WARN);
             SS_Log::log('name='.$this->title,SS_Log::WARN);            
-            SS_Log::log('MandateReference='.$this->dbObject('MandateReference')->value,SS_Log::WARN);**/
+            SS_Log::log('MandateReference='.$this->dbObject('MandateReference')->value,SS_Log::WARN);
+            */
 			if ($this->class =="ClubMember" && !$this->dbObject('MandateReference')->value) {
 				$currentMax = DB::query("SELECT MAX(\"MandateReference\") FROM \"ClubMember\"")->value();
 				$mref = preg_replace_callback("|([0-9]{3,})|", function($matches) {return ++$matches[1];}, $currentMax);
