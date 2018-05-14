@@ -78,7 +78,8 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
 			
 			$siteConfig = SiteConfig::current_site_config();
 			$sendApprovalMail = $siteConfig->SendApprovalMail; // set in site config
-			if(isset($sendApprovalMail))
+			//SS_Log::log('sendApprovalMail='.$sendApprovalMail,SS_Log::WARN);
+			if($sendApprovalMail)
 			{
 				//Send an E-Mail
 				$email = new Email();
