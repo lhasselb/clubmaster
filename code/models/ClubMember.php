@@ -338,7 +338,7 @@ class ClubMember extends DataObject
         return $date;
     }
 
-    public function onBeforeWrite()
+	public function onBeforeWrite()
     {
         parent::onBeforeWrite();
 
@@ -352,7 +352,8 @@ class ClubMember extends DataObject
 		$siteConfig = SiteConfig::current_site_config();
 		// Set MandateReference for newly added members
 		$addMandate = $siteConfig->AddMandate; // set in site config
-		if(isset($addMandate))
+		//SS_Log::log('addMandate='.$addMandate,SS_Log::WARN);
+		if($addMandate)
 		{
             /*
             SS_Log::log('class='.$this->class,SS_Log::WARN);
@@ -361,7 +362,18 @@ class ClubMember extends DataObject
             */
 			if ($this->class =="ClubMember" && !$this->dbObject('MandateReference')->value) {
 				$currentMax = DB::query("SELECT MAX(\"MandateReference\") FROM \"ClubMember\"")->value();
-				$mref = preg_replace_callback("|([0-9]{3,})|", function($matches) {return ++$matches[1];}, $currentMax);
+				// Regex for matching 3 and more numbers 
+				$mref = preg_replace_callback("|([0-9]{3,})|", 
+				function($matches) 
+				{
+					//SS_Log::log('0='.$matches[0],SS_Log::WARN);
+					// Add 1 to match e.g. M0649-01 will match 0649 but the leading 0 will be removed by the following operation
+					$matchPlusOne = $matches[0] + 1;
+					// Add leading 0 again
+					$newMandate = sprintf("%'.04d", $matchPlusOne);
+					return $newMandate;
+				}, $currentMax);
+
 				//SS_Log::log('MandateReference=empty, '.$currentMax.' new='.$mref,SS_Log::WARN);
 				$this->MandateReference = $mref;
 			};
