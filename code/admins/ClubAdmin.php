@@ -285,6 +285,7 @@ class ClubAdmin extends ModelAdmin
         // field => title
         return array(
             'Salutation',
+			'NameTitle',
             'FirstName',
             'LastName',
             'CareOf',
@@ -308,12 +309,14 @@ class ClubAdmin extends ModelAdmin
             'AccountHolderCity',
             'Iban',
             'Bic',
+			//Special
             'Active',
-            //'Insurance',
+            'Insurance',
             'Age',
-            //'Sex',
-            //'SerializedFileName',
-            //'CreationType',
+            'Sex',
+            'SerializedFileName',
+			//'FormClaimDate',
+            'CreationType' => 'CreationType',
             //'Pending',
             'MandateReference'
         );

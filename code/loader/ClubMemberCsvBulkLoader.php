@@ -27,7 +27,9 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
         }
 
         // Add information about creation type
-        $record['CreationType'] = 'Import';
+        if (empty($record['CreationType'])) {
+            $record['CreationType'] = 'Import';
+        }
 
         // Verify equal address
         if (
@@ -103,8 +105,16 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
         'AccountHolderCity' => 'AccountHolderCity',
         'Iban' => 'Iban',
         'Bic' => 'Bic',
-        'MandateReference' => 'MandateReference',
-        'Active' => 'Active'
+		//Special
+        'Active' => 'Active',
+		'Insurance' => 'Insurance',
+		'Age' => 'Age',
+		'Sex' => 'Sex',
+		'SerializedFileName' => 'SerializedFileName',
+		//'FormClaimDate',
+		'CreationType' => 'CreationType',
+		//Pending,
+        'MandateReference' => 'MandateReference'
     );
 
     /* Fetch relations with a callback */
