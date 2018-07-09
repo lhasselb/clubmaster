@@ -1,0 +1,14 @@
+---
+Name: dev-errors
+Only:
+  environment: dev
+---
+SilverStripe\Core\Injector\Injector:
+  Psr\Log\LoggerInterface: 
+    calls:
+      LogFileHandler: [ pushHandler, [ %$LogFileHandler ] ]
+  LogFileHandler:
+    class: Monolog\Handler\StreamHandler
+    constructor:
+      - "//Users/tommy/Sites/ss41x/silverstripe.log"
+      - "debug"

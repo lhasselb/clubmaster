@@ -1,23 +1,37 @@
 {
-    "name": "lhasselb/clubmaster",
+    "name": "lhasselb/clubmanager",
+    "type": "silverstripe-vendormodule",
     "description": "Club management module",
-    "type": "silverstripe-module",
+    "homepage": "https://github.com/lhasselb/clubmanager",
+    "keywords": ["silverstripe", "club management"],
     "license": "BSD-3-Clause",
-    "keywords": ["silverstripe", "club", "management"],
     "authors": [
-    {
-        "name": "guggelimehl",
-        "email": "guggelimehl@gmail.com"
-    }
+        {
+            "name": "guggelimehl",
+            "email": "guggelimehl@gmail.com"
+        },
+        {
+            "name": "GitHub contributors",
+            "homepage": "https://github.com/lhasselb/clubmanager/contributors"
+        }
     ],
     "require":
     {
-        "silverstripe/framework": "3.*",
-        "silverstripe/cms": "3.*",
+        "silverstripe/framework": "~4",
+        "silverstripe/cms": "~4",
+        "silverstripe/asset-admin": "~1",
         "globalcitizen/php-iban": "*",
         "colymba/gridfield-bulk-editing-tools": "*"
     },
-    "suggest": {
-        "": "*"
+    "extra": {
+        "branch-alias": {},
+        "expose": [
+            "client/dist",
+            "client/lang"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+        }
     }
 }

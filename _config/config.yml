@@ -6,12 +6,12 @@ LeftAndMain:
   extensions:
     - CustomLeftAndMain
 # Add extension SiteConfig: add folder to store files of type "antraege"
-SiteConfig:
+Silverstripe\SiteConfig\SiteConfig:
   extensions:
     - ClubAdminSiteConfig
 
 # Add file extension to allowed extensions
-File:
+SilverStripe\Assets\File:
   allowed_extensions:
     - antrag
 
