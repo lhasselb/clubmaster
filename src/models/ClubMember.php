@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
 /**
  * ClubMember object
  *
- * @package clubmaster
+ * @package    clubmaster
  * @subpackage models
  */
 class ClubMember extends DataObject
@@ -36,7 +36,7 @@ class ClubMember extends DataObject
      * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
      */
     private static $table_name = 'ClubMember';
-    
+
     private static $db = [
         //Form-Fields
         'Salutation' => 'Enum("Frau,Herr,Schülerin,Schüler","Frau")',
@@ -87,17 +87,18 @@ class ClubMember extends DataObject
         'EqualAddress' => '1'
     ];
 
-    /* Dynamic defaults for object instance 
-	 * TODO: Check Dates should be stored using ISO 8601 formatted date (y-MM-dd) 
-	 */
+    /* Dynamic defaults for object instance
+    * TODO: Check Dates should be stored using ISO 8601 formatted date (y-MM-dd)
+    */
     public function populateDefaults()
     {
-		$this->Since = date('d.m.Y');
+        $this->Since = date('d.m.Y');
         parent::populateDefaults();
     }
 
     /**
      * Fields to be displayed in Table head
+     *
      * @var array
      */
     private static $summary_fields = [
@@ -114,13 +115,14 @@ class ClubMember extends DataObject
 
     /**
      * Fields Searchable within top Filter
+     *
      * @var array
      */
     private static $searchable_fields = [
-		//'Type.ID'
+    //'Type.ID'
     ];
 
-    function fieldLabels($includerelations = true)
+    public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels($includerelations);
         // Relation has_one
@@ -169,7 +171,8 @@ class ClubMember extends DataObject
     /* List all required fields */
     public function getCMSValidator()
     {
-        return new RequiredFields([
+        return new RequiredFields(
+            [
             'Salutation', // for calculating Sex
             'FirstName',  // unique #1
             'LastName',   // unique #2
@@ -192,10 +195,11 @@ class ClubMember extends DataObject
             'AccountHolderCity',
             'Iban',
             'Bic'
-        ]);
+            ]
+        );
     }
 
-    function getCMSFields()
+    public function getCMSFields()
     {
         $fields = parent::getCMSFields();
         // The Main tab
@@ -207,15 +211,25 @@ class ClubMember extends DataObject
 
         $fields->addFieldToTab(
             'Root.Main',
-            DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'), singleton('ClubMember')->dbObject('Salutation')->enumValues())
+            DropdownField::create(
+                'Salutation',
+                _t('ClubMember.SALUTATION', 'Salutation'),
+                singleton('ClubMember')->dbObject('Salutation')->enumValues()
+            )
         );
         $fields->addFieldToTab(
             'Root.Main',
-            EUNameTextField::create('NameTitle', _t('ClubMember.NAMETITLE', 'Title'))->addExtraClass('text')->setDescription(_t('ClubMember.NAMETITLEHINT', 'e.g. Ph.D'))
+            EUNameTextField::create(
+                'NameTitle',
+                _t('ClubMember.NAMETITLE', 'Title')
+            )->addExtraClass('text')->setDescription(_t('ClubMember.NAMETITLEHINT', 'e.g. Ph.D'))
         );
         $fields->addFieldToTab(
             'Root.Main',
-            EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus', 'autofocus')->addExtraClass('text')
+            EUNameTextField::create(
+                'FirstName',
+                _t('ClubMember.FIRSTNAME', 'FirstName')
+            )->setAttribute('autofocus', 'autofocus')->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -227,7 +241,7 @@ class ClubMember extends DataObject
         );
         $fields->addFieldToTab(
             'Root.Main',
-            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))//->setConfig('showcalendar', true)
+            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -239,7 +253,10 @@ class ClubMember extends DataObject
         );
         $fields->addFieldToTab(
             'Root.Main',
-            EUNameTextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber'))->addExtraClass('text')
+            EUNameTextField::create(
+                'StreetNumber',
+                _t('ClubMember.STREETNUMBER', 'StreetNumber')
+            )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -259,42 +276,66 @@ class ClubMember extends DataObject
         );
         $fields->addFieldToTab(
             'Root.Main',
-            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-'))
+            TelephoneNumberField::create(
+                'Mobil',
+                _t('ClubMember.MOBIL', 'Mobil')
+            )->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-'))
         );
         $fields->addFieldToTab(
             'Root.Main',
-            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-'))
+            TelephoneNumberField::create(
+                'Phone',
+                _t('ClubMember.PHONE', 'Phone')
+            )->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-'))
         );
         $fields->addFieldToTab(
             'Root.Main',
-            DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID', 'TypeName'))
+            DropdownField::create(
+                'TypeID',
+                _t('ClubMember.TYPE', 'Type')
+            )->setSource(ClubMemberType::get()->map('ID', 'TypeName'))
         );
         $fields->addFieldToTab(
             'Root.Main',
-            DateField::create('Since', _t('ClubMember.SINCE', 'Since')) //->setConfig('showcalendar', true)
+            DateField::create('Since', _t('ClubMember.SINCE', 'Since'))
         );
         //Account tab
         //$fields->addFieldToTab('Root.Account',
         //    CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderTitle', _t('ClubMember.ACCOUNTHOLDERTITLE', 'AccountHolderTitle'))->addExtraClass('text')
+            EUNameTextField::create(
+                'AccountHolderTitle',
+                _t('ClubMember.ACCOUNTHOLDERTITLE', 'AccountHolderTitle')
+            )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName'))->addExtraClass('text')
+            EUNameTextField::create(
+                'AccountHolderFirstName',
+                _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')
+            )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName'))->addExtraClass('text')
+            EUNameTextField::create(
+                'AccountHolderLastName',
+                _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')
+            )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet'))->addExtraClass('text')
+            EUNameTextField::create(
+                'AccountHolderStreet',
+                _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')
+            )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber'))->addExtraClass('text')
+            EUNameTextField::create(
+                'AccountHolderStreetNumber',
+                _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')
+            )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
@@ -302,19 +343,31 @@ class ClubMember extends DataObject
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'))->addExtraClass('text')
+            EUNameTextField::create(
+                'AccountHolderCity',
+                _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')
+            )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT', 'IBAN hint'))
+            IbanField::create(
+                'Iban',
+                _t('ClubMember.IBAN', 'Iban')
+            )->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT', 'IBAN hint'))
         );
         $fields->addFieldToTab(
             'Root.Account',
-            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT', 'BIC hint'))
+            BicField::create(
+                'Bic',
+                _t('ClubMember.BIC', 'Bic')
+            )->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT', 'BIC hint'))
         );
         $fields->addFieldToTab(
             'Root.Account',
-            TextField::create('MandateReference', _t('ClubMember.MANDATEREFERENCE', 'Mandate'))->performReadonlyTransformation()
+            TextField::create(
+                'MandateReference',
+                _t('ClubMember.MANDATEREFERENCE', 'Mandate')
+            )->performReadonlyTransformation()
         );
         //Meta tab
         $fields->addFieldToTab(
@@ -335,7 +388,10 @@ class ClubMember extends DataObject
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation()
+            TextField::create(
+                'SerializedFileName',
+                _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName')
+            )->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
@@ -343,7 +399,10 @@ class ClubMember extends DataObject
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation()
+            TextField::create(
+                'CreationType',
+                _t('ClubMember.CREATIONTYPE', 'CreationType')
+            )->performReadonlyTransformation()
         );
         //$fields->addFieldToTab('Root.Meta',
         //    CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
@@ -357,12 +416,12 @@ class ClubMember extends DataObject
     }
 
     /*
-	 * The field DBDatetime currently supports New Zealand date format (DD/MM/YYYY), 
-	 * or an ISO 8601 formatted date and time (Y-m-d H:i:s). 
-	 * Alternatively you can set a timestamp that is evaluated through PHP's built-in date()
-	 *  and strtotime() function according to your system locale.
-	 */
-	private static $casting = [
+    * The field DBDatetime currently supports New Zealand date format (DD/MM/YYYY),
+    * or an ISO 8601 formatted date and time (Y-m-d H:i:s).
+    * Alternatively you can set a timestamp that is evaluated through PHP's built-in date()
+    *  and strtotime() function according to your system locale.
+    */
+    private static $casting = [
         'FormClaimDate' => 'Datetime'
     ];
 
@@ -380,76 +439,86 @@ class ClubMember extends DataObject
         if ($id > 0) {
             $type = ClubMemberType::get()->byID($id);
             $title = $type->Title;
-            //Injector::inst()->get(LoggerInterface::class)->debug('ClubMember - ExportType()' . ' id='.$id.' type='.$type.' title='.$title);
+            //Injector::inst()->get(LoggerInterface::class)
+            //->debug('ClubMember - ExportType()' . ' id='.$id.' type='.$type.' title='.$title);
             return ClubMemberType::get()->byID($this->TypeID)->Title;
         } else {
-			//TODO: Translate
+            //TODO: Translate
             return "Unbekannt";
         }
     }
-	
+
     /*
-	 * @return String
-	 */
+    * @return String
+    */
     public function getSinceDate()
     {
         $since = $this->dbObject('Since')->value;
         $date = new DateTime($since);
         return $date->format('d.m.Y');
     }
-	
+
     /*
-	 * @return String
-	 */
+    * @return String
+    */
     public function getFormClaimDate()
     {
         $date = $this->dateFromFilename($this->SerializedFileName);
         $datetime = new Datetime($date->format('Y-m-d H:i:s'));
         //return $date->FormatI18N('%d.%m.%Y %H:%M:%S');
-        return $date->format('d.m.Y H:i:s');;
+        return $date->format('d.m.Y H:i:s');
     }
 
     /*
-	 * @return int
-	 */
-	public function getAge()
-    {		
-		if (!$this->dbObject('Birthday')->value) {
+    * @return int
+    */
+    public function getAge()
+    {
+        if (!$this->dbObject('Birthday')->value) {
             return 0;
-        } else 
-		$today = new DateTime('now');
-        $birthday = new DateTime($this->dbObject('Birthday')->value);	
+        } else {
+            $today = new DateTime('now');
+        }
+        $birthday = new DateTime($this->dbObject('Birthday')->value);
         $age = $birthday->diff($today)->format('%y');
-		//Injector::inst()->get(LoggerInterface::class)->debug('ClubMember - getAge()' . ' today = '.$today->format(DateTime::RFC1123));			
-		//Injector::inst()->get(LoggerInterface::class)->debug('ClubMember - getAge()' . ' birthday = '.$birthday->format(DateTime::RFC1123));	
-        //Injector::inst()->get(LoggerInterface::class)->debug('ClubMember - getAge()' . ' age = '.$age);		
+        //Injector::inst()->get(LoggerInterface::class)
+        //->debug('ClubMember - getAge()' . ' today = '.$today->format(DateTime::RFC1123));
+        //Injector::inst()->get(LoggerInterface::class)
+        //->debug('ClubMember - getAge()' . ' birthday = '.$birthday->format(DateTime::RFC1123));
+        //Injector::inst()->get(LoggerInterface::class)
+        //->debug('ClubMember - getAge()' . ' age = '.$age);
         return $age;
     }
 
     /*
-	 * @return String
-	 */
+    * @return String
+    */
     public function getSex()
     {
         return ($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin') ? 'w' : 'm';
     }
 
     /*
-	 * @return bool
-	 */
+    * @return bool
+    */
     public function isActive()
     {
         return $this->Active;
     }
-	
+
     /*
-	 * @return DateTime
-	 */
+    * @return DateTime
+    */
     public function dateFromFilename($filename)
     {
         $date = new DateTime();
         // XX_dd.mm.yyyy_hh_mm_ss.antrag
-        if (preg_match('/^[A-Za-z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/', $filename, $matches)) {
+        if (preg_match(
+            '/^[A-Za-z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/',
+            $filename,
+            $matches
+        )
+        ) {
             $day = intval($matches[1]);
             $month = intval($matches[2]);
             $year = intval($matches[3]);
@@ -457,8 +526,8 @@ class ClubMember extends DataObject
             $minute = intval($matches[5]);
             $second = intval($matches[6]);
             //$date->setValue($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
-            $date->setDate($year,$month,$day);
-            $date->setTime($hour,$minute,$second);
+            $date->setDate($year, $month, $day);
+            $date->setTime($hour, $minute, $second);
             //SS_Log::log('date='.$date->format('d.m.Y H:i:s'),SS_Log::WARN);
         }
         return $date;
@@ -467,7 +536,7 @@ class ClubMember extends DataObject
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-		//Injector::inst()->get(LoggerInterface::class)->debug('ClubMember - onBeforeWrite()' . ' "" ');
+        //Injector::inst()->get(LoggerInterface::class)->debug('ClubMember - onBeforeWrite()' . ' "" ');
         // Set Age
         $this->Age = $this->getAge();
         // Set Sex
@@ -491,10 +560,10 @@ class ClubMember extends DataObject
                 $mref = preg_replace_callback(
                     "|([0-9]{3,})|",
                     function ($matches) {
-                    //SS_Log::log('0='.$matches[0],SS_Log::WARN);
-                    // Add 1 to match e.g. M0649-01 will match 0649 but the leading 0 will be removed by the following operation
+                        // Add 1 to match e.g. M0649-01 will match 0649
+                        // but the leading 0 will be removed by the following operation
                         $matchPlusOne = $matches[0] + 1;
-                    // Add leading 0 again
+                        // Add leading 0 again
                         $newMandate = sprintf("%'.04d", $matchPlusOne);
                         return $newMandate;
                     },
