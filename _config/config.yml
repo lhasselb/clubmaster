@@ -2,13 +2,13 @@
 Name: clubmaster
 ---
 # Extend LeftAndMain (Hide Help)
-LeftAndMain:
+SilverStripe\Admin\LeftAndMain:
   extensions:
-    - CustomLeftAndMain
+    - SYBEHA\Clubmaster\Extensions\CustomLeftAndMain
 # Add extension SiteConfig: add folder to store files of type "antraege"
 Silverstripe\SiteConfig\SiteConfig:
   extensions:
-    - ClubAdminSiteConfig
+    - SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig
 
 # Add file extension to allowed extensions
 SilverStripe\Assets\File:
@@ -16,7 +16,7 @@ SilverStripe\Assets\File:
     - antrag
 
 # Number of displayed items
-ClubAdmin:
+SYBEHA\Clubmaster\Admins\ClubAdmin:
   items_per_page: 25
   extensions:
     - ClubAdminImport

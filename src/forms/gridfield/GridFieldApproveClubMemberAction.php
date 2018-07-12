@@ -1,5 +1,7 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Forms\Gridfield;
+
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
 use SilverStripe\Forms\GridField\GridField_FormAction;
@@ -89,7 +91,7 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             $clubMemberPending->ClassName = 'ClubMember';
             $clubMemberPending->Since = DBDatetime::now();
             $clubMemberPending->write();
-            
+
             $siteConfig = SiteConfig::current_site_config();
             $sendApprovalMail = $siteConfig->SendApprovalMail; // set in site config
             //SS_Log::log('sendApprovalMail='.$sendApprovalMail,SS_Log::WARN);
@@ -103,7 +105,7 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
                 $email->setTo($clubMemberPending->Email)->setSubject('Anmeldung bei Jim e.V.')->setTemplate('ApproveMail')->populateTemplate(new ArrayData($data));
                 $email->send();
             }
-            
+
             // output a success message to the user
             Controller::curr()->getResponse()->setStatusCode(200, _t('GridFieldApproveClubMemberAction.APPROVEMEMBERDONE', 'ApproveMember Done.'));
         }

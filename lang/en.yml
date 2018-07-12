@@ -26,9 +26,9 @@ en:
 
   ClubAdminSiteConfig:
     PENDINGFOLDER: "Pending folder"
-    MEMBERSDISPLAYED: "Amount of members displayed"
+    MEMBERSDISPLAYED: "Members displayed per page"
     ADDMANDATE: "Automatic addition of mandate reference"
-    SENDAPPROVEMAIL: "Send E-Mail  after approval"    
+    SENDAPPROVEMAIL: "Send E-Mail  after approval"
 
   ClubMemberPending:
     SINGULARNAME: "Member request"

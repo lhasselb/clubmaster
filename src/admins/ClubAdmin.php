@@ -1,5 +1,7 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Admins;
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Assets\Folder;
@@ -42,18 +44,22 @@ use SilverStripe\i18n\i18n;
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
 
+use SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction;
+
+// TODO: Check for later usage GridFieldAddExistingSearchButton
+// use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
+
 /**
  * ClubMember administration system within the CMS
- *
- * @package    clubmaster
- * @subpackage admins
+ * Class ClubAdmin
+ * @package SYBEHA\Clubmaster\Admins
  */
 class ClubAdmin extends ModelAdmin
 {
     private static $menu_title = 'Clubmanager';
     private static $url_segment = 'clubmanager';
     private static $menu_icon = 'clubmaster/images/clubmaster.png';
-    
+
     private static $managed_models = array(
         'ClubMemberPending' => array('title' => 'Anträge'),
         'ClubMember' => array('title' => 'Mitglieder'),
@@ -83,7 +89,7 @@ class ClubAdmin extends ModelAdmin
         if ($this->modelClass == 'ClubMember') {
             // Postleitzahlen
             $zipFieldGroup = FieldGroup::create(
-                HeaderField::create('TitleHeader',_t('ClubAdmin.ZIPSEARCH', 'Zip'), 4),
+                HeaderField::create('TitleHeader', _t('ClubAdmin.ZIPSEARCH', 'Zip'), 4),
                 new ZipField("q[StartPlz]", _t('ClubAdmin.ZIPSTART', 'zipStart')),
                 new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND', 'zipEnd'))
             );
@@ -231,26 +237,27 @@ class ClubAdmin extends ModelAdmin
         $config = $gridField->getConfig();
 
         /*
-        Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getEditForm() config = ' . $config->getComponents());
+        Injector::inst()->get(LoggerInterface::class)
+        ->debug('ClubAdmin - getEditForm() config = ' . $config->getComponents());
         $components = $config->getComponents();
         foreach ( $components as $key => $value ) {
             Injector::inst()->get(LoggerInterface::class)->debug('key =' . $key . ' value = ' . get_class($value));
         }
-        0 = SilverStripe\Forms\GridField\GridFieldButtonRow
-        1 = SilverStripe\Forms\GridField\GridFieldAddNewButton
-        2 = SilverStripe\Forms\GridField\GridFieldToolbarHeader
-        3 = SilverStripe\Forms\GridField\GridFieldSortableHeader
-        4 = SilverStripe\Forms\GridField\GridFieldDataColumns
-        5 = SilverStripe\Forms\GridField\GridFieldEditButton
-        6 = SilverStripe\Forms\GridField\GridFieldDeleteAction
-        7 = SilverStripe\Forms\GridField\GridFieldPageCount
-        8 = SilverStripe\Forms\GridField\GridFieldPaginator
-        9 = SilverStripe\Forms\GridField\GridFieldDetailForm
-        10 = SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState
-        11 = SilverStripe\Forms\GridField\GridFieldExportButton
-        12 = SilverStripe\Forms\GridField\GridFieldPrintButton
-        13 = SilverStripe\Forms\GridField\GridState_Component
-        14 = SilverStripe\Forms\GridField\GridFieldImportButton
+            0 = SilverStripe\Forms\GridField\GridFieldButtonRow
+            1 = SilverStripe\Forms\GridField\GridFieldAddNewButton
+            2 = SilverStripe\Forms\GridField\GridFieldToolbarHeader
+            3 = SilverStripe\Forms\GridField\GridFieldSortableHeader
+            4 = SilverStripe\Forms\GridField\GridFieldDataColumns
+            5 = SilverStripe\Forms\GridField\GridFieldEditButton
+            6 = SilverStripe\Forms\GridField\GridFieldDeleteAction
+            7 = SilverStripe\Forms\GridField\GridFieldPageCount
+            8 = SilverStripe\Forms\GridField\GridFieldPaginator
+            9 = SilverStripe\Forms\GridField\GridFieldDetailForm
+            10 = SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState
+            11 = SilverStripe\Forms\GridField\GridFieldExportButton
+            12 = SilverStripe\Forms\GridField\GridFieldPrintButton
+            13 = SilverStripe\Forms\GridField\GridState_Component
+            14 = SilverStripe\Forms\GridField\GridFieldImportButton
         */
 
         if ($gridFieldName == 'ClubMember') {
@@ -262,22 +269,27 @@ class ClubAdmin extends ModelAdmin
             $itemsPerPage = $siteConfig->MembersDisplayed; // set in site config
 
             $config->getComponentByType(GridFieldPaginator::class)->setItemsPerPage($itemsPerPage);
+            //Injector::inst()->get(LoggerInterface::class)->debug('Config: ' . implode(" +  ",$config));
+
             // Add Filter header
             $config->addComponent(new GridFieldFilterHeader());
 
+            // Check out https://github.com/symbiote/silverstripe-gridfieldextensions
+            //$config->addComponent(new GridFieldAddExistingSearchButton());
+
             // Add GridFieldBulkManager
             $config->addComponent(new \Colymba\BulkManager\BulkManager());
-
-            //Injector::inst()->get(LoggerInterface::class)->debug('Config: ' . implode(" +  ",$config));
-            
             // Remove bulk actions
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
-
-            //$config->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
+            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
+            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
+            //$config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            //->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
             // Remove bulk delete action from non Administrators
             if (!$this->canDeleteClubmember()) {
-                $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
+                $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+                ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
             }
 
             // Add ACTION activate/deactivateMember
@@ -318,7 +330,8 @@ class ClubAdmin extends ModelAdmin
                     //'AccountHolderFirstName'  => _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName'),
                     //'AccountHolderLastName'  => _t('ClubMember.AccountHolderLastName', 'AccountHolderLastName'),
                     //'AccountHolderStreet'  => _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet'),
-                    //'AccountHolderStreetNumber'  => _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber'),
+                    //'AccountHolderStreetNumber'  =>
+                    //_t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber'),
                     //'AccountHolderZip'  => _t('ClubMember.AccountHolderZip', 'AccountHolderZip'),
                     //'AccountHolderCity'  => _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'),
                     //'Iban'  => _t('ClubMember.IBAN', 'Iban'),
@@ -352,9 +365,12 @@ class ClubAdmin extends ModelAdmin
                 'Sybeha\\clubmaster\\forms\\gridfield\\GridFieldBulkActionApproveMemberHandler'
             );
             // Remove action
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
+            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
+            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
+            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
         }
         return $form;
     }
@@ -408,7 +424,6 @@ class ClubAdmin extends ModelAdmin
 
     /**
      * Initialize ClubAdmin
-     *
      */
     public function init()
     {
@@ -417,7 +432,7 @@ class ClubAdmin extends ModelAdmin
         //Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
         Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
 
-		Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() locale = ' . i18n::get_locale());
+        Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() locale = ' . i18n::get_locale());
 
         // Create Pending members from serialized form data
         if ($this->sanitiseClassName($this->modelClass) == 'ClubMemberPending') {
@@ -425,7 +440,8 @@ class ClubAdmin extends ModelAdmin
             $siteConfig = SiteConfig::current_site_config();
             $folder = $siteConfig->PendingFolder();
 
-            //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() pending folder = ' . $folder->Title . '(ID=' . $folder->ID . ')');
+            //Injector::inst()->get(LoggerInterface::class)
+            //->debug('ClubAdmin - Init() pending folder = ' . $folder->Title . '(ID=' . $folder->ID . ')');
             // Check if not configured (FolderID=0)
             if ($folder->ID == '0') {
                 // Create a default within assets/antraege
@@ -435,21 +451,30 @@ class ClubAdmin extends ModelAdmin
             }
 
             $files = File::get()->filter("ParentID", $folder->ID);
-			if(!$files->exists())
-				Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() no files found');
-			else 
-				Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found ' . $files->count() . ' files');
+            if (!$files->exists()) {
+                Injector::inst()->get(LoggerInterface::class)
+                ->debug('ClubAdmin - Init() no files found');
+            } else {
+                Injector::inst()->get(LoggerInterface::class)
+                ->debug('ClubAdmin - Init() found ' . $files->count() . ' files');
+            }
 
             // Iterate the files found
             foreach ($files as $file) {
                 // In order to ensure that assets are made public you should check the following:
                 // $file->isPublished(); $file->exists();canView(); CanViewType; */
-                //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' . $file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' . $file->canView() . ' and can view type ? ' . $file->CanViewType);
+                //Injector::inst()->get(LoggerInterface::class)
+                //->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' .
+                // $file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' .
+                // $file->canView() . ' and can view type ? ' . $file->CanViewType);
                 $extension = $file->getExtension();
-                //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file title = ' . $file->Title . '(' . $file->Filename . ') extension = ' . $extension);
+                //Injector::inst()->get(LoggerInterface::class)
+                //->debug('ClubAdmin - Init() found file title = ' . $file->Title .
+                //'(' . $file->Filename . ') extension = ' . $extension);
                 // Skip all files except those with extension antrag
                 if (!$extension || $extension !== 'antrag') {
-                    Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() file with wrong extension = ' . $extension . ' title = ' . $file->Name);
+                    Injector::inst()->get(LoggerInterface::class)
+                    ->debug('ClubAdmin - Init() file with wrong extension = ' . $extension . ' title = ' . $file->Name);
                     continue;
                 }
 
@@ -459,31 +484,42 @@ class ClubAdmin extends ModelAdmin
                     // Find an existing member created with current file
                     $existingClubMember = ClubMember::get()->find('SerializedFileName', $file->Name);
                     if ($existingClubMember) {
-                        //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title . ' (' . $existingClubMember->ID .') for file = ' . $file->Name);
+                        //Injector::inst()->get(LoggerInterface::class)
+                        //->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title .
+                        //' (' . $existingClubMember->ID .') for file = ' . $file->Name);
                     }
                 }
                 // No member found
                 if (!$existingClubMember) {
-                    Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() no matching member found for file title = ' . $file->Title . ' ,name = ' . $file->Name . ' (' . $file->Filename . ') extension = ' . $extension);
+                    Injector::inst()->get(LoggerInterface::class)
+                    ->debug('ClubAdmin - Init() no matching member found for file title = ' . $file->Title
+                    . ' ,name = ' . $file->Name . ' (' . $file->Filename . ') extension = ' . $extension);
                     //$serialized = file_get_contents($file->getFullPath());
                     $serialized = $file->getString();
                     $data = unserialize(base64_decode($serialized));
                     // Create a new pending member
                     $pendingMember = new ClubMemberPending();
-					Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  new ClubMemberPending created');
+                    Injector::inst()->get(LoggerInterface::class)
+                    ->debug('ClubAdmin - Init()  new ClubMemberPending created');
 
                     $pendingMember->SerializedFileName = $file->Name;
-                    //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  SerializedFileName = ' . $file->Name);
+                    //Injector::inst()->get(LoggerInterface::class)
+                    //->debug('ClubAdmin - Init()  SerializedFileName = ' . $file->Name);
 
-					// Attention php DateTime needs to be ISO 8601 formatted date and time (Y-m-d H:i:s)
-					$pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Name)->format('Y-m-d H:i:s');
-                    //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  create date (FormClaimDate) from = ' . $pendingMember->FormClaimDate );
+                    // Attention php DateTime needs to be ISO 8601 formatted date and time (Y-m-d H:i:s)
+                    $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Name)
+                        ->format('Y-m-d H:i:s');
+                    //Injector::inst()->get(LoggerInterface::class)
+                    //->debug('ClubAdmin - Init()  create date (FormClaimDate) from = '
+                    //. $pendingMember->FormClaimDate );
 
-					$pendingMember->fillWith($data);
-                    //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  Birthday = ' . $pendingMember->Birthday );
-                    //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  Since = ' . $pendingMember->Since );
+                    $pendingMember->fillWith($data);
+                    //Injector::inst()->get(LoggerInterface::class)
+                    //->debug('ClubAdmin - Init()  Birthday = ' . $pendingMember->Birthday );
+                    //Injector::inst()->get(LoggerInterface::class)
+                    //->debug('ClubAdmin - Init()  Since = ' . $pendingMember->Since );
 
-					$pendingMember->write();
+                    $pendingMember->write();
                 }
             }
         }
