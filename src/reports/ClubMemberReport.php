@@ -1,17 +1,17 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Reports;
+
 use SilverStripe\Reports\Report;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
+use SYBEHA\Clubmaster\Models\ClubMember;
 
 /**
- * ClubMemberReport report
- *
- * @package clubmaster
- * @subpackage reports
+ * Class ClubMemberReport
+ * @package SYBEHA\Clubmaster\Reports
  */
 class ClubMemberReport extends Report
 {
-
     // the name of the report
     public function title()
     {

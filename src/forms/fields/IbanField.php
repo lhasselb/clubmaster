@@ -1,16 +1,17 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Forms\Fields;
+
+use SilverStripe\Forms\TextField;
+
 /**
  * Allows input of IBAN number via form field,
  * including generic validation of its value.
  * https://de.wikipedia.org/wiki/IBAN
  *
- * @package clubmaster
- * @subpackage forms/fields
+ * Class IbanField
+ * @package SYBEHA\Clubmaster\Forms\Fields
  */
-
-use SilverStripe\Forms\TextField;
-
 class IbanField extends TextField
 {
 

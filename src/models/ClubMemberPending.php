@@ -1,5 +1,7 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Models;
+
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Forms\RequiredFields;
@@ -12,42 +14,49 @@ use SilverStripe\Forms\EMailField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\NumericField;
+/* Use global namespace for PHP DateTime */
+use \DateTime;
 /* See  https://github.com/dynamic/silverstripe-country-dropdown-field */
 use Dynamic\CountryDropdownField\Fields\CountryDropdownField;
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
 
+use SYBEHA\Clubmaster\Models\ClubMemberType;
+use SYBEHA\Clubmaster\Forms\Fields\EUNameTextField;
+use SYBEHA\Clubmaster\Forms\Fields\ZipField;
+use SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField;
+use SYBEHA\Clubmaster\Forms\Fields\IbanField;
+use SYBEHA\Clubmaster\Forms\Fields\BicField;
+
 /**
- * ClubMemberPending object
- *
- * @package clubmaster
- * @subpackage models
+ * Class ClubMemberPending
+ * @package SYBEHA\Clubmaster\Models
  */
 class ClubMemberPending extends ClubMember
 {   
  
-    private static $defaults = array('CreationType' => 'Formular', 'Active' => '0');
+    private static $defaults = ['CreationType' => 'Formular', 'Active' => '0'];
 
     /**
      * Fields to be displayed in Table head (gridfield)
      * @var array
      */
-    private static $summary_fields = array(
+    private static $summary_fields = [
         'Salutation',
         'FirstName',
         'LastName',
         'SerializedFileName',
         'FormClaimDate'
-    );
+        ];
 
-    private static $searchable_fields = array();
+    private static $searchable_fields = [];
 
 
     /* List all required fields */
     public function getCMSValidator()
     {
-        return new RequiredFields(array(
+        return new RequiredFields([
             'Salutation',
             'FirstName',
             'LastName',
@@ -70,7 +79,7 @@ class ClubMemberPending extends ClubMember
             'AccountHolderCity',
             'Iban',
             'Bic'
-        ));
+        ]);
     }
 
     function getCMSFields()
@@ -224,7 +233,7 @@ class ClubMemberPending extends ClubMember
             CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation()
         );
         //Remove the fields obsolete for ClubMmeberPending
-        $fields->removeByName(array('Active', 'Insurance'));
+        $fields->removeByName(['Active', 'Insurance']);
 
         return $fields;
     }

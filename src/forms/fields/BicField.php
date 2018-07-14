@@ -1,16 +1,17 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Forms\Fields;
+
+use SilverStripe\Forms\TextField;
+
 /**
  * Allows input of BIC number via form field,
  * including generic validation of its value.
  * https://de.wikipedia.org/wiki/ISO_9362
  *
- * @package clubmaster
- * @subpackage forms/fields
+ * Class BicField
+ * @package SYBEHA\Clubmaster\Forms\Fields
  */
-
-use SilverStripe\Forms\TextField;
-
 class BicField extends TextField
 {
 

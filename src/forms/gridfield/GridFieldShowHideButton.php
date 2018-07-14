@@ -1,13 +1,14 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Forms\Gridfield;
+
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
 
 /**
  * Adds an "Show/Hide Inactive" button to the bottom of a GridField.
- *
- * @package forms
- * @subpackage gridfield
+ * Class GridFieldShowHideButton
+ * @package SYBEHA\Clubmaster\Forms\Gridfield
  */
 class GridFieldShowHideButton implements GridField_HTMLProvider, GridField_ActionProvider
 {

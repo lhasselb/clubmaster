@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\clubmaster\forms\gridfield;
+namespace SYBEHA\Clubmaster\Forms\Gridfield;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -13,8 +13,8 @@ use Exception;
 /**
  * Bulk action handler for approving member records.
  * Member class will be changed from ClubMemberPending to ClubMember.
- *
- * @author Lars Hasselbach
+ * Class GridFieldBulkActionApproveMemberHandler
+ * @package SYBEHA\Clubmaster\Forms\Gridfield
  */
 class GridFieldBulkActionApproveMemberHandler extends Handler
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\clubmaster\forms\gridfield;
+namespace SYBEHA\Clubmaster\Forms\Gridfield;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -11,8 +11,8 @@ use Exception;
 
 /**
  * Bulk action handler for adding insurance flag to member records.
- *
- * @author Lars Hasselbach
+ * Class GridFieldBulkActionInsuranceMemberHandler
+ * @package SYBEHA\Clubmaster\Forms\Gridfield
  */
 class GridFieldBulkActionInsuranceMemberHandler extends Handler
 {

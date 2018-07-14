@@ -32,6 +32,7 @@ en:
 
   ClubMemberPending:
     SINGULARNAME: "Member request"
+    PLURALNAME: "Member request"
 
   ClubMemberType:
     SINGULARNAME: "Clubmember type"

@@ -1,19 +1,27 @@
 <?php
 
-/**
- * Imports clubmember records, and checks/updates duplicates based on
- * FirstName + LastName + Birthday.
- * To reset index on table use ALTER TABLE clubmember AUTO_INCREMENT = 1
- * 
- * @package clubmaster
- * @subpackage loader
- */
+namespace SYBEHA\Clubmaster\Loader;
+
+use SilverStripe\Core\Environment;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\View\ViewableData;
 
 use SilverStripe\Dev\CsvBulkLoader;
+
+use SYBEHA\Clubmaster\Models\ClubMember;
+use SYBEHA\Clubmaster\Models\ClubMemberType;
+
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Imports clubmember records, and checks/updates duplicates based on
+ * FirstName + LastName + Birthday.
+ * To reset index on table use ALTER TABLE clubmember AUTO_INCREMENT = 1
+ * Class ClubMemberCsvBulkLoader
+ * @package SYBEHA\Clubmaster\Loader
+ */
 class ClubMemberCsvBulkLoader extends CsvBulkLoader
 {   
     /**
@@ -29,9 +37,11 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
      */
     protected function processRecord($record, $columnMap, &$results, $preview = false)
     {		
-		/*foreach ($record as $key => $value) {
-			Injector::inst()->get(LoggerInterface::class)->debug('ClubMemberCsvBulkLoader - processRecord()' . ' key='.$key . ' value=' . $value);
-        }*/
+
+        //foreach ($record as $key => $value) {
+        //	Injector::inst()->get(LoggerInterface::class)
+        //      ->debug('ClubMemberCsvBulkLoader - processRecord()' . ' key='.$key . ' value=' . $value);
+        //}
 		
         // Skip if required data is not present
         if (!$this->hasRequiredData($record)) {
@@ -75,7 +85,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
             $record['EqualAddress'] = '0';
         }
 		
-		// TODO: Compare fields of existing members with given fields to evaluate differences  
+		// @todo: Compare fields of existing members with given fields to evaluate differences  
 		// $existingObj = $this->findExistingObject($record, $columnMap);
 		
 		return parent::processRecord($record, $columnMap, $results, $preview = false);
@@ -84,6 +94,10 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
 
     /*
      * Using a callback function to  check for unique record
+     * Is used by findExistingObject function in the 
+     * CsvBulkLoader class @see CsvBulkLoader::findExistingObject(). 
+     * It is iterated over to find any object that has a column with the specified value.
+     * It can also be passed a callback like below "checkFirstLastBirthday"
      */
     public $duplicateChecks = [
         'FirstName' => [
@@ -156,7 +170,12 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
         'MandateReference' => 'MandateReference'
     ];
 
-    /* Fetch relations with a callback */
+    /** Fetch relations with a callback
+     * $relationCallbacks on the other hand is used by the main processRecord function. 
+     * The callback works in the same way as the $duplicateCheck callback, 
+     * it needs to either exist on an instance of the class specified on the proeprty objectClass or on the CsvBulkLoader. 
+     * These callbacks can return an object that will be related back to a specific object record (new or existing) as a has_one.
+     */
     public $relationCallbacks = [
         'Type.TypeName' => [
             'relationname' => 'Type',
@@ -176,7 +195,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
 
     /**
      * Generate the information for show spec link
-     * @return [type] [description]
+     * @return array
      */
     public function getImportSpec()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\clubmaster\forms\gridfield;
+namespace SYBEHA\Clubmaster\Forms\Gridfield;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -11,8 +11,8 @@ use Exception;
 
 /**
  * Bulk action handler for activating records.
- *
- * @author Lars Hasselbach
+ * Class GridFieldBulkActionActivateMemberHandler
+ * @package SYBEHA\Clubmaster\Forms\Gridfield;
  */
 class GridFieldBulkActionActivateMemberHandler extends Handler
 {

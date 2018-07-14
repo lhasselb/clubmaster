@@ -1,15 +1,16 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Forms\Fields;
+
+use SilverStripe\Forms\TextField;
+
 /**
  * Text input field with validation for numeric (zip) values.
  * Supports validating the numeric value.
  *
- * @package clubmaster
- * @subpackage forms
+ * Class ZipField
+ * @package SYBEHA\Clubmaster\Forms\Fields
  */
-
-use SilverStripe\Forms\TextField;
-
 class ZipField extends TextField
 {
 

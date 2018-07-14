@@ -1,15 +1,16 @@
 <?php
 
-/**
- * Text input field with validation for numeric values. Supports validating
- * the numeric value.
- *
- * @package clubmaster
- * @subpackage forms/fields
- */
+namespace SYBEHA\Clubmaster\Forms\Fields;
 
 use SilverStripe\Forms\TextField;
 
+/**
+ * Text input field with validation for numeric values. Supports validating
+ * the numeric value.
+ * 
+ * Class EUNameTextField
+ * @package SYBEHA\Clubmaster\Forms\Fields
+ */
 class EUNameTextField extends TextField
 {
 

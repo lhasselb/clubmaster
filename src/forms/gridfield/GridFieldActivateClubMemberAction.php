@@ -1,5 +1,7 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Forms\Gridfield;
+
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
 use SilverStripe\Forms\GridField\GridField_FormAction;
@@ -7,8 +9,8 @@ use SilverStripe\Control\Controller;
 
 /**
  * Gridfield action handler for activating/deactivating records.
- *
- * @author Lars Hasselbach
+ * Class GridFieldActivateClubmemberAction
+ * @package SYBEHA\Clubmaster\Forms\Gridfield;
  */
 class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider
 {

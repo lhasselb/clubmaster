@@ -1,15 +1,16 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Forms\Fields;
+
+use SilverStripe\Forms\TextField;
+
 /**
  * Text input field with validation for numeric (telephon) values.
  * Supports validating the numeric value.
  *
- * @package clubmaster
- * @subpackage forms/fields
+ * Class TelephoneNumberField
+ * @package SYBEHA\Clubmaster\Forms\Fields;
  */
-
-use SilverStripe\Forms\TextField;
-
 class TelephoneNumberField extends TextField
 {
 

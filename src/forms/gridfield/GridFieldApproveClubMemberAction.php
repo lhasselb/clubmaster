@@ -11,8 +11,8 @@ use SilverStripe\SiteConfig\SiteConfig;
 
 /**
  * Gridfield action handler for approving records.
- *
- * @author Lars Hasselbach
+ * Class GridFieldApproveClubMemberAction
+ * @package SYBEHA\Clubmaster\Forms\Gridfield;
  */
 class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider
 {

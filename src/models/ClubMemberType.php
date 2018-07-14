@@ -1,14 +1,16 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Models;
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 
+use SYBEHA\Clubmaster\Models\ClubMember;
+
 /**
- * ClubMemberType object
- *
- * @package clubmaster
- * @subpackage models
+ * Class ClubMemberType
+ * @package SYBEHA\Clubmaster\Models
  */
 class ClubMemberType extends DataObject
 {
@@ -19,19 +21,20 @@ class ClubMemberType extends DataObject
      * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
      */
     private static $table_name = 'ClubMemberType';
-    private static $db = array(
+
+    private static $db = [
         'TypeName' => 'Varchar(255)'
-    );
+    ];
 
-    private static $has_many = array(
-        'ClubMembers' => 'ClubMember'
-    );
+    private static $has_many = [
+        'ClubMembers' => ClubMember::class
+    ];
 
-    private static $summary_fields = array(
+    private static $summary_fields = [
         'TypeName'
-    );
+    ];
 
-    private static $searchable_fields = array();
+    private static $searchable_fields = [];
 
     function fieldLabels($includerelations = true)
     {

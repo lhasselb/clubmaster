@@ -4,7 +4,7 @@ Name: clubmaster
 # Extend LeftAndMain (Hide Help)
 SilverStripe\Admin\LeftAndMain:
   extensions:
-    - SYBEHA\Clubmaster\Extensions\CustomLeftAndMain
+    - SYBEHA\Clubmaster\Extensions\ClubAdminLeftAndMain
 # Add extension SiteConfig: add folder to store files of type "antraege"
 Silverstripe\SiteConfig\SiteConfig:
   extensions:
@@ -19,7 +19,7 @@ SilverStripe\Assets\File:
 SYBEHA\Clubmaster\Admins\ClubAdmin:
   items_per_page: 25
   extensions:
-    - ClubAdminImport
+    - SYBEHA\Clubmaster\Extensions\ClubAdminImport
 
 # Betterbuttons (unclecheese/silverstripe-gridfield-betterbuttons)
 ClubMemberPending:

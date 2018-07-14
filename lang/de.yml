@@ -32,10 +32,11 @@ de:
 
   ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"
+    PLURALNAME: "Mitgliedsantrag"
 
   ClubMemberType:
-    SINGULARNAME: "Antragtyp"
-    PLURALNAME: "Antragtypen"
+    SINGULARNAME: "Antragstyp"
+    PLURALNAME: "Antragstypen"
     DESCRIPTION: "Verwalte Typen"
     TYPENAME: "Typname"
     CLUBMEMBERS: "Mitglieder"

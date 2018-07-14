@@ -1,5 +1,7 @@
 <?php
 
+namespace SYBEHA\Clubmaster\Models;
+
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
@@ -15,17 +17,24 @@ use SilverStripe\Forms\EMailField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\NumericField;
+/* Use global namespace for PHP DateTime */
+use \DateTime;
 /* See  https://github.com/dynamic/silverstripe-country-dropdown-field */
 use Dynamic\CountryDropdownField\Fields\CountryDropdownField;
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
 
+use SYBEHA\Clubmaster\Models\ClubMemberType;
+use SYBEHA\Clubmaster\Forms\Fields\EUNameTextField;
+use SYBEHA\Clubmaster\Forms\Fields\ZipField;
+use SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField;
+use SYBEHA\Clubmaster\Forms\Fields\IbanField;
+use SYBEHA\Clubmaster\Forms\Fields\BicField;
+
 /**
- * ClubMember object
- *
- * @package    clubmaster
- * @subpackage models
+ * Class ClubMember
+ * @package SYBEHA\Clubmaster\Models
  */
 class ClubMember extends DataObject
 {
@@ -77,7 +86,7 @@ class ClubMember extends DataObject
 
     /* Relation to ClubMemberType */
     private static $has_one = [
-        'Type' => 'ClubMemberType'
+        'Type' => ClubMemberType::class
     ];
 
     /* Defaults for object instance */
@@ -214,7 +223,7 @@ class ClubMember extends DataObject
             DropdownField::create(
                 'Salutation',
                 _t('ClubMember.SALUTATION', 'Salutation'),
-                singleton('ClubMember')->dbObject('Salutation')->enumValues()
+                singleton(ClubMember::class)->dbObject('Salutation')->enumValues()
             )
         );
         $fields->addFieldToTab(
@@ -384,7 +393,8 @@ class ClubMember extends DataObject
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'), singleton('ClubMember')->dbObject('Sex')->enumValues())->setReadonly(true)//->performReadonlyTransformation()
+            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'), 
+                singleton(ClubMember::class)->dbObject('Sex')->enumValues())->setReadonly(true)//->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
