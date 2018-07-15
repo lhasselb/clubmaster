@@ -106,8 +106,7 @@ class ClubMember extends DataObject
     }
 
     /**
-     * Fields to be displayed in Table head
-     *
+     * Fields to be displayed in (GridField) table head
      * @var array
      */
     private static $summary_fields = [
@@ -123,8 +122,8 @@ class ClubMember extends DataObject
     ];
 
     /**
-     * Fields Searchable within top Filter
-     *
+     * Fields Searchable within top Filter 
+     * empty equals all 
      * @var array
      */
     private static $searchable_fields = [

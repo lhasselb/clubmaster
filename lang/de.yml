@@ -1,5 +1,5 @@
 de:
-  ClubAdmin:
+  SYBEHA\Clubmaster\Admins\ClubAdmin:
     MENUTITLE: "Mitgliederverwaltung"
     #Filter
     SELECTONE: "Bitte wählen"
@@ -30,20 +30,22 @@ de:
     ADDMANDATE: "Mandatsreferenz automatisch generieren"
     SENDAPPROVEMAIL: "Sende eine E-Mail nach der Zustimmung zum Antrag"
 
-  ClubMemberPending:
+  SYBEHA\Clubmaster\Models\ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"
     PLURALNAME: "Mitgliedsantrag"
 
-  ClubMemberType:
+  SYBEHA\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Antragstyp"
     PLURALNAME: "Antragstypen"
+  ClubMemberType:
     DESCRIPTION: "Verwalte Typen"
     TYPENAME: "Typname"
     CLUBMEMBERS: "Mitglieder"
 
-  ClubMember:
+  SYBEHA\Clubmaster\Models\ClubMember:
     SINGULARNAME: "Mitglied"
     PLURALNAME: "Mitglieder"
+  ClubMember:
     DESCRIPTION: "Verwalte Mitglieder"
     MAINTITLE: "Stammdaten"
     BANKINGACCOUNT: "Bankverbindung"

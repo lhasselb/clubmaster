@@ -72,7 +72,7 @@ use SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction;
 //use SYBEHA\Clubmaster\Forms\Gridfield\ 
 
 use SYBEHA\Clubmaster\Loader\ClubMemberCsvBulkLoader;
-
+use SilverStripe\i18n\i18nEntityProvider;
 // TODO: Check for later usage GridFieldAddExistingSearchButton
 // use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
@@ -99,12 +99,11 @@ class ClubAdmin extends ModelAdmin
     // Show importer for ClubMember only
     public $showImportForm = [ClubMember::class];
 
-    //private static $url_rule = '/$Action';
+    // Declare allowed actions
     private static $allowed_actions = ['approvemember', 'activatemember', 'deactivatemember'];
 
     /**
-     *
-     * @config
+     * @config set a default for items_per_page
      */
     private static $items_per_page = '25';
 
@@ -118,53 +117,53 @@ class ClubAdmin extends ModelAdmin
         if ($this->modelClass === ClubMember::class) {
             // Postleitzahlen
             $zipFieldGroup = FieldGroup::create(
-                HeaderField::create('TitleHeader', _t('ClubAdmin.ZIPSEARCH', 'Zip'), 4),
-                new ZipField("q[StartPlz]", _t('ClubAdmin.ZIPSTART', 'zipStart')),
-                new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND', 'zipEnd'))
+                HeaderField::create('TitleHeader', _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPSEARCH', 'Zip'), 4),
+                new ZipField("q[StartPlz]", _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPSTART', 'zipStart')),
+                new ZipField("q[EndPlz]", _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPEND', 'zipEnd'))
             );
             // Alter
             $ageRangeDropDownField = DropdownField::create(
                 'q[AgeRange]',
                 _t(
-                    'ClubAdmin.AGERANGE',
+                    'SYBEHA\Clubmaster\Admins\ClubAdmin.AGERANGE',
                     'AgeRange'
                 ),
                 array(
-                    'U16' => _t('ClubAdmin.LESSTHAN16', 'LessThan 16'),
-                    'U26' => _t('ClubAdmin.LESSTHAN26', 'LessThan 26'),
-                    'U60' => _t('ClubAdmin.LESSTHAN60', 'LessThan 60'),
+                    'U16' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.LESSTHAN16', 'LessThan 16'),
+                    'U26' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.LESSTHAN26', 'LessThan 26'),
+                    'U60' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.LESSTHAN60', 'LessThan 60'),
                 )
-            )->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
+            )->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
             // Active / Inactive
             $showInactiveDropDownField = DropdownField::create(
                 'q[State]',
                 _t(
-                    'ClubAdmin.STATE',
+                    'SYBEHA\Clubmaster\Admins\ClubAdmin.STATE',
                     'Member state'
                 ),
                 array(
-                    'A' => _t('ClubAdmin.SHOWACTIVE', 'Show active'),
-                    'I' => _t('ClubAdmin.SHOWINACTIVE', 'Show inactive')
-                    //'AI' => _t('ClubAdmin.SHOWALL','Show all')
+                    'A' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWACTIVE', 'Show active'),
+                    'I' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWINACTIVE', 'Show inactive')
+                    //'AI' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWALL','Show all')
                 )
-            )->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
+            )->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
             // Versicherung
             $insuranceDropDownField = DropdownField::create(
                 'q[Insurance]',
                 _t(
-                    'ClubAdmin.INSURANCE',
+                    'SYBEHA\Clubmaster\Admins\ClubAdmin.INSURANCE',
                     'Insurance'
                 ),
                 array(
-                    'UV' => _t('ClubAdmin.SHOWNOINSURANCE', 'Non insured'),
-                    'V' => _t('ClubAdmin.SHOWINSURANCE', 'Insured')
+                    'UV' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWNOINSURANCE', 'Non insured'),
+                    'V' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWINSURANCE', 'Insured')
                 )
-            )->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
+            )->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
             // Type
             //$typeList = ClubMemberType::get()->map()->toArray();
             $typeDropDownField = DropdownField::create('q[Type]', _t('ClubMember.TYPE', 'Type'))
                 ->setSource(ClubMemberType::get()->map()->toArray())
-                ->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
+                ->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
 
             $context->getFields()->push($ageRangeDropDownField);
             $context->getFields()->push($insuranceDropDownField);
@@ -514,10 +513,11 @@ class ClubAdmin extends ModelAdmin
                 //Injector::inst()->get(LoggerInterface::class)
                 //->debug('ClubAdmin - Init() found file title = ' . $file->Title .
                 //'(' . $file->Filename . ') extension = ' . $extension);
+                
                 // Skip all files except those with extension antrag
                 if (!$extension || $extension !== 'antrag') {
-                    Injector::inst()->get(LoggerInterface::class)
-                    ->debug('ClubAdmin - Init() file with wrong extension = ' . $extension . ' title = ' . $file->Name);
+                    //Injector::inst()->get(LoggerInterface::class)
+                    //->debug('ClubAdmin - Init() file with wrong extension = ' . $extension . ' title = ' . $file->Name);
                     continue;
                 }
 
@@ -527,9 +527,9 @@ class ClubAdmin extends ModelAdmin
                     // Find an existing member created with current file
                     $existingClubMember = ClubMember::get()->find('SerializedFileName', $file->Name);
                     if ($existingClubMember) {
-                        Injector::inst()->get(LoggerInterface::class)
-                        ->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title .
-                        ' (' . $existingClubMember->ID .') for file = ' . $file->Name);
+                        //Injector::inst()->get(LoggerInterface::class)
+                        //->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title .
+                        //' (' . $existingClubMember->ID .') for file = ' . $file->Name);
                     }
                 }
                 // No member found
