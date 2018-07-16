@@ -5,6 +5,10 @@ namespace Sybeha\clubmaster;
 use Page;
 use PageController;
 
+use SilverStripe\Assets\Folder;
+/* Configuration */
+use SilverStripe\Core\Config\Config;
+
 /**
  * Enroll page template
  *
@@ -29,10 +33,10 @@ class EnrollPageTemplate extends Page
     private static $db = array();
 
     // Store relation to folder(FolderID)
-    private static $has_one = array(
+    private static $has_one = [
         // Store selected folder
-        'Folder' => 'Folder'
-    );
+        'Folder' => Folder::class
+    ];
 
     /**
      * @config
