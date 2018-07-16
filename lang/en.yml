@@ -1,5 +1,5 @@
 en:
-  ClubAdmin:
+  SYBEHA\Clubmaster\Admins\ClubAdmin\ClubAdmin:
     MENUTITLE: "Clubmanager"
     #Filter
     SELECTONE: "Select one"
@@ -30,20 +30,22 @@ en:
     ADDMANDATE: "Automatic addition of mandate reference"
     SENDAPPROVEMAIL: "Send E-Mail  after approval"
 
-  ClubMemberPending:
+  SYBEHA\Clubmaster\Models\ClubMemberPending:
     SINGULARNAME: "Member request"
     PLURALNAME: "Member request"
 
-  ClubMemberType:
+  SYBEHA\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Clubmember type"
     PLURALNAME: "Clubmember type"
+  ClubMemberType:  
     DESCRIPTION: "Manage your types"
     TYPENAME: "Type name"
     CLUBMEMBERS: "Club members"
 
-  ClubMember:
+  SYBEHA\Clubmaster\Models\ClubMember:
     SINGULARNAME: "Club member"
     PLURALNAME: "Club members"
+  ClubMember:
     DESCRIPTION: "Manage your member"
     MAINTITLE: "Main"
     BANKINGACCOUNT: "Account data"
@@ -101,7 +103,7 @@ en:
     ACTIVATEMEMBERDONE: "Activate Member Action Done."
     DEACTIVATEMEMBERDONE: "De-Activate Member Action Done."
 
-  GridFieldApproveClubMemberAction:
+  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction:
     APPROVEMEMBER: "Approve member"
     APPROVEMEMBERDONE: "Approve Member Action Done."
 

@@ -17,7 +17,6 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
 
     public function augmentColumns($gridField, &$columns)
     {
-
         if (!in_array('Actions', $columns)) {
             $columns[] = 'Actions';
         }
@@ -25,19 +24,19 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
 
     public function getColumnAttributes($gridField, $record, $columnName)
     {
-        return array('class' => 'col-buttons');
+        return ['class' => 'grid-field__col-compact'];
     }
 
     public function getColumnMetadata($gridField, $columnName)
     {
         if ($columnName == 'Actions') {
-            return array('title' => '');
+            return ['title' => ''];
         }
     }
 
     public function getColumnsHandled($gridField)
     {
-        return array('Actions');
+        return ['Actions'];
     }
 
     /**
@@ -50,40 +49,40 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
     public function getColumnContent($gridField, $record, $columnName)
     {
 
-        if (!$record->canEdit() || $record != "ClubMember") {
+        if (!$record->canEdit() || $record != 'SYBEHA\Clubmaster\Models\ClubMember') {
             return;
         }
         if (!$record->isActive()) {
             $field = GridField_FormAction::create(
                 $gridField,
                 'ActivateMember' . $record->ID,
-                false,
-                "activatemember",
-                array('RecordID' => $record->ID)
+                _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.ACTIVATEMEMBER','Activate member'),
+                'activatemember',
+                ['RecordID' => $record->ID]
             )
                 ->addExtraClass('gridfield-button-activate')
-                ->setAttribute('title', _t('GridFieldActivateClubMemberAction.ACTIVATEMEMBER', "ActivateMember"))
+                ->setAttribute('title', _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.ACTIVATEMEMBER', "ActivateMember"))
                 ->setAttribute('data-icon', 'decline')
-                ->setDescription(_t('GridFieldActivateClubMemberAction.ACTIVATEMEMBER', "ActivateMember"));
+                ->setDescription(_t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.ACTIVATEMEMBER', "ActivateMember"));
         } elseif ($record->isActive()) {
             $field = GridField_FormAction::create(
                 $gridField,
                 'DeActivateMember' . $record->ID,
-                false,
-                "deactivatemember",
-                array('RecordID' => $record->ID)
+                _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DEACTIVATEMEMBER','Deactivate member'),
+                'deactivatemember',
+                ['RecordID' => $record->ID]
             )
                 ->addExtraClass('gridfield-button-deactivate')
-                ->setAttribute('title', _t('GridFieldActivateClubMemberAction.DEACTIVATEMEMBER', "DeActivateMember"))
+                ->setAttribute('title', _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DEACTIVATEMEMBER', "DeActivateMember"))
                 ->setAttribute('data-icon', 'accept')
-                ->setDescription(_t('GridFieldActivateClubMemberAction.DEACTIVATEMEMBER', "DeActivateMember"));
+                ->setDescription(_t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DEACTIVATEMEMBER', "DeActivateMember"));
         }
         return $field->Field();
     }
 
     public function getActions($gridField)
     {
-        return array('activatemember', 'deactivatemember');
+        return ['activatemember', 'deactivatemember'];
     }
 
     public function handleAction($gridField, $actionName, $arguments, $data)
@@ -101,7 +100,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
             // output a success message to the user
             Controller::curr()->getResponse()->setStatusCode(
                 200,
-                _t("GridFieldActivateClubMemberAction.ACTIVATEMEMBERDONE", 'ActivateMember Done.')
+                _t("SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.ACTIVATEMEMBERDONE", 'ActivateMember Done.')
             );
         } elseif ($actionName == 'deactivatemember') {
             // perform your action here
@@ -115,7 +114,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
             // output a success message to the user
             Controller::curr()->getResponse()->setStatusCode(
                 200,
-                _t("GridFieldActivateClubMemberAction.DEACTIVATEMEMBERDONE", 'ActivateMember Done.')
+                _t("SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DEACTIVATEMEMBERDONE", 'ActivateMember Done.')
             );
         }
     }

@@ -70,7 +70,6 @@ use SYBEHA\Clubmaster\Forms\Fields\ZipField;
 use SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction;
 use SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction;
 //use SYBEHA\Clubmaster\Forms\Gridfield\ 
-
 use SYBEHA\Clubmaster\Loader\ClubMemberCsvBulkLoader;
 use SilverStripe\i18n\i18nEntityProvider;
 // TODO: Check for later usage GridFieldAddExistingSearchButton
@@ -326,7 +325,8 @@ class ClubAdmin extends ModelAdmin
             }
 
             // Add ACTION activate/deactivateMember
-            $config->addComponent(new GridFieldActivateClubMemberAction());
+            $config->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction());
+            
             // Add BULK action activateMember
             $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
                 'SYBEHA\\clubmaster\\forms\\gridfield\\GridFieldBulkActionActivateMemberHandler'
@@ -391,7 +391,7 @@ class ClubAdmin extends ModelAdmin
             $config->removeComponentsByType(GridFieldFilterHeader::class);
             $config->removeComponentsByType(GridFieldDeleteAction::class);
 
-            $config->addComponent(new GridFieldApproveClubMemberAction());
+            $config->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction());
 
             // Add GridFieldBulkManager
             $config->addComponent(new \Colymba\BulkManager\BulkManager());
@@ -466,12 +466,6 @@ class ClubAdmin extends ModelAdmin
         // Disabled after moving account data to its own tab
         //Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
         Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
-
-        /*
-        $importers = $this->getModelImporters();
-        foreach ( $importers as $key => $value ) {
-            Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - init() - getModelImporters() key =' . $key . ' value = ' . $value);
-        }*/
         
         Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() locale = ' . i18n::get_locale());
         //Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass) );
@@ -506,9 +500,9 @@ class ClubAdmin extends ModelAdmin
                 // In order to ensure that assets are made public you should check the following:
                 // $file->isPublished(); $file->exists();canView(); CanViewType; */
                 //Injector::inst()->get(LoggerInterface::class)
-                //->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' .
-                // $file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' .
-                // $file->canView() . ' and can view type ? ' . $file->CanViewType);
+                    //->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' .
+                    //$file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' .
+                    //$file->canView() . ' and can view type ? ' . $file->CanViewType);
                 $extension = $file->getExtension();
                 //Injector::inst()->get(LoggerInterface::class)
                 //->debug('ClubAdmin - Init() found file title = ' . $file->Title .
@@ -537,31 +531,28 @@ class ClubAdmin extends ModelAdmin
                     Injector::inst()->get(LoggerInterface::class)
                     ->debug('ClubAdmin - Init() no matching member found for file title = ' . $file->Title
                     . ' ,name = ' . $file->Name . ' (' . $file->Filename . ') extension = ' . $extension);
-                    //$serialized = file_get_contents($file->getFullPath());
+                    
+                    // Create a new pending member
+                    $pendingMember = ClubMemberPending::create();
+                    Injector::inst()->get(LoggerInterface::class)
+                        ->debug('ClubAdmin - Init()  new ClubMemberPending created ' . get_class($pendingMember));
+
+                    // Create an alias for "old" non-namespaced serialized objects
+                    class_alias('SYBEHA\Clubmaster\Models\ClubMemberPending', 'ClubMemberPending');
                     $serialized = $file->getString();
                     $data = unserialize(base64_decode($serialized));
-                    // Create a new pending member
-                    $pendingMember = new ClubMemberPending();
+                    
                     Injector::inst()->get(LoggerInterface::class)
-                    ->debug('ClubAdmin - Init()  new ClubMemberPending created');
+                        ->debug('ClubAdmin - Init()  unserialize data class = ' . get_class($data));
 
+                    $pendingMember->fillWith($data);
                     $pendingMember->SerializedFileName = $file->Name;
-                    //Injector::inst()->get(LoggerInterface::class)
-                    //->debug('ClubAdmin - Init()  SerializedFileName = ' . $file->Name);
 
                     // Attention php DateTime needs to be ISO 8601 formatted date and time (Y-m-d H:i:s)
                     $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Name)
                         ->format('Y-m-d H:i:s');
-                    //Injector::inst()->get(LoggerInterface::class)
-                    //->debug('ClubAdmin - Init()  create date (FormClaimDate) from = '
-                    //. $pendingMember->FormClaimDate );
 
-                    $pendingMember->fillWith($data);
-                    //Injector::inst()->get(LoggerInterface::class)
-                    //->debug('ClubAdmin - Init()  Birthday = ' . $pendingMember->Birthday );
-                    //Injector::inst()->get(LoggerInterface::class)
-                    //->debug('ClubAdmin - Init()  Since = ' . $pendingMember->Since );
-
+                    // Store ClubMemberPending
                     $pendingMember->write();
                 }
             }

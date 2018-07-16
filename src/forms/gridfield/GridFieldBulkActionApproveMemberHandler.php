@@ -87,7 +87,7 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('ClubAdmin.GRIDFIELDBULKDROPDOWNAPPROVE', $this->getLabel());
+        return _t('SYBEHA\Clubmaster\Admins\ClubAdmin.GRIDFIELDBULKDROPDOWNAPPROVE', $this->getLabel());
     }
 
     /**

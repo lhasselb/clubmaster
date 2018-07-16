@@ -97,13 +97,13 @@ de:
   GridField:
     NewRecord: 'Neues %s'
 
-  GridFieldActivateClubMemberAction:
+  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction:
     ACTIVATEMEMBER: "Aktiviere Mitglied"
     DEACTIVATEMEMBER: "Deaktiviere Mitglied"
     ACTIVATEMEMBERDONE: "Mitglied aktiviert."
     DEACTIVATEMEMBERDONE: "Mitglied deaktiviert."
 
-  GridFieldApproveClubMemberAction:
+  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction:
     APPROVEMEMBER: "Antrag zustimmen"
     APPROVEMEMBERDONE: "Mitglied angelegt."
 

@@ -8,6 +8,10 @@ use SilverStripe\Forms\GridField\GridField_FormAction;
 use SilverStripe\Control\Controller;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\SiteConfig\SiteConfig;
+use SYBEHA\Clubmaster\Models\ClubMemberPending;
+/* Logging */
+use SilverStripe\Core\Injector\Injector;
+use Psr\Log\LoggerInterface;
 
 /**
  * Gridfield action handler for approving records.
@@ -26,19 +30,19 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
 
     public function getColumnAttributes($gridField, $record, $columnName)
     {
-        return array('class' => 'col-buttons');
+        return ['class' => 'grid-field__col-compact'];
     }
 
     public function getColumnMetadata($gridField, $columnName)
     {
         if ($columnName == 'Actions') {
-            return array('title' => '');
+            return ['title' => ''];
         }
     }
 
     public function getColumnsHandled($gridField)
     {
-        return array('Actions');
+        return ['Actions'];
     }
 
     /**
@@ -50,34 +54,36 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
      */
     public function getColumnContent($gridField, $record, $columnName)
     {
-        //SS_Log::log('record='.$record,SS_Log::WARN);
-        if (!$record->canEdit() || $record != 'ClubMemberPending') {
+        //Injector::inst()->get(LoggerInterface::class)
+            //->debug('GridFieldApproveClubMemberAction - getColumnContent() columnName = ' . $columnName 
+            //    . ' record = ' . $record);
+        
+        if (!$record->canEdit() || $record != 'SYBEHA\Clubmaster\Models\ClubMemberPending') {
             return;
         }
         if ($record->isPending()) {
             $field = GridField_FormAction::create(
                 $gridField,
                 'ApproveMember' . $record->ID,
-                false,
+                _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER','Approve member'),
                 'approvemember',
-                array('RecordID' => $record->ID)
+                ['RecordID' => $record->ID]
             )
                 ->addExtraClass('gridfield-button-activate')
-                ->setAttribute('title', _t('GridFieldApproveClubMemberAction.APPROVEMEMBER', 'ApproveMember'))
+                ->setAttribute('title', _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER', 'ApproveMember'))
                 ->setAttribute('data-icon', 'accept')
-                ->setDescription(_t('GridFieldApproveClubMemberAction.APPROVEMEMBER', 'ApproveMember'));
+                ->setDescription(_t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER', 'ApproveMember'));
         }
         return $field->Field();
     }
 
     public function getActions($gridField)
     {
-        return array('approvemember');
+        return ['approvemember'];
     }
 
     public function handleAction($gridField, $actionName, $arguments, $data)
     {
-
         //SS_Log::log('handleAction() called, action name ='.$actionName,SS_Log::WARN);
         if ($actionName == 'approvemember') {
             $clubMemberPending = ClubMemberPending::get()->byId($arguments['RecordID']);
@@ -107,7 +113,7 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             }
 
             // output a success message to the user
-            Controller::curr()->getResponse()->setStatusCode(200, _t('GridFieldApproveClubMemberAction.APPROVEMEMBERDONE', 'ApproveMember Done.'));
+            Controller::curr()->getResponse()->setStatusCode(200, _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBERDONE', 'ApproveMember Done.'));
         }
     }
 }

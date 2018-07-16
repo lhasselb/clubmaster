@@ -2,6 +2,7 @@
 
 namespace SYBEHA\Clubmaster\Models;
 
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Forms\RequiredFields;
@@ -52,8 +53,12 @@ class ClubMemberPending extends ClubMember
 
     private static $searchable_fields = [];
 
-
-    /* List all required fields */
+	/**
+	 * Add custom validation to the form
+	 * List all required fields
+	 * @access public
+	 * @return RequiredFields
+	 */
     public function getCMSValidator()
     {
         return new RequiredFields([
@@ -82,13 +87,36 @@ class ClubMemberPending extends ClubMember
         ]);
     }
 
+    /**
+     * Centerpiece of every data administration interface in Silverstripe,
+     * which returns a {@link FieldList} suitable for a {@link Form} object.
+     * If not overloaded, we're using {@link scaffoldFormFields()} to automatically
+     * generate this set. To customize, overload this method in a subclass
+     * or extended onto it by using {@link DataExtension->updateCMSFields()}.
+     *
+     * <code>
+     * class MyCustomClass extends DataObject {
+     *  static $db = array('CustomProperty'=>'Boolean');
+     *
+     *  function getCMSFields() {
+     *    $fields = parent::getCMSFields();
+     *    $fields->addFieldToTab('Root.Content',new CheckboxField('CustomProperty'));
+     *    return $fields;
+     *  }
+     * }
+     * </code>
+     *
+     * @see Good example of complex FormField building: SiteTree::getCMSFields()
+     *
+     * @return FieldList Returns a TabSet for usage within the CMS - don't use for frontend forms.
+     */
     function getCMSFields()
     {
         $fields = parent::getCMSFields();
 
         $fields->addFieldToTab(
             'Root.Main',
-            DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'), singleton('ClubMember')->dbObject('Salutation')->enumValues())
+            DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'), singleton(ClubMember::class)->dbObject('Salutation')->enumValues())
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -214,7 +242,7 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'), singleton('ClubMember')->dbObject('Sex')->enumValues())//->performReadonlyTransformation()
+            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'), singleton(ClubMember::class)->dbObject('Sex')->enumValues())//->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
@@ -239,7 +267,7 @@ class ClubMemberPending extends ClubMember
     }
 
 	/*
-	 * Used to prepare (prefill) a new Clubmember (DataObject) while reading the files
+	 * Used to prepare (prefill) a new ClubmemberPending while reading the files
 	 * created by the register form  within "antraege" 
 	 */
     public function fillWith($data)
@@ -248,7 +276,7 @@ class ClubMemberPending extends ClubMember
             return false;
         }
 		// Dump data
-		/*
+        /*
 		Injector::inst()->get(LoggerInterface::class)->debug('ClubMemberPending - fillWith()' . ' dump data start ======');
 		foreach ($data as $key => $value) {
 			foreach ($value->toMap() as $key => $value) {
@@ -256,34 +284,24 @@ class ClubMemberPending extends ClubMember
 			}
 		}
 		Injector::inst()->get(LoggerInterface::class)->debug('ClubMemberPending - fillWith()' . ' dump data end ======');
-		*/
+        */
         $this->Salutation = $data->Salutation;
         $this->FirstName = ucfirst($data->FirstName); // Uppercase first
         $this->LastName = ucfirst($data->LastName); // Uppercase first
-		// TODO: Assure correct dates in frontend form (validate), 
+        // TODO: Assure correct dates in frontend form (better validation!), 
 		//       e.g. a user managed to create a birthday date in the future - using year 2096
-		
         $year = new DateTime('now');
         $current_year = $year->format('Y');
         if(2147483647 == PHP_INT_MAX) {		
-			$birthday_year = strtok($data->Birthday,'-');
-			/*
-			if (strtok($birthday_year,"-") > $current_year ) {
-				$this->Birthday = strval( (int)$birthday_year - 100) . '-' .strtok("-") . '-' . strtok("-");	
-				Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - fillWith()' . ' reset birthday to ' . $this->Birthday);
-			} else {
-				$this->Birthday = $data->Birthday;
-			}
-			*/
+            $birthday_year = strtok($data->Birthday,'-');
 			if ( $data->Birthday > $current_year.'-12-31' ) {
 				$this->Birthday = strval( (int)$birthday_year - 100) . '-' .strtok("-") . '-' . strtok("-");	
 				Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - fillWith()' . ' replace birthday ' . $data->Birthday . ' to ' . $this->Birthday . ' current = ' . $current_year);
 			} 
 		} else {
-			Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - fillWith()' . ' regular birthday ' . $data->Birthday . ' current year = ' . $current_year);			
+			Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - fillWith()' . ' regular birthday given ' . $data->Birthday . ' current year = ' . $current_year);			
 			$this->Birthday = $data->Birthday;
 		}
-		
 		$this->Nationality = strtolower($data->Nationality); //lowercase all
         $this->Street = ucfirst($data->Street);
         $this->StreetNumber = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $data->StreetNumber);// Removes special chars.
@@ -319,14 +337,26 @@ class ClubMemberPending extends ClubMember
         }
     }
 
+    /**
+     * getter for Pending 
+     *
+     * @return boolean
+     */
     public function isPending()
     {
         return $this->Pending;
     }
 
+    /**
+     * Event handler called before deleting from the database.
+     * You can overload this to clean up or otherwise process data before delete this
+     * record.  Don't forget to call parent::onBeforeDelete(), though!
+     *
+     * @uses DataExtension->onBeforeDelete()
+     */
     public function onBeforeDelete()
     {
-
+        /* @todo: Should we delete the file ?
         $siteConfig = SiteConfig::current_site_config();
         $folder = $siteConfig->PendingFolder();
         $fileName = $this->SerializedFileName;
@@ -334,34 +364,48 @@ class ClubMemberPending extends ClubMember
             'Name' => $fileName,
             'ParentID' => $folder->ID
         ))->first();
-
         if ($file && $file->exists()) {
             $file->delete();
             $file->destroy();
-        }
-
+        } */
         return parent::onBeforeDelete();
     }
 
-    /* Only clubadmins are allowed */
+    /**
+     * Only clubadmins are allowed
+     * @param Member $member
+     * @return boolean
+     */
     public function canView($member = null)
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 
-    /* Only clubadmins are allowed */
+    /**
+     * Only clubadmins are allowed
+     * @param Member $member
+     * @return boolean
+     */
     public function canEdit($member = null)
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 
-    /* Only admins (Group Administrators) are allowed */
+    /**
+     * Only admins (Group Administrators) are allowed
+     * @param Member $member
+     * @return boolean
+     */
     public function canDelete($member = null)
     {
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
 
-    /* Only clubadmins are allowed */
+    /**
+     * Only admins (Group Administrators) are allowed
+     * @param Member $member
+     * @return boolean
+     */
     public function canCreate($member = null, $context = array())
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
