@@ -461,7 +461,9 @@ class ClubAdmin extends ModelAdmin
     }
 
     /**
-     * Initialize ClubAdmin
+     * Initialize ClubAdmin ini()
+     * Fired on every managed model class
+     * (by clicking on model tab)
      */
     public function init()
     {
@@ -471,10 +473,10 @@ class ClubAdmin extends ModelAdmin
         Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
 
         Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() locale = ' . i18n::get_locale());
-        //Injector::inst()->get(LoggerInterface::class)
-        //  ->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass) );
-        // Create Pending members from serialized form data
-        //if ($this->sanitiseClassName($this->modelClass) === 'ClubMemberPending') {
+        Injector::inst()->get(LoggerInterface::class)
+          ->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass));
+
+          // Create Pending members from serialized form data
         if ($this->sanitiseClassName($this->modelClass) === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {
             // Get the SiteConfig
             $siteConfig = SiteConfig::current_site_config();
@@ -489,7 +491,7 @@ class ClubAdmin extends ModelAdmin
                 $siteConfig->PendingFolderID = $folder->ID;
                 $siteConfig->write();
             }
-
+            // Check for serialized request forms
             $files = File::get()->filter("ParentID", $folder->ID);
             if (!$files->exists()) {
                 Injector::inst()->get(LoggerInterface::class)
@@ -535,26 +537,31 @@ class ClubAdmin extends ModelAdmin
                 if (!$existingClubMember) {
                     Injector::inst()->get(LoggerInterface::class)
                         ->debug(
-                            'ClubAdmin - Init() no matching member found for file title = ' . $file->Title
+                            'ClubAdmin - Init()  - No matching member found for file title = ' . $file->Title
                             . ' ,name = ' . $file->Name . ' (' . $file->Filename . ') extension = ' . $extension
                         );
 
-                    // Create a new pending member
-                    $pendingMember = ClubMemberPending::create();
-                    Injector::inst()->get(LoggerInterface::class)
-                        ->debug('ClubAdmin - Init()  new ClubMemberPending created ' . get_class($pendingMember));
-
                     // Create an alias for "old" non-namespaced serialized objects
-                    class_alias('SYBEHA\Clubmaster\Models\ClubMemberPending', 'ClubMemberPending');
+                    if (!class_exists('ClubMemberPending')) {
+                        class_alias('SYBEHA\Clubmaster\Models\ClubMemberPending', 'ClubMemberPending');
+                    }
+
+                    // Get the serialized object content
                     $serialized = $file->getString();
-                    $data = unserialize(base64_decode($serialized));
+
+                    // Create a new pending member
+                    $pendingMember = unserialize(base64_decode($serialized));
 
                     Injector::inst()->get(LoggerInterface::class)
-                        ->debug('ClubAdmin - Init()  unserialize data class = ' . get_class($data));
+                        ->info('ClubAdmin - Init() - New ' . get_class($pendingMember) . ' created ');
 
-                    $pendingMember->fillWith($data);
+
+                    // Created by webform
+                    $pendingMember->CreationType = 'Formular';
+                    // Required to be displayed
+                    $pendingMember->Pending = 1;
+
                     $pendingMember->SerializedFileName = $file->Name;
-
                     // Attention php DateTime needs to be ISO 8601 formatted date and time (Y-m-d H:i:s)
                     $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Name)
                         ->format('Y-m-d H:i:s');

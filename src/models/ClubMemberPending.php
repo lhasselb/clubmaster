@@ -329,34 +329,15 @@ class ClubMemberPending extends ClubMember
     }
 
     /*
-    * Used to prepare (prefill) a new ClubmemberPending while reading the files
-    * created by the register form  within "antraege"
+    * Used to "clean" a new ClubmemberPending
     */
-    public function fillWith($data)
+    private function cleanNewClubMember()
     {
-        if ($data === null) {
-            return false;
-        }
-        // Dump data
-        /*
-        Injector::inst()->get(LoggerInterface::class)
-            ->debug('ClubMemberPending - fillWith()' . ' dump data start ======');
-        foreach ($data as $key => $value) {
-        foreach ($value->toMap() as $key => $value) {
-        Injector::inst()->get(LoggerInterface::class)
-            ->debug('key = ' . $key . ' value = ' . $value);
-        }
-        }
-        Injector::inst()->get(LoggerInterface::class)
-            ->debug('ClubMemberPending - fillWith()' . ' dump data end ======');
-        */
-        $this->Salutation = $data->Salutation;
-        $this->FirstName = ucfirst($data->FirstName); // Uppercase first
-        $this->LastName = ucfirst($data->LastName); // Uppercase first
-        // TODO: Assure correct dates in frontend form (better validation!),
+        // @todo: Assure correct dates in frontend form (better validation!),
         //       e.g. a user managed to create a birthday date in the future - using year 2096
         $year = new DateTime('now');
         $current_year = $year->format('Y');
+        // Only required for 32bit version
         if (2147483647 == PHP_INT_MAX) {
             $birthday_year = strtok($data->Birthday, '-');
             if ($data->Birthday > $current_year.'-12-31') {
@@ -371,34 +352,44 @@ class ClubMemberPending extends ClubMember
                 ' current year = ' . $current_year);
             $this->Birthday = $data->Birthday;
         }
-        $this->Nationality = strtolower($data->Nationality); //lowercase all
-        $this->Street = ucfirst($data->Street);
-        $this->StreetNumber = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $data->StreetNumber);// Removes special chars.
-        $this->Zip = $data->Zip;
-        $this->City = ucfirst($data->City);
-        $this->Email = $data->Email;
-        $this->Mobil = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $data->Mobil);// Removes special chars.
-        $this->Phone = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $data->Phone);// Removes special chars.
-        // Attention: Use the date given on the form instead of now (date('d.m.Y');)
-        $this->Since = $data->Since;
-        $this->AccountHolderFirstName = ucfirst($data->AccountHolderFirstName); // Uppercase first
-        $this->AccountHolderLastName = ucfirst($data->AccountHolderLastName); // Uppercase first
-        $this->AccountHolderStreet = ucfirst($data->AccountHolderStreet);
-        $this->AccountHolderStreetNumber = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $data->AccountHolderStreetNumber);// Removes special chars.
-        $this->AccountHolderZip = $data->AccountHolderZip;
-        $this->AccountHolderCity = ucfirst($data->AccountHolderCity);
-        $this->Iban = $data->Iban;
-        $this->Bic = $data->Bic;
-        $this->AccountHolderZip = $data->AccountHolderZip;
-        // Special
-        $this->CreationType = 'Formular';
-        $this->Pending = 1;
+        // Lowercase required
+        $this->Nationality = strtolower($this->Nationality);
+        // Uppercase first
+        $this->FirstName = ucfirst($this->FirstName);
+        // Uppercase first
+        $this->LastName = ucfirst($this->LastName);
+        // Uppercase first
+        $this->Street = ucfirst($this->Street);
+        // Removes special chars.
+        $this->StreetNumber = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $this->StreetNumber);
+        // Uppercase first
+        $this->City = ucfirst($this->City);
+        // Removes special chars.
+        $this->Mobil = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $this->Mobil);
+        // Removes special chars.
+        $this->Phone = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $this->Phone);
+        // Uppercase first
+        $this->AccountHolderFirstName = ucfirst($this->AccountHolderFirstName);
+        // Uppercase first
+        $this->AccountHolderLastName = ucfirst($this->AccountHolderLastName);
+        // Uppercase first
+        $this->AccountHolderStreet = ucfirst($this->AccountHolderStreet);
+        // Removes special chars.
+        $this->AccountHolderStreetNumber = preg_replace(
+            '/[^A-Za-z0-9\- ]/',
+            ' ',
+            $this->AccountHolderStreetNumber
+        );
+        // Uppercase first
+        $this->AccountHolderCity = ucfirst($this->AccountHolderCity);
+
         // We need to replace the String TypeID from the form with a database entry for the appropriate TypeID
-        $type = ClubMemberType::get()->filter('TypeName', $typeString = $data->TypeID)->first();
+        $type = ClubMemberType::get()->filter('TypeName', $typeString = $this->TypeID)->first();
         // Initially there are no ClubMemberType's - TODO : Warning ?
         if ($type) {
             $this->TypeID = $type->ID;
         }
+
         if ($this->Zip == $this->AccountHolderZip && $this->City == $this->AccountHolderCity
             && $this->Street == $this->AccountHolderStreet && $this->StreetNumber == $this->AccountHolderStreetNumber
         ) {
@@ -416,6 +407,12 @@ class ClubMemberPending extends ClubMember
     public function isPending()
     {
         return $this->Pending;
+    }
+
+    public function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+        $this->cleanNewClubMember();
     }
 
     /**
