@@ -343,7 +343,7 @@ class ClubMemberPending extends ClubMember
             if ($data->Birthday > $current_year.'-12-31') {
                 $this->Birthday = strval((int)$birthday_year - 100) . '-' .strtok("-") . '-' . strtok("-");
                 Injector::inst()->get(LoggerInterface::class)
-                    ->info('ClubMemberPending - fillWith()' . ' replace birthday ' . $data->Birthday . ' to ' .
+                    ->info('ClubMemberPending - fillWith()' . ' replace birthday ' . $this->Birthday . ' to ' .
                     $this->Birthday . ' current = ' . $current_year);
             }
         } else {
