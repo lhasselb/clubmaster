@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Gridfield action handler for approving records.
  * Class GridFieldApproveClubMemberAction
+ *
  * @package SYBEHA\Clubmaster\Forms\Gridfield;
  */
 class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider
@@ -47,17 +48,17 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
 
     /**
      *
-     * @param GridField $gridField
-     * @param DataObject $record
-     * @param string $columnName
+     * @param  GridField  $gridField
+     * @param  DataObject $record
+     * @param  string     $columnName
      * @return string - the HTML for the column
      */
     public function getColumnContent($gridField, $record, $columnName)
     {
         //Injector::inst()->get(LoggerInterface::class)
-            //->debug('GridFieldApproveClubMemberAction - getColumnContent() columnName = ' . $columnName 
+            //->debug('GridFieldApproveClubMemberAction - getColumnContent() columnName = ' . $columnName
             //    . ' record = ' . $record);
-        
+
         if (!$record->canEdit() || $record != 'SYBEHA\Clubmaster\Models\ClubMemberPending') {
             return;
         }
@@ -65,14 +66,28 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             $field = GridField_FormAction::create(
                 $gridField,
                 'ApproveMember' . $record->ID,
-                _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER','Approve member'),
+                _t(
+                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER',
+                    'Approve member'
+                ),
                 'approvemember',
                 ['RecordID' => $record->ID]
             )
                 ->addExtraClass('gridfield-button-activate')
-                ->setAttribute('title', _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER', 'ApproveMember'))
+                ->setAttribute(
+                    'title',
+                    _t(
+                        'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER',
+                        'ApproveMember'
+                    )
+                )
                 ->setAttribute('data-icon', 'accept')
-                ->setDescription(_t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER', 'ApproveMember'));
+                ->setDescription(
+                    _t(
+                        'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER',
+                        'ApproveMember'
+                    )
+                );
         }
         return $field->Field();
     }
@@ -108,12 +123,20 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
                 //foreach ($data as $key => $value) {
                 //  SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
                 //}
-                $email->setTo($clubMemberPending->Email)->setSubject('Anmeldung bei Jim e.V.')->setTemplate('ApproveMail')->populateTemplate(new ArrayData($data));
+                $email->setTo($clubMemberPending->Email)
+                    ->setSubject('Anmeldung bei Jim e.V.')
+                    ->setTemplate('ApproveMail')->populateTemplate(new ArrayData($data));
                 $email->send();
             }
 
-            // output a success message to the user
-            Controller::curr()->getResponse()->setStatusCode(200, _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBERDONE', 'ApproveMember Done.'));
+            // Output a success message to the user
+            Controller::curr()->getResponse()->setStatusCode(
+                200,
+                _t(
+                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBERDONE',
+                    'ApproveMember Done.'
+                )
+            );
         }
     }
 }

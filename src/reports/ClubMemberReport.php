@@ -8,6 +8,7 @@ use SYBEHA\Clubmaster\Models\ClubMember;
 
 /**
  * Class ClubMemberReport
+ *
  * @package SYBEHA\Clubmaster\Reports
  */
 class ClubMemberReport extends Report
@@ -43,7 +44,8 @@ class ClubMemberReport extends Report
         'Sex' => 'Sex', // Calculated
         'ExportType' => 'ClubMemberType',
         'CreationType' => 'CreationType', // Distinguish Formular,Import,Händisch
-        'MandateReference' => 'MandateReference' // max 35 char. (A-z0-9) TODO: has_one? (Multiple members might share one)
+        'MandateReference' => 'MandateReference'
+        // max 35 char. (A-z0-9) @todo: has_one? (Multiple members might share one)
         );
 
         return $fields;
@@ -52,20 +54,20 @@ class ClubMemberReport extends Report
     public function getReportField()
     {
         $gridField = parent::getReportField();
-        
+
         //$gridField->setModelClass('');
         $gridConfig = $gridField->getConfig();
         //SS_Log::log('gridConfig='.$gridConfig,SS_Log::WARN);
         $gridConfig->getComponentByType(GridFieldPaginator::class)->setItemsPerPage(500);
-        
+
         //$gridConfig->removeComponentsByType('GridFieldPrintButton');
         //$gridConfig->removeComponentsByType('GridFieldExportButton');
-        
+
         /*$gridConfig->addComponents (
             new GridFieldPrintAllButton('buttons-after-left'),
             new GridFieldExportAllButton('buttons-after-left')
         );*/
-        
+
         return $gridField;
     }
 }

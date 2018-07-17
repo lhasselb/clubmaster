@@ -32,15 +32,19 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
 
 /**
  * Class ClubMemberPending
+ *
  * @package SYBEHA\Clubmaster\Models
  */
 class ClubMemberPending extends ClubMember
-{   
- 
+{
+
+
+
     private static $defaults = ['CreationType' => 'Formular', 'Active' => '0'];
 
     /**
      * Fields to be displayed in Table head (gridfield)
+     *
      * @var array
      */
     private static $summary_fields = [
@@ -53,15 +57,17 @@ class ClubMemberPending extends ClubMember
 
     private static $searchable_fields = [];
 
-	/**
-	 * Add custom validation to the form
-	 * List all required fields
-	 * @access public
-	 * @return RequiredFields
-	 */
+    /**
+     * Add custom validation to the form
+     * List all required fields
+     *
+     * @access public
+     * @return RequiredFields
+     */
     public function getCMSValidator()
     {
-        return new RequiredFields([
+        return new RequiredFields(
+            [
             'Salutation',
             'FirstName',
             'LastName',
@@ -84,7 +90,8 @@ class ClubMemberPending extends ClubMember
             'AccountHolderCity',
             'Iban',
             'Bic'
-        ]);
+            ]
+        );
     }
 
     /**
@@ -110,21 +117,30 @@ class ClubMemberPending extends ClubMember
      *
      * @return FieldList Returns a TabSet for usage within the CMS - don't use for frontend forms.
      */
-    function getCMSFields()
+    public function getCMSFields()
     {
         $fields = parent::getCMSFields();
 
         $fields->addFieldToTab(
             'Root.Main',
-            DropdownField::create('Salutation', _t('ClubMember.SALUTATION', 'Salutation'), singleton(ClubMember::class)->dbObject('Salutation')->enumValues())
+            DropdownField::create(
+                'Salutation',
+                _t(
+                    'ClubMember.SALUTATION',
+                    'Salutation'
+                ),
+                singleton(ClubMember::class)->dbObject('Salutation')->enumValues()
+            )
         );
         $fields->addFieldToTab(
             'Root.Main',
-            EUNameTextField::create('NameTitle', _t('ClubMember.NAMETITLE', 'Title'))->addExtraClass('text')->setDescription(_t('ClubMember.NAMETITLEHINT', 'e.g. Ph.D'))
+            EUNameTextField::create('NameTitle', _t('ClubMember.NAMETITLE', 'Title'))->addExtraClass('text')
+            ->setDescription(_t('ClubMember.NAMETITLEHINT', 'e.g. Ph.D'))
         );
         $fields->addFieldToTab(
             'Root.Main',
-            EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))->setAttribute('autofocus', 'autofocus')->addExtraClass('text')
+            EUNameTextField::create('FirstName', _t('ClubMember.FIRSTNAME', 'FirstName'))
+            ->setAttribute('autofocus', 'autofocus')->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -148,7 +164,8 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Main',
-            EUNameTextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber'))->addExtraClass('text')
+            EUNameTextField::create('StreetNumber', _t('ClubMember.STREETNUMBER', 'StreetNumber'))
+            ->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -168,15 +185,18 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Main',
-            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-'))
+            TelephoneNumberField::create('Mobil', _t('ClubMember.MOBIL', 'Mobil'))
+            ->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-'))
         );
         $fields->addFieldToTab(
             'Root.Main',
-            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-'))
+            TelephoneNumberField::create('Phone', _t('ClubMember.PHONE', 'Phone'))
+            ->addExtraClass('text')->setDescription(_t('ClubMember.PHONEHINT', '0-9+-'))
         );
         $fields->addFieldToTab(
             'Root.Main',
-            DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))->setSource(ClubMemberType::get()->map('ID', 'TypeName'))
+            DropdownField::create('TypeID', _t('ClubMember.TYPE', 'Type'))
+            ->setSource(ClubMemberType::get()->map('ID', 'TypeName'))
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -185,27 +205,51 @@ class ClubMemberPending extends ClubMember
         //Account tab
         $fields->addFieldToTab(
             'Root.Account',
-            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress'))->performReadonlyTransformation()
+            CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress'))
+            ->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderTitle', _t('ClubMember.ACCOUNTHOLDERTITLE', 'AccountHolderTitle'))->addExtraClass('text')
+            EUNameTextField::create('AccountHolderTitle', _t('ClubMember.ACCOUNTHOLDERTITLE', 'AccountHolderTitle'))
+            ->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderFirstName', _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName'))->addExtraClass('text')
+            EUNameTextField::create(
+                'AccountHolderFirstName',
+                _t(
+                    'ClubMember.ACCOUNTHOLDERFIRSTNAME',
+                    'AccountHolderFirstName'
+                )
+            )
+            ->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderLastName', _t('ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName'))->addExtraClass('text')
+            EUNameTextField::create(
+                'AccountHolderLastName',
+                _t(
+                    'ClubMember.ACCOUNTHOLDERLASTNAME',
+                    'AccountHolderLastName'
+                )
+            )
+            ->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet'))->addExtraClass('text')
+            EUNameTextField::create('AccountHolderStreet', _t('ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet'))
+            ->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderStreetNumber', _t('ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber'))->addExtraClass('text')
+            EUNameTextField::create(
+                'AccountHolderStreetNumber',
+                _t(
+                    'ClubMember.ACCOUNTHOLDERSTREETNUMBER',
+                    'AccountHolderStreetNumber'
+                )
+            )
+            ->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
@@ -213,19 +257,24 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Account',
-            EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'))->addExtraClass('text')
+            EUNameTextField::create('AccountHolderCity', _t('ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity'))
+            ->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
-            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')->setDescription(_t('ClubMember.IBANHINT', 'IBAN hint'))
+            IbanField::create('Iban', _t('ClubMember.IBAN', 'Iban'))->addExtraClass('text')
+            ->setDescription(_t('ClubMember.IBANHINT', 'IBAN hint'))
         );
         $fields->addFieldToTab(
             'Root.Account',
-            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')->setDescription(_t('ClubMember.BICHINT', 'BIC hint'))
+            BicField::create('Bic', _t('ClubMember.BIC', 'Bic'))->addExtraClass('text')
+            ->setDescription(_t('ClubMember.BICHINT', 'BIC hint'))
         );
         $fields->addFieldToTab(
             'Root.Account',
-            TextField::create('MandateReference', _t('ClubMember.MANDATEREFERENCE', 'Mandate'))->addExtraClass('text')->setDescription(_t('ClubMember.MANDATEREFERENCEHINT', 'Mandate hint'))->performReadonlyTransformation()
+            TextField::create('MandateReference', _t('ClubMember.MANDATEREFERENCE', 'Mandate'))
+            ->addExtraClass('text')->setDescription(_t('ClubMember.MANDATEREFERENCEHINT', 'Mandate hint'))
+            ->performReadonlyTransformation()
         );
         //Meta tab
         $fields->addFieldToTab(
@@ -234,7 +283,14 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            CheckboxSetField::create('Insurance', _t('ClubMember.INSURANCE', 'Insurance'), array('1' => 'BLSV gemeldet?'))
+            CheckboxSetField::create(
+                'Insurance',
+                _t(
+                    'ClubMember.INSURANCE',
+                    'Insurance'
+                ),
+                ['1' => 'BLSV gemeldet?']
+            )
         );
         $fields->addFieldToTab(
             'Root.Meta',
@@ -242,23 +298,29 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'), singleton(ClubMember::class)->dbObject('Sex')->enumValues())//->performReadonlyTransformation()
+            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'), singleton(ClubMember::class)
+            ->dbObject('Sex')->enumValues())
+            //->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))->performReadonlyTransformation()
+            TextField::create('SerializedFileName', _t('ClubMember.SERIALIZEDFILENAME', 'SerializedFileName'))
+            ->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))//->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation()
+            DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))
+            //->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))->performReadonlyTransformation()
+            TextField::create('CreationType', _t('ClubMember.CREATIONTYPE', 'CreationType'))
+            ->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation()
+            CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))
+            ->performReadonlyTransformation()
         );
         //Remove the fields obsolete for ClubMmeberPending
         $fields->removeByName(['Active', 'Insurance']);
@@ -266,43 +328,50 @@ class ClubMemberPending extends ClubMember
         return $fields;
     }
 
-	/*
-	 * Used to prepare (prefill) a new ClubmemberPending while reading the files
-	 * created by the register form  within "antraege" 
-	 */
+    /*
+    * Used to prepare (prefill) a new ClubmemberPending while reading the files
+    * created by the register form  within "antraege"
+    */
     public function fillWith($data)
     {
         if ($data === null) {
             return false;
         }
-		// Dump data
+        // Dump data
         /*
-		Injector::inst()->get(LoggerInterface::class)->debug('ClubMemberPending - fillWith()' . ' dump data start ======');
-		foreach ($data as $key => $value) {
-			foreach ($value->toMap() as $key => $value) {
-				Injector::inst()->get(LoggerInterface::class)->debug('key = ' . $key . ' value = ' . $value);    					
-			}
-		}
-		Injector::inst()->get(LoggerInterface::class)->debug('ClubMemberPending - fillWith()' . ' dump data end ======');
+        Injector::inst()->get(LoggerInterface::class)
+            ->debug('ClubMemberPending - fillWith()' . ' dump data start ======');
+        foreach ($data as $key => $value) {
+        foreach ($value->toMap() as $key => $value) {
+        Injector::inst()->get(LoggerInterface::class)
+            ->debug('key = ' . $key . ' value = ' . $value);
+        }
+        }
+        Injector::inst()->get(LoggerInterface::class)
+            ->debug('ClubMemberPending - fillWith()' . ' dump data end ======');
         */
         $this->Salutation = $data->Salutation;
         $this->FirstName = ucfirst($data->FirstName); // Uppercase first
         $this->LastName = ucfirst($data->LastName); // Uppercase first
-        // TODO: Assure correct dates in frontend form (better validation!), 
-		//       e.g. a user managed to create a birthday date in the future - using year 2096
+        // TODO: Assure correct dates in frontend form (better validation!),
+        //       e.g. a user managed to create a birthday date in the future - using year 2096
         $year = new DateTime('now');
         $current_year = $year->format('Y');
-        if(2147483647 == PHP_INT_MAX) {		
-            $birthday_year = strtok($data->Birthday,'-');
-			if ( $data->Birthday > $current_year.'-12-31' ) {
-				$this->Birthday = strval( (int)$birthday_year - 100) . '-' .strtok("-") . '-' . strtok("-");	
-				Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - fillWith()' . ' replace birthday ' . $data->Birthday . ' to ' . $this->Birthday . ' current = ' . $current_year);
-			} 
-		} else {
-			Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - fillWith()' . ' regular birthday given ' . $data->Birthday . ' current year = ' . $current_year);			
-			$this->Birthday = $data->Birthday;
-		}
-		$this->Nationality = strtolower($data->Nationality); //lowercase all
+        if (2147483647 == PHP_INT_MAX) {
+            $birthday_year = strtok($data->Birthday, '-');
+            if ($data->Birthday > $current_year.'-12-31') {
+                $this->Birthday = strval((int)$birthday_year - 100) . '-' .strtok("-") . '-' . strtok("-");
+                Injector::inst()->get(LoggerInterface::class)
+                    ->info('ClubMemberPending - fillWith()' . ' replace birthday ' . $data->Birthday . ' to ' .
+                    $this->Birthday . ' current = ' . $current_year);
+            }
+        } else {
+            Injector::inst()->get(LoggerInterface::class)
+                ->info('ClubMemberPending - fillWith()' . ' regular birthday given ' . $data->Birthday .
+                ' current year = ' . $current_year);
+            $this->Birthday = $data->Birthday;
+        }
+        $this->Nationality = strtolower($data->Nationality); //lowercase all
         $this->Street = ucfirst($data->Street);
         $this->StreetNumber = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $data->StreetNumber);// Removes special chars.
         $this->Zip = $data->Zip;
@@ -311,7 +380,7 @@ class ClubMemberPending extends ClubMember
         $this->Mobil = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $data->Mobil);// Removes special chars.
         $this->Phone = preg_replace('/[^A-Za-z0-9\- ]/', ' ', $data->Phone);// Removes special chars.
         // Attention: Use the date given on the form instead of now (date('d.m.Y');)
-        $this->Since = $data->Since;		
+        $this->Since = $data->Since;
         $this->AccountHolderFirstName = ucfirst($data->AccountHolderFirstName); // Uppercase first
         $this->AccountHolderLastName = ucfirst($data->AccountHolderLastName); // Uppercase first
         $this->AccountHolderStreet = ucfirst($data->AccountHolderStreet);
@@ -327,9 +396,11 @@ class ClubMemberPending extends ClubMember
         // We need to replace the String TypeID from the form with a database entry for the appropriate TypeID
         $type = ClubMemberType::get()->filter('TypeName', $typeString = $data->TypeID)->first();
         // Initially there are no ClubMemberType's - TODO : Warning ?
-		if ($type) $this->TypeID = $type->ID;
-        if ($this->Zip == $this->AccountHolderZip && $this->City == $this->AccountHolderCity &&
-            $this->Street == $this->AccountHolderStreet && $this->StreetNumber == $this->AccountHolderStreetNumber
+        if ($type) {
+            $this->TypeID = $type->ID;
+        }
+        if ($this->Zip == $this->AccountHolderZip && $this->City == $this->AccountHolderCity
+            && $this->Street == $this->AccountHolderStreet && $this->StreetNumber == $this->AccountHolderStreetNumber
         ) {
             $this->EqualAddress = 1;
         } else {
@@ -338,7 +409,7 @@ class ClubMemberPending extends ClubMember
     }
 
     /**
-     * getter for Pending 
+     * getter for Pending
      *
      * @return boolean
      */
@@ -373,7 +444,8 @@ class ClubMemberPending extends ClubMember
 
     /**
      * Only clubadmins are allowed
-     * @param Member $member
+     *
+     * @param  Member $member
      * @return boolean
      */
     public function canView($member = null)
@@ -383,7 +455,8 @@ class ClubMemberPending extends ClubMember
 
     /**
      * Only clubadmins are allowed
-     * @param Member $member
+     *
+     * @param  Member $member
      * @return boolean
      */
     public function canEdit($member = null)
@@ -393,7 +466,8 @@ class ClubMemberPending extends ClubMember
 
     /**
      * Only admins (Group Administrators) are allowed
-     * @param Member $member
+     *
+     * @param  Member $member
      * @return boolean
      */
     public function canDelete($member = null)
@@ -403,7 +477,8 @@ class ClubMemberPending extends ClubMember
 
     /**
      * Only admins (Group Administrators) are allowed
-     * @param Member $member
+     *
+     * @param  Member $member
      * @return boolean
      */
     public function canCreate($member = null, $context = array())

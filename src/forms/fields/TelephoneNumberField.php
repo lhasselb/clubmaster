@@ -9,6 +9,7 @@ use SilverStripe\Forms\TextField;
  * Supports validating the numeric value.
  *
  * Class TelephoneNumberField
+ *
  * @package SYBEHA\Clubmaster\Forms\Fields;
  */
 class TelephoneNumberField extends TextField

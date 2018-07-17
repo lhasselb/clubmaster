@@ -10,6 +10,7 @@ use SilverStripe\Forms\TextField;
  * https://de.wikipedia.org/wiki/ISO_9362
  *
  * Class BicField
+ *
  * @package SYBEHA\Clubmaster\Forms\Fields
  */
 class BicField extends TextField

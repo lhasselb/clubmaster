@@ -34,6 +34,7 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
 
 /**
  * Class ClubMember
+ *
  * @package SYBEHA\Clubmaster\Models
  */
 class ClubMember extends DataObject
@@ -107,6 +108,7 @@ class ClubMember extends DataObject
 
     /**
      * Fields to be displayed in (GridField) table head
+     *
      * @var array
      */
     private static $summary_fields = [
@@ -122,8 +124,9 @@ class ClubMember extends DataObject
     ];
 
     /**
-     * Fields Searchable within top Filter 
-     * empty equals all 
+     * Fields Searchable within top Filter
+     * empty equals all
+     *
      * @var array
      */
     private static $searchable_fields = [
@@ -392,8 +395,14 @@ class ClubMember extends DataObject
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            DropdownField::create('Sex', _t('ClubMember.SEX', 'Sex'), 
-                singleton(ClubMember::class)->dbObject('Sex')->enumValues())->setReadonly(true)//->performReadonlyTransformation()
+            DropdownField::create(
+                'Sex',
+                _t(
+                    'ClubMember.SEX',
+                    'Sex'
+                ),
+                singleton(ClubMember::class)->dbObject('Sex')->enumValues()
+            )->setReadonly(true)//->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
@@ -404,7 +413,9 @@ class ClubMember extends DataObject
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))->setDateFormat('dd.MM.yyyy')->performReadonlyTransformation()//->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation()
+            DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))
+            ->setDateFormat('dd.MM.yyyy')->performReadonlyTransformation()
+            //->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
@@ -414,7 +425,8 @@ class ClubMember extends DataObject
             )->performReadonlyTransformation()
         );
         //$fields->addFieldToTab('Root.Meta',
-        //    CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))->performReadonlyTransformation());
+        //  CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))
+        //      ->performReadonlyTransformation());
         //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
         $fields->removeByName('Pending');
         if ($this->CreationType !== 'Formular') {

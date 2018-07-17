@@ -1,9 +1,8 @@
 <?php
 
-namespace Sybeha\clubmaster;
+namespace Sybeha\Clubmaster\Pages;
 
 use Page;
-use PageController;
 
 class EnrollPageSuccess extends Page
 {
@@ -33,29 +32,27 @@ class EnrollPageSuccess extends Page
         return $labels;
     }
 
-    function getCMSFields()
+    public function getCMSFields()
     {
         $fields = parent::getCMSFields();
         $fields->removeFieldFromTab('Root.Main', 'Content');
         //$fields->addFieldToTab('Root.Main', HtmlEditorField::create('Content','Inhalt', $this->Content, 'cmsNoP'));
-        $fields->addFieldToTab('Root.Main', TextAreaField::create('Content', 'Danke-Meldung', $this->Content), 'Metadata');
+        $fields->addFieldToTab(
+            'Root.Main',
+            TextAreaField::create(
+                'Content',
+                'Danke-Meldung',
+                $this->Content
+            ),
+            'Metadata'
+        );
         return $fields;
     }
 
-    function FormData()
+    public function FormData()
     {
         if (Session::get('Data')) {
             return $list = new ArrayData(Session::get('Data'));
         }
     }
-}
-
-class EnrollPageSuccessController extends PageController
-{
-    private static $allowed_actions = array ();
-
-    public function init()
-    {
-        parent::init();
-    }//init()
 }

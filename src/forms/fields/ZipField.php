@@ -9,6 +9,7 @@ use SilverStripe\Forms\TextField;
  * Supports validating the numeric value.
  *
  * Class ZipField
+ *
  * @package SYBEHA\Clubmaster\Forms\Fields
  */
 class ZipField extends TextField

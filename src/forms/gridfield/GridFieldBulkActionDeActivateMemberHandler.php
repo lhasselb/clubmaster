@@ -12,6 +12,7 @@ use Exception;
 /**
  * Bulk action handler for deactivating records.
  * Class GridFieldBulkActionDeActivateMemberHandler
+ *
  * @package SYBEHA\Clubmaster\Forms\Gridfield
  */
 class GridFieldBulkActionDeActivateMemberHandler extends Handler
@@ -19,7 +20,7 @@ class GridFieldBulkActionDeActivateMemberHandler extends Handler
     /**
      * URL segment used to call this handler
      * If none given, @BulkManager will fallback to the Unqualified class name
-     * 
+     *
      * @var string
      */
     private static $url_segment = 'deactivatemember';
@@ -42,50 +43,50 @@ class GridFieldBulkActionDeActivateMemberHandler extends Handler
 
     /**
      * Front-end label for this handler's action
-     * 
+     *
      * @var string
      */
     protected $label = 'deactivateMember';
-    
+
     /**
-    * Front-end icon path for this handler's action.
-    * 
-    * @var string
-    */
+     * Front-end icon path for this handler's action.
+     *
+     * @var string
+     */
     protected $icon = '';
 
     /**
-    * Extra classes to add to the bulk action button for this handler
-    * Can also be used to set the button font-icon e.g. font-icon-trash
-    * 
-    * @var string
-    */
+     * Extra classes to add to the bulk action button for this handler
+     * Can also be used to set the button font-icon e.g. font-icon-trash
+     *
+     * @var string
+     */
     protected $buttonClasses = '';
 
     /**
-    * Whether this handler should be called via an XHR from the front-end
-    * 
-    * @var boolean
-    */
+     * Whether this handler should be called via an XHR from the front-end
+     *
+     * @var boolean
+     */
     protected $xhr = true;
 
     /**
-    * Set to true is this handler will destroy any data.
-    * A warning and confirmation will be shown on the front-end.
-    * 
-    * @var boolean
-    */
+     * Set to true is this handler will destroy any data.
+     * A warning and confirmation will be shown on the front-end.
+     *
+     * @var boolean
+     */
     protected $destructive = false;
     /**
-    * Return i18n localized front-end label
-    *
-    * @return array
-    */
+     * Return i18n localized front-end label
+     *
+     * @return array
+     */
     public function getI18nLabel()
     {
-    return _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE', $this->getLabel());
+        return _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE', $this->getLabel());
     }
-    
+
     /**
      * De-Activate the selected records passed from the activate bulk action.
      *
@@ -114,5 +115,5 @@ class GridFieldBulkActionDeActivateMemberHandler extends Handler
             $response->setMessage($ex->getMessage());
         }
         return $response;
-    }    
+    }
 }

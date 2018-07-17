@@ -12,6 +12,7 @@ use Exception;
 /**
  * Bulk action handler for activating records.
  * Class GridFieldBulkActionActivateMemberHandler
+ *
  * @package SYBEHA\Clubmaster\Forms\Gridfield;
  */
 class GridFieldBulkActionActivateMemberHandler extends Handler
@@ -19,7 +20,7 @@ class GridFieldBulkActionActivateMemberHandler extends Handler
     /**
      * URL segment used to call this handler
      * If none given, @BulkManager will fallback to the Unqualified class name
-     * 
+     *
      * @var string
      */
     private static $url_segment = 'activatemember';
@@ -42,37 +43,37 @@ class GridFieldBulkActionActivateMemberHandler extends Handler
 
     /**
      * Front-end label for this handler's action
-     * 
+     *
      * @var string
      */
-         protected $label = 'activateMember';
-    
+    protected $label = 'activateMember';
+
          /**
-     * Front-end icon path for this handler's action.
-     * 
-     * @var string
-     */
+          * Front-end icon path for this handler's action.
+          *
+          * @var string
+          */
     protected $icon = '';
-    
+
     /**
      * Extra classes to add to the bulk action button for this handler
      * Can also be used to set the button font-icon e.g. font-icon-trash
-     * 
+     *
      * @var string
      */
     protected $buttonClasses = '';
-    
+
     /**
      * Whether this handler should be called via an XHR from the front-end
-     * 
+     *
      * @var boolean
      */
     protected $xhr = true;
-    
+
     /**
      * Set to true is this handler will destroy any data.
      * A warning and confirmation will be shown on the front-end.
-     * 
+     *
      * @var boolean
      */
     protected $destructive = false;

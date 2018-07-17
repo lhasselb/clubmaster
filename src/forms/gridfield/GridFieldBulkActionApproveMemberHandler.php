@@ -49,14 +49,14 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
      * @var string
      */
     protected $label = 'approveMember';
-    
+
     /**
      * Front-end icon path for this handler's action.
      *
      * @var string
      */
     protected $icon = '';
-    
+
      /**
      * Extra classes to add to the bulk action button for this handler
      * Can also be used to set the button font-icon e.g. font-icon-trash
@@ -64,14 +64,14 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
      * @var string
      */
     protected $buttonClasses = '';
-    
+
     /**
      * Whether this handler should be called via an XHR from the front-end
      *
      * @var boolean
      */
     protected $xhr = true;
-    
+
     /**
      * Set to true is this handler will destroy any data.
      * A warning and confirmation will be shown on the front-end.
@@ -79,7 +79,7 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
      * @var boolean
      */
     protected $destructive = false;
-    
+
     /**
      * Return i18n localized front-end label
      *

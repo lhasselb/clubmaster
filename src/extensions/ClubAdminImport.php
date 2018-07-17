@@ -7,14 +7,16 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Member;
 
 /**
-* Class ClubAdminImport
-* @package  SYBEHA\Clubmaster\Extensions
-* @property \SilverStripe\Admin\ModelAdmin $owner
-*/
+ * Class ClubAdminImport
+ *
+ * @package  SYBEHA\Clubmaster\Extensions
+ * @property \SilverStripe\Admin\ModelAdmin $owner
+ */
 class ClubAdminImport extends Extension
 {
     /**
      * Prevent existing import form from showing up
+     *
      * @param Form as reference
      */
     public function updateImportForm(&$form)

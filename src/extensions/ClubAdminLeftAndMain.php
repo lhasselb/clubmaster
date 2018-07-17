@@ -10,7 +10,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class ClubAdminLeftAndMain
- * @package SYBEHA\Clubmaster\Extensions
+ *
+ * @package  SYBEHA\Clubmaster\Extensions
  * @property \SilverStripe\Admin\LeftAndMain $owner
  */
 class ClubAdminLeftAndMain extends LeftAndMainExtension

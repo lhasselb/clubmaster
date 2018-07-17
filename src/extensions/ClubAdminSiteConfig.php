@@ -12,6 +12,7 @@ use SilverStripe\Forms\TreeDropdownField;
 /**
  * Add clubmaster specific behaviour to SiteConfig
  * Class ClubAdminSiteConfig
+ *
  * @package  SYBEHA\Clubmaster\Extensions
  * @property \SilverStripe\SiteConfig\SiteConfig $owner
  */
@@ -33,14 +34,16 @@ class ClubAdminSiteConfig extends DataExtension
 
     /**
      * Store (selected folder) relation to folder(FolderID)
+     *
      * @config $has_one
-     * @var array
+     * @var    array
      */
     private static $has_one = [
         'PendingFolder' => Folder::class
     ];
 
     /**
+     *
      * @param FieldList $fields
      */
     public function updateCMSFields(FieldList $fields)

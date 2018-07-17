@@ -20,29 +20,31 @@ use Psr\Log\LoggerInterface;
  * FirstName + LastName + Birthday.
  * To reset index on table use ALTER TABLE clubmember AUTO_INCREMENT = 1
  * Class ClubMemberCsvBulkLoader
+ *
  * @package SYBEHA\Clubmaster\Loader
  */
 class ClubMemberCsvBulkLoader extends CsvBulkLoader
-{   
+{
     /**
+     *
      * @todo Better messages for relation checks and duplicate detection
      * Note that columnMap isn't used.
      *
-     * @param array $record
-     * @param array $columnMap
+     * @param array             $record
+     * @param array             $columnMap
      * @param BulkLoader_Result $results
-     * @param boolean $preview
+     * @param boolean           $preview
      *
      * @return int
      */
     protected function processRecord($record, $columnMap, &$results, $preview = false)
-    {		
+    {
 
         //foreach ($record as $key => $value) {
-        //	Injector::inst()->get(LoggerInterface::class)
+        //    Injector::inst()->get(LoggerInterface::class)
         //      ->debug('ClubMemberCsvBulkLoader - processRecord()' . ' key='.$key . ' value=' . $value);
         //}
-		
+
         // Skip if required data is not present
         if (!$this->hasRequiredData($record)) {
             //$results->addSkipped("Required data is missing.");
@@ -58,44 +60,41 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
         if ($record['Nationality']) {
             $record['Nationality'] = strtolower($record['Nationality']);
         }
-		
-		// Attention 32bit version, e.g. XAMPP (Windows): The valid range of a timestamp is typically from 
-		// Fri, 13 Dec 1901 20:45:54 UTC 
-		// to 
-		// Tue, 19 Jan 2038 03:14:07 UTC. 
-		// (These are the dates that correspond to the minimum and maximum values for a 32-bit signed integer.)
-		if(2147483647 == PHP_INT_MAX) {
-			if ($record['Birthday']) {
-				// 1900-01-01
-				if($record['Birthday'] < '1901-12-14') 
-				{
-					$record['Birthday'] = '1901-12-14';
-					Injector::inst()->get(LoggerInterface::class)->debug('ClubMemberCsvBulkLoader - Birthday changed to ' . $record['Birthday']);
-				}
-			}
-		}		
+
+        // Attention 32bit version, e.g. XAMPP (Windows): The valid range of a timestamp is typically from
+        // Fri, 13 Dec 1901 20:45:54 UTC
+        // to
+        // Tue, 19 Jan 2038 03:14:07 UTC.
+        // (These are the dates that correspond to the minimum and maximum values for a 32-bit signed integer.)
+        if (2147483647 == PHP_INT_MAX) {
+            if ($record['Birthday']) {
+                // 1900-01-01
+                if ($record['Birthday'] < '1901-12-14') {
+                    $record['Birthday'] = '1901-12-14';
+                    Injector::inst()->get(LoggerInterface::class)
+                    ->debug('ClubMemberCsvBulkLoader - Birthday changed to ' . $record['Birthday']);
+                }
+            }
+        }
         // Verify equal address
-        if ($record['Street'] == $record['AccountHolderStreet'] &&
-            $record['StreetNumber'] == $record['AccountHolderStreetNumber'] &&
-            $record['Zip'] == $record['AccountHolderZip'] &&
-            $record['City'] == $record['AccountHolderCity']
+        if ($record['Street'] == $record['AccountHolderStreet']
+            && $record['StreetNumber'] == $record['AccountHolderStreetNumber']
+            && $record['Zip'] == $record['AccountHolderZip']
+            && $record['City'] == $record['AccountHolderCity']
         ) {
             $record['EqualAddress'] = '1';
         } else {
             $record['EqualAddress'] = '0';
         }
-		
-		// @todo: Compare fields of existing members with given fields to evaluate differences  
-		// $existingObj = $this->findExistingObject($record, $columnMap);
-		
-		return parent::processRecord($record, $columnMap, $results, $preview = false);
-
+        // @todo: Compare fields of existing members with given fields to evaluate differences
+        // $existingObj = $this->findExistingObject($record, $columnMap);
+        return parent::processRecord($record, $columnMap, $results, $preview = false);
     }
 
     /*
      * Using a callback function to  check for unique record
-     * Is used by findExistingObject function in the 
-     * CsvBulkLoader class @see CsvBulkLoader::findExistingObject(). 
+     * Is used by findExistingObject function in the
+     * CsvBulkLoader class @see CsvBulkLoader::findExistingObject().
      * It is iterated over to find any object that has a column with the specified value.
      * It can also be passed a callback like below "checkFirstLastBirthday"
      */
@@ -110,19 +109,23 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
      */
     public function checkFirstLastBirthday($fieldName, $record)
     {
-		//Injector::inst()->get(LoggerInterface::class)->debug('ClubMemberCsvBulkLoader - checkFirstLastBirthday(' . fieldName . ',record)');
-		/*
-		foreach ($record as $key => $value) {
-			Injector::inst()->get(LoggerInterface::class)->debug('ClubMemberCsvBulkLoader - processRecord()' . ' key='.$key . ' value=' . $value);
+        //Injector::inst()->get(LoggerInterface::class)
+        //  ->debug('ClubMemberCsvBulkLoader - checkFirstLastBirthday(' . fieldName . ',record)');
+        /*
+        foreach ($record as $key => $value) {
+        Injector::inst()->get(LoggerInterface::class)
+            ->debug('ClubMemberCsvBulkLoader - processRecord()' . ' key='.$key . ' value=' . $value);
         }*/
         $first = $record['FirstName'];
         $last = $record['LastName'];
         $birthday = $record['Birthday'];
-        $member = ClubMember::get()->filter([
-            'FirstName' => $first, 
-			'LastName' => $last, 
-			'Birthday' => $birthday])->First();
-		
+        $member = ClubMember::get()->filter(
+            [
+            'FirstName' => $first,
+            'LastName' => $last,
+            'Birthday' => $birthday]
+        )->First();
+
         return $member;
     }
 
@@ -170,11 +173,14 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
         'MandateReference' => 'MandateReference'
     ];
 
-    /** Fetch relations with a callback
-     * $relationCallbacks on the other hand is used by the main processRecord function. 
-     * The callback works in the same way as the $duplicateCheck callback, 
-     * it needs to either exist on an instance of the class specified on the proeprty objectClass or on the CsvBulkLoader. 
-     * These callbacks can return an object that will be related back to a specific object record (new or existing) as a has_one.
+    /**
+     * Fetch relations with a callback
+     * $relationCallbacks on the other hand is used by the main processRecord function.
+     * The callback works in the same way as the $duplicateCheck callback,
+     * it needs to either exist on an instance of the class specified on
+     * the proeprty objectClass or on the CsvBulkLoader.
+     * These callbacks can return an object that will be related
+     * back to a specific object record (new or existing) as a has_one.
      */
     public $relationCallbacks = [
         'Type.TypeName' => [
@@ -182,9 +188,10 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
             'callback' => 'getTypeByTypeName'
         ]
     ];
-	
+
     /**
      * Get the related DataObject
+     *
      * @return ClubMemberType
      */
     public static function getTypeByTypeName(&$obj, $val, $record)
@@ -195,6 +202,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
 
     /**
      * Generate the information for show spec link
+     *
      * @return array
      */
     public function getImportSpec()
@@ -209,6 +217,7 @@ class ClubMemberCsvBulkLoader extends CsvBulkLoader
 
     /**
      * Check within processRecord if the given mapped record has the required data.
+     *
      * @param  array $mappedrecord
      * @return boolean
      */

@@ -10,6 +10,7 @@ use SilverStripe\Forms\TextField;
  * https://de.wikipedia.org/wiki/IBAN
  *
  * Class IbanField
+ *
  * @package SYBEHA\Clubmaster\Forms\Fields
  */
 class IbanField extends TextField
@@ -44,7 +45,7 @@ class IbanField extends TextField
          * Valid number DE12500105170648489890
          * Simple validator rule [a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}
          */
-        require_once BASE_PATH . '/vendor/globalcitizen/php-iban/php-iban.php';
+        include_once BASE_PATH . '/vendor/globalcitizen/php-iban/php-iban.php';
 
         if (!$this->value) {
             return true;

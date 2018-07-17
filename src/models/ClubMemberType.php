@@ -10,6 +10,7 @@ use SYBEHA\Clubmaster\Models\ClubMember;
 
 /**
  * Class ClubMemberType
+ *
  * @package SYBEHA\Clubmaster\Models
  */
 class ClubMemberType extends DataObject
@@ -36,7 +37,7 @@ class ClubMemberType extends DataObject
 
     private static $searchable_fields = [];
 
-    function fieldLabels($includerelations = true)
+    public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels($includerelations);
         $labels['TypeName'] = _t('ClubMemberType.TYPENAME', 'TypeName');
@@ -44,7 +45,7 @@ class ClubMemberType extends DataObject
         return $labels;
     }
 
-    function getCMSFields()
+    public function getCMSFields()
     {
         $fields = parent::getCMSFields();
 
