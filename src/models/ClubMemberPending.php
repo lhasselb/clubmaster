@@ -152,7 +152,7 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Main',
-            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))//->setConfig('showcalendar', true)
+            DateField::create('Birthday', _t('ClubMember.BIRTHDAY', 'Birthday'))
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -200,9 +200,9 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Main',
-            DateField::create('Since', _t('ClubMember.FROM', 'From'))//->setConfig('showcalendar', true)
+            DateField::create('Since', _t('ClubMember.FROM', 'From'))
         );
-        //Account tab
+        // Create Account tab
         $fields->addFieldToTab(
             'Root.Account',
             CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress'))
@@ -276,7 +276,7 @@ class ClubMemberPending extends ClubMember
             ->addExtraClass('text')->setDescription(_t('ClubMember.MANDATEREFERENCEHINT', 'Mandate hint'))
             ->performReadonlyTransformation()
         );
-        //Meta tab
+        // Create Meta tab
         $fields->addFieldToTab(
             'Root.Meta',
             CheckboxSetField::create('Active', _t('ClubMember.ACTIVE', 'Active'), array('1' => 'Mitglied ist aktiv?'))

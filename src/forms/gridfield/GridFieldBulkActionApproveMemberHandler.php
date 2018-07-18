@@ -106,13 +106,13 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
                 array_push($ids, $record->ID);
                 $record->Pending = 0;
                 $record->Active = 1;
-                $record->ClassName = 'ClubMember';
+                $record->ClassName = 'SYBEHA\Clubmaster\Models\ClubMember';
                 $record->Since = DBDatetime::now();
                 $record->write();
             }
             $doneCount = count($response->getSuccessRecords());
             $message = sprintf(
-                'Antrag von %1$d zugestimmt',
+                '%1$doneCount Antrag  zugestimmt',
                 $doneCount
             );
             $response->setMessage($message);

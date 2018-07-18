@@ -9,6 +9,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\SiteConfig\SiteConfig;
 use SYBEHA\Clubmaster\Models\ClubMemberPending;
+use SYBEHA\Clubmaster\Models\ClubMember;
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
@@ -109,8 +110,15 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             // Move ClubMemberPending to ClubMember
             $clubMemberPending->Pending = 0;
             $clubMemberPending->Active = 1;
-            $clubMemberPending->ClassName = 'ClubMember';
+            $clubMember = new ClubMember();
+            $clubMemberPending->ClassName = $clubMember->getClassName();//'SYBEHA\Clubmaster\Models\ClubMember';
+
+            Injector::inst()->get(LoggerInterface::class)
+                ->debug('GridFieldApproveClubMemberAction - handleAction() date = ' . DBDatetime::now());
             $clubMemberPending->Since = DBDatetime::now();
+            Injector::inst()->get(LoggerInterface::class)
+                ->debug('GridFieldApproveClubMemberAction - handleAction() since = ' . $clubMemberPending->Since);
+
             $clubMemberPending->write();
 
             $siteConfig = SiteConfig::current_site_config();

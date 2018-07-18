@@ -47,8 +47,8 @@ class ClubMember extends DataObject
      */
     private static $table_name = 'ClubMember';
 
+    // Form-Fields
     private static $db = [
-        //Form-Fields
         'Salutation' => 'Enum("Frau,Herr,Schülerin,Schüler","Frau")',
         'NameTitle' => 'Varchar(255)',
         'FirstName' => 'Varchar(255)',
@@ -90,7 +90,11 @@ class ClubMember extends DataObject
         'Type' => ClubMemberType::class
     ];
 
-    /* Defaults for object instance */
+    /**
+     * Set defaults
+     *
+     * @var array
+     */
     private static $defaults = [
         'CreationType' => 'Händisch',
         'Active' => '1',
@@ -98,8 +102,8 @@ class ClubMember extends DataObject
     ];
 
     /* Dynamic defaults for object instance
-    * TODO: Check Dates should be stored using ISO 8601 formatted date (y-MM-dd)
-    */
+     * @todo: Check Dates should be stored using ISO 8601 formatted date (y-MM-dd)
+     */
     public function populateDefaults()
     {
         $this->Since = date('d.m.Y');
@@ -107,7 +111,8 @@ class ClubMember extends DataObject
     }
 
     /**
-     * Fields to be displayed in (GridField) table head
+     * Fields to be displayed in table head
+     * of GridField
      *
      * @var array
      */
@@ -117,7 +122,7 @@ class ClubMember extends DataObject
         'Zip' => 'Zip',
         'Age' => 'Age',
         'Sex' => 'Sex',
-        'Since' => 'Since', //Since.FormatFromSettings
+        'Since' => 'Since',
         //'Insurance' => 'Insurance',
         //'Type.TypeName' => 'Type.TypeName'
         'Email' => 'Email'
@@ -133,6 +138,9 @@ class ClubMember extends DataObject
     //'Type.ID'
     ];
 
+    /**
+     * @return array labels
+     */
     public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels($includerelations);
@@ -210,6 +218,9 @@ class ClubMember extends DataObject
         );
     }
 
+    /**
+     * @return array fields
+     */
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -402,7 +413,7 @@ class ClubMember extends DataObject
                     'Sex'
                 ),
                 singleton(ClubMember::class)->dbObject('Sex')->enumValues()
-            )->setReadonly(true)//->performReadonlyTransformation()
+            )//->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
@@ -414,8 +425,7 @@ class ClubMember extends DataObject
         $fields->addFieldToTab(
             'Root.Meta',
             DateField::create('FormClaimDate', _t('ClubMember.FORMCLAIMDATE', 'FormClaimDate'))
-            ->setDateFormat('dd.MM.yyyy')->performReadonlyTransformation()
-            //->setConfig('dateformat', 'dd.MM.yyyy')->performReadonlyTransformation()
+            //->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
@@ -424,13 +434,11 @@ class ClubMember extends DataObject
                 _t('ClubMember.CREATIONTYPE', 'CreationType')
             )->performReadonlyTransformation()
         );
-        //$fields->addFieldToTab('Root.Meta',
-        //  CheckboxField::create('Pending', _t('ClubMember.PENDING', 'Pending'))
-        //      ->performReadonlyTransformation());
-        //Remove the fields obsolete for ClubMember (added all for ClubMmeberPending)
+
+        // Remove the fields obsolete for ClubMember
         $fields->removeByName('Pending');
         if ($this->CreationType !== 'Formular') {
-            $fields->removeByName(['SerializedFileName', 'FormClaimDate']);//, 'MandateReference'
+            $fields->removeByName(['SerializedFileName', 'FormClaimDate']);
         }
 
         return $fields;
@@ -446,13 +454,43 @@ class ClubMember extends DataObject
         'FormClaimDate' => 'Datetime'
     ];
 
+    /**
+     * Used within the ModelAdmin to display
+     * Firstname and Lastname for ClubMember objects
+     * @return string title
+     */
     public function getTitle()
     {
         return $this->FirstName . ' ' . $this->LastName;
     }
 
     /**
+     * Format FormClaimDate (date)
+     * @return string
+     */
+    public function getFormClaimDate()
+    {
+        // Create a DateTime object
+        $dateTime = $this->dateFromFilename($this->SerializedFileName);
+        // Use strftime to utilize locale
+        return strftime('%d.%m.%Y %H:%M:%S', $dateTime->getTimestamp());
+    }
+
+    /**
+     * Format Since (date) for ModelAdmin gridfield
+     * @return string
+     */
+    public function getSince()
+    {
+        // Create a DBDate object
+        $dbDate = $this->dbObject('Since');
+        // Use strftime to utilize locale
+        return strftime('%d.%m.%Y', $dbDate->getTimestamp());
+    }
+
+    /**
      * Info: used by SilverStripe\Reports\Report
+     * @return string
      */
     public function ExportType()
     {
@@ -469,32 +507,12 @@ class ClubMember extends DataObject
         }
     }
 
-    /*
-    * @return String
-    */
-    public function getSinceDate()
-    {
-        $since = $this->dbObject('Since')->value;
-        $date = new DateTime($since);
-        return $date->format('d.m.Y');
-    }
-
-    /*
-    * @return String
-    */
-    public function getFormClaimDate()
-    {
-        $date = $this->dateFromFilename($this->SerializedFileName);
-        $datetime = new Datetime($date->format('Y-m-d H:i:s'));
-        //return $date->FormatI18N('%d.%m.%Y %H:%M:%S');
-        return $date->format('d.m.Y H:i:s');
-    }
-
-    /*
-    * @return int
-    */
+    /**
+     * @return int
+     */
     public function getAge()
     {
+        //if (!$this->dbObject('Birthday')->value) {
         if (!$this->dbObject('Birthday')->value) {
             return 0;
         } else {
@@ -511,49 +529,57 @@ class ClubMember extends DataObject
         return $age;
     }
 
-    /*
-    * @return String
-    */
+    /**
+     * @return string
+     */
     public function getSex()
     {
         return ($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin') ? 'w' : 'm';
     }
 
-    /*
-    * @return bool
-    */
+    /**
+     * @return bool
+     */
     public function isActive()
     {
         return $this->Active;
     }
 
-    /*
-    * @return DateTime
-    */
+    /**
+     * Get a DateTime from the given filename
+     * @param string filename
+     * @return DateTime
+     */
     public function dateFromFilename($filename)
     {
         $date = new DateTime();
-        // XX_dd.mm.yyyy_hh_mm_ss.antrag
         if (preg_match(
             '/^[A-Za-z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/',
             $filename,
             $matches
         )
         ) {
+            // Get the appropriate matches XX_dd.mm.yyyy_hh_mm_ss.antrag
             $day = intval($matches[1]);
             $month = intval($matches[2]);
             $year = intval($matches[3]);
             $hour = intval($matches[4]);
             $minute = intval($matches[5]);
             $second = intval($matches[6]);
-            //$date->setValue($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
+            // Set the date
             $date->setDate($year, $month, $day);
+            // Set the time
             $date->setTime($hour, $minute, $second);
-            //SS_Log::log('date='.$date->format('d.m.Y H:i:s'),SS_Log::WARN);
+            Injector::inst()->get(LoggerInterface::class)
+                ->debug('ClubMember - dateFromFilename('.$filename.')' .
+                ' calculated date = '. $date->format('d.m.Y H:i:s'));
         }
         return $date;
     }
 
+    /**
+     *
+     */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
