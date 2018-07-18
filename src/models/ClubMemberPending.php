@@ -339,8 +339,8 @@ class ClubMemberPending extends ClubMember
         $current_year = $year->format('Y');
         // Only required for 32bit version
         if (2147483647 == PHP_INT_MAX) {
-            $birthday_year = strtok($data->Birthday, '-');
-            if ($data->Birthday > $current_year.'-12-31') {
+            $birthday_year = strtok($this->Birthday, '-');
+            if ($this->Birthday > $current_year.'-12-31') {
                 $this->Birthday = strval((int)$birthday_year - 100) . '-' .strtok("-") . '-' . strtok("-");
                 Injector::inst()->get(LoggerInterface::class)
                     ->info('ClubMemberPending - fillWith()' . ' replace birthday ' . $this->Birthday . ' to ' .
@@ -348,9 +348,9 @@ class ClubMemberPending extends ClubMember
             }
         } else {
             Injector::inst()->get(LoggerInterface::class)
-                ->info('ClubMemberPending - fillWith()' . ' regular birthday given ' . $data->Birthday .
+                ->info('ClubMemberPending - fillWith()' . ' regular birthday given ' . $this->Birthday .
                 ' current year = ' . $current_year);
-            $this->Birthday = $data->Birthday;
+            $this->Birthday = $this->Birthday;
         }
         // Lowercase required
         $this->Nationality = strtolower($this->Nationality);
