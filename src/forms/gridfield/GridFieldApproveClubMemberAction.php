@@ -60,6 +60,11 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             //->debug('GridFieldApproveClubMemberAction - getColumnContent() columnName = ' . $columnName
             //    . ' record = ' . $record);
 
+        // ClubMemberPending only
+        $clubMemberPendingClass = get_class(new ClubMemberPending());
+        // Injector::inst()->get(LoggerInterface::class)
+        //    ->debug('GridFieldApproveClubMemberAction - getColumnContent() clubMemberPendingClass = '
+        //        . $clubMemberPendingClass);
         if (!$record->canEdit() || $record != 'SYBEHA\Clubmaster\Models\ClubMemberPending') {
             return;
         }
@@ -111,14 +116,14 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             $clubMemberPending->Pending = 0;
             $clubMemberPending->Active = 1;
             $clubMember = new ClubMember();
-            $clubMemberPending->ClassName = $clubMember->getClassName();//'SYBEHA\Clubmaster\Models\ClubMember';
-
-            Injector::inst()->get(LoggerInterface::class)
+            // Add namespaced classname 'SYBEHA\Clubmaster\Models\ClubMember';
+            $clubMemberPending->ClassName = $clubMember->getClassName();
+            // Add date only if missing !
+            if (empty($clubMemberPending->Pending)) {
+                Injector::inst()->get(LoggerInterface::class)
                 ->debug('GridFieldApproveClubMemberAction - handleAction() date = ' . DBDatetime::now());
-            $clubMemberPending->Since = DBDatetime::now();
-            Injector::inst()->get(LoggerInterface::class)
-                ->debug('GridFieldApproveClubMemberAction - handleAction() since = ' . $clubMemberPending->Since);
-
+                $clubMemberPending->Since = DBDatetime::now();
+            }
             $clubMemberPending->write();
 
             $siteConfig = SiteConfig::current_site_config();

@@ -2,18 +2,27 @@
 
 namespace SYBEHA\Clubmaster\Forms\Gridfield;
 
+use SYBEHA\Clubmaster\Models\ClubMemberPending;
+use SYBEHA\Clubmaster\Models\ClubMember;
+
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
+
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use Exception;
 
+/* Logging */
+use SilverStripe\Core\Injector\Injector;
+use Psr\Log\LoggerInterface;
+
 /**
  * Bulk action handler for approving member records.
  * Member class will be changed from ClubMemberPending to ClubMember.
  * Class GridFieldBulkActionApproveMemberHandler
+ *
  * @package SYBEHA\Clubmaster\Forms\Gridfield
  */
 class GridFieldBulkActionApproveMemberHandler extends Handler
@@ -48,7 +57,7 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
      *
      * @var string
      */
-    protected $label = 'approveMember';
+    protected $label = 'Approve';
 
     /**
      * Front-end icon path for this handler's action.
@@ -58,11 +67,11 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
     protected $icon = '';
 
      /**
-     * Extra classes to add to the bulk action button for this handler
-     * Can also be used to set the button font-icon e.g. font-icon-trash
-     *
-     * @var string
-     */
+      * Extra classes to add to the bulk action button for this handler
+      * Can also be used to set the button font-icon e.g. font-icon-trash
+      *
+      * @var string
+      */
     protected $buttonClasses = '';
 
     /**
@@ -87,7 +96,7 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('SYBEHA\Clubmaster\Admins\ClubAdmin.GRIDFIELDBULKDROPDOWNAPPROVE', $this->getLabel());
+        return _t('SYBEHA\Clubmaster\Admins\ClubAdmin\ClubAdmin\GRIDFIELDBULKDROPDOWNAPPROVE', $this->getLabel());
     }
 
     /**
@@ -99,20 +108,34 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
      */
     public function approveMember(HTTPRequest $request)
     {
+        $records = $this->getRecords();
         $response = new HTTPBulkToolsResponse(true, $this->gridField);
+
         try {
-            $ids = array();
+            //$ids = array();
             foreach ($this->getRecords() as $record) {
-                array_push($ids, $record->ID);
+                //array_push($ids, $record->ID);
                 $record->Pending = 0;
                 $record->Active = 1;
-                $record->ClassName = 'SYBEHA\Clubmaster\Models\ClubMember';
-                $record->Since = DBDatetime::now();
-                $record->write();
+                $clubMember = new ClubMember();
+                // Add namespaced classname 'SYBEHA\Clubmaster\Models\ClubMember';
+                $record->ClassName = $clubMember->getClassName();
+                // Add date only if missing !
+                if (empty($record->Since)) {
+                    $record->Since = DBDatetime::now();
+                }
+                $done = $record->write();
+                if ($done) {
+                    $response->addSuccessRecord($record);
+                } else {
+                    $response->addFailedRecord($record, $done);
+                }
             }
             $doneCount = count($response->getSuccessRecords());
+            Injector::inst()->get(LoggerInterface::class)
+                ->debug('GridFieldBulkActionApproveMemberHandler - approveMember() doneCount = ' . $doneCount);
             $message = sprintf(
-                '%1$doneCount Antrag  zugestimmt',
+                _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldBulkActionApproveMemberHandler', '%s approved'),
                 $doneCount
             );
             $response->setMessage($message);

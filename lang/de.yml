@@ -19,10 +19,7 @@ de:
     ZIPEND: "Postleitzahlen bis"
     FILE: "Datei"
     #BulkAction
-    GRIDFIELDBULKDROPDOWNACTIVATE: "Mitglieder aktivieren"
-    GRIDFIELDBULKDROPDOWNDEACTIVATE: "Mitglieder de-aktivieren"
-    GRIDFIELDBULKDROPDOWNAPPROVE: "Antrag zustimmen"
-    GRIDFIELDBULKDROPDOWNINSURANCE: "Setze BLSV gemeldet"
+    GRIDFIELDBULKDROPDOWNAPPROVE: "Mehreren Anträgen zustimmen"
 
   ClubAdminSiteConfig:
     PENDINGFOLDER: "Verzeichnis für Anträge"
@@ -106,6 +103,14 @@ de:
   SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction:
     APPROVEMEMBER: "Antrag zustimmen"
     APPROVEMEMBERDONE: "Mitglied angelegt."
+
+  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldBulkActionApproveMemberHandler:
+    GRIDFIELDBULKDROPDOWNAPPROVED: "%s Anträgen zugestimmt"
+
+    #BulkAction
+    GRIDFIELDBULKDROPDOWNACTIVATE: "Mitglieder aktivieren"
+    GRIDFIELDBULKDROPDOWNDEACTIVATE: "Mitglieder de-aktivieren"
+    GRIDFIELDBULKDROPDOWNINSURANCE: "Setze BLSV gemeldet"
 
   GridFieldShowHideButton:
     SHOW: "Zeige auch inaktive Mitglieder"

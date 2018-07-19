@@ -19,10 +19,7 @@ en:
     ZIPEND: "Zip to"
     FILE: "File"
     #BulkAction
-    GRIDFIELDBULKDROPDOWNACTIVATE: "Activate"
-    GRIDFIELDBULKDROPDOWNDEACTIVATE: "Deactive"
-    GRIDFIELDBULKDROPDOWNAPPROVE: "Approve"
-    GRIDFIELDBULKDROPDOWNINSURANCE: "Add insurance"
+    GRIDFIELDBULKDROPDOWNAPPROVE: "Approve multiple"
 
   ClubAdminSiteConfig:
     PENDINGFOLDER: "Pending folder"
@@ -37,7 +34,7 @@ en:
   SYBEHA\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Clubmember type"
     PLURALNAME: "Clubmember type"
-  ClubMemberType:  
+  ClubMemberType:
     DESCRIPTION: "Manage your types"
     TYPENAME: "Type name"
     CLUBMEMBERS: "Club members"
@@ -106,6 +103,14 @@ en:
   SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction:
     APPROVEMEMBER: "Approve member"
     APPROVEMEMBERDONE: "Approve Member Action Done."
+
+  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldBulkActionApproveMemberHandler:
+    GRIDFIELDBULKDROPDOWNAPPROVED: "%s approved"
+
+    #BulkAction
+    GRIDFIELDBULKDROPDOWNACTIVATE: "Activate"
+    GRIDFIELDBULKDROPDOWNDEACTIVATE: "Deactive"
+    GRIDFIELDBULKDROPDOWNINSURANCE: "Add insurance"
 
   GridFieldShowHideButton:
     SHOW: "Show inactive"
