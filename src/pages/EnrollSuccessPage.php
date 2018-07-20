@@ -1,10 +1,17 @@
 <?php
 
-namespace Sybeha\Clubmaster\Pages;
+namespace SYBEHA\Clubmaster\Pages;
 
 use Page;
 
-class EnrollPageSuccess extends Page
+use SilverStripe\Forms\TextareaField;
+
+/**
+ * Enroll success page template
+ * Class EnrollSuccessPage
+ * @package SYBEHA\Clubmaster\Pages
+ */
+class EnrollSuccessPage extends Page
 {
     /*
      * Important: Please note: It is strongly recommended to define a table_name for all namespaced models.
@@ -12,18 +19,19 @@ class EnrollPageSuccess extends Page
      * and may not be supported by your current database engine.
      * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
      */
-    private static $table_name = 'EnrollPageSuccess';
+    private static $table_name = 'EnrollSuccessPage';
+
     private static $singular_name = 'Erfolgreicher Mitgliedsantrag';
     private static $description = 'Seite für erfolgreichen Mitgliedsantrag';
     //private static $icon = 'mysite/images/treffen.png';
     private static $can_be_root = false;
     private static $allowed_children = 'none';
-    private static $defaults = array (
+    private static $defaults = [
         'ShowInMenus' => false,
         'ShowInSearch' => false
-    );
+    ];
 
-    private static $db = array();
+    private static $db = [];
 
 
     public function fieldLabels($includerelations = true)

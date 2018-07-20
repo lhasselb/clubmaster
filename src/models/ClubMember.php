@@ -49,7 +49,7 @@ class ClubMember extends DataObject
 
     // Form-Fields
     private static $db = [
-        'Salutation' => 'Enum("Frau,Herr,Schülerin,Schüler","Frau")',
+        'Salutation' => 'Enum(array("Frau","Herr","Schülerin","Schüler"), "Frau")',
         'NameTitle' => 'Varchar(255)',
         'FirstName' => 'Varchar(255)',
         'LastName' => 'Varchar(255)',
@@ -237,7 +237,7 @@ class ClubMember extends DataObject
                 'Salutation',
                 _t('SYBEHA\Clubmaster\Models\ClubMember.SALUTATION', 'Salutation'),
                 singleton(ClubMember::class)->dbObject('Salutation')->enumValues()
-            )
+            )->setEmptyString('(Select one)')
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -425,7 +425,7 @@ class ClubMember extends DataObject
         $fields->addFieldToTab(
             'Root.Meta',
             DateField::create('FormClaimDate', _t('SYBEHA\Clubmaster\Models\ClubMember.FORMCLAIMDATE', 'FormClaimDate'))
-            //->performReadonlyTransformation()
+            ->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',

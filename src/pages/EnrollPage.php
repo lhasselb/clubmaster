@@ -1,20 +1,25 @@
 <?php
 
-namespace Sybeha\Clubmaster\Pages;
+namespace SYBEHA\Clubmaster\Pages;
 
 use Page;
 
+use SilverStripe\Security\Member;
+use SilverStripe\Security\Permission;
 use SilverStripe\Assets\Folder;
+use SilverStripe\Forms\TreeDropdownField;
+use SilverStripe\Forms\LabelField;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\View\Requirements;
 /* Configuration */
 use SilverStripe\Core\Config\Config;
 
 /**
  * Enroll page template
- *
- * @package    clubmaster
- * @subpackage pages
+ * Class EnrollPage
+ * @package SYBEHA\Clubmaster\Pages
  */
-class EnrollPageTemplate extends Page
+class EnrollPage extends Page
 {
     /*
      * Important: Please note: It is strongly recommended to define a table_name for all namespaced models.
@@ -22,13 +27,14 @@ class EnrollPageTemplate extends Page
      * and may not be supported by your current database engine.
      * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
      */
-    private static $table_name = 'EnrollPageTemplate';
+    private static $table_name = 'EnrollPage';
+
     private static $singular_name = 'Mitgliedsantrag';
     private static $description = 'Seite für den Mitgliedsantrag';
     private static $can_be_root = false;
-    private static $allowed_children = array('EnrollPageSuccess');
+    private static $allowed_children = ['SYBEHA\Clubmaster\Pages\EnrollSuccessPage'];
 
-    private static $db = array();
+    private static $db = [];
 
     // Store relation to folder(FolderID)
     private static $has_one = [
@@ -86,7 +92,7 @@ class EnrollPageTemplate extends Page
             $requestFolderTreeDropDown = TreeDropdownField::create(
                 'FolderID',
                 _t('EnrollPage.REQUESTSFOLDER', 'Folder:'),
-                'Folder'
+                Folder::class
             )
                 ->setDescription(
                     _t(

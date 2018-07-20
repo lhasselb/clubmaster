@@ -36,6 +36,7 @@ en:
     #DESCRIPTION: "Manage your types"
     TYPENAME: "Type name"
     CLUBMEMBERS: "Club members"
+    SHOW_IN_FRONTEND: "Show in form"
 
   SYBEHA\Clubmaster\Models\ClubMember:
     SINGULARNAME: "Club member"
@@ -45,6 +46,7 @@ en:
     BANKINGACCOUNT: "Account data"
     META: "Aditional"
     TYPES: "Types"
+    SELECTONE: "(Select one)"
     SALUTATION: "Salutation"
     NAMETITLE: "Title"
     NAMETITLEHINT: "e.g. Ph.D"
@@ -139,9 +141,12 @@ en:
   SYBEHA\Clubmaster\Forms\Fields\EUNameTextField:
     VALIDATION_NAME: "\"{value}\" is not valid, special charcters cannot be accepted for this field"
 
-  EnrollPage:
+  SYBEHA\Clubmaster\Pages\EnrollPage:
     SINGULARNAME: "Enroll"
     DESCRIPTION: "Page with form to enroll"
     ENROLL: "Enroll"
     REQUESTSFOLDER: "Folder"
     REQUESTSFOLDERDESCRIPTION: "Folder to store files created by form"
+
+  SYBEHA\Clubmaster\Pages\EnrollSuccessPage:
+    SINGULARNAME: "Succes"

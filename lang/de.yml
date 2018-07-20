@@ -36,6 +36,7 @@ de:
     #DESCRIPTION: "Verwalte Mitgliedstypen"
     TYPENAME: "Mitgliedstyp Bezeichnung"
     CLUBMEMBERS: "Mitglieder"
+    SHOW_IN_FRONTEND: "Zeige im Formular"
 
   SYBEHA\Clubmaster\Models\ClubMember:
     SINGULARNAME: "Mitglied"
@@ -45,6 +46,7 @@ de:
     BANKINGACCOUNT: "Bankverbindung"
     META: "Weitere Informationen"
     TYPES: "Mitgliedstypen"
+    SELECTONE: "(Bitte wählen)"
     SALUTATION: "Anrede"
     NAMETITLE: "Titel"
     NAMETITLEHINT: "z.B. Dr."
@@ -139,9 +141,12 @@ de:
   SYBEHA\Clubmaster\Forms\Fields\EUNameTextField:
     VALIDATION_NAME: "\"{value}\" ist keine zulässige Eingabe, Sonderzeichen sind nicht zulässig."
 
-  EnrollPage:
+  SYBEHA\Clubmaster\Pages\EnrollPage:
     SINGULARNAME: "Mitgliedsantrag"
     DESCRIPTION: "Seite für den Mitgliedsantrag"
     ENROLL: "Antrag absenden"
     REQUESTSFOLDER: "Verzeichnis für Anträge:"
     REQUESTSFOLDERDESCRIPTION: "Verzeichnis zum speichern der Antragsdateien (generiert vom Formular)"
+  
+  SYBEHA\Clubmaster\Pages\EnrollSuccessPage:
+    SINGULARNAME: "Erfolgreicher Mitgliedsantrag"

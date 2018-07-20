@@ -24,11 +24,21 @@ class ClubMemberType extends DataObject
     private static $table_name = 'ClubMemberType';
 
     private static $db = [
-        'TypeName' => 'Varchar(255)'
+        'TypeName' => 'Varchar(255)',
+        'ShowInFrontEnd' => 'Boolean(0)'
     ];
 
     private static $has_many = [
         'ClubMembers' => ClubMember::class
+    ];
+
+    /**
+     * Set defaults
+     *
+     * @var array
+     */
+    private static $defaults = [
+        'ShowInFrontEnd' => '0'
     ];
 
     private static $summary_fields = [
@@ -42,6 +52,7 @@ class ClubMemberType extends DataObject
         $labels = parent::fieldLabels($includerelations);
         $labels['TypeName'] = _t('SYBEHA\Clubmaster\Models\ClubMemberType.TYPENAME', 'type name');
         $labels['ClubMembers'] = _t('SYBEHA\Clubmaster\Models\ClubMemberType.CLUBMEMBERS', 'ClubMembers');
+        $labels['ShowInFrontEnd'] = _t('SYBEHA\Clubmaster\Models\ClubMemberType.SHOW_IN_FRONTEND', 'Show in frontend');
         return $labels;
     }
 
