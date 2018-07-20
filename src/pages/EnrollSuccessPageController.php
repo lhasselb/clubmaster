@@ -32,4 +32,12 @@ class EnrollPageSuccessController extends PageController
     {
         parent::init();
     }
+
+    public function FormData()
+    {
+        $session = $this->getRequest()->getSession();
+        if ($session->get('Data')) {
+            return $list = new ArrayData(Session::get('Data'));
+        }
+    }   
 }

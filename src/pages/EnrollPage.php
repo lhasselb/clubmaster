@@ -91,12 +91,12 @@ class EnrollPage extends Page
             // Add folder to be selectable from settings (Root.Settings)
             $requestFolderTreeDropDown = TreeDropdownField::create(
                 'FolderID',
-                _t('EnrollPage.REQUESTSFOLDER', 'Folder:'),
+                _t('SYBEHA\Clubmaster\Pages\EnrollPage.REQUESTSFOLDER', 'Folder:'),
                 Folder::class
             )
                 ->setDescription(
                     _t(
-                        'EnrollPage.REQUESTSFOLDERDESCRIPTION',
+                        'SYBEHA\Clubmaster\Pages\EnrollPage.REQUESTSFOLDERDESCRIPTION',
                         'Folder to store files created by form'
                     ),
                     'Folder to store files created by form'

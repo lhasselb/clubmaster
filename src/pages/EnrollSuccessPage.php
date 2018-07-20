@@ -5,6 +5,7 @@ namespace SYBEHA\Clubmaster\Pages;
 use Page;
 
 use SilverStripe\Forms\TextareaField;
+use SilverStripe\Control\Session;
 
 /**
  * Enroll success page template
@@ -57,10 +58,12 @@ class EnrollSuccessPage extends Page
         return $fields;
     }
 
+    /*
     public function FormData()
     {
-        if (Session::get('Data')) {
+        $session = $this->getRequest()->getSession();
+        if ($session->get('Data')) {
             return $list = new ArrayData(Session::get('Data'));
         }
-    }
+    }*/
 }
