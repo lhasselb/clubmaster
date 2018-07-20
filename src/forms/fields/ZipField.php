@@ -30,11 +30,11 @@ class ZipField extends TextField
     {
         return array_merge(
             parent::getAttributes(),
-            array(
+            [
                 //'autocomplete' => 'off',
                 'maxlength' => 5,
                 'size' => 5
-            )
+            ]
         );
     }
 
@@ -49,11 +49,11 @@ class ZipField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    'ZipField.VALIDATIONZIP',
-                    "'{value}' is not a zip number, only zip numbers can be accepted for this field",
-                    array('value' => $this->value)
+                    'SYBEHA\Clubmaster\Forms\Fields\ZipField.VALIDATION_ZIP',
+                    '{value} is not a zip number, only zip numbers can be accepted for this field',
+                    ['value' => $this->value]
                 ),
-                "validation",
+                'validation error',
                 false
             );
             return false;

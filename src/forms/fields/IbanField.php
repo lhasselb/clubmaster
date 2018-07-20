@@ -26,16 +26,15 @@ class IbanField extends TextField
      *
      * @return array List of attributes
      */
-
     public function getAttributes()
     {
         return array_merge(
             parent::getAttributes(),
-            array(
+            [
                 //'autocomplete' => 'off',
                 'maxlength' => 34,
                 'size' => 34
-            )
+            ]
         );
     }
 
@@ -55,11 +54,11 @@ class IbanField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    "IbanField.VALIDATIONIBANNUMBER",
-                    "Please ensure you have entered the {number} IBAN number correctly",
-                    array('number' => $this->value)
+                    'SYBEHA\Clubmaster\Forms\Fields\IbanField.VALIDATION_IBANNUMBER',
+                    'Please ensure you have entered the {number} IBAN number correctly',
+                    ['number' => $this->value]
                 ),
-                "validation",
+                'validation error',
                 false
             );
             return false;

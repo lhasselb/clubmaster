@@ -67,9 +67,9 @@ use SYBEHA\Clubmaster\Models\ClubMember;
 use SYBEHA\Clubmaster\Models\ClubMemberPending;
 use SYBEHA\Clubmaster\Models\ClubMemberType;
 use SYBEHA\Clubmaster\Forms\Fields\ZipField;
-use SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction;
-use SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction;
-//use SYBEHA\Clubmaster\Forms\Gridfield\
+use SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember;
+use SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember;
+
 use SYBEHA\Clubmaster\Loader\ClubMemberCsvBulkLoader;
 use SilverStripe\i18n\i18nEntityProvider;
 
@@ -296,7 +296,7 @@ class ClubAdmin extends ModelAdmin
 
         //if ($gridFieldName == 'ClubMember') {
         if ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMember') {
-            //$config->addComponent(new GridFieldShowHideButton('before'));
+            //$config->addComponent(new SYBEHA\Forms\Gridfields\Actions\ShowHideButton('before'));
             // Get configuration
             $siteConfig = SiteConfig::current_site_config();
             // Set rows displayed
@@ -327,21 +327,21 @@ class ClubAdmin extends ModelAdmin
                     ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
             }
 
-            // Add ACTION activate/deactivateMember
-            $config->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction());
+            // Add action activate/deactivateMember
+            $config->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember());
 
             // Add BULK action activateMember
             $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
-                'SYBEHA\\clubmaster\\forms\\gridfield\\GridFieldBulkActionActivateMemberHandler'
+                'SYBEHA\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\ActivateMemberHandler'
             );
             // Add BULK action deactivateMember
             $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
-                'SYBEHA\\clubmaster\\forms\\gridfield\\GridFieldBulkActionDeActivateMemberHandler'
+                'SYBEHA\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\DeActivateMemberHandler'
             );
 
             // Add BULK action insureMember
             $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
-                'SYBEHA\\clubmaster\\forms\\gridfield\\GridFieldBulkActionInsuranceMemberHandler'
+                'SYBEHA\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\InsuranceMemberHandler'
             );
 
             /* PRINT disabled */
@@ -394,13 +394,13 @@ class ClubAdmin extends ModelAdmin
             $config->removeComponentsByType(GridFieldFilterHeader::class);
             $config->removeComponentsByType(GridFieldDeleteAction::class);
 
-            $config->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction());
+            $config->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember());
 
             // Add GridFieldBulkManager
             $config->addComponent(new \Colymba\BulkManager\BulkManager());
             // Add action
             $config->getComponentByType('Colymba\BulkManager\BulkManager')->addBulkAction(
-                'SYBEHA\\clubmaster\\forms\\gridfield\\GridFieldBulkActionApproveMemberHandler'
+                'SYBEHA\\clubmaster\\forms\\gridfields\\Bulkactions\\ApproveMemberHandler'
             );
             // Remove action
             $config->getComponentByType('Colymba\\BulkManager\\BulkManager')

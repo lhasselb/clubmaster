@@ -31,11 +31,11 @@ class TelephoneNumberField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    'PhoneNumberField.VALIDATIONPHONE',
-                    "'{value}' is not valid Phone numer, special charcters cannot be accepted for this field",
-                    array('value' => $this->value)
+                    'SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField.VALIDATION_PHONE',
+                    '{value} is not valid Phone numer, special charcters cannot be accepted for this field',
+                    ['value' => $this->value]
                 ),
-                "validation",
+                'validation error',
                 false
             );
             return false;

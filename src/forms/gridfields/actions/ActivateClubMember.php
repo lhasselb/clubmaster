@@ -1,19 +1,26 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Gridfield;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Actions;
 
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
 use SilverStripe\Forms\GridField\GridField_FormAction;
 use SilverStripe\Control\Controller;
 
+/* Use Model */
+use SYBEHA\Clubmaster\Models\ClubMemberPending;
+use SYBEHA\Clubmaster\Models\ClubMember;
+/* Logging */
+use SilverStripe\Core\Injector\Injector;
+use Psr\Log\LoggerInterface;
+
 /**
  * Gridfield action handler for activating/deactivating records.
- * Class GridFieldActivateClubmemberAction
+ * Class ActivateClubmemberAction
  *
- * @package SYBEHA\Clubmaster\Forms\Gridfield;
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Actions;
  */
-class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider
+class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionProvider
 {
 
     public function augmentColumns($gridField, &$columns)
@@ -49,8 +56,16 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
      */
     public function getColumnContent($gridField, $record, $columnName)
     {
+        //Injector::inst()->get(LoggerInterface::class)
+            //->debug('ActivateClubMember - getColumnContent() columnName = ' . $columnName
+            //    . ' record = ' . $record);
 
-        if (!$record->canEdit() || $record != 'SYBEHA\Clubmaster\Models\ClubMember') {
+        // ClubMember only
+        $clubMemberClass = get_class(new ClubMember());
+        // Injector::inst()->get(LoggerInterface::class)
+        //    ->debug('ApproveClubMember - getColumnContent() clubMemberClass = '
+        //        . $clubMemberClass);
+        if (!$record->canEdit() || $record != $clubMemberClass) {
             return;
         }
         if (!$record->isActive()) {
@@ -58,7 +73,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
                 $gridField,
                 'ActivateMember' . $record->ID,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.ACTIVATEMEMBER',
+                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER',
                     'Activate member'
                 ),
                 'activatemember',
@@ -68,15 +83,15 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
                 ->setAttribute(
                     'title',
                     _t(
-                        'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.ACTIVATEMEMBER',
-                        'ActivateMember'
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER',
+                        'Activate member'
                     )
                 )
                 ->setAttribute('data-icon', 'decline')
                 ->setDescription(
                     _t(
-                        'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.ACTIVATEMEMBER',
-                        'ActivateMember'
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER',
+                        'Activate member'
                     )
                 );
         } elseif ($record->isActive()) {
@@ -84,7 +99,7 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
                 $gridField,
                 'DeActivateMember' . $record->ID,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DEACTIVATEMEMBER',
+                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.DE_ACTIVATE_MEMBER',
                     'Deactivate member'
                 ),
                 'deactivatemember',
@@ -94,15 +109,15 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
                 ->setAttribute(
                     'title',
                     _t(
-                        'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DEACTIVATEMEMBER',
-                        'DeActivateMember'
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.DE_ACTIVATE_MEMBER',
+                        'Deactivate member'
                     )
                 )
                 ->setAttribute('data-icon', 'accept')
                 ->setDescription(
                     _t(
-                        'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DEACTIVATEMEMBER',
-                        'DeActivateMember'
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.DE_ACTIVATE_MEMBER',
+                        'Deactivate member'
                     )
                 );
         }
@@ -130,8 +145,8 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
             Controller::curr()->getResponse()->setStatusCode(
                 200,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.ACTIVATEMEMBERDONE',
-                    'ActivateMember Done.'
+                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER_DONE',
+                    'Member activated.'
                 )
             );
         } elseif ($actionName == 'deactivatemember') {
@@ -147,8 +162,8 @@ class GridFieldActivateClubMemberAction implements GridField_ColumnProvider, Gri
             Controller::curr()->getResponse()->setStatusCode(
                 200,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DEACTIVATEMEMBERDONE',
-                    'ActivateMember Done.'
+                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DE_ACTIVATE_MEMBER_DONE',
+                    'Member deactivated.'
                 )
             );
         }

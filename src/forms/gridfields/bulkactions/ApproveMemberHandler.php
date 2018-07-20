@@ -1,18 +1,18 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Gridfield;
-
-use SYBEHA\Clubmaster\Models\ClubMemberPending;
-use SYBEHA\Clubmaster\Models\ClubMember;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
-
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Convert;
-use SilverStripe\ORM\FieldType\DBDatetime;
 use Exception;
+
+use SilverStripe\ORM\FieldType\DBDatetime;
+
+use SYBEHA\Clubmaster\Models\ClubMemberPending;
+use SYBEHA\Clubmaster\Models\ClubMember;
 
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
@@ -21,11 +21,11 @@ use Psr\Log\LoggerInterface;
 /**
  * Bulk action handler for approving member records.
  * Member class will be changed from ClubMemberPending to ClubMember.
- * Class GridFieldBulkActionApproveMemberHandler
+ * Class ApproveMemberHandler
  *
- * @package SYBEHA\Clubmaster\Forms\Gridfield
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions
  */
-class GridFieldBulkActionApproveMemberHandler extends Handler
+class ApproveMemberHandler extends Handler
 {
     /**
      * URL segment used to call this handler
@@ -40,24 +40,21 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
      *
      * @var array
      */
-    private static $allowed_actions = array('approveMember');
+    private static $allowed_actions = ['approveMember'];
 
     /**
      * RequestHandler url => action map.
      *
      * @var array
      */
-    private static $url_handlers = array(
-        '' => 'approveMember'
-
-    );
+    private static $url_handlers = ['' => 'approveMember'];
 
     /**
      * Front-end label for this handler's action
      *
      * @var string
      */
-    protected $label = 'Approve';
+    protected $label = 'Approve multiple';
 
     /**
      * Front-end icon path for this handler's action.
@@ -96,7 +93,7 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('SYBEHA\Clubmaster\Admins\ClubAdmin\ClubAdmin\GRIDFIELDBULKDROPDOWNAPPROVE', $this->getLabel());
+        return _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler.GRIDFIELD_BULK_DROPDOWN_APPROVE', $this->getLabel());
     }
 
     /**
@@ -112,9 +109,8 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
         $response = new HTTPBulkToolsResponse(true, $this->gridField);
 
         try {
-            //$ids = array();
             foreach ($this->getRecords() as $record) {
-                //array_push($ids, $record->ID);
+
                 $record->Pending = 0;
                 $record->Active = 1;
                 $clubMember = new ClubMember();
@@ -132,10 +128,10 @@ class GridFieldBulkActionApproveMemberHandler extends Handler
                 }
             }
             $doneCount = count($response->getSuccessRecords());
-            Injector::inst()->get(LoggerInterface::class)
-                ->debug('GridFieldBulkActionApproveMemberHandler - approveMember() doneCount = ' . $doneCount);
+            //Injector::inst()->get(LoggerInterface::class)
+                //->debug('ApproveMemberHandler - approveMember() doneCount = ' . $doneCount);
             $message = sprintf(
-                _t('SYBEHA\Clubmaster\Forms\Gridfield\GridFieldBulkActionApproveMemberHandler', '%s approved'),
+                _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler.GRIDFIELD_BULK_DROPDOWN_APPROVED', '%s member requests approved'),
                 $doneCount
             );
             $response->setMessage($message);

@@ -53,11 +53,11 @@ class BicField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    "BicField.VALIDATIONBICNUMBER",
-                    "Please ensure you have entered the {number} BIC number correctly",
-                    array('number' => $this->value)
+                    'SYBEHA\Clubmaster\Forms\Fields\BicField.VALIDATION_BICNUMBER',
+                    'Please ensure you have entered the {number} BIC number correctly',
+                    ['number' => $this->value]
                 ),
-                "validation",
+                'validation error',
                 false
             );
             return false;

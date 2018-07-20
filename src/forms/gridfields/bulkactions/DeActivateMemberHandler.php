@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Gridfield;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -11,11 +11,11 @@ use Exception;
 
 /**
  * Bulk action handler for deactivating records.
- * Class GridFieldBulkActionDeActivateMemberHandler
+ * Class DeActivateMemberHandler
  *
- * @package SYBEHA\Clubmaster\Forms\Gridfield
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions
  */
-class GridFieldBulkActionDeActivateMemberHandler extends Handler
+class DeActivateMemberHandler extends Handler
 {
     /**
      * URL segment used to call this handler
@@ -30,23 +30,21 @@ class GridFieldBulkActionDeActivateMemberHandler extends Handler
      *
      * @var array
      */
-    private static $allowed_actions = array('deactivateMember');
+    private static $allowed_actions = ['deactivateMember'];
 
     /**
      * RequestHandler url => action map.
      *
      * @var array
      */
-    private static $url_handlers = array(
-        '' => 'deactivateMember'
-    );
+    private static $url_handlers = ['' => 'deactivateMember'];
 
     /**
      * Front-end label for this handler's action
      *
      * @var string
      */
-    protected $label = 'deactivateMember';
+    protected $label = 'Deactivate multiple';
 
     /**
      * Front-end icon path for this handler's action.
@@ -84,7 +82,7 @@ class GridFieldBulkActionDeActivateMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE', $this->getLabel());
+        return _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_DEACTIVATE', $this->getLabel());
     }
 
     /**
@@ -96,17 +94,22 @@ class GridFieldBulkActionDeActivateMemberHandler extends Handler
      */
     public function deactivateMember(HTTPRequest $request)
     {
+        $records = $this->getRecords();
         $response = new HTTPBulkToolsResponse(true, $this->gridField);
+        
         try {
-            $ids = array();
             foreach ($this->getRecords() as $record) {
-                array_push($ids, $record->ID);
                 $record->Active = 0;
-                $record->write();
+                $done = $record->write();
+                if ($done) {
+                    $response->addSuccessRecord($record);
+                } else {
+                    $response->addFailedRecord($record, $done);
+                }
             }
             $doneCount = count($response->getSuccessRecords());
             $message = sprintf(
-                'Mitglied %1$d deaktieviert',
+                _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_DEACTIVATED', '%s members deactivated'),
                 $doneCount
             );
             $response->setMessage($message);

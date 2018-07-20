@@ -5,8 +5,8 @@ namespace SYBEHA\Clubmaster\Forms\Fields;
 use SilverStripe\Forms\TextField;
 
 /**
- * Text input field with validation for numeric values. Supports validating
- * the numeric value.
+ * Text input field with validation for numeric values. 
+ * Supports validating the numeric value.
  *
  * Class EUNameTextField
  *
@@ -14,6 +14,10 @@ use SilverStripe\Forms\TextField;
  */
 class EUNameTextField extends TextField
 {
+    public function Type()
+    {
+        return 'Numeric text';
+    }
 
     public function validate($validator)
     {
@@ -26,11 +30,11 @@ class EUNameTextField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    'EUNameTextField.VALIDATIONNAME',
-                    "'{value}' is not valid, special charcters cannot be accepted for this field",
-                    array('value' => $this->value)
+                    'SYBEHA\Clubmaster\Forms\Fields\EUNameTextField.VALIDATION_NAME',
+                    '{value} is not valid, special charcters cannot be accepted for this field',
+                    ['value' => $this->value]
                 ),
-                "validation",
+                'validation error',
                 false
             );
             return false;

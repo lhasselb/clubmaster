@@ -18,8 +18,6 @@ en:
     ZIPSTART: "Zip from"
     ZIPEND: "Zip to"
     FILE: "File"
-    #BulkAction
-    GRIDFIELDBULKDROPDOWNAPPROVE: "Approve multiple"
 
   ClubAdminSiteConfig:
     PENDINGFOLDER: "Pending folder"
@@ -90,31 +88,57 @@ en:
     IBANHINT: "IBAN, like DE21301204000000015228"
     BICHINT: "BIC, like VOBADEXX"
     MANDATEREFERENCEHINT: "Will be created automatically after approving"
+  
+  # Check!
+  # SilverStripe\Forms\GridField\GridField:
+  #   NewRecord: 'New %s'
 
-#  GridField:
-#    NewRecord: 'New %s'
+  # Gridfield-Actions
+  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember:
+    ACTIVATE_MEMBER: "Activate member"
+    DE_ACTIVATE_MEMBER: "Deactivate member"
+    ACTIVATE_MEMBER_DONE: "Member activated."
+    DE_ACTIVATE_MEMBER_DONE: "Member de-activated."
 
-  GridFieldActivateClubMemberAction:
-    ACTIVATEMEMBER: "Activate member"
-    DEACTIVATEMEMBER: "De-Activate member"
-    ACTIVATEMEMBERDONE: "Activate Member Action Done."
-    DEACTIVATEMEMBERDONE: "De-Activate Member Action Done."
+  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember:
+    APPROVE_MEMBER: "Approve member request"
+    APPROVE_MEMBER_DONE: "Member approved."
 
-  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction:
-    APPROVEMEMBER: "Approve member"
-    APPROVEMEMBERDONE: "Approve Member Action Done."
-
-  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldBulkActionApproveMemberHandler:
-    GRIDFIELDBULKDROPDOWNAPPROVED: "%s approved"
-
-    #BulkAction
-    GRIDFIELDBULKDROPDOWNACTIVATE: "Activate"
-    GRIDFIELDBULKDROPDOWNDEACTIVATE: "Deactive"
-    GRIDFIELDBULKDROPDOWNINSURANCE: "Add insurance"
-
-  GridFieldShowHideButton:
+  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ShowHideButton:
     SHOW: "Show inactive"
     HIDE: "Hide inactive"
+
+  # Gridfield-Bulk-Actions
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler:
+    GRIDFIELD_BULK_DROPDOWN_APPROVE: "Approve multiple"
+    GRIDFIELD_BULK_DROPDOWN_APPROVED: "%s member requests approved."
+  
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler:
+    GRIDFIELD_BULK_DROPDOWN_ACTIVATE: "Activate members"
+    GRIDFIELD_BULK_DROPDOWN_ACTIVATED: "%s members activated."
+  
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler:
+    GRIDFIELD_BULK_DROPDOWN_DEACTIVATE: "Deactivate members"
+    GRIDFIELD_BULK_DROPDOWN_DEACTIVATED: "%s members deactivated."
+  
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler:
+    GRIDFIELD_BULK_DROPDOWN_INSURANCE: "Add insurance"
+    GRIDFIELD_BULK_DROPDOWN_INSURANCE_DONE: "%s members done"
+
+  SYBEHA\Clubmaster\Forms\Fields\BicField:
+    VALIDATION_BICNUMBER: "Problem with \"{number}\".Please ensure you have entered the BIC number correctly"
+
+  SYBEHA\Clubmaster\Forms\Fields\IbanField:
+    VALIDATION_IBANNUMBER: "Problem with \"{number}\".Please ensure you have entered the IBAN number correctly"
+
+  SYBEHA\Clubmaster\Forms\Fields\ZipField:
+    VALIDATION_ZIP: "\"{value}\" is not a zip number, only zip numbers can be accepted for this field"
+
+  SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField:
+    VALIDATION_PHONE: "\"{value}\" is not valid Phone numer, special charcters cannot be accepted for this field"
+
+  SYBEHA\Clubmaster\Forms\Fields\EUNameTextField:
+    VALIDATION_NAME: "\"{value}\" is not valid, special charcters cannot be accepted for this field"
 
   EnrollPage:
     SINGULARNAME: "Enroll"
@@ -122,18 +146,3 @@ en:
     ENROLL: "Enroll"
     REQUESTSFOLDER: "Folder"
     REQUESTSFOLDERDESCRIPTION: "Folder to store files created by form"
-
-  BicField:
-    VALIDATIONBICNUMBER: "Problem with {number}.Please ensure you have entered the BIC number correctly"
-
-  IbanField:
-    VALIDATIONIBANNUMBER: "Problem with {number}.Please ensure you have entered the IBAN number correctly"
-
-  ZipField:
-    VALIDATIONZIP: "'{value}' is not a zip number, only zip numbers can be accepted for this field"
-
-  PhoneNumberField:
-    VALIDATIONPHONE: "'{value}' is not valid Phone numer, special charcters cannot be accepted for this field"
-
-  EUNameTextField:
-    VALIDATIONNAME: "'{value}' is not valid, special charcters cannot be accepted for this field"

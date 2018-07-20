@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Gridfield;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Actions;
 
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
@@ -8,6 +8,7 @@ use SilverStripe\Forms\GridField\GridField_FormAction;
 use SilverStripe\Control\Controller;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\SiteConfig\SiteConfig;
+/* Use Model */
 use SYBEHA\Clubmaster\Models\ClubMemberPending;
 use SYBEHA\Clubmaster\Models\ClubMember;
 /* Logging */
@@ -16,11 +17,11 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Gridfield action handler for approving records.
- * Class GridFieldApproveClubMemberAction
+ * Class ApproveClubMember
  *
- * @package SYBEHA\Clubmaster\Forms\Gridfield;
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Actions;
  */
-class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, GridField_ActionProvider
+class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionProvider
 {
 
     public function augmentColumns($gridField, &$columns)
@@ -57,15 +58,15 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
     public function getColumnContent($gridField, $record, $columnName)
     {
         //Injector::inst()->get(LoggerInterface::class)
-            //->debug('GridFieldApproveClubMemberAction - getColumnContent() columnName = ' . $columnName
+            //->debug('ApproveClubMember - getColumnContent() columnName = ' . $columnName
             //    . ' record = ' . $record);
 
         // ClubMemberPending only
         $clubMemberPendingClass = get_class(new ClubMemberPending());
         // Injector::inst()->get(LoggerInterface::class)
-        //    ->debug('GridFieldApproveClubMemberAction - getColumnContent() clubMemberPendingClass = '
+        //    ->debug('ApproveClubMember - getColumnContent() clubMemberPendingClass = '
         //        . $clubMemberPendingClass);
-        if (!$record->canEdit() || $record != 'SYBEHA\Clubmaster\Models\ClubMemberPending') {
+        if (!$record->canEdit() || $record != $clubMemberPendingClass) {
             return;
         }
         if ($record->isPending()) {
@@ -73,7 +74,7 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
                 $gridField,
                 'ApproveMember' . $record->ID,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER',
+                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER',
                     'Approve member'
                 ),
                 'approvemember',
@@ -83,15 +84,15 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
                 ->setAttribute(
                     'title',
                     _t(
-                        'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER',
-                        'ApproveMember'
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER',
+                        'Approve Member request'
                     )
                 )
                 ->setAttribute('data-icon', 'accept')
                 ->setDescription(
                     _t(
-                        'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBER',
-                        'ApproveMember'
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER',
+                        'Approve Member request'
                     )
                 );
         }
@@ -121,7 +122,7 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             // Add date only if missing !
             if (empty($clubMemberPending->Pending)) {
                 Injector::inst()->get(LoggerInterface::class)
-                ->debug('GridFieldApproveClubMemberAction - handleAction() date = ' . DBDatetime::now());
+                ->debug('ApproveClubMember - handleAction() date = ' . DBDatetime::now());
                 $clubMemberPending->Since = DBDatetime::now();
             }
             $clubMemberPending->write();
@@ -146,8 +147,8 @@ class GridFieldApproveClubMemberAction implements GridField_ColumnProvider, Grid
             Controller::curr()->getResponse()->setStatusCode(
                 200,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction.APPROVEMEMBERDONE',
-                    'ApproveMember Done.'
+                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER_DONE',
+                    'Member approved.'
                 )
             );
         }

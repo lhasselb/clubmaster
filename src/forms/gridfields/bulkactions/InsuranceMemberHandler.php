@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Gridfield;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -13,9 +13,9 @@ use Exception;
  * Bulk action handler for adding insurance flag to member records.
  * Class GridFieldBulkActionInsuranceMemberHandler
  *
- * @package SYBEHA\Clubmaster\Forms\Gridfield
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions
  */
-class GridFieldBulkActionInsuranceMemberHandler extends Handler
+class InsuranceMemberHandler extends Handler
 {
     /**
      * URL segment used to call this handler
@@ -30,23 +30,21 @@ class GridFieldBulkActionInsuranceMemberHandler extends Handler
      *
      * @var array
      */
-    private static $allowed_actions = array('insureMember');
+    private static $allowed_actions = ['insureMember'];
 
     /**
      * RequestHandler url => action map.
      *
      * @var array
      */
-    private static $url_handlers = array(
-        '' => 'insureMember'
+    private static $url_handlers = ['' => 'insureMember'];
 
-    );
     /**
      * Front-end label for this handler's action
      *
      * @var string
      */
-    protected $label = 'insureMember';
+    protected $label = 'Set insurance multiple';
     /**
      * Front-end icon path for this handler's action.
      *
@@ -82,7 +80,7 @@ class GridFieldBulkActionInsuranceMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('ClubAdmin.GRIDFIELDBULKDROPDOWNINSURANCE', $this->getLabel());
+        return _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler.GRIDFIELD_BULK_DROPDOWN_INSURANCE', $this->getLabel());
     }
 
     /**
@@ -94,17 +92,22 @@ class GridFieldBulkActionInsuranceMemberHandler extends Handler
      */
     public function insureMember(HTTPRequest $request)
     {
+        $records = $this->getRecords();
         $response = new HTTPBulkToolsResponse(true, $this->gridField);
+        
         try {
-            $ids = array();
             foreach ($this->getRecords() as $record) {
-                array_push($ids, $record->ID);
                 $record->Insurance = 1;
-                $record->write();
+                $done = $record->write();
+                if ($done) {
+                    $response->addSuccessRecord($record);
+                } else {
+                    $response->addFailedRecord($record, $done);
+                }
             }
             $doneCount = count($response->getSuccessRecords());
             $message = sprintf(
-                'BLSV von %1$d gesetzt.',
+                _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler.GRIDFIELD_BULK_DROPDOWN_INSURANCE_DONE', '%s members set'),
                 $doneCount
             );
             $response->setMessage($message);

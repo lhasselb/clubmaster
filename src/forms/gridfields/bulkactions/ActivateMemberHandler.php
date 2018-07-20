@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Gridfield;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -11,11 +11,11 @@ use Exception;
 
 /**
  * Bulk action handler for activating records.
- * Class GridFieldBulkActionActivateMemberHandler
+ * Class ActivateMemberHandler
  *
- * @package SYBEHA\Clubmaster\Forms\Gridfield;
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
  */
-class GridFieldBulkActionActivateMemberHandler extends Handler
+class ActivateMemberHandler extends Handler
 {
     /**
      * URL segment used to call this handler
@@ -30,23 +30,21 @@ class GridFieldBulkActionActivateMemberHandler extends Handler
      *
      * @var array
      */
-    private static $allowed_actions = array('activateMember');
+    private static $allowed_actions = ['activateMember'];
 
     /**
      * RequestHandler url => action map.
      *
      * @var array
      */
-    private static $url_handlers = array(
-        '' => 'activateMember'
-    );
+    private static $url_handlers = ['' => 'activateMember'];
 
     /**
      * Front-end label for this handler's action
      *
      * @var string
      */
-    protected $label = 'activateMember';
+    protected $label = 'Activate multiple';
 
          /**
           * Front-end icon path for this handler's action.
@@ -84,7 +82,7 @@ class GridFieldBulkActionActivateMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE', $this->getLabel());
+        return _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_ACTIVATE', $this->getLabel());
     }
 
     /**
@@ -96,17 +94,22 @@ class GridFieldBulkActionActivateMemberHandler extends Handler
      */
     public function activateMember(HTTPRequest $request)
     {
+        $records = $this->getRecords();
         $response = new HTTPBulkToolsResponse(true, $this->gridField);
+        
         try {
-            $ids = array();
             foreach ($this->getRecords() as $record) {
-                array_push($ids, $record->ID);
                 $record->Active = 1;
-                $record->write();
+                $done = $record->write();
+                if ($done) {
+                    $response->addSuccessRecord($record);
+                } else {
+                    $response->addFailedRecord($record, $done);
+                }
             }
             $doneCount = count($response->getSuccessRecords());
             $message = sprintf(
-                'Mitglied %1$d aktiviert',
+                _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_ACTIVATED', '%s members activated'),
                 $doneCount
             );
             $response->setMessage($message);

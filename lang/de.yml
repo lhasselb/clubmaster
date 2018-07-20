@@ -18,8 +18,6 @@ de:
     ZIPSTART: "Postleitzahlen von"
     ZIPEND: "Postleitzahlen bis"
     FILE: "Datei"
-    #BulkAction
-    GRIDFIELDBULKDROPDOWNAPPROVE: "Mehreren Anträgen zustimmen"
 
   ClubAdminSiteConfig:
     PENDINGFOLDER: "Verzeichnis für Anträge"
@@ -90,31 +88,57 @@ de:
     IBANHINT: "IBAN, z.B. DE21301204000000015228"
     BICHINT: "BIC, z.B. VOBADEXX"
     MANDATEREFERENCEHINT: "Wird bei der Zustimmung automatisch angelegt."
+  
+  # Check!
+  # SilverStripe\Forms\GridField\GridField:
+  #   NewRecord: "Neues %s"
 
-  GridField:
-    NewRecord: 'Neues %s'
+  # Gridfield-Actions
+  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember:
+    ACTIVATE_MEMBER: "Aktiviere Mitglied"
+    DE_ACTIVATE_MEMBER: "Deaktiviere Mitglied"
+    ACTIVATE_MEMBER_DONE: "Mitglied aktiviert."
+    DEACTIVATE_MEMBER_DONE: "Mitglied deaktiviert."
 
-  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction:
-    ACTIVATEMEMBER: "Aktiviere Mitglied"
-    DEACTIVATEMEMBER: "Deaktiviere Mitglied"
-    ACTIVATEMEMBERDONE: "Mitglied aktiviert."
-    DEACTIVATEMEMBERDONE: "Mitglied deaktiviert."
-
-  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldApproveClubMemberAction:
-    APPROVEMEMBER: "Antrag zustimmen"
-    APPROVEMEMBERDONE: "Mitglied angelegt."
-
-  SYBEHA\Clubmaster\Forms\Gridfield\GridFieldBulkActionApproveMemberHandler:
-    GRIDFIELDBULKDROPDOWNAPPROVED: "%s Anträgen zugestimmt"
-
-    #BulkAction
-    GRIDFIELDBULKDROPDOWNACTIVATE: "Mitglieder aktivieren"
-    GRIDFIELDBULKDROPDOWNDEACTIVATE: "Mitglieder de-aktivieren"
-    GRIDFIELDBULKDROPDOWNINSURANCE: "Setze BLSV gemeldet"
-
-  GridFieldShowHideButton:
+  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember:
+    APPROVE_MEMBER: "Mitgliedsantrag zustimmen"
+    APPROVE_MEMBER_DONE: "Mitglied angelegt."
+  
+  SYBEHA\Clubmaster\Forms\Gridfields\Actions\GridFieldShowHideButton:
     SHOW: "Zeige auch inaktive Mitglieder"
     HIDE: "Zeige nur aktive Mitglieder"
+
+  # Gridfield-Bulk-Actions
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler:
+    GRIDFIELD_BULK_DROPDOWN_APPROVE: "Anträgen zustimmen"
+    GRIDFIELD_BULK_DROPDOWN_APPROVED: "%s Anträgen zugestimmt."
+  
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler:
+    GRIDFIELD_BULK_DROPDOWN_ACTIVATE: "Mitglieder aktivieren"
+    GRIDFIELD_BULK_DROPDOWN_ACTIVATED: "%s Mitglieder aktiviert."
+  
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler:
+    GRIDFIELD_BULK_DROPDOWN_DEACTIVATE: "Mitglieder deaktivieren"
+    GRIDFIELD_BULK_DROPDOWN_DEACTIVATED: "%s Mitglieder deaktiviert."
+  
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler:
+    GRIDFIELD_BULK_DROPDOWN_INSURANCE: "BLSV gemeldet setzen"
+    GRIDFIELD_BULK_DROPDOWN_INSURANCE_DONE: "%s Mitglieder gesetzt."
+
+  SYBEHA\Clubmaster\Forms\Fields\BicField:
+    VALIDATION_BICNUMBER: "Bitte prüfen Sie die korrekte Eingabe BIC \"{number}\"."
+
+  SYBEHA\Clubmaster\Forms\Fields\IbanField:
+    VALIDATION_IBANNUMBER: "Bitte prüfen Sie die korrekte Eingabe IBAN \"{number}\"."
+
+  SYBEHA\Clubmaster\Forms\Fields\ZipField:
+    VALIDATION_ZIP: "\"{value}\" ist keine Postleitzahl, nur Postleitzahlen sind zulässig für dieses Feld."
+
+  SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField:
+    VALIDATION_PHONE: "\"{value}\" ist keine zulässige Telefonnummer."
+
+  SYBEHA\Clubmaster\Forms\Fields\EUNameTextField:
+    VALIDATION_NAME: "\"{value}\" ist keine zulässige Eingabe, Sonderzeichen sind nicht zulässig."
 
   EnrollPage:
     SINGULARNAME: "Mitgliedsantrag"
@@ -122,18 +146,3 @@ de:
     ENROLL: "Antrag absenden"
     REQUESTSFOLDER: "Verzeichnis für Anträge:"
     REQUESTSFOLDERDESCRIPTION: "Verzeichnis zum speichern der Antragsdateien (generiert vom Formular)"
-
-  BicField:
-    VALIDATIONBICNUMBER: "Bitte prüfen Sie die korrekte Eingabe BIC {number}"
-
-  IbanField:
-    VALIDATIONIBANNUMBER: "Bitte prüfen Sie die korrekte Eingabe IBAN {number}"
-
-  ZipField:
-    VALIDATIONZIP: "'{value}' ist keine Postleitzahl, nur Postleitzahlen sind zulässig für dieses Feld."
-
-  PhoneNumberField:
-    VALIDATIONPHONE: "'{value}' ist keine zulässige Telefonnummer."
-
-  EUNameTextField:
-    VALIDATIONNAME: "'{value}' ist keine zulässige Eingabe, Sonderzeichen sind nicht zulässig."
