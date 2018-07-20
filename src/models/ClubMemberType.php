@@ -40,8 +40,8 @@ class ClubMemberType extends DataObject
     public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels($includerelations);
-        $labels['TypeName'] = _t('ClubMemberType.TYPENAME', 'TypeName');
-        $labels['ClubMembers'] = _t('ClubMemberType.CLUBMEMBERS', 'ClubMembers');
+        $labels['TypeName'] = _t('SYBEHA\Clubmaster\Models\ClubMemberType.TYPENAME', 'type name');
+        $labels['ClubMembers'] = _t('SYBEHA\Clubmaster\Models\ClubMemberType.CLUBMEMBERS', 'ClubMembers');
         return $labels;
     }
 

@@ -49,7 +49,7 @@ class ClubAdminSiteConfig extends DataExtension
     public function updateCMSFields(FieldList $fields)
     {
 
-        $clubAdminTabTitle = _t('ClubAdmin.MENUTITLE', 'ClubAdmin');
+        $clubAdminTabTitle = _t('SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.MENUTITLE', 'ClubAdmin');
 
         // Create a configuration variable to store pending member files
         $fields->addFieldToTab(
@@ -57,7 +57,7 @@ class ClubAdminSiteConfig extends DataExtension
             TreeDropdownField::create(
                 'PendingFolderID',
                 _t(
-                    'ClubAdminSiteConfig.PENDINGFOLDER',
+                    'SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.PENDINGFOLDER',
                     'PendingFolder'
                 ),
                 Folder::class
@@ -70,7 +70,7 @@ class ClubAdminSiteConfig extends DataExtension
             NumericField::create(
                 'MembersDisplayed',
                 _t(
-                    'ClubAdminSiteConfig.MEMBERSDISPLAYED',
+                    'SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.MEMBERSDISPLAYED',
                     'Amount of members displayed'
                 )
             )
@@ -82,7 +82,7 @@ class ClubAdminSiteConfig extends DataExtension
             CheckboxField::create(
                 'AddMandate',
                 _t(
-                    'ClubAdminSiteConfig.ADDMANDATE',
+                    'SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.ADDMANDATE',
                     'Automatic addition of mandate reference'
                 )
             )
@@ -94,7 +94,7 @@ class ClubAdminSiteConfig extends DataExtension
             CheckboxField::create(
                 'SendApprovalMail',
                 _t(
-                    'ClubAdminSiteConfig.SENDAPPROVEMAIL',
+                    'SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.SENDAPPROVEMAIL',
                     'Send E-Mail  after approval'
                 )
             )

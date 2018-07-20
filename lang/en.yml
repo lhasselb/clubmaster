@@ -19,7 +19,8 @@ en:
     ZIPEND: "Zip to"
     FILE: "File"
 
-  ClubAdminSiteConfig:
+  SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig:
+    MENUTITLE: "Clubmaster settings"
     PENDINGFOLDER: "Pending folder"
     MEMBERSDISPLAYED: "Members displayed per page"
     ADDMANDATE: "Automatic addition of mandate reference"
@@ -32,15 +33,13 @@ en:
   SYBEHA\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Clubmember type"
     PLURALNAME: "Clubmember type"
-  ClubMemberType:
-    DESCRIPTION: "Manage your types"
+    #DESCRIPTION: "Manage your types"
     TYPENAME: "Type name"
     CLUBMEMBERS: "Club members"
 
   SYBEHA\Clubmaster\Models\ClubMember:
     SINGULARNAME: "Club member"
     PLURALNAME: "Club members"
-  ClubMember:
     DESCRIPTION: "Manage your member"
     MAINTITLE: "Main"
     BANKINGACCOUNT: "Account data"
