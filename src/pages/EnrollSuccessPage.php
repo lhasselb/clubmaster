@@ -56,7 +56,7 @@ class EnrollSuccessPage extends Page
             //@todo: Add i18n
             TextAreaField::create(
                 'Content',
-                'Danke-Meldung',
+                _t('SYBEHA\Clubmaster\Pages\EnrollSuccessPage.MESSAGE_LABEL','Thank you messag'),
                 $this->Content
             ),
             'Metadata'
@@ -64,13 +64,28 @@ class EnrollSuccessPage extends Page
         return $fields;
     }
 
-
+    /**
+     * Get form data
+     *
+     * @return ArrayData
+     */
     public function FormData()
     {
         $request = Injector::inst()->get(HTTPRequest::class);
         $session = $request->getSession();
+        if ($session->get('Data')) {
+            // Get the String for the tyoe ID
+            return $list = new ArrayData($session->get('Data'));
+        } else new ArrayData();
+    }
 
-        /*
+    /**
+     * Utility to dump session data
+     *
+     * @param SilverStripe\Control\Session $session
+     * @return void
+     */
+    private static function dumpSession($session) {
         $checkAll = $session->getAll();
         foreach($checkAll as $key => $value) {
             if (is_string($value)) {
@@ -86,17 +101,13 @@ class EnrollSuccessPage extends Page
                     } elseif (is_array($value)) {
                         Injector::inst()->get(LoggerInterface::class)
                             ->debug('EnrolSuccessPage - FormData()  ----- session key = ' . $key . ' array data: ' );
-                            foreach($value as $key => $value) {
-                                Injector::inst()->get(LoggerInterface::class)
-                                ->debug('EnrolSuccessPage - FormData()  ----- ----- session key = ' . $key . ' value = ' . $value);
-                            }
+                        foreach($value as $key => $value) {
+                            Injector::inst()->get(LoggerInterface::class)
+                            ->debug('EnrolSuccessPage - FormData()  ----- ----- session key = ' . $key . ' value = ' . $value);
+                        }
                     }
                 }
             }
-        }*/
-
-        if ($session->get('Data')) {
-            return $list = new ArrayData($session->get('Data'));
         }
     }
 }

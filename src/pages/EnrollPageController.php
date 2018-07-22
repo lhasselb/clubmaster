@@ -81,50 +81,49 @@ class EnrollPageController extends PageController
                 _t('SYBEHA\Clubmaster\Models\ClubMember.SALUTATION', 'Salutation'),
                 singleton(ClubMember::class)->dbObject('Salutation')->enumValues()
             )->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            TextField::create('FirstName', _t('SYBEHA\Clubmaster\Models\ClubMember.FIRSTNAME', 'FirstName'))
+            EUNameTextField::create('FirstName', _t('SYBEHA\Clubmaster\Models\ClubMember.FIRSTNAME', 'FirstName'))
                 ->setAttribute('placeholder', 'Vorname'),
-            TextField::create('LastName', _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName'))
+            EUNameTextField::create('LastName', _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName'))
                 ->setAttribute('placeholder', 'Nachname'),
             DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
                 ->setAttribute('placeholder', $today),
             CountryDropdownField::create('Nationality', _t('SYBEHA\Clubmaster\Models\ClubMember.NATIONALITY', 'Nationality'))->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            TextField::create('Street', _t('SYBEHA\Clubmaster\Models\ClubMember.STREET', 'Street'))
+            EUNameTextField::create('Street', _t('SYBEHA\Clubmaster\Models\ClubMember.STREET', 'Street'))
                 ->setAttribute('placeholder', 'Straße'),
-            TextField::create('StreetNumber', _t('SYBEHA\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber'))
+            EUNameTextField::create('StreetNumber', _t('SYBEHA\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber'))
                 ->setAttribute('placeholder', 'Hausnummer'),
             ZipField::create('Zip', _t('SYBEHA\Clubmaster\Models\ClubMember.ZIP', 'Zip'))
                 ->setAttribute('placeholder', '12345'),
-            TextField::create('City', _t('SYBEHA\Clubmaster\Models\ClubMember.CITY', 'City'))
+            EUNameTextField::create('City', _t('SYBEHA\Clubmaster\Models\ClubMember.CITY', 'City'))
                 ->setAttribute('placeholder', 'Wohnort'),
             EmailField::create('Email', _t('SYBEHA\Clubmaster\Models\ClubMember.EMAIL', 'Email'))
                 ->setAttribute('placeholder', 'name@domain.de'),
-            TextField::create('Mobil', _t('SYBEHA\Clubmaster\Models\ClubMember.MOBIL', 'Mobil'))
+            TelephoneNumberField::create('Mobil', _t('SYBEHA\Clubmaster\Models\ClubMember.MOBIL', 'Mobil'))
                 ->setAttribute('placeholder', 'Handynummer'), //PhoneNumberField
-            TextField::create('Phone', _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
+            TelephoneNumberField::create('Phone', _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
                 ->setAttribute('placeholder', 'Telefonnummer'), //PhoneNumberField
             DropdownField::create('TypeID', 'Mitgliedstyp', $clubMemberTypesMap)
                 ->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            //->setSource(ClubMemberType::get()->map('ID', 'TypeName')),
-        DateField::create('Since', 'Mitglied ab')->setValue(DBDatetime::now()/*->FormatI18N('%d.%m.%Y')*/),
+            DateField::create('Since', 'Mitglied ab')->setValue(DBDatetime::now()),
             CheckboxField::create('EqualAddress', _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress'))->setValue(true),
-            TextField::create(
+            EUNameTextField::create(
                 'AccountHolderFirstName',
                 _t(
-                    'ClubMember.ACCOUNTHOLDERFIRSTNAME',
+                    'SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERFIRSTNAME',
                     'AccountHolderFirstName'
                 )
             ),
-            TextField::create('AccountHolderLastName', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')),
-            TextField::create('AccountHolderStreet', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')),
-            TextField::create(
+            EUNameTextField::create('AccountHolderLastName', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')),
+            EUNameTextField::create('AccountHolderStreet', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')),
+            EUNameTextField::create(
                 'AccountHolderStreetNumber',
                 _t(
-                    'ClubMember.ACCOUNTHOLDERSTREETNUMBER',
+                    'SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREETNUMBER',
                     'AccountHolderStreetNumber'
                 )
             ),
             ZipField::create('AccountHolderZip', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
-            TextField::create('AccountHolderCity', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
+            EUNameTextField::create('AccountHolderCity', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
             IbanField::create('Iban', _t('SYBEHA\Clubmaster\Models\ClubMember.IBAN', 'Iban'))
                 ->setAttribute('placeholder', "DE12500105170648489890")->addExtraClass("text"),
             BicField::create('Bic', _t('SYBEHA\Clubmaster\Models\ClubMember.BIC', 'Bic'))
@@ -132,7 +131,9 @@ class EnrollPageController extends PageController
         );
 
         $actions = new FieldList(
-            FormAction::create('doEnroll')->setTitle(_t('EnrollPage.ENROLL', 'Enroll'))->setUseButtonTag(true)
+            FormAction::create('doEnroll')
+                ->setTitle(_t('SYBEHA\Clubmaster\Pages\EnrollPage.ENROLL', 'Enroll'))
+                ->setUseButtonTag(true)
         );
 
         $required = new RequiredFields(
