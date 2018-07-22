@@ -6,6 +6,11 @@ use Page;
 
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\Control\Session;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\View\ArrayData;
+/* Logging */
+use SilverStripe\Core\Injector\Injector;
+use Psr\Log\LoggerInterface;
 
 /**
  * Enroll success page template
@@ -48,6 +53,7 @@ class EnrollSuccessPage extends Page
         //$fields->addFieldToTab('Root.Main', HtmlEditorField::create('Content','Inhalt', $this->Content, 'cmsNoP'));
         $fields->addFieldToTab(
             'Root.Main',
+            //@todo: Add i18n
             TextAreaField::create(
                 'Content',
                 'Danke-Meldung',
@@ -58,12 +64,39 @@ class EnrollSuccessPage extends Page
         return $fields;
     }
 
-    /*
+
     public function FormData()
     {
-        $session = $this->getRequest()->getSession();
+        $request = Injector::inst()->get(HTTPRequest::class);
+        $session = $request->getSession();
+
+        /*
+        $checkAll = $session->getAll();
+        foreach($checkAll as $key => $value) {
+            if (is_string($value)) {
+                Injector::inst()->get(LoggerInterface::class)
+                ->debug('EnrolSuccessPage - FormData()  session key = ' . $key . ' value = ' . $value);
+            } elseif (is_array($value)) {
+                Injector::inst()->get(LoggerInterface::class)
+                    ->debug('EnrolSuccessPage - FormData()  session key = ' . $key . ' ----- array data: ');
+                foreach($value as $key => $value) {
+                    if (is_string($value)) {
+                        Injector::inst()->get(LoggerInterface::class)
+                            ->debug('EnrolSuccessPage - FormData()  ----- session key = ' . $key . ' value = ' . $value);
+                    } elseif (is_array($value)) {
+                        Injector::inst()->get(LoggerInterface::class)
+                            ->debug('EnrolSuccessPage - FormData()  ----- session key = ' . $key . ' array data: ' );
+                            foreach($value as $key => $value) {
+                                Injector::inst()->get(LoggerInterface::class)
+                                ->debug('EnrolSuccessPage - FormData()  ----- ----- session key = ' . $key . ' value = ' . $value);
+                            }
+                    }
+                }
+            }
+        }*/
+
         if ($session->get('Data')) {
-            return $list = new ArrayData(Session::get('Data'));
+            return $list = new ArrayData($session->get('Data'));
         }
-    }*/
+    }
 }

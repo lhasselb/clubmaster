@@ -185,28 +185,26 @@ class EnrollPageController extends PageController
         // Get the desired folder to store the serialized object
         $folder = $this->Folder();
         // Get the path for the folder and add a filename
-        /*
-        $path = $folder->getFullPath() . $data['FirstName'][0] . $data['LastName'][0] . '_'
+        $path = $folder->Name . DIRECTORY_SEPARATOR .$data['FirstName'][0] . $data['LastName'][0] . '_'
             . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
-        */
-        $path = $folder->Filename . $data['FirstName'][0] . $data['LastName'][0] . '_'
-        . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
+
         Injector::inst()->get(LoggerInterface::class)
             ->debug('EnrolPageController - doEnroll()  path = ' . $path);
-        
-        /* Store the object at calculated path
-         * If filename does not exist, the file is created. Otherwise,
-         * the existing file is overwritten, unless the FILE_APPEND flag is set.
-         */
-        //file_put_contents($path, $serialized);
+
+
         $file = new File();
         $info = $file->setFromString($serialized, $path);
+        /*
         foreach ( $info as $key => $value ) {
             Injector::inst()->get(LoggerInterface::class)
-            ->debug('key =' . $key . ' value = ' . $value);
-        }        
-
-        //Send an E-Mail
+                ->debug('EnrollPageController - doEnroll()  key = ' . $key . ' value = ' . $value);
+        }*/ 
+        $id = $file->write();
+        Injector::inst()->get(LoggerInterface::class)
+            ->debug('EnrollPageController - doEnroll()  file id = ' . $id . ' filename = ' . $file->Filename);
+    
+        
+        // Send an E-Mail
         $email = Email::create()
         ->setTo($data['Email'])
         ->setSubject('Anmeldung bei Jim e.V.')
@@ -217,10 +215,41 @@ class EnrollPageController extends PageController
         } else {
             // there may have been 1 or more failures
         }
-        //return $this->redirectBack();
-        //SS_Log::log(EnrollSuccessPage::get()->First()->Link(),SS_Log::WARN);
+        
+        // Get the session object
         $session = $this->getRequest()->getSession();
+        // Add data
         $session->set('Data', $data);
+
+        
+        /*$checkAll = $session->getAll();
+        foreach($checkAll as $key => $value) {
+            if (is_string($value)) {
+                Injector::inst()->get(LoggerInterface::class)
+                ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' value = ' . $value);
+            } elseif (is_array($value)) {
+                Injector::inst()->get(LoggerInterface::class)
+                    ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' array data: ');
+                foreach($value as $key => $value) {
+                    if (is_string($value)) {
+                        Injector::inst()->get(LoggerInterface::class)
+                            ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' value = ' . $value);
+                    } elseif (is_array($value)) {
+                        Injector::inst()->get(LoggerInterface::class)
+                            ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' array data: ' );
+                            foreach($value as $key => $value) {
+                                Injector::inst()->get(LoggerInterface::class)
+                                ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' value = ' . $value);
+                            }
+                    }
+                }
+            }
+        }*/
+        //$link = EnrollSuccessPage::get()->First()->Link();
+        //Injector::inst()->get(LoggerInterface::class)
+        //    ->debug('EnrolPageController - doEnroll()  link = ' . $link);
+        
+        //return $this->redirectBack();
         return $this->redirect(EnrollSuccessPage::get()->First()->Link());
     }
 

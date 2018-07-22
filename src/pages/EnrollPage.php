@@ -47,7 +47,10 @@ class EnrollPage extends Page
      * @config
      */
     private static $request_folder = 'antraege';
-
+    
+    /**
+     * {@inheritdoc}
+     */
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -66,6 +69,9 @@ class EnrollPage extends Page
         return $fields;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
