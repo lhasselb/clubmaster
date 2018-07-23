@@ -168,6 +168,13 @@ class EnrollPageController extends PageController
         return $form;
     }
 
+    /**
+     * Function for declared action 
+     *
+     * @param FieldList $data
+     * @param Form $form
+     * @return void
+     */
     public function doEnroll($data, Form $form)
     {
 
@@ -177,49 +184,55 @@ class EnrollPageController extends PageController
         // Save data into object
         $form->saveInto($clubMemberPending);
         
-        // Serialize object safely
-        $serialized = base64_encode(serialize($clubMemberPending));
-        
+        // Get the path for the folder and add a filename like LH_03011970_dd.mm.YYYY_HH_MM_SS.antrag
+        $name = $data['FirstName'][0] . $data['LastName'][0] . '_'
+            . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
+
         // Get the desired folder to store the serialized object
         $folder = $this->Folder();
 
-        // Get the path for the folder and add a filename like LH_03011970_dd.mm.YYYY_HH_MM_SS.antrag
-        $path = $folder->Name . DIRECTORY_SEPARATOR .$data['FirstName'][0] . $data['LastName'][0] . '_'
-            . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
+        // Files property Filename contains (optional) preceding folder  
+        $filename = $folder->Name . DIRECTORY_SEPARATOR . $name;
 
         Injector::inst()->get(LoggerInterface::class)
-            ->debug('EnrolPageController - doEnroll()  path = ' . $path);
-
-
-        $file = new File();
-        $info = $file->setFromString($serialized, $path);
+            ->debug('EnrolPageController - doEnroll()  path = ' . $filename);
         
+        // Add path to object
+        $clubMemberPending->SerializedFileName = $filename;
+        
+        // Serialize object safely
+        $serialized = base64_encode(serialize($clubMemberPending));
+        
+        // Store the serialized file
+        $file = new File();
+        $file->setFromString($serialized, $filename);
         $id = $file->write();
+        
         Injector::inst()->get(LoggerInterface::class)
             ->debug('EnrollPageController - doEnroll()  file id = ' . $id . ' filename = ' . $file->Filename);
     
-        
-        // Send an E-Mail
-        $email = Email::create()
-        ->setTo($data['Email'])
-        ->setSubject('Anmeldung bei Jim e.V.')
-        ->setHTMLTemplate('EMail\EnrollMail');
+        if ($id) {
+            // Send an E-Mail
+            $email = Email::create()
+            ->setTo($data['Email'])
+            ->setSubject('Anmeldung bei Jim e.V.')
+            ->setHTMLTemplate('EMail\EnrollMail');
+            if ($email->send()) {
 
-        //->populateTemplate(new ArrayData($data));
-        if ($email->send()) {
-            //email sent successfully
-        } else {
-            // there may have been 1 or more failures
+                // Get the session object
+                $session = $this->getRequest()->getSession();
+
+                // Add data
+                //$session->set('Data', $data);
+                $session->set('ClubMemberPending', $serialized);
+
+                return $this->redirect(EnrollSuccessPage::get()->First()->Link());
+
+            } else {
+                // there may have been 1 or more failures
+                return $this->redirectBack();
+            }
         }
-        
-        // Get the session object
-        $session = $this->getRequest()->getSession();
-
-        // Add data
-        $session->set('Data', $data);
-
-        //return $this->redirectBack();
-        return $this->redirect(EnrollSuccessPage::get()->First()->Link());
     }
 
     public function init()

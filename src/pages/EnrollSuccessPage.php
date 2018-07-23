@@ -8,8 +8,10 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\Control\Session;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\View\ArrayData;
+use SilverStripe\ORM\ArrayList;
 
 use SYBEHA\Clubmaster\Models\ClubMemberType;
+use SYBEHA\Clubmaster\Models\ClubMemberPending;
 
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
@@ -76,14 +78,23 @@ class EnrollSuccessPage extends Page
     {
         $request = Injector::inst()->get(HTTPRequest::class);
         $session = $request->getSession();
-        if ($session->get('Data')) {
-            
-            $list = new ArrayData($session->get('Data'));
+        //if ($session->get('Data')) {
+        if($session->get('ClubMemberPending'))
+        {
+            //$list = new ArrayData($session->get('Data'));
+            $list = new ArrayData();
+            $serialized = $session->get('ClubMemberPending');
+            $pendingMember = unserialize(base64_decode($serialized));
+            $list = $pendingMember->data();
             // We need to replace the String TypeID from the form with a database entry for the appropriate TypeID
             Injector::inst()->get(LoggerInterface::class)
-                ->debug('EnrolSuccessPage - FormData()  id = ' . $list->getField('TypeID'));
+                ->debug('EnrolSuccessPage - FormData()  class = ' . get_class($pendingMember));
+            Injector::inst()->get(LoggerInterface::class)
+                //->debug('EnrolSuccessPage - FormData()  id = ' . $list->getField('TypeID'));
+                ->debug('EnrolSuccessPage - FormData()  id = ' . $pendingMember->TypeID);
             
-            $typeName = ClubMemberType::get()->byID($list->getField('TypeID'))->TypeName;
+            //$typeName = ClubMemberType::get()->byID($list->getField('TypeID'))->TypeName;
+            $typeName = ClubMemberType::get()->byID($pendingMember->TypeID)->TypeName;
             // Initially there are no ClubMemberType's - @todo: Ignore
 
             Injector::inst()->get(LoggerInterface::class)
