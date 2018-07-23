@@ -35,7 +35,7 @@
                                         <li>E-Mail: $Email</li>
                                         <li>Mobil: $Mobil</li>
                                         <li>Telefon: $Phone</li>
-                                        <li>Typ: $TypeID</li>
+                                        <li>Typ: $TypeName</li>
                                         <li>Mitgliedschaft startet am $Since</li>
                                     </ul>
                                 </div>

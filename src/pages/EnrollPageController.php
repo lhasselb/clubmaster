@@ -35,6 +35,7 @@ use SYBEHA\Clubmaster\Forms\Fields\IbanField;
 use SYBEHA\Clubmaster\Forms\Fields\BicField;
 /* See  https://github.com/dynamic/silverstripe-country-dropdown-field */
 use Dynamic\CountryDropdownField\Fields\CountryDropdownField;
+
 //use \DateTime;
 
 
@@ -66,7 +67,7 @@ class EnrollPageController extends PageController
     {
         $today = DBDatetime::now();//->FormatI18N("%d.%m.%Y");
 
-        // @todo: Clarify if we should add an additional flag to the backend to hide them from the list 
+        // @todo: Clarify if we should add an additional flag to the backend to hide them from the list
         // Check for types before using
         if (ClubMemberType::get()->exists()) {
             $clubMemberTypesMap = ClubMemberType::get()->exclude('ShowInFrontEnd', '0')->map('ID', 'Title');
@@ -169,23 +170,20 @@ class EnrollPageController extends PageController
 
     public function doEnroll($data, Form $form)
     {
-        // Add a success message
-        //$form->sessionMessage(
-        //    'Vielen Dank für die Anmeldung ' .$data['FirstName']. ' ' .$data['LastName'],
-        //    'success'
-        //);
-        /*foreach ($data as $key => $value) {
-            SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
-        }*/
+
         // Create a ClubMember object
         $clubMemberPending = new ClubMemberPending();
+
         // Save data into object
         $form->saveInto($clubMemberPending);
+        
         // Serialize object safely
         $serialized = base64_encode(serialize($clubMemberPending));
+        
         // Get the desired folder to store the serialized object
         $folder = $this->Folder();
-        // Get the path for the folder and add a filename
+
+        // Get the path for the folder and add a filename like LH_03011970_dd.mm.YYYY_HH_MM_SS.antrag
         $path = $folder->Name . DIRECTORY_SEPARATOR .$data['FirstName'][0] . $data['LastName'][0] . '_'
             . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
 
@@ -195,11 +193,7 @@ class EnrollPageController extends PageController
 
         $file = new File();
         $info = $file->setFromString($serialized, $path);
-        /*
-        foreach ( $info as $key => $value ) {
-            Injector::inst()->get(LoggerInterface::class)
-                ->debug('EnrollPageController - doEnroll()  key = ' . $key . ' value = ' . $value);
-        }*/ 
+        
         $id = $file->write();
         Injector::inst()->get(LoggerInterface::class)
             ->debug('EnrollPageController - doEnroll()  file id = ' . $id . ' filename = ' . $file->Filename);
@@ -210,6 +204,7 @@ class EnrollPageController extends PageController
         ->setTo($data['Email'])
         ->setSubject('Anmeldung bei Jim e.V.')
         ->setHTMLTemplate('EMail\EnrollMail');
+
         //->populateTemplate(new ArrayData($data));
         if ($email->send()) {
             //email sent successfully
@@ -219,37 +214,10 @@ class EnrollPageController extends PageController
         
         // Get the session object
         $session = $this->getRequest()->getSession();
+
         // Add data
         $session->set('Data', $data);
 
-        
-        /*$checkAll = $session->getAll();
-        foreach($checkAll as $key => $value) {
-            if (is_string($value)) {
-                Injector::inst()->get(LoggerInterface::class)
-                ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' value = ' . $value);
-            } elseif (is_array($value)) {
-                Injector::inst()->get(LoggerInterface::class)
-                    ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' array data: ');
-                foreach($value as $key => $value) {
-                    if (is_string($value)) {
-                        Injector::inst()->get(LoggerInterface::class)
-                            ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' value = ' . $value);
-                    } elseif (is_array($value)) {
-                        Injector::inst()->get(LoggerInterface::class)
-                            ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' array data: ' );
-                            foreach($value as $key => $value) {
-                                Injector::inst()->get(LoggerInterface::class)
-                                ->debug('EnrolPageController - doEnroll()  session key = ' . $key . ' value = ' . $value);
-                            }
-                    }
-                }
-            }
-        }*/
-        //$link = EnrollSuccessPage::get()->First()->Link();
-        //Injector::inst()->get(LoggerInterface::class)
-        //    ->debug('EnrolPageController - doEnroll()  link = ' . $link);
-        
         //return $this->redirectBack();
         return $this->redirect(EnrollSuccessPage::get()->First()->Link());
     }

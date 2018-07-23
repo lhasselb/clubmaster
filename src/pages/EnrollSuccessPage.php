@@ -8,6 +8,9 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\Control\Session;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\View\ArrayData;
+
+use SYBEHA\Clubmaster\Models\ClubMemberType;
+
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
@@ -74,8 +77,21 @@ class EnrollSuccessPage extends Page
         $request = Injector::inst()->get(HTTPRequest::class);
         $session = $request->getSession();
         if ($session->get('Data')) {
-            // Get the String for the tyoe ID
-            return $list = new ArrayData($session->get('Data'));
+            
+            $list = new ArrayData($session->get('Data'));
+            // We need to replace the String TypeID from the form with a database entry for the appropriate TypeID
+            Injector::inst()->get(LoggerInterface::class)
+                ->debug('EnrolSuccessPage - FormData()  id = ' . $list->getField('TypeID'));
+            
+            $typeName = ClubMemberType::get()->byID($list->getField('TypeID'))->TypeName;
+            // Initially there are no ClubMemberType's - @todo: Ignore
+
+            Injector::inst()->get(LoggerInterface::class)
+                ->debug('EnrolSuccessPage - FormData()  type = ' . $typeName);
+
+            $list->setField('TypeName',$typeName);
+            return $list;
+
         } else new ArrayData();
     }
 

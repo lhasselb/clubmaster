@@ -7,7 +7,8 @@
 <p>$Email</p>
 <p>$Mobil</p>
 <p>$Phone</p>
-<p>$TypeID</p>
+<!-- <p>$TypeID</p> -->
+<p>$TypeName</p>
 <p>$Since</p>
 <h2>Bankverbindung</h2>
 <p>$AccountHolderFirstName $AccountHolderLastName</p>
