@@ -147,6 +147,7 @@ de:
     ENROLL: "Antrag absenden"
     REQUESTSFOLDER: "Verzeichnis für Anträge:"
     REQUESTSFOLDERDESCRIPTION: "Verzeichnis zum speichern der Antragsdateien (generiert vom Formular)"
+    CONTENT_LABEL: "Das Formular wird im PHP-Code gepflegt."
   
   SYBEHA\Clubmaster\Pages\EnrollSuccessPage:
     SINGULARNAME: "Erfolgreicher Mitgliedsantrag"

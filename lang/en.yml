@@ -147,6 +147,7 @@ en:
     ENROLL: "Enroll"
     REQUESTSFOLDER: "Folder"
     REQUESTSFOLDERDESCRIPTION: "Folder to store files created by form"
+    CONTENT_LABEL: "Form data is maintained within PHP code."
 
   SYBEHA\Clubmaster\Pages\EnrollSuccessPage:
     SINGULARNAME: "Succes"

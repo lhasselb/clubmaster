@@ -54,7 +54,12 @@ class EnrollPage extends Page
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        $fields->addFieldToTab('Root.Main', LabelField::create('Das Formular wird im PHP-Code gepflegt.'), 'Content');
+        $fields->addFieldToTab(
+            'Root.Main', 
+            LabelField::create(
+                _t('SYBEHA\Clubmaster\Pages\EnrollPage.CONTENT_LABEL','Form data is maintained within PHP code.')
+            ), 'Content'
+            );
         $fields->removeFieldFromTab('Root.Main', 'Content');
         $fields->addFieldToTab(
             'Root.Main',
