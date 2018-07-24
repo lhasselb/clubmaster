@@ -17,6 +17,7 @@ use SilverStripe\Core\Config\Config;
 /**
  * Enroll page template
  * Class EnrollPage
+ *
  * @package SYBEHA\Clubmaster\Pages
  */
 class EnrollPage extends Page
@@ -47,7 +48,7 @@ class EnrollPage extends Page
      * @config
      */
     private static $request_folder = 'antraege';
-    
+
     /**
      * {@inheritdoc}
      */
@@ -55,11 +56,12 @@ class EnrollPage extends Page
     {
         $fields = parent::getCMSFields();
         $fields->addFieldToTab(
-            'Root.Main', 
+            'Root.Main',
             LabelField::create(
-                _t('SYBEHA\Clubmaster\Pages\EnrollPage.CONTENT_LABEL','Form data is maintained within PHP code.')
-            ), 'Content'
-            );
+                _t('SYBEHA\Clubmaster\Pages\EnrollPage.CONTENT_LABEL', 'Form data is maintained within PHP code.')
+            ),
+            'Content'
+        );
         $fields->removeFieldFromTab('Root.Main', 'Content');
         $fields->addFieldToTab(
             'Root.Main',

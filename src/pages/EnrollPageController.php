@@ -42,6 +42,7 @@ use Dynamic\CountryDropdownField\Fields\CountryDropdownField;
 /**
  * Enroll page template controller
  * Class EnrollPageController
+ *
  * @package SYBEHA\Clubmaster\Pages
  */
 class EnrollPageController extends PageController
@@ -72,7 +73,10 @@ class EnrollPageController extends PageController
         if (ClubMemberType::get()->exists()) {
             $clubMemberTypesMap = ClubMemberType::get()->exclude('ShowInFrontEnd', '0')->map('ID', 'Title');
         } else {
-            $clubMemberTypesMap = ['Vollverdiener'=>'Vollverdiener','Student / Azubi / Schüler'=>'Student / Azubi / Schüler'];
+            $clubMemberTypesMap = [
+                'Vollverdiener'=>'Vollverdiener',
+                'Student / Azubi / Schüler'=>'Student / Azubi / Schüler'
+            ];
         }
 
 
@@ -88,10 +92,16 @@ class EnrollPageController extends PageController
                 ->setAttribute('placeholder', 'Nachname'),
             DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
                 ->setAttribute('placeholder', $today),
-            CountryDropdownField::create('Nationality', _t('SYBEHA\Clubmaster\Models\ClubMember.NATIONALITY', 'Nationality'))->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
+            CountryDropdownField::create(
+                'Nationality',
+                _t('SYBEHA\Clubmaster\Models\ClubMember.NATIONALITY', 'Nationality')
+            )->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
             EUNameTextField::create('Street', _t('SYBEHA\Clubmaster\Models\ClubMember.STREET', 'Street'))
                 ->setAttribute('placeholder', 'Straße'),
-            EUNameTextField::create('StreetNumber', _t('SYBEHA\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber'))
+            EUNameTextField::create(
+                'StreetNumber',
+                _t('SYBEHA\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber')
+            )
                 ->setAttribute('placeholder', 'Hausnummer'),
             ZipField::create('Zip', _t('SYBEHA\Clubmaster\Models\ClubMember.ZIP', 'Zip'))
                 ->setAttribute('placeholder', '12345'),
@@ -100,22 +110,28 @@ class EnrollPageController extends PageController
             EmailField::create('Email', _t('SYBEHA\Clubmaster\Models\ClubMember.EMAIL', 'Email'))
                 ->setAttribute('placeholder', 'name@domain.de'),
             TelephoneNumberField::create('Mobil', _t('SYBEHA\Clubmaster\Models\ClubMember.MOBIL', 'Mobil'))
-                ->setAttribute('placeholder', 'Handynummer'), //PhoneNumberField
+                ->setAttribute('placeholder', 'Handynummer'),
             TelephoneNumberField::create('Phone', _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
-                ->setAttribute('placeholder', 'Telefonnummer'), //PhoneNumberField
+                ->setAttribute('placeholder', 'Telefonnummer'),
             DropdownField::create('TypeID', 'Mitgliedstyp', $clubMemberTypesMap)
                 ->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
             DateField::create('Since', 'Mitglied ab')->setValue(DBDatetime::now()),
-            CheckboxField::create('EqualAddress', _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress'))->setValue(true),
+            CheckboxField::create(
+                'EqualAddress',
+                _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress')
+            )->setValue(true),
             EUNameTextField::create(
                 'AccountHolderFirstName',
-                _t(
-                    'SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERFIRSTNAME',
-                    'AccountHolderFirstName'
-                )
+                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')
             ),
-            EUNameTextField::create('AccountHolderLastName', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')),
-            EUNameTextField::create('AccountHolderStreet', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')),
+            EUNameTextField::create(
+                'AccountHolderLastName',
+                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')
+            ),
+            EUNameTextField::create(
+                'AccountHolderStreet',
+                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')
+            ),
             EUNameTextField::create(
                 'AccountHolderStreetNumber',
                 _t(
@@ -123,8 +139,14 @@ class EnrollPageController extends PageController
                     'AccountHolderStreetNumber'
                 )
             ),
-            ZipField::create('AccountHolderZip', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
-            EUNameTextField::create('AccountHolderCity', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
+            ZipField::create(
+                'AccountHolderZip',
+                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')
+            ),
+            EUNameTextField::create(
+                'AccountHolderCity',
+                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')
+            ),
             IbanField::create('Iban', _t('SYBEHA\Clubmaster\Models\ClubMember.IBAN', 'Iban'))
                 ->setAttribute('placeholder', "DE12500105170648489890")->addExtraClass("text"),
             BicField::create('Bic', _t('SYBEHA\Clubmaster\Models\ClubMember.BIC', 'Bic'))
@@ -169,10 +191,10 @@ class EnrollPageController extends PageController
     }
 
     /**
-     * Function for declared action 
+     * Function for declared action
      *
-     * @param FieldList $data
-     * @param Form $form
+     * @param  FieldList $data
+     * @param  Form      $form
      * @return void
      */
     public function doEnroll($data, Form $form)
@@ -183,7 +205,7 @@ class EnrollPageController extends PageController
 
         // Save data into object
         $form->saveInto($clubMemberPending);
-        
+
         // Get the path for the folder and add a filename like LH_03011970_dd.mm.YYYY_HH_MM_SS.antrag
         $name = $data['FirstName'][0] . $data['LastName'][0] . '_'
             . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
@@ -191,43 +213,39 @@ class EnrollPageController extends PageController
         // Get the desired folder to store the serialized object
         $folder = $this->Folder();
 
-        // Files property Filename contains (optional) preceding folder  
+        // Files property Filename contains (optional) preceding folder
         $filename = $folder->Name . DIRECTORY_SEPARATOR . $name;
 
         Injector::inst()->get(LoggerInterface::class)
             ->debug('EnrolPageController - doEnroll()  path = ' . $filename);
-        
+
         // Add path to object
         $clubMemberPending->SerializedFileName = $filename;
-        
+
         // Serialize object safely
         $serialized = base64_encode(serialize($clubMemberPending));
-        
+
         // Store the serialized file
         $file = new File();
         $file->setFromString($serialized, $filename);
         $id = $file->write();
-        
+
         Injector::inst()->get(LoggerInterface::class)
             ->debug('EnrollPageController - doEnroll()  file id = ' . $id . ' filename = ' . $file->Filename);
-    
+
         if ($id) {
             // Send an E-Mail
             $email = Email::create()
-            ->setTo($data['Email'])
-            ->setSubject('Anmeldung bei Jim e.V.')
-            ->setHTMLTemplate('EMail\EnrollMail');
+                ->setTo($data['Email'])
+                ->setSubject('Anmeldung bei Jim e.V.')
+                ->setHTMLTemplate('EMail\EnrollMail');
             if ($email->send()) {
-
                 // Get the session object
                 $session = $this->getRequest()->getSession();
-
                 // Add data
                 //$session->set('Data', $data);
                 $session->set('ClubMemberPending', $serialized);
-
                 return $this->redirect(EnrollSuccessPage::get()->First()->Link());
-
             } else {
                 // there may have been 1 or more failures
                 return $this->redirectBack();
