@@ -7,6 +7,7 @@ use PageController;
 /**
  * Enroll success page template controller
  * Class EnrollPageSuccessController
+ *
  * @package SYBEHA\Clubmaster\Pages
  */
 class EnrollPageSuccessController extends PageController

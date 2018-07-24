@@ -234,23 +234,32 @@ class EnrollPageController extends PageController
             ->debug('EnrollPageController - doEnroll()  file id = ' . $id . ' filename = ' . $file->Filename);
 
         if ($id) {
+            $typeName = ClubMemberType::get()->byID($clubMemberPending->TypeID)->TypeName;
             // Send an E-Mail
+            // $email = new Email($from, $to, $subject, $body);
             $email = Email::create()
+                //setFrom('JIM .e.V')
                 ->setTo($data['Email'])
+                ->setData($clubMemberPending)
+                ->addData('TypeName', $typeName)
                 ->setSubject('Anmeldung bei Jim e.V.')
                 ->setHTMLTemplate('EMail\EnrollMail');
+
+            // Get the session object
+            $session = $this->getRequest()->getSession();
+            // Add object
+            $session->set('ClubMemberPending', $serialized);
+
+            // @todo: Meaningful E-Mail validation
             if ($email->send()) {
-                // Get the session object
-                $session = $this->getRequest()->getSession();
-                // Add data
-                //$session->set('Data', $data);
-                $session->set('ClubMemberPending', $serialized);
-                return $this->redirect(EnrollSuccessPage::get()->First()->Link());
+                // Nothing
             } else {
                 // there may have been 1 or more failures
-                return $this->redirectBack();
+                $session->set('Error', 'Fehler');
             }
         }
+        //return $this->redirectBack();
+        return $this->redirect(EnrollSuccessPage::get()->First()->Link());
     }
 
     public function init()

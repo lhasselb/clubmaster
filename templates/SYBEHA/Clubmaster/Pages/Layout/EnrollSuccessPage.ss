@@ -53,6 +53,16 @@
                             </div>
                         </div>
                         <% end_with %>
+
+                        <% if $Error %>
+                        <div class="col-md-6 col-sm-6 c-margin-t-20">
+                            <div data-height="height">
+                                <h3 class=" c-margin-b-20 c-font-uppercase c-font-22 c-font-bold">Problem mit der Bestätingsmail.</h3>
+                            </div>
+                        </div>
+                        <% end_if %>
+
+
                     </div>
                 </div>
             </div>

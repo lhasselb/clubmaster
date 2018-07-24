@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Enroll success page template
  * Class EnrollSuccessPage
+ *
  * @package SYBEHA\Clubmaster\Pages
  */
 class EnrollSuccessPage extends Page
@@ -61,7 +62,7 @@ class EnrollSuccessPage extends Page
             //@todo: Add i18n
             TextAreaField::create(
                 'Content',
-                _t('SYBEHA\Clubmaster\Pages\EnrollSuccessPage.MESSAGE_LABEL','Thank you messag'),
+                _t('SYBEHA\Clubmaster\Pages\EnrollSuccessPage.MESSAGE_LABEL', 'Thank you messag'),
                 $this->Content
             ),
             'Metadata'
@@ -78,59 +79,52 @@ class EnrollSuccessPage extends Page
     {
         $request = Injector::inst()->get(HTTPRequest::class);
         $session = $request->getSession();
-        //if ($session->get('Data')) {
-        if($session->get('ClubMemberPending'))
-        {
-            //$list = new ArrayData($session->get('Data'));
-            $list = new ArrayData();
+        $list = new ArrayData();
+
+        if ($session->get('ClubMemberPending')) {
             $serialized = $session->get('ClubMemberPending');
             $pendingMember = unserialize(base64_decode($serialized));
             $list = $pendingMember->data();
+            //  @todo: Initially there are no ClubMemberType's
             // We need to replace the String TypeID from the form with a database entry for the appropriate TypeID
-            Injector::inst()->get(LoggerInterface::class)
-                ->debug('EnrolSuccessPage - FormData()  class = ' . get_class($pendingMember));
-            Injector::inst()->get(LoggerInterface::class)
-                //->debug('EnrolSuccessPage - FormData()  id = ' . $list->getField('TypeID'));
-                ->debug('EnrolSuccessPage - FormData()  id = ' . $pendingMember->TypeID);
-            
-            //$typeName = ClubMemberType::get()->byID($list->getField('TypeID'))->TypeName;
             $typeName = ClubMemberType::get()->byID($pendingMember->TypeID)->TypeName;
-            // Initially there are no ClubMemberType's - @todo: Ignore
+            //Injector::inst()->get(LoggerInterface::class)
+            //    ->debug('EnrolSuccessPage - FormData()  type = ' . $typeName);
+            $list->setField('TypeName', $typeName);
+        }
 
-            Injector::inst()->get(LoggerInterface::class)
-                ->debug('EnrolSuccessPage - FormData()  type = ' . $typeName);
-
-            $list->setField('TypeName',$typeName);
-            return $list;
-
-        } else new ArrayData();
+        return $list;
     }
 
     /**
      * Utility to dump session data
      *
-     * @param SilverStripe\Control\Session $session
+     * @param  SilverStripe\Control\Session $session
      * @return void
      */
-    private static function dumpSession($session) {
+    private static function dumpSession($session)
+    {
         $checkAll = $session->getAll();
-        foreach($checkAll as $key => $value) {
+        foreach ($checkAll as $key => $value) {
             if (is_string($value)) {
                 Injector::inst()->get(LoggerInterface::class)
-                ->debug('EnrolSuccessPage - FormData()  session key = ' . $key . ' value = ' . $value);
+                    ->debug('EnrolSuccessPage - FormData()  session key = ' . $key . ' value = ' . $value);
             } elseif (is_array($value)) {
                 Injector::inst()->get(LoggerInterface::class)
                     ->debug('EnrolSuccessPage - FormData()  session key = ' . $key . ' ----- array data: ');
-                foreach($value as $key => $value) {
+                foreach ($value as $key => $value) {
                     if (is_string($value)) {
                         Injector::inst()->get(LoggerInterface::class)
-                            ->debug('EnrolSuccessPage - FormData()  ----- session key = ' . $key . ' value = ' . $value);
+                            ->debug('EnrolSuccessPage - FormData()  ----- session key = '
+                            . $key . ' value = ' . $value);
                     } elseif (is_array($value)) {
                         Injector::inst()->get(LoggerInterface::class)
-                            ->debug('EnrolSuccessPage - FormData()  ----- session key = ' . $key . ' array data: ' );
-                        foreach($value as $key => $value) {
+                            ->debug('EnrolSuccessPage - FormData()  ----- session key = '
+                            . $key . ' array data: ');
+                        foreach ($value as $key => $value) {
                             Injector::inst()->get(LoggerInterface::class)
-                            ->debug('EnrolSuccessPage - FormData()  ----- ----- session key = ' . $key . ' value = ' . $value);
+                                ->debug('EnrolSuccessPage - FormData()  ----- ----- session key = '
+                                . $key . ' value = ' . $value);
                         }
                     }
                 }
