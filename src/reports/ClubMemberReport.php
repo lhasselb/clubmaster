@@ -5,6 +5,9 @@ namespace SYBEHA\Clubmaster\Reports;
 use SilverStripe\Reports\Report;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SYBEHA\Clubmaster\Models\ClubMember;
+/* Logging */
+use SilverStripe\Core\Injector\Injector;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ClubMemberReport
@@ -57,7 +60,9 @@ class ClubMemberReport extends Report
 
         //$gridField->setModelClass('');
         $gridConfig = $gridField->getConfig();
-        //SS_Log::log('gridConfig='.$gridConfig,SS_Log::WARN);
+        //Injector::inst()->get(LoggerInterface::class)
+        //->debug('ClubMemberReport - getReportField() gridConfig = ' . $gridConfig);
+
         $gridConfig->getComponentByType(GridFieldPaginator::class)->setItemsPerPage(500);
 
         //$gridConfig->removeComponentsByType('GridFieldPrintButton');

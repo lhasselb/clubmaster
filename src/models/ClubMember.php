@@ -673,13 +673,7 @@ class ClubMember extends DataObject
         $siteConfig = SiteConfig::current_site_config();
         // Set MandateReference for newly added members
         $addMandate = $siteConfig->AddMandate; // see site config
-        //SS_Log::log('addMandate='.$addMandate,SS_Log::WARN);
         if ($addMandate) {
-            /*
-            SS_Log::log('class='.$this->class,SS_Log::WARN);
-            SS_Log::log('name='.$this->title,SS_Log::WARN);
-            SS_Log::log('MandateReference='.$this->dbObject('MandateReference')->value,SS_Log::WARN);
-            */
             if ($this->class =="ClubMember" && !$this->dbObject('MandateReference')->value) {
                 $currentMax = DB::query("SELECT MAX(\"MandateReference\") FROM \"ClubMember\"")->value();
                 // Regex for matching 3 and more numbers
@@ -695,8 +689,6 @@ class ClubMember extends DataObject
                     },
                     $currentMax
                 );
-
-                //SS_Log::log('MandateReference=empty, '.$currentMax.' new='.$mref,SS_Log::WARN);
                 $this->MandateReference = $mref;
             };
         }

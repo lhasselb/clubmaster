@@ -133,15 +133,14 @@ class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionPr
     {
 
         if ($actionName == 'activatemember') {
-            // perform your action here
+            // Perform your action here
             $item = $gridField->getList()->byID($arguments['RecordID']);
             if (!$item) {
                 return;
             }
-            //SS_Log::log('handleAction item='.$item->FirstName,SS_Log::WARN);
             $item->Active = 1;
             $item->write();
-            // output a success message to the user
+            // Output a success message to the user
             Controller::curr()->getResponse()->setStatusCode(
                 200,
                 _t(
@@ -150,15 +149,15 @@ class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionPr
                 )
             );
         } elseif ($actionName == 'deactivatemember') {
-            // perform your action here
+            // Perform your action here
             $item = $gridField->getList()->byID($arguments['RecordID']);
             if (!$item) {
                 return;
             }
-            //SS_Log::log('handleAction item='.$item->FirstName,SS_Log::WARN);
+
             $item->Active = 0;
             $item->write();
-            // output a success message to the user
+            // Output a success message to the user
             Controller::curr()->getResponse()->setStatusCode(
                 200,
                 _t(

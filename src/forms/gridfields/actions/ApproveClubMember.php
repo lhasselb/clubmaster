@@ -106,7 +106,6 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
 
     public function handleAction($gridField, $actionName, $arguments, $data)
     {
-        //SS_Log::log('handleAction() called, action name ='.$actionName,SS_Log::WARN);
         if ($actionName == 'approvemember') {
             $clubMemberPending = ClubMemberPending::get()->byId($arguments['RecordID']);
             if (!$clubMemberPending) {
@@ -122,20 +121,20 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
             // Add date only if missing !
             if (empty($clubMemberPending->Pending)) {
                 Injector::inst()->get(LoggerInterface::class)
-                ->debug('ApproveClubMember - handleAction() date = ' . DBDatetime::now());
+                    ->debug('ApproveClubMember - handleAction() date = ' . DBDatetime::now());
                 $clubMemberPending->Since = DBDatetime::now();
             }
             $clubMemberPending->write();
 
             $siteConfig = SiteConfig::current_site_config();
             $sendApprovalMail = $siteConfig->SendApprovalMail; // set in site config
-            //SS_Log::log('sendApprovalMail='.$sendApprovalMail,SS_Log::WARN);
             if ($sendApprovalMail) {
                 //Send an E-Mail
                 $email = new Email();
                 $data = $clubMemberPending->toMAp();
                 //foreach ($data as $key => $value) {
-                //  SS_Log::log("key=".$key." value=".$value,SS_Log::WARN);
+                    //Injector::inst()->get(LoggerInterface::class)
+                    //    ->debug('ApproveClubMember - handleAction() key = ' . $key . ' value = ' . $value);
                 //}
                 $email->setTo($clubMemberPending->Email)
                     ->setSubject('Anmeldung bei Jim e.V.')

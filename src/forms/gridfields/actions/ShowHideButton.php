@@ -45,8 +45,6 @@ class ShowHideButton implements GridField_HTMLProvider, GridField_ActionProvider
      */
     public function getHTMLFragments($gridField)
     {
-
-        //SS_Log::log('getHTMLFragments() state='.$this->state,SS_Log::WARN);
         if ($this->state == 'SHOW') {
             $button = new GridField_FormAction(
                 $gridField,

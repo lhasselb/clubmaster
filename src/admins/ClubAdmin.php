@@ -204,7 +204,6 @@ class ClubAdmin extends ModelAdmin
         if ($params && $this->modelClass === ClubMember::class) {
             // Limit to active or inactive
             if (isset($params['State']) && $params['State']) {
-                //SS_Log::log('State='.$params['State'],SS_Log::WARN);
                 if ($params['State'] == 'A') {
                     $list = $list->filter('Active', '1');
                 } elseif ($params['State'] =='AI') {
@@ -215,7 +214,6 @@ class ClubAdmin extends ModelAdmin
             }
             // Limit to insurance
             if (isset($params['Insurance']) && $params['Insurance'] == 'V') {
-                //SS_Log::log('Insurance='.$params['Insurance'],SS_Log::WARN);
                 if ($params['Insurance'] == 'V') {
                     $list = $list->filter('Insurance', '1');
                 } elseif ($params['Insurance'] == 'UV') {
@@ -385,7 +383,8 @@ class ClubAdmin extends ModelAdmin
         } elseif ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {
             /*$columns = $gridField->getColumns();
             foreach ($columns as $column) {
-                SS_Log::log('column='.$column,SS_Log::WARN);
+                Injector::inst()->get(LoggerInterface::class)
+                    ->debug('ClubAdmin - getEditForm()  column = ' . $column);
             }*/
             $config->removeComponentsByType(GridFieldImportButton::class);
             $config->removeComponentsByType(GridFieldPrintButton::class);
@@ -474,7 +473,7 @@ class ClubAdmin extends ModelAdmin
 
         Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() locale = ' . i18n::get_locale());
         Injector::inst()->get(LoggerInterface::class)
-          ->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass));
+            ->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass));
 
           // Create Pending members from serialized form data
         if ($this->sanitiseClassName($this->modelClass) === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {
