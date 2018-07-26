@@ -64,6 +64,11 @@ class EnrollPageController extends PageController
      */
     private static $allowed_actions = ['EnrollForm'];
 
+    /**
+     * Create the enroll form
+     *
+     * @return Form form
+     */
     public function EnrollForm()
     {
         $today = DBDatetime::now();//->FormatI18N("%d.%m.%Y");
@@ -79,7 +84,7 @@ class EnrollPageController extends PageController
             ];
         }
 
-
+        // List of form fields
         $fields = FieldList::create(
             DropdownField::create(
                 'Salutation',
@@ -153,12 +158,14 @@ class EnrollPageController extends PageController
                 ->setAttribute('placeholder', "VOBADEXX")->addExtraClass("text")
         );
 
+        // List of action fields
         $actions = new FieldList(
             FormAction::create('doEnroll')
                 ->setTitle(_t('SYBEHA\Clubmaster\Pages\EnrollPage.ENROLL', 'Enroll'))
                 ->setUseButtonTag(true)
         );
 
+        // List of required fields
         $required = new RequiredFields(
             'Salutation',
             'FirstName',
@@ -183,7 +190,8 @@ class EnrollPageController extends PageController
             'Iban',
             'Bic'
         );
-        $form = new Form($this, 'EnrollForm', $fields, $actions, $required);
+        // controller, functionname(__FUNCTION__ = 'EnrollForm'), formfields, actionfields, requirdfields
+        $form = new Form($this, __FUNCTION__, $fields, $actions, $required);
         $form->setTemplate('EnrollForm');
         $form->setFormMethod('POST', true);
 
@@ -191,7 +199,7 @@ class EnrollPageController extends PageController
     }
 
     /**
-     * Function for declared action
+     * Handling submission specified within form action list
      *
      * @param  FieldList $data
      * @param  Form      $form
