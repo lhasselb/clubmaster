@@ -78,3 +78,9 @@ $RECYCLE.BIN/
 /themes/simple/
 /resources/
 /public/resources/
+
+
+.transifexrc
+**/css/bourbon
+**/.sass-cache
+node_modules/
