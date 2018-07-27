@@ -21,6 +21,8 @@ use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\EMailField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\View\ArrayData;
+/* Locale */
+use SilverStripe\i18n\i18n;
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
@@ -207,16 +209,29 @@ class EnrollPageController extends PageController
      */
     public function doEnroll($data, Form $form)
     {
+        Injector::inst()->get(LoggerInterface::class)
+            ->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale());
 
+        Injector::inst()->get(LoggerInterface::class)
+            ->info('EnrollPageController - doEnroll() data Birthday = ' . $data['Birthday']);
+        
         // Create a ClubMember object
         $clubMemberPending = new ClubMemberPending();
 
         // Save data into object
         $form->saveInto($clubMemberPending);
 
-        // Get the path for the folder and add a filename like LH_03011970_dd.mm.YYYY_HH_MM_SS.antrag
+        // Attention: given form birthday date (string) got the wrong format 1970-01-03 
+
+        // Create a DBDate object
+        $dbDate = $clubMemberPending->dbObject('Birthday');
+        // Use strftime to utilize locale
+        $birthday = strftime('%d.%m.%Y', $dbDate->getTimestamp());
+
+        // Get the path for the folder and add a filename 
+        // like LH_03.01.1970_dd.mm.YYYY_HH_MM_SS.antrag
         $name = $data['FirstName'][0] . $data['LastName'][0] . '_'
-            . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
+            . $birthday . '_' . date('d.m.Y_H_i_s') . '.antrag';
 
         // Get the desired folder to store the serialized object
         $folder = $this->Folder();

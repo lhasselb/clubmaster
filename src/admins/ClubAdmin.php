@@ -471,9 +471,10 @@ class ClubAdmin extends ModelAdmin
         //Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
         Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
 
-        Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() locale = ' . i18n::get_locale());
         Injector::inst()->get(LoggerInterface::class)
-            ->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass));
+            ->info('ClubAdmin - Init() locale = ' . i18n::get_locale());
+        //Injector::inst()->get(LoggerInterface::class)
+        //    ->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass));
 
           // Create Pending members from serialized form data
         if ($this->sanitiseClassName($this->modelClass) === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {

@@ -629,7 +629,11 @@ class ClubMember extends DataObject
      */
     public function dateFromFilename($filename)
     {
+        //Injector::inst()->get(LoggerInterface::class)
+        //    ->debug('ClubMember - dateFromFilename('.$filename.') for ' . $this->getTitle());
+
         $date = new DateTime();
+        // LA_12.08.2000_22.06.2018_13_08_09.antrag
         if (preg_match(
             '/^[A-Za-z]{2}_\d{2}.\d{2}.\d{4}_(\d{2})\.(\d{2})\.(\d{4})_(\d{2})_(\d{2})_(\d{2}).antrag$/',
             $filename,
@@ -647,11 +651,19 @@ class ClubMember extends DataObject
             $date->setDate($year, $month, $day);
             // Set the time
             $date->setTime($hour, $minute, $second);
+            /*
             Injector::inst()->get(LoggerInterface::class)
                 ->debug(
                     'ClubMember(' . $this->getTitle() . ') - dateFromFilename('.$filename.')' .
                     ' calculated date = '. $date->format('d.m.Y H:i:s')
                 );
+            */
+        } else {
+            Injector::inst()->get(LoggerInterface::class)
+            ->debug(
+                'ClubMember(' . $this->getTitle() . ') - dateFromFilename('.$filename.')' .
+                ' got the wrong format (date?) in filename'
+            );
         }
         return $date;
     }
