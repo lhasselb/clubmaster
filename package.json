@@ -29,6 +29,7 @@
     "jest-cli": "^19.0.2"
   },
   "dependencies": {
+    "hoek": "^5.0.3",
     "webpack": "^3.10"
   },
   "babel": {

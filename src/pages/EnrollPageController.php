@@ -289,34 +289,20 @@ class EnrollPageController extends PageController
     {
         parent::init();
         $theme = $this->themeDir();
+ /*       
         //Add javascript here
         Requirements::block(THIRDPARTY_DIR . '/jquery/jquery.js');
         Requirements::block('framework/javascript/DateField.js');
         Requirements::block('framework/thirdparty/jquery-ui/jquery-ui.js');
         Requirements::block('framework/thirdparty/jquery-ui/datepicker/i18n/jquery.ui.datepicker-de.js');
         Requirements::block(THIRDPARTY_DIR . '/jquery-ui-themes/smoothness/jquery-ui.css');
-
+*/
+        Requirements::javascript('framework/admin/thirdparty/jquery/jquery.js');
         //Front-End validation
-        //Requirements::javascript('mysite/javascript/jquery-validate/jquery.validate.js');
-        //Requirements::javascript('mysite/javascript/jquery-validate/additional-methods.js');
-        //Requirements::javascript('mysite/javascript/jquery-validate/localization/messages_de.js');
+        Requirements::javascript('clubmaster/javascript/jquery-validate/jquery.validate.js');
+        Requirements::javascript('clubmaster/javascript/jquery-validate/additional-methods.js');
+        Requirements::javascript('clubmaster/javascript/jquery-validate/localization/messages_de.js');
 
-        // eonasdan Datetimepicker
-        Requirements::css(
-            $theme.'/javascript/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
-        );
-        Requirements::javascript($theme.'/javascript/moment/min/moment-with-locales.js');
-        Requirements::javascript(
-            $theme.'/javascript/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
-        );
-        /*
-        if (method_exists(Requirements::backend(), 'add_dependency')) {
-            Requirements::backend()
-                ->add_dependency(
-                    'mysite/javascript/Enroll.js',
-                    $theme.'/javascript/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
-                );
-        }
-        */
+        Requirements::javascript('clubmaster/javascript/Enroll.js');
     } //init
 } //eof
