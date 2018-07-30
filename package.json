@@ -2,6 +2,17 @@
   "name": "clubmaster",
   "version": "4.0.0",
   "description": "Manager for club members",
+  "main": "",
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lhasselb/clubmaster.git"
+  },
+  "homepage": "https://github.com/lhasselb/clubmaster",
+  "bugs": {
+    "url": "https://github.com/lhasselb/clubmaster/issues"
+  },
+  "author": "lhasselb",
   "engines": {
     "node": "^6.x"
   },
@@ -11,25 +22,22 @@
     "tx": "tx push --source && tx pull --all && node transifex.js",
     "dist": "npm run tx && npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/tractorcow/silverstripe-fluent.git"
+  "devDependencies": {
+    "@silverstripe/webpack-config": "^0.7",
+    "@silverstripe/eslint-config": "^0.0.4",
+    "babel-jest": "^19.0.0",
+    "jest-cli": "^19.0.2"
   },
-  "keywords": [
-    "club",
-    "manager",
-    "silverstripe"
-  ],
-  "author": "lhasselb",
-  "license": "BSD-3-Clause",
-  "bugs": {
-    "url": "https://github.com/lhasselb/clubmaster/issues"
-  },
-  "homepage": "https://github.com/lhasselb/clubmaster",
   "dependencies": {
     "webpack": "^3.10"
   },
-  "devDependencies": {
-    "@silverstripe/webpack-config": "^0.7"
+  "babel": {
+    "presets": [
+      "env",
+      "react"
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
+    ]
   }
 }
