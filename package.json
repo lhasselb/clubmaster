@@ -2,7 +2,7 @@
   "name": "clubmaster",
   "version": "4.0.0",
   "description": "Manager for club members",
-  "main": "",
+  "main": "clubmaster.js",
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
