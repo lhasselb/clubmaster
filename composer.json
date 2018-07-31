@@ -17,17 +17,15 @@
     ],
     "require":
     {
-        "silverstripe/framework": "~4.1",
-        "silverstripe/cms": "~4.1",
+        "silverstripe/framework": "^4",
+        "silverstripe/cms": "^4",
         "silverstripe/asset-admin": "~1.2",
         "globalcitizen/php-iban": "^2.6",
         "dynamic/silverstripe-country-dropdown-field": "^1.1",
         "colymba/gridfield-bulk-editing-tools": "dev-master"
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "4.x-dev"
-        },
+        "branch-alias": {},
         "expose": [
             "client/dist",
             "client/lang"
