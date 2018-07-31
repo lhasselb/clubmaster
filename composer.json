@@ -1,7 +1,7 @@
 {
     "name": "lhasselb/clubmanager",
-    "type": "silverstripe-vendormodule",
     "description": "Club management module",
+    "type": "silverstripe-vendormodule",
     "homepage": "https://github.com/lhasselb/clubmanager",
     "keywords": ["silverstripe", "club management"],
     "license": "BSD-3-Clause",
@@ -35,5 +35,10 @@
         "psr-4": {
             "SYBEHA\\Clubmaster\\": "src/"
         }
-    }
+    },
+    "config": {
+        "process-timeout": 600
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
