@@ -84,3 +84,9 @@ $RECYCLE.BIN/
 **/css/bourbon
 **/.sass-cache
 node_modules/
+
+# =========================
+# General System Files
+# =========================
+composer.lock
+package-lock.json
