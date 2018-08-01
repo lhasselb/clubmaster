@@ -15,14 +15,8 @@
             "homepage": "https://github.com/lhasselb/clubmanager/contributors"
         }
     ],
-    "require":
-    {
-
-
-    },
     "extra": {
-        "branch-alias": {},
-        "expose": [
+          "expose": [
             "client/dist",
             "client/lang"
         ]
