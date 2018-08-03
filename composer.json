@@ -29,8 +29,7 @@
             "dev-master": "4.0.x-dev"
         },
         "expose": [
-            "client/dist",
-            "client/lang"
+            "client/dist"
         ]
     },
     "autoload": {
