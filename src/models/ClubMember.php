@@ -265,10 +265,13 @@ class ClubMember extends DataObject
         $main = $fields->findOrMakeTab('Root.Main')
             ->setTitle(_t('SYBEHA\Clubmaster\Models\ClubMember.MAINTITLE', 'Main'));
         // Account tab
-        $fields->addFieldToTab('Root', new Tab(
-            'Account',
-            _t('SYBEHA\Clubmaster\Models\ClubMember.BANKINGACCOUNT', 'Account data')
-        ));
+        $fields->addFieldToTab(
+            'Root',
+            new Tab(
+                'Account',
+                _t('SYBEHA\Clubmaster\Models\ClubMember.BANKINGACCOUNT', 'Account data')
+            )
+        );
         // The Meta tab
         $fields->addFieldToTab('Root', new Tab('Meta', _t('SYBEHA\Clubmaster\Models\ClubMember.META', 'Meta')));
 
@@ -287,7 +290,7 @@ class ClubMember extends DataObject
                 'NameTitle',
                 _t('SYBEHA\Clubmaster\Models\ClubMember.NAMETITLE', 'Title')
             )->addExtraClass('text')
-            ->setDescription(_t('SYBEHA\Clubmaster\Models\ClubMember.NAMETITLEHINT', 'e.g. Ph.D'))
+                ->setDescription(_t('SYBEHA\Clubmaster\Models\ClubMember.NAMETITLEHINT', 'e.g. Ph.D'))
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -660,10 +663,10 @@ class ClubMember extends DataObject
             */
         } else {
             Injector::inst()->get(LoggerInterface::class)
-            ->debug(
-                'ClubMember(' . $this->getTitle() . ') - dateFromFilename('.$filename.')' .
-                ' got the wrong format (date?) in filename'
-            );
+                ->debug(
+                    'ClubMember(' . $this->getTitle() . ') - dateFromFilename('.$filename.')' .
+                    ' got the wrong format (date?) in filename'
+                );
         }
         return $date;
     }
