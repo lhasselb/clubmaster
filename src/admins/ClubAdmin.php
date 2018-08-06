@@ -473,8 +473,8 @@ class ClubAdmin extends ModelAdmin
         //Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
         //Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
 
-        Requirements::javascript('lhasselb/clubmaster:client/dist/js/main.js');
-        Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
+        Requirements::javascript('lhasselb/clubmaster:client/dist/js/clubmaster.js');
+        Requirements::css('lhasselb/clubmaster:client/dist/styles/clubmaster.css');
         //Requirements::add_i18n_javascript('sybeha/clubmaster:client/lang');
 
         Injector::inst()->get(LoggerInterface::class)
