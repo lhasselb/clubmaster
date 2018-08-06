@@ -42,7 +42,8 @@ class ClubMemberType extends DataObject
     ];
 
     private static $summary_fields = [
-        'TypeName'
+        'TypeName',
+        'ShowInFrontEnd'
     ];
 
     private static $searchable_fields = [];
