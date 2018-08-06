@@ -299,10 +299,6 @@ class EnrollPageController extends PageController
 */
         Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
         //Front-End validation
-        Requirements::javascript('clubmaster/javascript/jquery-validate/jquery.validate.js');
-        Requirements::javascript('clubmaster/javascript/jquery-validate/additional-methods.js');
-        Requirements::javascript('clubmaster/javascript/jquery-validate/localization/messages_de.js');
-
-        Requirements::javascript('clubmaster/javascript/Enroll.js');
+        Requirements::javascript('lhasselb/clubmaster:client/dist/javascript/validation.js');
     } //init
 } //eof

@@ -28,7 +28,12 @@ const PATHS = {
 
 };
 
-const config = [
+var config = {
+    // TODO: Add common Configuration
+    module: {},
+};
+
+var config1 = Object.assign({}, config,
     {
         name: 'js',
         entry: [
@@ -58,6 +63,27 @@ const config = [
         plugins: pluginCSS(ENV, PATHS),
     }
 
-];
+);
 
-module.exports = config;
+var config2 = Object.assign({}, config,
+    {
+        name: 'js2',
+        entry: [
+            `${PATHS.MODULES}/jquery-validation/dist/jquery.validate.js`,
+            `${PATHS.MODULES}/jquery-validation/dist/additional-methods.js`,
+            `${PATHS.MODULES}/jquery-validation/dist/localization/messages_de.js`,
+            `${PATHS.SRC}/javascript/enroll.js`
+        ],
+        output: {
+            path: PATHS.DIST,
+            filename: 'javascript/validation.js'
+        },
+        devtool: (ENV !== 'production') ? 'source-map' : '',
+        resolve: resolveJS(ENV, PATHS),
+        externals: externalJS(ENV, PATHS),
+        module: moduleJS(ENV, PATHS),
+        plugins: pluginJS(ENV, PATHS),
+    }
+)
+
+module.exports = [config1, config2];

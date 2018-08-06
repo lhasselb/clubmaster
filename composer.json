@@ -30,7 +30,8 @@
         },
         "expose": [
             "client/dist",
-            "client/images"
+            "client/images",
+            "client/javascript"
         ]
     },
     "autoload": {
