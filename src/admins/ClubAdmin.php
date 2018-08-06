@@ -87,7 +87,8 @@ class ClubAdmin extends ModelAdmin
     private static $menu_title = 'Clubmanager';
     private static $url_segment = 'clubmanager';
     private static $menu_icon = 'lhasselb/clubmaster: client/images/clubmaster.png';
-    private static $menu_icon_for_class = 'lhasselb/clubmaster: client/images/clubmaster.png';
+    // Set within ModelAdmin to font-icon-database
+    private static $menu_icon_class = '';
 
     private static $managed_models = [
         ClubMemberPending::class,
