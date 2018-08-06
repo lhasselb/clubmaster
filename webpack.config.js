@@ -36,8 +36,8 @@ const config = [
         ],
         output: {
             path: PATHS.DIST,
-            //filename: 'js/[name].js',
-            filename: 'js/clubmaster.js'
+            filename: 'js/[name].js',
+            //filename: 'js/clubmaster.js'
         },
         devtool: (ENV !== 'production') ? 'source-map' : '',
         resolve: resolveJS(ENV, PATHS),
@@ -52,8 +52,8 @@ const config = [
         ],
         output: {
             path: PATHS.DIST,
-            //filename: 'styles/[name].css',
-            filename: 'styles/clubmaster.css'
+            filename: 'styles/[name].css',
+            //filename: 'styles/clubmaster.css'
         },
         devtool: (ENV !== 'production') ? 'source-map' : '',
         module: moduleCSS(ENV, PATHS),

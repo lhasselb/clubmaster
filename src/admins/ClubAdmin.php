@@ -86,9 +86,9 @@ class ClubAdmin extends ModelAdmin
 {
     private static $menu_title = 'Clubmanager';
     private static $url_segment = 'clubmanager';
-    private static $menu_icon = 'lhasselb/clubmaster: client/images/clubmaster.png';
+    private static $menu_icon = 'lhasselb/clubmaster:client/images/clubmaster.png';
     // Set within ModelAdmin to font-icon-database
-    private static $menu_icon_class = '';
+    private static $menu_icon_class = 'clubmaster';
 
     private static $managed_models = [
         ClubMemberPending::class,
@@ -473,8 +473,8 @@ class ClubAdmin extends ModelAdmin
         //Requirements::javascript(CLUBMASTER_DIR . '/javascript/ClubAdmin.js');
         //Requirements::css(CLUBMASTER_DIR . "/css/ClubAdmin.css");
 
-        Requirements::javascript('lhasselb/clubmaster:client/dist/js/clubmaster.js');
-        Requirements::css('lhasselb/clubmaster:client/dist/styles/clubmaster.css');
+        Requirements::javascript('lhasselb/clubmaster:client/dist/js/main.js');
+        Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
         //Requirements::add_i18n_javascript('sybeha/clubmaster:client/lang');
 
         Injector::inst()->get(LoggerInterface::class)
