@@ -214,21 +214,21 @@ class EnrollPageController extends PageController
 
         Injector::inst()->get(LoggerInterface::class)
             ->info('EnrollPageController - doEnroll() data Birthday = ' . $data['Birthday']);
-        
+
         // Create a ClubMember object
         $clubMemberPending = new ClubMemberPending();
 
         // Save data into object
         $form->saveInto($clubMemberPending);
 
-        // Attention: given form birthday date (string) got the wrong format 1970-01-03 
+        // Attention: given form birthday date (string) got the wrong format 1970-01-03
 
         // Create a DBDate object
         $dbDate = $clubMemberPending->dbObject('Birthday');
         // Use strftime to utilize locale
         $birthday = strftime('%d.%m.%Y', $dbDate->getTimestamp());
 
-        // Get the path for the folder and add a filename 
+        // Get the path for the folder and add a filename
         // like LH_03.01.1970_dd.mm.YYYY_HH_MM_SS.antrag
         $name = $data['FirstName'][0] . $data['LastName'][0] . '_'
             . $birthday . '_' . date('d.m.Y_H_i_s') . '.antrag';
@@ -289,7 +289,7 @@ class EnrollPageController extends PageController
     {
         parent::init();
         $theme = $this->themeDir();
- /*       
+ /*
         //Add javascript here
         Requirements::block(THIRDPARTY_DIR . '/jquery/jquery.js');
         Requirements::block('framework/javascript/DateField.js');
@@ -297,7 +297,7 @@ class EnrollPageController extends PageController
         Requirements::block('framework/thirdparty/jquery-ui/datepicker/i18n/jquery.ui.datepicker-de.js');
         Requirements::block(THIRDPARTY_DIR . '/jquery-ui-themes/smoothness/jquery-ui.css');
 */
-        Requirements::javascript('framework/admin/thirdparty/jquery/jquery.js');
+        Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
         //Front-End validation
         Requirements::javascript('clubmaster/javascript/jquery-validate/jquery.validate.js');
         Requirements::javascript('clubmaster/javascript/jquery-validate/additional-methods.js');
