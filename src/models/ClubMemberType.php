@@ -7,6 +7,9 @@ use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 
 use SYBEHA\Clubmaster\Models\ClubMember;
+/* Logging */
+use SilverStripe\Core\Injector\Injector;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ClubMemberType
@@ -57,6 +60,11 @@ class ClubMemberType extends DataObject
         return $labels;
     }
 
+    /**
+     * @see Good example of complex FormField building: SiteTree::getCMSFields()
+     *
+     * @return FieldList Returns a TabSet for usage within the CMS - don't use for frontend forms.
+     */
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -64,6 +72,33 @@ class ClubMemberType extends DataObject
         return $fields;
     }
 
+    /**
+     * Add default records to database. This function is called whenever the
+     * database is built, after the database tables have all been created. Overload
+     * this to add default records when the database is built, but make sure you
+     * call parent::requireDefaultRecords().
+     *
+     * @uses DataExtension->requireDefaultRecords()
+     */
+    public function requireDefaultRecords()
+    {
+        parent::requireDefaultRecords();
+
+        $defaultTypes = ['Vollverdiener','Student / Azubi / Schüler'];
+        foreach ($defaultTypes as $currentType) {
+            if (!$type = ClubMemberType::get()->filter('TypeName', $currentType)->first()) {
+                $type = ClubMemberType::create(["TypeName" => $currentType,"ShowInFrontEnd" => "1"])->write();
+                Injector::inst()->get(LoggerInterface::class)
+                    ->debug('ClubMemberType - requireDefaultRecords()' . ' created type  = ' . ClubMemberType::get()->byID($type)->TypeName);
+            }
+        }
+    }
+
+    /**
+     * Create a meaningful title
+     *
+     * @return string Title
+     */
     public function getTitle()
     {
         return $this->TypeName;

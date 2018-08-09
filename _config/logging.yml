@@ -3,12 +3,13 @@ Name: dev-errors
 Only:
   environment: dev
 ---
-SilverStripe\Core\Injector\Injector:
-  Psr\Log\LoggerInterface: 
-    calls:
-      LogFileHandler: [ pushHandler, [ %$LogFileHandler ] ]
-  LogFileHandler:
-    class: Monolog\Handler\StreamHandler
-    constructor:
-      - "../silverstripe.log"
-      - "debug"
+# Uncomment this ONLY if there is no file/setting in app/_config/logging.yml
+#SilverStripe\Core\Injector\Injector:
+#  Psr\Log\LoggerInterface:
+#    calls:
+#      LogFileHandler: [ pushHandler, [ %$LogFileHandler ] ]
+#  LogFileHandler:
+#    class: Monolog\Handler\StreamHandler
+#    constructor:
+#      - "../clubmaster.log"
+#      - "debug"

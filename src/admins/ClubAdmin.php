@@ -474,7 +474,7 @@ class ClubAdmin extends ModelAdmin
         //Requirements::add_i18n_javascript('sybeha/clubmaster:client/lang');
 
         Injector::inst()->get(LoggerInterface::class)
-            ->info('ClubAdmin - Init() locale = ' . i18n::get_locale());
+            ->info('ClubAdmin - Init() using locale = ' . i18n::get_locale());
         //Injector::inst()->get(LoggerInterface::class)
         //    ->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass));
 
@@ -497,10 +497,10 @@ class ClubAdmin extends ModelAdmin
             $files = File::get()->filter("ParentID", $folder->ID);
             if (!$files->exists()) {
                 Injector::inst()->get(LoggerInterface::class)
-                    ->debug('ClubAdmin - Init() no files found');
+                    ->info('ClubAdmin - Init() no files found');
             } else {
                 Injector::inst()->get(LoggerInterface::class)
-                    ->debug('ClubAdmin - Init() found ' . $files->count() . ' files');
+                    ->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
             }
 
             // Iterate the files found

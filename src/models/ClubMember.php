@@ -255,8 +255,9 @@ class ClubMember extends DataObject
     }
 
     /**
+     * @see Good example of complex FormField building: SiteTree::getCMSFields()
      *
-     * @return array fields
+     * @return FieldList Returns a TabSet for usage within the CMS - don't use for frontend forms.
      */
     public function getCMSFields()
     {

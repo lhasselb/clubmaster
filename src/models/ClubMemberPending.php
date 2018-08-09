@@ -95,24 +95,6 @@ class ClubMemberPending extends ClubMember
     }
 
     /**
-     * Centerpiece of every data administration interface in Silverstripe,
-     * which returns a {@link FieldList} suitable for a {@link Form} object.
-     * If not overloaded, we're using {@link scaffoldFormFields()} to automatically
-     * generate this set. To customize, overload this method in a subclass
-     * or extended onto it by using {@link DataExtension->updateCMSFields()}.
-     *
-     * <code>
-     * class MyCustomClass extends DataObject {
-     *  static $db = array('CustomProperty'=>'Boolean');
-     *
-     *  function getCMSFields() {
-     *    $fields = parent::getCMSFields();
-     *    $fields->addFieldToTab('Root.Content',new CheckboxField('CustomProperty'));
-     *    return $fields;
-     *  }
-     * }
-     * </code>
-     *
      * @see Good example of complex FormField building: SiteTree::getCMSFields()
      *
      * @return FieldList Returns a TabSet for usage within the CMS - don't use for frontend forms.
@@ -295,7 +277,7 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            DropdownField::create('Sex', _t('SYBEHA\Clubmaster\Models\ClubMember.SEX', 'Sex'), 
+            DropdownField::create('Sex', _t('SYBEHA\Clubmaster\Models\ClubMember.SEX', 'Sex'),
             singleton(ClubMember::class)->dbObject('Sex')->enumValues())
             //->performReadonlyTransformation()
         );
