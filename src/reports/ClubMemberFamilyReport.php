@@ -21,7 +21,7 @@ class ClubMemberFamilyReport extends Report
     // the name of the report
     public function title()
     {
-        return 'Mitglieder mit identischem Nachnamen ';
+        return 'Mitglieder mit identischem Nachnamen und PLZ ';
     }
 
     // what we want the report to return
@@ -32,7 +32,6 @@ class ClubMemberFamilyReport extends Report
 
         // Iterate over sorted list
         foreach (ClubMember::get()->sort('LastName') as $member) {
-            
             // Get members with equal last name
             $list = ClubMember::get()->filter([
                 'LastName' => $member->LastName
@@ -42,12 +41,10 @@ class ClubMemberFamilyReport extends Report
             if ($list->count() > 1) {
                 $equalLastName->push($member);
             }
-
         }
 
         // Iterate over list with equal last names
         foreach ($equalLastName as $member) {
-
             //Injector::inst()->get(LoggerInterface::class)
             //    ->debug('ClubMemberFamilyReport - sourceRecords() lastname = ' . $member->LastName);
 
@@ -63,7 +60,7 @@ class ClubMemberFamilyReport extends Report
             if ($currentList->count() > 1) {
                 $family->push($member);
             }
-         }
+        }
 
 
         return $family->sort([
