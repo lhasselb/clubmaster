@@ -130,12 +130,33 @@ class ClubMember extends DataObject
 
     /**
      * Fields Searchable within top Filter
-     * empty equals all
+     * empty equals enable all fields
+     * and PartialMatchFilter seems to be default
      *
      * @var array
      */
     private static $searchable_fields = [
-    //'Type.ID'
+        /*
+        'FirstName' => [
+            'field' => TextField::class,
+            'filter' => 'PartialMatchFilter',
+        ],
+        'LastName' => [
+            'field' => TextField::class,
+            'filter' => 'PartialMatchFilter',
+        ],
+        'Zip' => [
+            'field' => NumericField::class,
+            'filter' => 'PartialMatchFilter',
+        ],
+        'Age' => [
+            'field' => NumericField::class,
+            'filter' => 'PartialMatchFilter',
+        ],
+        'Sex',
+        'Since',
+        'Email'
+        */
     ];
 
     /**
@@ -144,6 +165,10 @@ class ClubMember extends DataObject
      */
     public function fieldLabels($includerelations = true)
     {
+        /*
+        $translation = _t(__CLASS__ . '.TYPE', 'Type');
+        $translation = _t(self::class . '.TYPE', 'Type');
+        */
         $labels = parent::fieldLabels($includerelations);
         // Relation has_one
         $labels['Type.ID'] = _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type');
@@ -262,6 +287,18 @@ class ClubMember extends DataObject
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
+
+        /**
+         * Temporarily hide all link and file tracking tabs/fields in the CMS UI
+         * added in SS 4.2 until 4.3 is available
+         *
+         * Related GitHub issues and PRs:
+         *   - https://github.com/silverstripe/silverstripe-cms/issues/2227
+         *   - https://github.com/silverstripe/silverstripe-cms/issues/2251
+         *   - https://github.com/silverstripe/silverstripe-assets/pull/163
+         * */
+        $fields->removeByName(['FileTracking', 'LinkTracking']);
+
         // The Main tab
         $main = $fields->findOrMakeTab('Root.Main')
             ->setTitle(_t('SYBEHA\Clubmaster\Models\ClubMember.MAINTITLE', 'Main'));
@@ -683,9 +720,9 @@ class ClubMember extends DataObject
         $this->Age = $this->getAge();
         // Set Sex
         $this->Sex = $this->getSex();
-        /*if($this->CreationType == 'Händisch'){
-            $this->Active = true;
-        }*/
+
+        //TODO: Verify/complete address for imported records
+        
         $siteConfig = SiteConfig::current_site_config();
         // Set MandateReference for newly added members
         $addMandate = $siteConfig->AddMandate; // see site config

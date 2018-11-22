@@ -49,7 +49,11 @@ use SilverStripe\Forms\GridField\GridState_Component;
 
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\HeaderField;
+
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\ListboxField; //Multiple selections not stored!
+use SilverStripe\Forms\CheckboxSetField;
+
 use SilverStripe\View\Requirements;
 use SilverStripe\SiteConfig\SiteConfig;
 /* Configuration */
@@ -59,6 +63,7 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Member;
 /* Locale */
 use SilverStripe\i18n\i18n;
+
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
@@ -74,7 +79,7 @@ use SYBEHA\Clubmaster\Loader\ClubMemberCsvBulkLoader;
 use SilverStripe\i18n\i18nEntityProvider;
 
 // TODO: Check for later usage GridFieldAddExistingSearchButton
-// use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
+use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
 
 /**
  * ClubMember administration system within the CMS
@@ -164,14 +169,21 @@ class ClubAdmin extends ModelAdmin
                 )
             )->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
             // Type
-            //$typeList = ClubMemberType::get()->map()->toArray();
+            //multiple
+            $typeCheckboxSetField = CheckboxSetField::create('q[Type]', _t('ClubMember.TYPE', 'Type'), ClubMemberType::get()->map()->toArray());
+            $typeCheckboxSetField->setTitle('Type (Mehrfachwahl möglich)')->setDescription('Multiple');
+            //$typeListboxField = ListboxField::create('q[Type]', _t('ClubMember.TYPE', 'Type'), ClubMemberType::get()->map()->toArray());
+            //single
             $typeDropDownField = DropdownField::create('q[Type]', _t('ClubMember.TYPE', 'Type'))
                 ->setSource(ClubMemberType::get()->map()->toArray())
                 ->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
 
             $context->getFields()->push($ageRangeDropDownField);
             $context->getFields()->push($insuranceDropDownField);
-            $context->getFields()->push($typeDropDownField);
+            //multiple
+            $context->getFields()->push($typeCheckboxSetField);
+            //single
+            //$context->getFields()->push($typeDropDownField);
             $context->getFields()->push($showInactiveDropDownField);
             $context->getFields()->push($zipFieldGroup);
         }
@@ -241,6 +253,13 @@ class ClubAdmin extends ModelAdmin
             }
             // Filter by Type
             if (isset($params['Type']) && $params['Type']) {
+                /*
+                foreach($params['Type'] as $key => $value) {
+                        Injector::inst()->get(LoggerInterface::class)
+                        ->debug('ClubAdmin - getList() - ' .$key. ' = ' . $value);
+                }
+                */
+
                 $list = $list->filter('TypeID', $params['Type']);
             }
         } else { /* Nothing */
@@ -473,8 +492,8 @@ class ClubAdmin extends ModelAdmin
         Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
         //Requirements::add_i18n_javascript('sybeha/clubmaster:client/lang');
 
-        Injector::inst()->get(LoggerInterface::class)
-            ->info('ClubAdmin - Init() using locale = ' . i18n::get_locale());
+        //Injector::inst()->get(LoggerInterface::class)
+        //    ->info('ClubAdmin - Init() using locale = ' . i18n::get_locale());
         //Injector::inst()->get(LoggerInterface::class)
         //    ->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass));
 

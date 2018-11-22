@@ -37,10 +37,23 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
  */
 class ClubMemberPending extends ClubMember
 {
-
-
-
-    private static $defaults = ['CreationType' => 'Formular', 'Active' => '0'];
+    /*
+     * Important: Please note: It is strongly recommended to define a table_name for all namespaced models.
+     * Not defining a table_name may cause generated table names to be too long
+     * and may not be supported by your current database engine.
+     * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
+     */
+    private static $table_name = 'ClubMemberPending';
+    
+    /**
+     * Set defaults
+     *
+     * @var array
+     */
+    private static $defaults = [
+        'CreationType' => 'Formular',
+        'Active' => '0'
+    ];
 
     /**
      * Fields to be displayed in Table head (gridfield)
@@ -102,6 +115,17 @@ class ClubMemberPending extends ClubMember
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
+        
+        /**
+         * Temporarily hide all link and file tracking tabs/fields in the CMS UI
+         * added in SS 4.2 until 4.3 is available
+         *
+         * Related GitHub issues and PRs:
+         *   - https://github.com/silverstripe/silverstripe-cms/issues/2227
+         *   - https://github.com/silverstripe/silverstripe-cms/issues/2251
+         *   - https://github.com/silverstripe/silverstripe-assets/pull/163
+         * */
+        $fields->removeByName(['FileTracking', 'LinkTracking']);
 
         $fields->addFieldToTab(
             'Root.Main',
@@ -277,8 +301,11 @@ class ClubMemberPending extends ClubMember
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            DropdownField::create('Sex', _t('SYBEHA\Clubmaster\Models\ClubMember.SEX', 'Sex'),
-            singleton(ClubMember::class)->dbObject('Sex')->enumValues())
+            DropdownField::create(
+                'Sex',
+                _t('SYBEHA\Clubmaster\Models\ClubMember.SEX', 'Sex'),
+                singleton(ClubMember::class)->dbObject('Sex')->enumValues()
+            )
             //->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
