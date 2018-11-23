@@ -9,10 +9,6 @@
         {
             "name": "lhasselb",
             "email": "guggelimehl@gmail.com"
-        },
-        {
-            "name": "GitHub contributors",
-            "homepage": "https://github.com/lhasselb/clubmaster/contributors"
         }
     ],
     "require":
@@ -37,9 +33,6 @@
         "psr-4": {
             "SYBEHA\\Clubmaster\\": "src/"
         }
-    },
-    "config": {
-        "process-timeout": 600
     },
     "minimum-stability": "dev",
     "prefer-stable": true
