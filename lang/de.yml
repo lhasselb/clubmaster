@@ -4,6 +4,8 @@ de:
     #Filter
     SELECTONE: "Bitte wählen"
     AGERANGE: "Altersbereich"
+    AGESTART: "Alter von"
+    AGEEND: "Alter bis"
     LESSTHAN16: "Bis 16 Jahre (einschließlich)"
     LESSTHAN26: "Bis 26 Jahre (einschließlich)"
     LESSTHAN60: "Bis 60 Jahre (einschließlich)"

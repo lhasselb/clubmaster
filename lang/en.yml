@@ -4,6 +4,8 @@ en:
     #Filter
     SELECTONE: "Select one"
     AGERANGE: "Age Range"
+    AGESTART: "Age from"
+    AGEEND: "Age to"
     LESSTHAN16: "Less/equal 16"
     LESSTHAN26: "Less/equal 26"
     LESSTHAN60: "Less/equal 60"
@@ -28,7 +30,7 @@ en:
     PENDINGFOLDER: "Pending folder"
     MEMBERSDISPLAYED: "Amount of members displayed"
     ADDMANDATE: "Automatic addition of mandate reference"
-    SENDAPPROVEMAIL: "Send E-Mail  after approval"    
+    SENDAPPROVEMAIL: "Send E-Mail  after approval"
 
   ClubMemberPending:
     SINGULARNAME: "Member request"

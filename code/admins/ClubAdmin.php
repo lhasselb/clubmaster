@@ -27,7 +27,7 @@ class ClubAdmin extends ModelAdmin
     private static $allowed_actions = array('approvemember', 'activatemember', 'deactivatemember');
 
     /**
-     * @config 
+     * @config
      */
     private static $items_per_page = '25';
 
@@ -47,23 +47,37 @@ class ClubAdmin extends ModelAdmin
                 new ZipField("q[EndPlz]", _t('ClubAdmin.ZIPEND', 'zipEnd'))
             );
             // Alter
-            $ageRangeDropDownField = DropdownField::create('q[AgeRange]', _t('ClubAdmin.AGERANGE', 'AgeRange'),
+            /*
+            $ageRangeDropDownField = DropdownField::create(
+                'q[AgeRange]',
+                _t('ClubAdmin.AGERANGE', 'Age'),
                 array(
                     'U16' => _t('ClubAdmin.LESSTHAN16', 'LessThan 16'),
                     'U26' => _t('ClubAdmin.LESSTHAN26', 'LessThan 26'),
                     'U60' => _t('ClubAdmin.LESSTHAN60', 'LessThan 60'),
                 )
             )->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
+            */
+            // Alter Bereich
+            $ageRangeFieldGroup = FieldGroup::create(
+                HeaderField::create(_t('ClubAdmin.AGERANGE', 'Age'), 4),
+                new NumericField("q[StartAge]", _t('ClubAdmin.AGESTART', 'ageStart')),
+                new NumericField("q[EndAge]", _t('ClubAdmin.AGEEND', 'ageEnd'))
+            );
             // Active / Inactive
-            $showInactiveDropDownField = DropdownField::create('q[State]', _t('ClubAdmin.STATE','Member state'),
+            $showInactiveDropDownField = DropdownField::create(
+                'q[State]',
+                _t('ClubAdmin.STATE', 'Member state'),
                 array(
-                    'A' => _t('ClubAdmin.SHOWACTIVE','Show active'),
-                    'I' => _t('ClubAdmin.SHOWINACTIVE','Show inactive')
+                    'A' => _t('ClubAdmin.SHOWACTIVE', 'Show active'),
+                    'I' => _t('ClubAdmin.SHOWINACTIVE', 'Show inactive')
                     //'AI' => _t('ClubAdmin.SHOWALL','Show all')
                 )
-            )->setEmptyString(_t('ClubAdmin.SELECTONE','Select one'));
+            )->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
             // Versicherung
-            $insuranceDropDownField = DropdownField::create('q[Insurance]', _t('ClubAdmin.INSURANCE', 'Insurance'),
+            $insuranceDropDownField = DropdownField::create(
+                'q[Insurance]',
+                _t('ClubAdmin.INSURANCE', 'Insurance'),
                 array(
                     'UV' => _t('ClubAdmin.SHOWNOINSURANCE', 'Non insured'),
                     'V' => _t('ClubAdmin.SHOWINSURANCE', 'Insured')
@@ -75,7 +89,8 @@ class ClubAdmin extends ModelAdmin
                 ->setSource(ClubMemberType::get()->map()->toArray())
                 ->setEmptyString(_t('ClubAdmin.SELECTONE', 'Select one'));
 
-            $context->getFields()->push($ageRangeDropDownField);
+            //$context->getFields()->push($ageRangeDropDownField);
+            $context->getFields()->push($ageRangeFieldGroup);
             $context->getFields()->push($insuranceDropDownField);
             $context->getFields()->push($typeDropDownField);
             $context->getFields()->push($zipFieldGroup);
@@ -101,34 +116,33 @@ class ClubAdmin extends ModelAdmin
             $list = $list->filter('Pending', '0');
         } // Limit list to pending members
         elseif ($this->modelClass == 'ClubMemberPending') {
-            $list = $list->filter('Pending', '1')->sort('Since','ASC');
+            $list = $list->filter('Pending', '1')->sort('Since', 'ASC');
         }
 
         // Get parameters
         $params = $this->request->requestVar('q');
 
         if ($params && $this->modelClass == 'ClubMember') {
-
             // Limit to active or inactive
             if (isset($params['State']) && $params['State']) {
-		//SS_Log::log('State='.$params['State'],SS_Log::WARN);
-		if($params['State'] == 'A') {
-                    $list = $list->filter('Active','1');
-                } elseif($params['State'] =='AI') {
+        //SS_Log::log('State='.$params['State'],SS_Log::WARN);
+                if ($params['State'] == 'A') {
+                    $list = $list->filter('Active', '1');
+                } elseif ($params['State'] =='AI') {
                     //$list
-                } elseif($params['State'] == 'I') {
-                    $list = $list->filter('Active','0');
+                } elseif ($params['State'] == 'I') {
+                    $list = $list->filter('Active', '0');
                 }
             }
             // Limit to insurance
             if (isset($params['Insurance']) && $params['Insurance'] == 'V') {
-		//SS_Log::log('Insurance='.$params['Insurance'],SS_Log::WARN);
-		if($params['Insurance'] == 'V') {
-			$list = $list->filter('Insurance', '1');
-		} elseif ($params['Insurance'] == 'UV') {
-			$list = $list->filter('Insurance', '0');
-		}
-		}
+        //SS_Log::log('Insurance='.$params['Insurance'],SS_Log::WARN);
+                if ($params['Insurance'] == 'V') {
+                    $list = $list->filter('Insurance', '1');
+                } elseif ($params['Insurance'] == 'UV') {
+                    $list = $list->filter('Insurance', '0');
+                }
+            }
             // Filter by Zip
             if (isset($params['StartPlz']) && $params['StartPlz']) {
                 $list = $list->exclude('Zip:LessThan', $params['StartPlz']);
@@ -136,21 +150,29 @@ class ClubAdmin extends ModelAdmin
             if (isset($params['EndPlz']) && $params['EndPlz']) {
                 $list = $list->exclude('Zip:GreaterThan', $params['EndPlz']);
             }
+
+            // Filter by Age
+            if (isset($params['StartAge']) && $params['StartAge']) {
+                $list = $list->exclude('Age:LessThan', $params['StartAge'])->sort('Age', 'ASC');
+            }
+            if (isset($params['EndAge']) && $params['EndAge']) {
+                $list = $list->exclude('Age:GreaterThan', $params['EndAge'])->sort('Age', 'ASC');
+            }
+
             // Filter by Age range
             if (isset($params['AgeRange']) && $params['AgeRange']) {
                 if ($params['AgeRange'] == 'U16') {
-                    $list = $list->exclude('Age:GreaterThan', '16');
+                    $list = $list->exclude('Age:GreaterThan', '15')->sort('Age', 'ASC');
                 } elseif ($params['AgeRange'] == 'U26') {
-                    $list = $list->exclude('Age:GreaterThan', '26');
+                    $list = $list->exclude('Age:GreaterThan', '26')->sort('Age', 'ASC');
                 } elseif ($params['AgeRange'] == 'U60') {
-                    $list = $list->exclude('Age:GreaterThan', '60');
+                    $list = $list->exclude('Age:GreaterThan', '60')->sort('Age', 'ASC');
                 }
             }
             // Filter by Type
             if (isset($params['Type']) && $params['Type']) {
                 $list = $list->filter('TypeID', $params['Type']);
             }
-
         } else { /* Nothing */
         }
 
@@ -176,13 +198,12 @@ class ClubAdmin extends ModelAdmin
         $config = $gridField->getConfig();
 
         if ($gridFieldName == 'ClubMember') {
-
             //$config->addComponent(new GridFieldShowHideButton('before'));
-			// Get configuration
+            // Get configuration
             $siteConfig = SiteConfig::current_site_config();
             // Set rows displayed
             $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page'); // default 50, _config/config.yml
-			$itemsPerPage = $siteConfig->MembersDisplayed; // set in site config
+            $itemsPerPage = $siteConfig->MembersDisplayed; // set in site config
 
             $config->getComponentByType('GridFieldPaginator')->setItemsPerPage($itemsPerPage);
             // Add GridFieldBulkManager
@@ -201,16 +222,26 @@ class ClubAdmin extends ModelAdmin
             // Add ACTION activate/deactivateMember
             $config->addComponent(new GridFieldActivateClubMemberAction());
             // Add BULK action activateMember
-            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('activateMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE', 'Activate'), 'GridFieldBulkActionActivateMemberHandler');
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction(
+                'activateMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNACTIVATE', 'Activate'),
+                'GridFieldBulkActionActivateMemberHandler'
+            );
             // Add BULK action deactivateMember
             $frontEndConfig = array('isAjax' => true, 'icon' => 'decline', 'isDestructive' => false);
-            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('deactivateMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE', 'Deactivate'), 'GridFieldBulkActionActivateMemberHandler', $frontEndConfig);
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction(
+                'deactivateMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNDEACTIVATE', 'Deactivate'),
+                'GridFieldBulkActionActivateMemberHandler',
+                $frontEndConfig
+            );
 
             // Add BULK action insureMember
-            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('insureMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNINSURANCE', 'Insurance'), 'GridFieldBulkActionInsuranceMemberHandler');
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction(
+                'insureMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNINSURANCE', 'Insurance'),
+                'GridFieldBulkActionInsuranceMemberHandler'
+            );
 
             /* PRINT disabled */
             $config->removeComponentsByType('GridFieldPrintButton');
@@ -243,7 +274,6 @@ class ClubAdmin extends ModelAdmin
                     'Age'  => _t('ClubMember.AGE', 'Age')
                 )
             );*/
-
         } elseif ($gridFieldName == 'ClubMemberType') {
             $config->removeComponentsByType('GridFieldPrintButton');
             $config->removeComponentsByType('GridFieldExportButton');
@@ -258,19 +288,20 @@ class ClubAdmin extends ModelAdmin
             $config->removeComponentsByType('GridFieldFilterHeader');
             //$config->removeComponentsByType('GridFieldDeleteAction');
 
-            $config->addComponent(new GridFieldApproveClubMemberAction());			
+            $config->addComponent(new GridFieldApproveClubMemberAction());
 
             // Add GridFieldBulkManager
             $config->addComponent(new GridFieldBulkManager());
             // Add action
-            $config->getComponentByType('GridFieldBulkManager')->addBulkAction('approveMember',
-                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNAPPROVE', 'Approve'), 'GridFieldBulkActionApproveMemberHandler');
+            $config->getComponentByType('GridFieldBulkManager')->addBulkAction(
+                'approveMember',
+                _t('ClubAdmin.GRIDFIELDBULKDROPDOWNAPPROVE', 'Approve'),
+                'GridFieldBulkActionApproveMemberHandler'
+            );
             // Remove action
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('unLink');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('bulkEdit');
             $config->getComponentByType('GridFieldBulkManager')->removeBulkAction('delete');
-
-
         }
 
         return $form;
@@ -285,7 +316,7 @@ class ClubAdmin extends ModelAdmin
         // field => title
         return array(
             'Salutation',
-			'NameTitle',
+            'NameTitle',
             'FirstName',
             'LastName',
             'CareOf',
@@ -300,7 +331,7 @@ class ClubAdmin extends ModelAdmin
             'Phone',
             'ExportType' => 'Type',
             'Since',
-			'EqualAddress',
+            'EqualAddress',
             'AccountHolderFirstName',
             'AccountHolderLastName',
             'AccountHolderStreet',
@@ -309,13 +340,13 @@ class ClubAdmin extends ModelAdmin
             'AccountHolderCity',
             'Iban',
             'Bic',
-			//Special
+            //Special
             'Active',
             'Insurance',
             'Age',
             'Sex',
             'SerializedFileName',
-			//'FormClaimDate',
+            //'FormClaimDate',
             'CreationType' => 'CreationType',
             //'Pending',
             'MandateReference'
@@ -364,13 +395,13 @@ class ClubAdmin extends ModelAdmin
                 // Do we have alreay members
                 if (ClubMember::get()->count() > 0) {
                     // Find an existing member created with current file
-					//SS_Log::log('file title='.$file->Title,SS_Log::WARN);
+                    //SS_Log::log('file title='.$file->Title,SS_Log::WARN);
                     $existingClubMember = ClubMember::get()->find('SerializedFileName', $file->Title);
-					//SS_Log::log('member?='.$existingClubMember->ID,SS_Log::WARN);
+                    //SS_Log::log('member?='.$existingClubMember->ID,SS_Log::WARN);
                 }
                 // No member found
                 if (!$existingClubMember) {
-					//SS_Log::log('non existing member = ',SS_Log::WARN);
+                    //SS_Log::log('non existing member = ',SS_Log::WARN);
                     $serialized = file_get_contents($file->getFullPath());
                     $data = unserialize(base64_decode($serialized));
                     // Create a new pending member
@@ -382,7 +413,6 @@ class ClubAdmin extends ModelAdmin
                 }
             }
         }
-
     }
 
     // Add a new permission
@@ -391,5 +421,4 @@ class ClubAdmin extends ModelAdmin
         $member = Member::currentUser();
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
-
 }
