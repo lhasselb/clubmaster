@@ -359,24 +359,17 @@ class ClubMember extends DataObject
         return $date->FormatI18N('%d.%m.%Y %H:%M:%S');
     }
 
-    /*public function getAge()
-    {
-        if (!$this->dbObject('Birthday')->value) return 0;
-        $time = SS_Datetime::now()->Format('U');
-        $ago = abs($time - strtotime($this->dbObject('Birthday')->value));
-        return round($ago / 86400 / 365);
-    }*/
     public function getCalculatedAge()
     {
         if (!$this->dbObject('Birthday')->value) {
             return 0;
         } else {
             $today = new DateTime(date('Y-m-d'));
-            SS_Log::log('today = '.$today->format('d.m.Y'), SS_Log::WARN);
+            //SS_Log::log('today = '.$today->format('d.m.Y'), SS_Log::WARN);
             $birthday = new DateTime($this->dbObject('Birthday')->value);
-            SS_Log::log('birthday = '.$birthday->format('d.m.Y'), SS_Log::WARN);
+            //SS_Log::log('birthday = '.$birthday->format('d.m.Y'), SS_Log::WARN);
             $diff = $birthday->diff($today)->format('%y');
-            SS_Log::log('diff = '.$diff, SS_Log::WARN);
+            //SS_Log::log('diff = '.$diff, SS_Log::WARN);
             return $diff;
         }
     }
