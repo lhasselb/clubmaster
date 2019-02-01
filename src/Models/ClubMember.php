@@ -625,7 +625,7 @@ class ClubMember extends DataObject
      *
      * @return int
      */
-    public function getAge()
+    public function getCalculatedAge()
     {
         //if (!$this->dbObject('Birthday')->value) {
         if (!$this->dbObject('Birthday')->value) {
@@ -636,11 +636,11 @@ class ClubMember extends DataObject
         $birthday = new DateTime($this->dbObject('Birthday')->value);
         $age = $birthday->diff($today)->format('%y');
         //Injector::inst()->get(LoggerInterface::class)
-        //->debug('ClubMember - getAge()' . ' today = '.$today->format(DateTime::RFC1123));
+        //->debug('ClubMember - getCalculatedAge()' . ' today = '.$today->format(DateTime::RFC1123));
         //Injector::inst()->get(LoggerInterface::class)
-        //->debug('ClubMember - getAge()' . ' birthday = '.$birthday->format(DateTime::RFC1123));
+        //->debug('ClubMember - getCalculatedAge()' . ' birthday = '.$birthday->format(DateTime::RFC1123));
         //Injector::inst()->get(LoggerInterface::class)
-        //->debug('ClubMember - getAge()' . ' age = '.$age);
+        //->debug('ClubMember - getCalculatedAge()' . ' age = '.$age);
         return $age;
     }
 
@@ -717,12 +717,12 @@ class ClubMember extends DataObject
         parent::onBeforeWrite();
         //Injector::inst()->get(LoggerInterface::class)->debug('ClubMember - onBeforeWrite()' . ' "" ');
         // Set Age
-        $this->Age = $this->getAge();
+        $this->Age = $this->getCalculatedAge();
         // Set Sex
         $this->Sex = $this->getSex();
 
         //TODO: Verify/complete address for imported records
-        
+
         $siteConfig = SiteConfig::current_site_config();
         // Set MandateReference for newly added members
         $addMandate = $siteConfig->AddMandate; // see site config
