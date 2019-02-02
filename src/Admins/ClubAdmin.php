@@ -91,7 +91,7 @@ class ClubAdmin extends ModelAdmin
 {
     private static $menu_title = 'Clubmanager';
     private static $url_segment = 'clubmanager';
-    //private static $menu_icon = 'lhasselb/clubmaster:client/images/clubmaster.png';
+    private static $menu_icon = 'lhasselb/clubmaster:client/images/clubmaster.png';
     // Set within ModelAdmin to font-icon-database
     private static $menu_icon_class = 'clubmaster';
 
@@ -111,10 +111,10 @@ class ClubAdmin extends ModelAdmin
     private static $allowed_actions = ['approvemember', 'activatemember', 'deactivatemember'];
 
     /**
-     *
-     * @config set a default for items_per_page
+     * @config
+     * @var int Amount of results to show per page
      */
-    private static $items_per_page = '25';
+    private static $page_length = 30;
 
     /**
      *  Prepare search
@@ -122,6 +122,7 @@ class ClubAdmin extends ModelAdmin
     public function getSearchContext()
     {
         $context = parent::getSearchContext();
+        Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getSearchContext() context = ' .$context);
 
         if ($this->modelClass === ClubMember::class) {
             // Postleitzahlen
@@ -131,6 +132,7 @@ class ClubAdmin extends ModelAdmin
                 new ZipField("q[EndPlz]", _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPEND', 'zipEnd'))
             );
             // Alter
+            /*
             $ageRangeDropDownField = DropdownField::create(
                 'q[AgeRange]',
                 _t(
@@ -143,6 +145,13 @@ class ClubAdmin extends ModelAdmin
                     'U60' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.LESSTHAN60', 'LessThan 60'),
                 )
             )->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
+            */
+            // Alter Bereich
+            $ageRangeFieldGroup = FieldGroup::create(
+                HeaderField::create(_t('ClubAdmin.AGERANGE', 'Age'), 4),
+                new NumericField("q[StartAge]", _t('ClubAdmin.AGESTART', 'ageStart')),
+                new NumericField("q[EndAge]", _t('ClubAdmin.AGEEND', 'ageEnd'))
+            );
             // Active / Inactive
             $showInactiveDropDownField = DropdownField::create(
                 'q[State]',
@@ -178,12 +187,10 @@ class ClubAdmin extends ModelAdmin
                 ->setSource(ClubMemberType::get()->map()->toArray())
                 ->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
 
-            $context->getFields()->push($ageRangeDropDownField);
+            //$context->getFields()->push($ageRangeDropDownField);
+            $context->getFields()->push($ageRangeFieldGroup);
             $context->getFields()->push($insuranceDropDownField);
-            //multiple
             $context->getFields()->push($typeCheckboxSetField);
-            //single
-            //$context->getFields()->push($typeDropDownField);
             $context->getFields()->push($showInactiveDropDownField);
             $context->getFields()->push($zipFieldGroup);
         }
@@ -282,8 +289,7 @@ class ClubAdmin extends ModelAdmin
         // 'ClubMember'  NEW :  SYBEHA-Clubmaster-Models-ClubMember
         // and SYBEHA-Clubmaster-Models-ClubMemberPending
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
-        //Injector::inst()->get(LoggerInterface::class)
-        //->debug('ClubAdmin - getEditForm() gridFieldName= ' . $gridFieldName);
+        Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getEditForm() gridFieldName= ' . $gridFieldName);
         $gridField = $form->Fields()->fieldByName($gridFieldName);
 
         // Get gridfield config
@@ -319,14 +325,14 @@ class ClubAdmin extends ModelAdmin
             // Get configuration
             $siteConfig = SiteConfig::current_site_config();
             // Set rows displayed
-            $itemsPerPage = Config::inst()->get('ClubAdmin', 'items_per_page'); // default 50, _config/config.yml
+            $itemsPerPage = Config::inst()->get('ClubAdmin', 'page_length'); // default 25, _config/config.yml
             $itemsPerPage = $siteConfig->MembersDisplayed; // set in site config
 
             $config->getComponentByType(GridFieldPaginator::class)->setItemsPerPage($itemsPerPage);
             //Injector::inst()->get(LoggerInterface::class)->debug('Config: ' . implode(" +  ",$config));
 
             // Add Filter header
-            $config->addComponent(new GridFieldFilterHeader());
+            //$config->addComponent(new GridFieldFilterHeader());
 
             // Check out https://github.com/symbiote/silverstripe-gridfieldextensions
             //$config->addComponent(new GridFieldAddExistingSearchButton());
@@ -402,6 +408,8 @@ class ClubAdmin extends ModelAdmin
             $config->removeComponentsByType(GridFieldImportButton::class);
             //} elseif ($gridFieldName == 'ClubMemberPending') {
         } elseif ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {
+                        // Set rows displayed
+            $itemsPerPage = Config::inst()->get('ClubAdmin', 'page_length'); // default 25, _config/config.yml
             /*$columns = $gridField->getColumns();
             foreach ($columns as $column) {
                 Injector::inst()->get(LoggerInterface::class)

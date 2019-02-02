@@ -17,7 +17,8 @@ SilverStripe\Assets\File:
 
 # Number of displayed items
 SYBEHA\Clubmaster\Admins\ClubAdmin:
-  items_per_page: 25
+  page_length: 25
+
   extensions:
     - SYBEHA\Clubmaster\Extensions\ClubAdminImport
 

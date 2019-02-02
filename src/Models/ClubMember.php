@@ -136,12 +136,11 @@ class ClubMember extends DataObject
      * @var array
      */
     private static $searchable_fields = [
-        /*
-        'FirstName' => [
+        'LastName' => [
             'field' => TextField::class,
             'filter' => 'PartialMatchFilter',
         ],
-        'LastName' => [
+        'FirstName' => [
             'field' => TextField::class,
             'filter' => 'PartialMatchFilter',
         ],
@@ -156,8 +155,25 @@ class ClubMember extends DataObject
         'Sex',
         'Since',
         'Email'
-        */
     ];
+
+    public function getDefaultSearchContext()
+    {
+        $fields = $this->scaffoldSearchFields([
+            'restrictFields' => ['LastName','FirstName']
+        ]);
+
+        $filters = [
+            'LastName' => new PartialMatchFilter('LastName'),
+            'FirstName' => new PartialMatchFilter('FirstName')
+        ];
+
+        return new SearchContext(
+            $this->class,
+            $fields,
+            $filters
+        );
+    }
 
     /**
      *
