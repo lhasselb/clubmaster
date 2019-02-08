@@ -512,7 +512,8 @@ class ClubAdmin extends ModelAdmin
             if (!$files->exists()) {
                 Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() no files found');
             } else {
-                //Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
+                Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
+                //TODO: Publish them automatically if required
             }
 
             // Iterate the files found
@@ -522,7 +523,12 @@ class ClubAdmin extends ModelAdmin
                 // Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' . $file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' . $file->canView() . ' and can view type ? ' . $file->CanViewType);
                 $extension = $file->getExtension();
                 //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file title = ' . $file->Title . '(' . $file->Filename . ') extension = ' . $extension);
-
+                if(!$file->isPublished() && $extension === 'antrag')
+                {
+                    $file->publishSingle();
+                    $file->write();
+                    //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() file title = ' . $file->Filename . ' has been published ');
+                }
                 // Skip all files except those with extension antrag
                 if (!$extension || $extension !== 'antrag') {
                     //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() file with wrong extension = ' . $extension . ' title = ' . $file->Name);
