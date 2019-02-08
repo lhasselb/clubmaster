@@ -25,3 +25,7 @@ SYBEHA\Clubmaster\Admins\ClubAdmin:
 # Betterbuttons (unclecheese/silverstripe-gridfield-betterbuttons)
 ClubMemberPending:
   better_buttons_enabled: false
+
+# Configure grid field to use legacy search API
+#SilverStripe\Forms\GridField\GridFieldFilterHeader:
+#  force_legacy: true

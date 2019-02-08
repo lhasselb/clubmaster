@@ -6,6 +6,7 @@ use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Forms\Tab;
@@ -17,6 +18,16 @@ use SilverStripe\Forms\EMailField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\FieldGroup;
+use SilverStripe\Forms\HeaderField;
+/* NEW Search */
+use SilverStripe\ORM\Search\SearchContext;
+use SilverStripe\ORM\Filters\PartialMatchFilter;
+use SilverStripe\ORM\Filters\LessThanFilter;
+use SilverStripe\ORM\Filters\GreaterThanFilter;
+use SilverStripe\ORM\Filters\ExactMatchFilter;
+
+use SilverStripe\ORM\Filters\WithinRangeFilter;
 /* Use global namespace for PHP DateTime */
 use \DateTime;
 /* See  https://github.com/dynamic/silverstripe-country-dropdown-field */
@@ -31,6 +42,8 @@ use SYBEHA\Clubmaster\Forms\Fields\ZipField;
 use SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField;
 use SYBEHA\Clubmaster\Forms\Fields\IbanField;
 use SYBEHA\Clubmaster\Forms\Fields\BicField;
+
+use SYBEHA\Clubmaster\Filters\WithinZipRangeFilter;
 
 /**
  * Class ClubMember
@@ -117,59 +130,114 @@ class ClubMember extends DataObject
      * @var array
      */
     private static $summary_fields = [
-        'FirstName' => 'FirstName',
         'LastName' => 'LastName',
+        'FirstName' => 'FirstName',
         'Zip' => 'Zip',
         'Age' => 'Age',
         'Sex' => 'Sex',
         'Since' => 'Since',
         //'Insurance' => 'Insurance',
-        //'Type.TypeName' => 'Type.TypeName'
-        'Email' => 'Email'
+        'Type.TypeName' => 'Type.TypeName',
+        'Email' => 'Email',
+        //'Active' => 'Active'
     ];
 
     /**
      * Fields Searchable within top Filter
      * empty equals enable all fields
      * and PartialMatchFilter seems to be default
-     *
+     * NOT USED - instead overwrite getDefaultSearchContext()
      * @var array
      */
-    private static $searchable_fields = [
-        'LastName' => [
-            'field' => TextField::class,
-            'filter' => 'PartialMatchFilter',
-        ],
-        'FirstName' => [
-            'field' => TextField::class,
-            'filter' => 'PartialMatchFilter',
-        ],
-        'Zip' => [
-            'field' => NumericField::class,
-            'filter' => 'PartialMatchFilter',
-        ],
-        'Age' => [
-            'field' => NumericField::class,
-            'filter' => 'PartialMatchFilter',
-        ],
-        'Sex',
-        'Since',
-        'Email'
-    ];
+    /*private static $searchable_fields = [];*/
 
+
+    /**
+     * Generates a SearchContext to be used for building and processing
+     * a generic search form for properties on this object.
+     * Use {@link SilverStripe\ORM\Search\SearchContext::getQuery()} for debugging;
+     *
+     * @return SearchContext
+     */
     public function getDefaultSearchContext()
     {
+        // Postleitzahlen - Group the ZipFields
+        $zipFieldGroup = FieldGroup::create(
+            _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPRANGE', 'Zip range'),
+            [ZipField::create('Search__ZipFrom',_t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPSTART', 'From')),
+            ZipField::create('Search__ZipTo',_t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPEND', 'To'))]
+        )->setName('Search__ZipRange')
+        ->addExtraClass('fieldgroup--fill-width');
+
+        //Active
+        $active = DropdownField::create(
+            'Active', _t('SYBEHA\Clubmaster\Admins\ClubAdmin.STATE', 'Member state'),
+            [
+                '' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWALL', '(all)'),
+                1 => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWACTIVE', 'Show active'),
+                0 => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWINACTIVE', 'Show inactive')
+            ]
+        );
+
+        //Age
+        $ageFieldGroup = FieldGroup::create(
+            _t('SYBEHA\Clubmaster\Admins\ClubAdmin.AGERANGE', 'Age range'),
+            [NumericField::create('Search__AgeFrom',_t('SYBEHA\Clubmaster\Admins\ClubAdmin.AGESTART', 'From')),
+            NumericField::create('Search__AgeTo',_t('SYBEHA\Clubmaster\Admins\ClubAdmin.AGEEND', 'To'))]
+        )->setName('Search__AgeRange')
+        ->addExtraClass('fieldgroup--fill-width');
+
+        //Insurance
+        $insurance = DropdownField::create(
+            'Insurance', _t('SYBEHA\Clubmaster\Admins\ClubAdmin.INSURANCE', 'Insurance'),
+            [
+                '' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWALL', '(all)'),
+                1 => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWINSURANCE', 'Insured'),
+                0 => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWNOINSURANCE', 'Non insured')
+            ]
+        );
+
+        //Type
+        $typename = DropdownField::create('Type', _t('SYBEHA\Clubmaster\Admins\ClubAdmin.TYPE', 'Type'))
+            ->setSource(ClubMemberType::get()->map()->toArray())
+            ->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
+
+        // Attention: This is also used for the order of fields
         $fields = $this->scaffoldSearchFields([
-            'restrictFields' => ['LastName','FirstName']
+            'restrictFields' => ['LastName','FirstName'/*,'Zip','Age'*/,'Sex','Since'/*,'Insurance'*/,'Type.TypeName','Email',/*'Active'*/]
         ]);
+
+        $fields->push($typename);
+        $fields->push($active);
+        $fields->push($insurance);
+        $fields->push($zipFieldGroup);
+        $fields->push($ageFieldGroup);
+
+        /*foreach ($fields as $key => $value) {
+            Injector::inst()
+            ->get(LoggerInterface::class)
+            ->debug('ClubMember - getDefaultSearchContext() key = ' . $key . ' value = ' . $value );
+        }*/
 
         $filters = [
             'LastName' => new PartialMatchFilter('LastName'),
-            'FirstName' => new PartialMatchFilter('FirstName')
+            'FirstName' => new PartialMatchFilter('FirstName'),
+            //Zip -> see $fields->push($zipFieldGroup),
+            'ZipFrom' => new GreaterThanFilter('Zip'),
+            'ZipTo' => new LessThanFilter('Zip'),
+            //Age -> see $fields->push($ageFieldGroup),
+            'AgeFrom' => new GreaterThanFilter('Age'),
+            'AgeTo' => new LessThanFilter('Age'),
+            'Sex' => new ExactMatchFilter('Sex'),
+            'Since'  => new GreaterThanFilter('Since'),
+            'Insurance' => new ExactMatchFilter('Insurance'),
+            'Type' => new ExactMatchFilter('TypeID'),
+            'Email' => new PartialMatchFilter('Email'),
+            'Active' => new ExactMatchFilter('Active')
         ];
 
         return new SearchContext(
-            $this->class,
+            $this->ClassName, //$this->class
             $fields,
             $filters
         );

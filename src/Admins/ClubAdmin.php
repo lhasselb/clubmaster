@@ -23,6 +23,7 @@ use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\NumericField;
 use SilverStripe\ORM\ArrayLib;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
@@ -46,6 +47,9 @@ use SilverStripe\Forms\GridField\GridFieldPageCount;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState;
 use SilverStripe\Forms\GridField\GridState_Component;
+
+//NEW: Added with 4.3
+use SilverStripe\Forms\GridField\GridFieldLazyLoader;
 
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\HeaderField;
@@ -117,12 +121,14 @@ class ClubAdmin extends ModelAdmin
     private static $page_length = 30;
 
     /**
-     *  Prepare search
+     * @deprecated 5.0
+     * @return \SilverStripe\ORM\Search\SearchContext
      */
-    public function getSearchContext()
+    /*
+     public function getSearchContext()
     {
         $context = parent::getSearchContext();
-        Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getSearchContext() context = ' .$context);
+        //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getSearchContext() context = ' .$context);
 
         if ($this->modelClass === ClubMember::class) {
             // Postleitzahlen
@@ -131,21 +137,6 @@ class ClubAdmin extends ModelAdmin
                 new ZipField("q[StartPlz]", _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPSTART', 'zipStart')),
                 new ZipField("q[EndPlz]", _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPEND', 'zipEnd'))
             );
-            // Alter
-            /*
-            $ageRangeDropDownField = DropdownField::create(
-                'q[AgeRange]',
-                _t(
-                    'SYBEHA\Clubmaster\Admins\ClubAdmin.AGERANGE',
-                    'AgeRange'
-                ),
-                array(
-                    'U16' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.LESSTHAN16', 'LessThan 16'),
-                    'U26' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.LESSTHAN26', 'LessThan 26'),
-                    'U60' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.LESSTHAN60', 'LessThan 60'),
-                )
-            )->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
-            */
             // Alter Bereich
             $ageRangeFieldGroup = FieldGroup::create(
                 HeaderField::create(_t('ClubAdmin.AGERANGE', 'Age'), 4),
@@ -197,14 +188,12 @@ class ClubAdmin extends ModelAdmin
 
         return $context;
     }
+    */
 
     /**
-     * Get a result list
-     * The results list are retrieved from SearchContext::getResults(),
-     * based on the parameters passed through the search form.
-     * If no search parameters are given, the results will show every record.
-     * Results are a DataList instance, so can
-     * be customized by additional SQL filters, joins.
+     * Override getList() from ModelAdmin {@link \SilverStripe\Admin\ModelAdmin::getList()}
+     *
+     * @return \SilverStripe\ORM\DataList
      */
     public function getList()
     {
@@ -219,9 +208,9 @@ class ClubAdmin extends ModelAdmin
             $list = $list->filter('Pending', '1')->sort('Since', 'ASC');
         }
 
-        // Get parameters
+        // Obsolete since 4.3! Get parameters
+        /*
         $params = $this->request->requestVar('q');
-
         if ($params && $this->modelClass === ClubMember::class) {
             // Limit to active or inactive
             if (isset($params['State']) && $params['State']) {
@@ -260,17 +249,11 @@ class ClubAdmin extends ModelAdmin
             }
             // Filter by Type
             if (isset($params['Type']) && $params['Type']) {
-                /*
-                foreach($params['Type'] as $key => $value) {
-                        Injector::inst()->get(LoggerInterface::class)
-                        ->debug('ClubAdmin - getList() - ' .$key. ' = ' . $value);
-                }
-                */
-
                 $list = $list->filter('TypeID', $params['Type']);
             }
-        } else { /* Nothing */
+        } else {
         }
+        */
         return $list;
     }
 
@@ -282,6 +265,7 @@ class ClubAdmin extends ModelAdmin
      */
     public function getEditForm($id = null, $fields = null)
     {
+        //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getEditForm()');
 
         $form = parent::getEditForm($id, $fields);
         // $gridFieldName is generated from the ModelClass, eg if the Class 'ClubMember'
@@ -289,16 +273,21 @@ class ClubAdmin extends ModelAdmin
         // 'ClubMember'  NEW :  SYBEHA-Clubmaster-Models-ClubMember
         // and SYBEHA-Clubmaster-Models-ClubMemberPending
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
-        Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getEditForm() gridFieldName= ' . $gridFieldName);
+        //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getEditForm() gridFieldName= ' . $gridFieldName);
         $gridField = $form->Fields()->fieldByName($gridFieldName);
 
         // Get gridfield config
-        $config = $gridField->getConfig();
+        $gridFieldConfig = $gridField->getConfig();
+
+        // Get configuration
+        $siteConfig = SiteConfig::current_site_config();
+
+        // Set rows displayed
+        $itemsPerPage = Config::inst()->get('ClubAdmin', 'page_length'); // default 25, _config/config.yml
+        $itemsPerPage = $siteConfig->MembersDisplayed;
 
         /*
-        Injector::inst()->get(LoggerInterface::class)
-        ->debug('ClubAdmin - getEditForm() config = ' . $config->getComponents());
-        $components = $config->getComponents();
+        $components = $gridFieldConfig->getComponents();
         foreach ( $components as $key => $value ) {
             Injector::inst()->get(LoggerInterface::class)->debug('key =' . $key . ' value = ' . get_class($value));
         }
@@ -321,57 +310,57 @@ class ClubAdmin extends ModelAdmin
 
         //if ($gridFieldName == 'ClubMember') {
         if ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMember') {
-            //$config->addComponent(new SYBEHA\Forms\Gridfields\Actions\ShowHideButton('before'));
-            // Get configuration
-            $siteConfig = SiteConfig::current_site_config();
-            // Set rows displayed
-            $itemsPerPage = Config::inst()->get('ClubAdmin', 'page_length'); // default 25, _config/config.yml
-            $itemsPerPage = $siteConfig->MembersDisplayed; // set in site config
+            //$gridFieldConfig->addComponent(new SYBEHA\Forms\Gridfields\Actions\ShowHideButton('before'));
 
-            $config->getComponentByType(GridFieldPaginator::class)->setItemsPerPage($itemsPerPage);
-            //Injector::inst()->get(LoggerInterface::class)->debug('Config: ' . implode(" +  ",$config));
+            $gridFieldConfig->getComponentByType(GridFieldPaginator::class)->setItemsPerPage($itemsPerPage);
+            //Injector::inst()->get(LoggerInterface::class)->debug('Config: ' . implode(" +  ",$gridFieldConfig));
 
-            // Add Filter header
-            //$config->addComponent(new GridFieldFilterHeader());
+            // Add Filter header - already added by default since SS v4.3
+            //$gridFieldConfig->addComponent(new GridFieldFilterHeader());
+            // Use legacy
+            //$gridFieldConfig->getComponentsByType(GridFieldFilterHeader::class)->useLegacyFilterHeader = true;
 
             // Check out https://github.com/symbiote/silverstripe-gridfieldextensions
-            //$config->addComponent(new GridFieldAddExistingSearchButton());
+            //$gridFieldConfig->addComponent(new GridFieldAddExistingSearchButton());
+
+            //NEW: Added with 4.3
+            $gridFieldConfig->addComponent(new GridFieldLazyLoader());
 
             // Add GridFieldBulkManager
-            $config->addComponent(new \Colymba\BulkManager\BulkManager());
+            $gridFieldConfig->addComponent(new \Colymba\BulkManager\BulkManager());
             // Remove bulk actions
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
                 ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
                 ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
-            //$config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            //$gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
             //->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
             // Remove bulk delete action from non Administrators
             if (!$this->canDeleteClubmember()) {
-                $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+                $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
                     ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
             }
 
             // Add action activate/deactivateMember
-            $config->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember());
+            $gridFieldConfig->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember());
 
             // Add BULK action activateMember
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
                 'SYBEHA\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\ActivateMemberHandler'
             );
             // Add BULK action deactivateMember
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
                 'SYBEHA\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\DeActivateMemberHandler'
             );
 
             // Add BULK action insureMember
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
                 'SYBEHA\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\InsuranceMemberHandler'
             );
 
             /* PRINT disabled */
-            $config->removeComponentsByType('GridFieldPrintButton');
-            /*$printButton = $config->getComponentByType('GridFieldPrintButton');
+            $gridFieldConfig->removeComponentsByType('GridFieldPrintButton');
+            /*$printButton = $gridFieldConfig->getComponentByType('GridFieldPrintButton');
             $printButton->setPrintColumns($print_columns
                 array(
                     'Salutation' => _t('ClubMember.SALUTATION', 'Salutation'),
@@ -403,39 +392,38 @@ class ClubAdmin extends ModelAdmin
             );*/
             //} elseif ($gridFieldName == 'ClubMemberType') {
         } elseif ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMemberType') {
-            $config->removeComponentsByType(GridFieldPrintButton::class);
-            $config->removeComponentsByType(GridFieldExportButton::class);
-            $config->removeComponentsByType(GridFieldImportButton::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldPrintButton::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldExportButton::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldImportButton::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldFilterHeader::class);
             //} elseif ($gridFieldName == 'ClubMemberPending') {
         } elseif ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {
-                        // Set rows displayed
-            $itemsPerPage = Config::inst()->get('ClubAdmin', 'page_length'); // default 25, _config/config.yml
             /*$columns = $gridField->getColumns();
             foreach ($columns as $column) {
                 Injector::inst()->get(LoggerInterface::class)
                     ->debug('ClubAdmin - getEditForm()  column = ' . $column);
             }*/
-            $config->removeComponentsByType(GridFieldImportButton::class);
-            $config->removeComponentsByType(GridFieldPrintButton::class);
-            $config->removeComponentsByType(GridFieldExportButton::class);
-            $config->removeComponentsByType(GridFieldAddNewButton::class);
-            $config->removeComponentsByType(GridFieldFilterHeader::class);
-            $config->removeComponentsByType(GridFieldDeleteAction::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldPrintButton::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldExportButton::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldImportButton::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldFilterHeader::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldAddNewButton::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldDeleteAction::class);
 
-            $config->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember());
+            $gridFieldConfig->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember());
 
             // Add GridFieldBulkManager
-            $config->addComponent(new \Colymba\BulkManager\BulkManager());
+            $gridFieldConfig->addComponent(new \Colymba\BulkManager\BulkManager());
             // Add action
-            $config->getComponentByType('Colymba\BulkManager\BulkManager')->addBulkAction(
+            $gridFieldConfig->getComponentByType('Colymba\BulkManager\BulkManager')->addBulkAction(
                 'SYBEHA\\clubmaster\\forms\\gridfields\\Bulkactions\\ApproveMemberHandler'
             );
             // Remove action
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
                 ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
                 ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
-            $config->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
                 ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
         }
         return $form;
@@ -449,7 +437,7 @@ class ClubAdmin extends ModelAdmin
     public function getExportFields()
     {
         // field => title
-        return array(
+        return [
             'Salutation',
             'NameTitle',
             'FirstName',
@@ -485,13 +473,12 @@ class ClubAdmin extends ModelAdmin
             'CreationType' => 'CreationType',
             //'Pending',
             'MandateReference'
-        );
+        ];
     }
 
     /**
      * Initialize ClubAdmin ini()
-     * Fired on every managed model class
-     * (by clicking on model tab)
+     * Fired on every managed model class (by clicking on model tab)
      */
     public function init()
     {
@@ -523,31 +510,22 @@ class ClubAdmin extends ModelAdmin
             // Check for serialized request forms
             $files = File::get()->filter("ParentID", $folder->ID);
             if (!$files->exists()) {
-                Injector::inst()->get(LoggerInterface::class)
-                    ->info('ClubAdmin - Init() no files found');
+                Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() no files found');
             } else {
-                Injector::inst()->get(LoggerInterface::class)
-                    ->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
+                //Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
             }
 
             // Iterate the files found
             foreach ($files as $file) {
                 // In order to ensure that assets are made public you should check the following:
                 // $file->isPublished(); $file->exists();canView(); CanViewType; */
-                //Injector::inst()->get(LoggerInterface::class)
-                    //->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' .
-                    //$file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' .
-                    //$file->canView() . ' and can view type ? ' . $file->CanViewType);
+                // Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' . $file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' . $file->canView() . ' and can view type ? ' . $file->CanViewType);
                 $extension = $file->getExtension();
-                //Injector::inst()->get(LoggerInterface::class)
-                //->debug('ClubAdmin - Init() found file title = ' . $file->Title .
-                //'(' . $file->Filename . ') extension = ' . $extension);
+                //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file title = ' . $file->Title . '(' . $file->Filename . ') extension = ' . $extension);
 
                 // Skip all files except those with extension antrag
                 if (!$extension || $extension !== 'antrag') {
-                    //Injector::inst()->get(LoggerInterface::class)
-                    //->debug('ClubAdmin - Init() file with wrong extension = ' .
-                    //  $extension . ' title = ' . $file->Name);
+                    //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() file with wrong extension = ' . $extension . ' title = ' . $file->Name);
                     continue;
                 }
 
@@ -557,9 +535,7 @@ class ClubAdmin extends ModelAdmin
                     // Find an existing member created with current file
                     $existingClubMember = ClubMember::get()->find('SerializedFileName', $file->Name);
                     if ($existingClubMember) {
-                        //Injector::inst()->get(LoggerInterface::class)
-                        //->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title .
-                        //' (' . $existingClubMember->ID .') for file = ' . $file->Name);
+                        // Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title . ' (' . $existingClubMember->ID .') for file = ' . $file->Name);
                     }
                 }
                 // No member found
@@ -581,8 +557,49 @@ class ClubAdmin extends ModelAdmin
                     // Create a new pending member
                     $pendingMember = unserialize(base64_decode($serialized));
 
-                    Injector::inst()->get(LoggerInterface::class)
-                        ->info('ClubAdmin - Init() - New ' . get_class($pendingMember) . ' created ');
+                    /*
+                     *  Attention: Problem with serialzied dataObject
+                     *  Changed since 4.2 - Extension for versioning added:
+                     *  'SilverStripe\Versioned\VersionedStateExtension' => object(SilverStripe\Versioned\VersionedStateExtension)
+                     *  Older object result in "__PHP_Incomplete_Class" on write() :-(
+                     */
+
+                    if(!$pendingMember->getExtensionInstance('SilverStripe\Versioned\VersionedStateExtension')) {
+
+                        Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() - incomplete object found');
+                        $incompleteMember = $pendingMember;
+
+                        // Create a new ClubMemberPending
+                        $pendingMember = ClubMemberPending::create();
+                        Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() - New ' . get_class($pendingMember) . ' created ');
+
+                        $pendingMember->Since = $incompleteMember->Since;
+                        $pendingMember->EqualAddress = $incompleteMember->EqualAddress;
+                        $pendingMember->Salutation = $incompleteMember->Salutation;
+                        $pendingMember->FirstName = $incompleteMember->FirstName;
+                        $pendingMember->LastName = $incompleteMember->LastName;
+                        $pendingMember->Birthday = $incompleteMember->Birthday;
+                        $pendingMember->Nationality = $incompleteMember->Nationality;
+                        $pendingMember->Street = $incompleteMember->Street;
+                        $pendingMember->StreetNumber = $incompleteMember->StreetNumber;
+                        $pendingMember->Zip = $incompleteMember->Zip;
+                        $pendingMember->City = $incompleteMember->City;
+                        $pendingMember->Email = $incompleteMember->Email;
+                        $pendingMember->Mobil = $incompleteMember->Mobil;
+                        $pendingMember->Phone = $incompleteMember->Phone;
+                        $pendingMember->TypeID = $incompleteMember->TypeID;
+                        $pendingMember->AccountHolderFirstName = $incompleteMember->AccountHolderFirstName;
+                        $pendingMember->AccountHolderLastName = $incompleteMember->AccountHolderLastName;
+                        $pendingMember->AccountHolderStreet = $incompleteMember->AccountHolderStreet;
+                        $pendingMember->AccountHolderStreetNumber = $incompleteMember->AccountHolderStreetNumber;
+                        $pendingMember->AccountHolderZip = $incompleteMember->AccountHolderZip;
+                        $pendingMember->AccountHolderCity = $incompleteMember->AccountHolderCity;
+                        $pendingMember->Iban = $incompleteMember->Iban;
+                        $pendingMember->Bic = $incompleteMember->Bic;
+
+                    } else {
+                        Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() - Serialized ' . get_class($pendingMember) . ' created ');
+                    }
 
 
                     // Created by webform

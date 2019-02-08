@@ -44,7 +44,7 @@ class ClubMemberPending extends ClubMember
      * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
      */
     private static $table_name = 'ClubMemberPending';
-    
+
     /**
      * Set defaults
      *
@@ -115,7 +115,7 @@ class ClubMemberPending extends ClubMember
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        
+
         /**
          * Temporarily hide all link and file tracking tabs/fields in the CMS UI
          * added in SS 4.2 until 4.3 is available
@@ -348,14 +348,10 @@ class ClubMemberPending extends ClubMember
             $birthday_year = strtok($this->Birthday, '-');
             if ($this->Birthday > $current_year.'-12-31') {
                 $this->Birthday = strval((int)$birthday_year - 100) . '-' .strtok("-") . '-' . strtok("-");
-                Injector::inst()->get(LoggerInterface::class)
-                    ->info('ClubMemberPending - fillWith()' . ' replace birthday ' . $this->Birthday . ' to ' .
-                    $this->Birthday . ' current = ' . $current_year);
+                Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - cleanNewClubMember()' . ' replace birthday ' . $this->Birthday . ' to ' . $this->Birthday . ' current = ' . $current_year);
             }
         } else {
-            Injector::inst()->get(LoggerInterface::class)
-                ->info('ClubMemberPending - fillWith()' . ' regular birthday given ' . $this->Birthday .
-                ' current year = ' . $current_year);
+            //Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - cleanNewClubMember()' . ' regular birthday given ' . $this->Birthday . ' current year = ' . $current_year);
             $this->Birthday = $this->Birthday;
         }
         // Lowercase required

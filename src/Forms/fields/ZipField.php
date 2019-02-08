@@ -3,6 +3,7 @@
 namespace SYBEHA\Clubmaster\Forms\Fields;
 
 use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\ValidationResult;
 
 /**
  * Text input field with validation for numeric (zip) values.
@@ -38,10 +39,14 @@ class ZipField extends TextField
         );
     }
 
+    /**
+     * @param Validator $validator
+     * @return bool
+     */
     public function validate($validator)
     {
 
-        if (!$this->value) {
+        if (empty($this->value)) {
             return true;
         }
 
@@ -53,8 +58,8 @@ class ZipField extends TextField
                     '{value} is not a zip number, only zip numbers can be accepted for this field',
                     ['value' => $this->value]
                 ),
-                'validation error',
-                false
+                ValidationResult::TYPE_ERROR, //'validation error'
+                ValidationResult::CAST_HTML //false
             );
             return false;
         }
