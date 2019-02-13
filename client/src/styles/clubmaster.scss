@@ -9,79 +9,38 @@
     background-image: url(../../images/clubmaster.png);
 }
 
-.cms table.ss-gridfield-table tr td {}
-.cms table.ss-gridfield-table tr td.col-FirstName,
-.cms table.ss-gridfield-table tr td.col-LastName,
-/*.cms table.ss-gridfield-table tr td.col-Age,
-.cms table.ss-gridfield-table tr td.col-Sex */
+/* Add visual aid for sex */
+.cms table.grid-field__table tr td.col-Sex.male,.cms table.grid-field__table tr.male td
 {
-    /*color: #808080;*/
+    background-color: rgba(235,248,255,.5)//#ebf8ff;
 }
 
-/* Improve visiblity for delete filter icon within GridfieldHeadFilter*/
-button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-ui-button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.filtered
+.cms table.grid-field__table tr.male td.col-Sex
 {
-    opacity: 0.8;
-}
-button[id*=action_reset_ClubMember].action.ss-gridfield-button-reset.nolabel.ss-ui-button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.filtered:hover
-{
-    opacity: 1;
-}
-
-/* Move save button to the right */
-#Form_ItemEditForm_action_save,#Form_ItemEditForm_action_doSaveAndQuit,
-#Form_ItemEditForm_action_doSave
-{
-    float:right;
-}
-
-/* Move delete button to the left */
-#Form_ItemEditForm_action_doDelete
-{
-    float:left;
-}
-
-/* Show/hide active */
-.cms .ss-gridfield .grid-show-button
-{
-    margin-bottom: 0;
-    font-size: 12px;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.cms table.ss-gridfield-table tr td.col-Sex.male
-{
-    color:#0000CD;
-    /*font-weight: bold;*/
+    color:#89CFF0;
     text-transform: uppercase;
-    //td[class*="male"] {}
 }
-.cms table.ss-gridfield-table tr td.col-Sex.female
+
+.cms table.grid-field__table tr.female td
+{
+    background-color:rgba(252,246,250,.5)//#fcf6fa;
+}
+
+.cms table.grid-field__table tr.female td.col-Sex
 {
     color:#C71585;
-    /*font-weight: bold;*/
     text-transform: uppercase;
 }
 
-/*DL, DT, DD TAGS LIST DATA*/
-.importSpec dl {}
-
-.importSpec dl dt {
-
-    float:left;
-    font-weight:bold;
-    margin-right:10px;
-}
-.importSpec dl dd {}
-
-/* width for gridfield filter header */
-.cms table.ss-gridfield-table tr th div.fieldgroup
+/* Add visual aid for hover */
+.cms table.grid-field__table tr:hover
 {
-    min-width: 50px;
+    color:#000;
 }
 
-#Form_SearchForm label.left
-{
-    font-weight: bold;
+/* Correction for Silverstripe Admin css overwriting styling for bulk editing tools
+ * https://github.com/colymba/GridFieldBulkEditingTools
+ */
+.bulkSelect, .bulkSelectAll{
+    position: relative;
 }

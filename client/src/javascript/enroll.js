@@ -1,67 +1,133 @@
-jQuery.noConflict();
-(function($){
-    $(document).ready(function() {
-        var bindGroups = function() {
-            // First copy values
-            $("#Form_EnrollForm_AccountHolderFirstName").val($("#Form_EnrollForm_FirstName").val());
-            $("#Form_EnrollForm_AccountHolderLastName").val($("#Form_EnrollForm_LastName").val());
-            $("#Form_EnrollForm_AccountHolderStreet").val($("#Form_EnrollForm_Street").val());
-            $("#Form_EnrollForm_AccountHolderStreetNumber").val($("#Form_EnrollForm_StreetNumber").val());
-            $("#Form_EnrollForm_AccountHolderZip").val($("#Form_EnrollForm_Zip").val());
-            $("#Form_EnrollForm_AccountHolderCity").val($("#Form_EnrollForm_City").val());
-            // Then bind fields
-            $("#Form_EnrollForm_FirstName").bind("change keyup", function() {
-                $("#Form_EnrollForm_AccountHolderFirstName").val($(this).val());
-            });
-            $("#Form_EnrollForm_LastName").bind("change keyup", function() {
-                $("#Form_EnrollForm_AccountHolderLastName").val($(this).val());
-            });
-            $("#Form_EnrollForm_Street").bind("change keyup", function() {
-                $("#Form_EnrollForm_AccountHolderStreet").val($(this).val());
-            });
-            $("#Form_EnrollForm_StreetNumber").bind("change keyup", function() {
-                $("#Form_EnrollForm_AccountHolderStreetNumber").val($(this).val());
-            });
-            $("#Form_EnrollForm_Zip").bind("change keyup", function() {
-                $("#Form_EnrollForm_AccountHolderZip").val($(this).val());
-            });
-            $("#Form_EnrollForm_City").bind("change keyup", function() {
-                $("#Form_EnrollForm_AccountHolderCity").val($(this).val())
-            });
-        };
-        var unbindGroups = function() {
-            $("#Form_EnrollForm_FirstName").unbind("change keyup");
-            $("#Form_EnrollForm_LastName").unbind("change keyup");
-            $("#Form_EnrollForm_Street").unbind("change keyup");
-            $("#Form_EnrollForm_StreetNumber").unbind("change keyup");
-            $("#Form_EnrollForm_Zip").unbind("change keyup");
-            $("#Form_EnrollForm_City").unbind("change keyup");
-        };
-        if ($("input[name='EqualAddress']:checked").length > 0) {
-            bindGroups();
-            // Hide fields on init
-            $("div[id^='Form_EnrollForm_AccountHolder']").hide();
-        }
-        $("input[name='EqualAddress']").change(function() {
-            if ($("input[name='EqualAddress']:checked").length > 0) {
-                bindGroups();
-                $('div[id^="Form_EnrollForm_AccountHolder"]').hide();
-            } else {
-                unbindGroups();
-                $('div[id^="Form_EnrollForm_AccountHolder"]').show();
-            }
-        });
+import jQuery from 'jquery';
+// import 'jquery-validation'; Moved to CDN on page controller
 
-        /*Front-end validation using jquery-validate */
-        $("#Form_EnrollForm").validate({
-            ignore: ".date",
-            rules: {
-                Iban: {required: true, iban: true},
-                Bic: {required: true, bic: true},
-            }
-        });
 
+const bindGroups = () => {
+    // First copy values
+    jQuery('#Form_EnrollForm_AccountHolderFirstName').val(jQuery('#Form_EnrollForm_FirstName').val());
+    jQuery('#Form_EnrollForm_AccountHolderLastName').val(jQuery('#Form_EnrollForm_LastName').val());
+    jQuery('#Form_EnrollForm_AccountHolderStreet').val(jQuery('#Form_EnrollForm_Street').val());
+    jQuery('#Form_EnrollForm_AccountHolderStreetNumber').val(jQuery('#Form_EnrollForm_StreetNumber').val());
+    jQuery('#Form_EnrollForm_AccountHolderZip').val(jQuery('#Form_EnrollForm_Zip').val());
+    jQuery('#Form_EnrollForm_AccountHolderCity').val(jQuery('#Form_EnrollForm_City').val());
+    // Then bind fields
+    jQuery('#Form_EnrollForm_FirstName').bind('change keyup', () => {
+        jQuery('#Form_EnrollForm_AccountHolderFirstName').val(jQuery(this).val());
     });
+    jQuery('#Form_EnrollForm_LastName').bind('change keyup', () => {
+        jQuery('#Form_EnrollForm_AccountHolderLastName').val(jQuery(this).val());
+    });
+    jQuery('#Form_EnrollForm_Street').bind('change keyup', () => {
+        jQuery('#Form_EnrollForm_AccountHolderStreet').val(jQuery(this).val());
+    });
+    jQuery('#Form_EnrollForm_StreetNumber').bind('change keyup', () => {
+        jQuery('#Form_EnrollForm_AccountHolderStreetNumber').val(jQuery(this).val());
+    });
+    jQuery('#Form_EnrollForm_Zip').bind('change keyup', () => {
+        jQuery('#Form_EnrollForm_AccountHolderZip').val(jQuery(this).val());
+    });
+    jQuery('#Form_EnrollForm_City').bind('change keyup', () => {
+        jQuery('#Form_EnrollForm_AccountHolderCity').val(jQuery(this).val());
+    });
+};
+const unbindGroups = () => {
+    jQuery('#Form_EnrollForm_FirstName').unbind('change keyup');
+    jQuery('#Form_EnrollForm_LastName').unbind('change keyup');
+    jQuery('#Form_EnrollForm_Street').unbind('change keyup');
+    jQuery('#Form_EnrollForm_StreetNumber').unbind('change keyup');
+    jQuery('#Form_EnrollForm_Zip').unbind('change keyup');
+    jQuery('#Form_EnrollForm_City').unbind('change keyup');
+};
 
-}(jQuery));
+if (jQuery('input[name="EqualAddress"]:checked').length > 0) {
+    bindGroups();
+    // Hide fields on init
+    jQuery('div[id^="Form_EnrollForm_AccountHolder"]').hide();
+}
 
+jQuery('input[name="EqualAddress"]').change(() => {
+    if (jQuery('input[name="EqualAddress"]:checked').length > 0) {
+        bindGroups();
+        jQuery('div[id^="Form_EnrollForm_AccountHolder"]').hide();
+    } else {
+        unbindGroups();
+        jQuery('div[id^="Form_EnrollForm_AccountHolder"]').show();
+    }
+});
+
+/* Front-end validation using jquery-validate */
+jQuery('#Form_EnrollForm').validate({
+    lang: 'de',
+    // ignore: '.date',
+    rules: {
+        Salutation: {
+            required: true
+        },
+        FirstName: {
+            required: true
+        },
+        LastName: {
+            required: true
+        },
+        Birthday: {
+            required: true,
+            birthday: true
+        },
+        Nationality: {
+            required: true
+        },
+        Street: {
+            required: true
+        },
+        StreetNumber: {
+            required: true
+        },
+        Zip: {
+            required: true
+        },
+        City: {
+            required: true
+        },
+        Email: {
+            required: true
+        },
+        Mobil: {
+            required: true
+        },
+        Phone: {
+            required: true
+        },
+        TypeID: {
+            required: true
+        },
+        Since: {
+            required: true
+        },
+        AccountHolderFirstName: {
+            required: true
+        },
+        AccountHolderLastName: {
+            required: true
+        },
+        AccountHolderStreet: {
+            required: true
+        },
+        AccountHolderStreetNumber: {
+            required: true
+        },
+        AccountHolderZip: {
+            required: true
+        },
+        AccountHolderCity: {
+            required: true
+        },
+        Iban: {
+            required: true,
+            iban: true
+        },
+        Bic: {
+            required: true,
+            bic: true
+        },
+    }
+});

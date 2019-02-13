@@ -137,8 +137,8 @@ class ClubMember extends DataObject
         'Sex' => 'Sex',
         'Since' => 'Since',
         //'Insurance' => 'Insurance',
-        'Type.TypeName' => 'Type.TypeName',
-        'Email' => 'Email',
+        //'Type.TypeName' => 'Type.TypeName',
+        //'Email' => 'Email',
         //'Active' => 'Active'
     ];
 
@@ -472,8 +472,9 @@ class ClubMember extends DataObject
             CheckboxField::create(
                 'EqualAddress',
                 _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress')
-            )
+            )//->performReadonlyTransformation()
         );
+
         $fields->addFieldToTab(
             'Root.Main',
             EmailField::create('Email', _t('SYBEHA\Clubmaster\Models\ClubMember.EMAIL', 'Email'))

@@ -289,16 +289,15 @@ class EnrollPageController extends PageController
     {
         parent::init();
         $theme = $this->themeDir();
- /*
-        //Add javascript here
-        Requirements::block(THIRDPARTY_DIR . '/jquery/jquery.js');
-        Requirements::block('framework/javascript/DateField.js');
-        Requirements::block('framework/thirdparty/jquery-ui/jquery-ui.js');
-        Requirements::block('framework/thirdparty/jquery-ui/datepicker/i18n/jquery.ui.datepicker-de.js');
-        Requirements::block(THIRDPARTY_DIR . '/jquery-ui-themes/smoothness/jquery-ui.css');
-*/
-        Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
+        // Same as Theme TODO: Make configurable
+        Requirements::javascript('//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js');
+        //Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
+        // Same as Theme TODO: Make configurable
         //Front-End validation
-        Requirements::javascript('lhasselb/clubmaster:client/dist/javascript/validation.js');
+        Requirements::javascript('//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js');
+        Requirements::javascript('//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/localization/messages_de.min.js');
+        Requirements::javascript('lhasselb/clubmaster:client/dist/javascript/enroll.js');
+        Requirements::css('lhasselb/clubmaster:client/dist/css/enroll.css');
+
     } //init
 } //eof

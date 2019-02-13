@@ -1,3 +1,5 @@
 # Added to support unserialize of ClubMemberPending serialized before usin namespaces
 mappings:
  ClubMemberPending: SYBEHA\Clubmaster\Models\ClubMemberPending
+ ClubMember: SYBEHA\Clubmaster\Models\ClubMember
+ ClubMemberType: SYBEHA\Clubmaster\Models\ClubMemberType
