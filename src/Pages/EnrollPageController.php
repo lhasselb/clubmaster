@@ -303,7 +303,6 @@ class EnrollPageController extends PageController
         Requirements::javascript('//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js');
         Requirements::javascript('//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/localization/messages_de.min.js');
         Requirements::javascript('lhasselb/clubmaster:client/dist/javascript/enroll.js');
-        Requirements::css('lhasselb/clubmaster:client/dist/css/enroll.css');
-
+        Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
     } //init
 } //eof

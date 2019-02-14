@@ -57,7 +57,7 @@ const config = [{
     {
         name: 'css',
         entry: {
-            main: `${PATHS.SRC}/styles/clubmaster.scss`,
+            main: `${PATHS.SRC}/main.scss`,
         },
         output: {
             path: PATHS.DIST,
@@ -65,20 +65,7 @@ const config = [{
         },
         devtool: (ENV !== 'production') ? 'source-map' : '',
         module: moduleCSS(ENV, PATHS),
-        plugins: pluginCSS(ENV, PATHS),
-    },
-    {
-        name: 'css',
-        entry: {
-            main: `${PATHS.SRC}/styles/enroll.scss`,
-        },
-        output: {
-            path: PATHS.DIST,
-            filename: 'css/enroll.css'
-        },
-        devtool: (ENV !== 'production') ? 'source-map' : '',
-        module: moduleCSS(ENV, PATHS),
-        plugins: pluginCSS(ENV, PATHS),
+        plugins: pluginCSS(ENV, PATHS)
     }
 ];
 
