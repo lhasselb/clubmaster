@@ -2,15 +2,6 @@
  * Clubmaster styles
  */
 
-
-.clubmaster:before {
-    content: "";
-    display:block;
-    width:16px;
-    height:16px;
-    background-image: url(../../images/clubmaster.png);
-}
-
 /* Add visual aid for sex */
 .cms table.grid-field__table tr td.col-Sex.male,.cms table.grid-field__table tr.male td
 {
