@@ -438,6 +438,8 @@ class ClubMember extends DataObject
         $fields->addFieldToTab(
             'Root.Main',
             DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
+            //->setMinDate('-100 years')
+            //->setMaxDate('+0 days')
         );
         $fields->addFieldToTab(
             'Root.Main',

@@ -38,6 +38,7 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
 /* See  https://github.com/dynamic/silverstripe-country-dropdown-field */
 use Dynamic\CountryDropdownField\Fields\CountryDropdownField;
 
+/* Used for setting min and max values for Birthday (-Field) */
 //use \DateTime;
 
 
@@ -73,8 +74,7 @@ class EnrollPageController extends PageController
      */
     public function EnrollForm()
     {
-        $today = DBDatetime::now();//->FormatI18N("%d.%m.%Y");
-
+        //Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale() . ' today = ' . DBDatetime::now());
         // @todo: Clarify if we should add an additional flag to the backend to hide them from the list
         // Check for types before using
         if (ClubMemberType::get()->exists()) {
@@ -98,7 +98,10 @@ class EnrollPageController extends PageController
             EUNameTextField::create('LastName', _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName'))
                 ->setAttribute('placeholder', 'Nachname'),
             DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
-                ->setAttribute('placeholder', $today),
+                ->setAttribute('placeholder', DBDatetime::now()->Date())
+                ->setMinDate('-100 years')
+                ->setMaxDate('+0 days'),
+
             CountryDropdownField::create(
                 'Nationality',
                 _t('SYBEHA\Clubmaster\Models\ClubMember.NATIONALITY', 'Nationality')
@@ -122,7 +125,10 @@ class EnrollPageController extends PageController
                 ->setAttribute('placeholder', 'Telefonnummer'),
             DropdownField::create('TypeID', 'Mitgliedstyp', $clubMemberTypesMap)
                 ->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            DateField::create('Since', 'Mitglied ab')->setValue(DBDatetime::now()),
+            DateField::create('Since', 'Mitglied ab')
+                ->setValue(DBDatetime::now())
+                ->setMinDate('-2 years')
+                ->setMaxDate('+0 days'),
             CheckboxField::create(
                 'EqualAddress',
                 _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress')

@@ -55,8 +55,16 @@ jQuery('input[name="EqualAddress"]').change(() => {
     }
 });
 
+/* Add date validation */
+jQuery.validator.addMethod('maxDate', function md(value, element) {
+    const now = new Date();
+    const givenDate = new Date(value);
+    return this.optional(element) || givenDate <= now;
+});
+
 /* Front-end validation using jquery-validate */
 jQuery('#Form_EnrollForm').validate({
+    // TODO: Make this dynamic
     lang: 'de',
     // ignore: '.date',
     rules: {
@@ -71,7 +79,8 @@ jQuery('#Form_EnrollForm').validate({
         },
         Birthday: {
             required: true,
-            birthday: true
+            date: true,
+            maxDate: true
         },
         Nationality: {
             required: true
@@ -92,10 +101,10 @@ jQuery('#Form_EnrollForm').validate({
             required: true
         },
         Mobil: {
-            required: true
+            required: '#Form_EnrollForm_Phone:blank'
         },
         Phone: {
-            required: true
+            required: '#Form_EnrollForm_Mobil:blank'
         },
         TypeID: {
             required: true
