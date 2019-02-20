@@ -98,6 +98,7 @@ class EnrollPageController extends PageController
             EUNameTextField::create('LastName', _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName'))
                 ->setAttribute('placeholder', 'Nachname'),
             DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
+                ->setHTML5(true)
                 ->setAttribute('placeholder', DBDatetime::now()->Date())
                 ->setMinDate('-100 years')
                 ->setMaxDate('+0 days'),
@@ -121,7 +122,7 @@ class EnrollPageController extends PageController
                 ->setAttribute('placeholder', 'name@domain.de'),
             TelephoneNumberField::create('Mobil', _t('SYBEHA\Clubmaster\Models\ClubMember.MOBIL', 'Mobil'))
                 ->setAttribute('placeholder', 'Handynummer'),
-            TelephoneNumberField::create('Phone', _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
+            TelephoneNumberField::create('Phone', 'oder ' . _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
                 ->setAttribute('placeholder', 'Telefonnummer'),
             DropdownField::create('TypeID', 'Mitgliedstyp', $clubMemberTypesMap)
                 ->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),

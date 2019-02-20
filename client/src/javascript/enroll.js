@@ -67,6 +67,18 @@ $('input[name="EqualAddress"]').change(() => {
     }
 });
 
+$('input[name="Mobil"]').change(() => {
+    if ($('#Form_EnrollForm_Mobil').valid()) {
+        $('#Form_EnrollForm_Phone_Holder').hide();
+    }
+});
+
+$('input[name="Phone"]').change(() => {
+    if ($('#Form_EnrollForm_Phone').valid()) {
+        $('#Form_EnrollForm_Mobil_Holder').hide();
+    }
+});
+
 /* Add date validation */
 jQuery.validator.addMethod('maxDate', function md(value, element) {
     const now = new Date();
