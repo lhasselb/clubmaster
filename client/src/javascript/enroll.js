@@ -1,57 +1,69 @@
 import jQuery from 'jquery';
 // import 'jquery-validation'; Moved to CDN on page controller
 
-
+const $ = jQuery;
 const bindGroups = () => {
     // First copy values
-    jQuery('#Form_EnrollForm_AccountHolderFirstName').val(jQuery('#Form_EnrollForm_FirstName').val());
-    jQuery('#Form_EnrollForm_AccountHolderLastName').val(jQuery('#Form_EnrollForm_LastName').val());
-    jQuery('#Form_EnrollForm_AccountHolderStreet').val(jQuery('#Form_EnrollForm_Street').val());
-    jQuery('#Form_EnrollForm_AccountHolderStreetNumber').val(jQuery('#Form_EnrollForm_StreetNumber').val());
-    jQuery('#Form_EnrollForm_AccountHolderZip').val(jQuery('#Form_EnrollForm_Zip').val());
-    jQuery('#Form_EnrollForm_AccountHolderCity').val(jQuery('#Form_EnrollForm_City').val());
+    $('#Form_EnrollForm_AccountHolderFirstName').val($('#Form_EnrollForm_FirstName').val());
+    $('#Form_EnrollForm_AccountHolderLastName').val($('#Form_EnrollForm_LastName').val());
+    $('#Form_EnrollForm_AccountHolderStreet').val($('#Form_EnrollForm_Street').val());
+    $('#Form_EnrollForm_AccountHolderStreetNumber').val($('#Form_EnrollForm_StreetNumber').val());
+    $('#Form_EnrollForm_AccountHolderZip').val($('#Form_EnrollForm_Zip').val());
+    $('#Form_EnrollForm_AccountHolderCity').val($('#Form_EnrollForm_City').val());
     // Then bind fields
-    jQuery('#Form_EnrollForm_FirstName').bind('change keyup', () => {
-        jQuery('#Form_EnrollForm_AccountHolderFirstName').val(jQuery(this).val());
+    $('#Form_EnrollForm_FirstName').bind('change keyup', () => {
+        if ($('#Form_EnrollForm_AccountHolderFirstName').length) {
+            $('#Form_EnrollForm_AccountHolderFirstName').val($(this).val());
+        }
     });
-    jQuery('#Form_EnrollForm_LastName').bind('change keyup', () => {
-        jQuery('#Form_EnrollForm_AccountHolderLastName').val(jQuery(this).val());
+    $('#Form_EnrollForm_LastName').bind('change keyup', () => {
+        if ($('#Form_EnrollForm_AccountHolderLastName').length) {
+            $('#Form_EnrollForm_AccountHolderLastName').val($(this).val());
+        }
     });
-    jQuery('#Form_EnrollForm_Street').bind('change keyup', () => {
-        jQuery('#Form_EnrollForm_AccountHolderStreet').val(jQuery(this).val());
+    $('#Form_EnrollForm_Street').bind('change keyup', () => {
+        if ($('#Form_EnrollForm_AccountHolderStreet').length) {
+            $('#Form_EnrollForm_AccountHolderStreet').val($(this).val());
+        }
     });
-    jQuery('#Form_EnrollForm_StreetNumber').bind('change keyup', () => {
-        jQuery('#Form_EnrollForm_AccountHolderStreetNumber').val(jQuery(this).val());
+    $('#Form_EnrollForm_StreetNumber').bind('change keyup', () => {
+        if ($('#Form_EnrollForm_AccountHolderStreetNumber').length) {
+            $('#Form_EnrollForm_AccountHolderStreetNumber').val($(this).val());
+        }
     });
-    jQuery('#Form_EnrollForm_Zip').bind('change keyup', () => {
-        jQuery('#Form_EnrollForm_AccountHolderZip').val(jQuery(this).val());
+    $('#Form_EnrollForm_Zip').bind('change keyup', () => {
+        if ($('#Form_EnrollForm_AccountHolderZip').length) {
+            $('#Form_EnrollForm_AccountHolderZip').val($(this).val());
+        }
     });
-    jQuery('#Form_EnrollForm_City').bind('change keyup', () => {
-        jQuery('#Form_EnrollForm_AccountHolderCity').val(jQuery(this).val());
+    $('#Form_EnrollForm_City').bind('change keyup', () => {
+        if ($('#Form_EnrollForm_AccountHolderCity').length) {
+            $('#Form_EnrollForm_AccountHolderCity').val($(this).val());
+        }
     });
 };
 const unbindGroups = () => {
-    jQuery('#Form_EnrollForm_FirstName').unbind('change keyup');
-    jQuery('#Form_EnrollForm_LastName').unbind('change keyup');
-    jQuery('#Form_EnrollForm_Street').unbind('change keyup');
-    jQuery('#Form_EnrollForm_StreetNumber').unbind('change keyup');
-    jQuery('#Form_EnrollForm_Zip').unbind('change keyup');
-    jQuery('#Form_EnrollForm_City').unbind('change keyup');
+    $('#Form_EnrollForm_FirstName').unbind('change keyup');
+    $('#Form_EnrollForm_LastName').unbind('change keyup');
+    $('#Form_EnrollForm_Street').unbind('change keyup');
+    $('#Form_EnrollForm_StreetNumber').unbind('change keyup');
+    $('#Form_EnrollForm_Zip').unbind('change keyup');
+    $('#Form_EnrollForm_City').unbind('change keyup');
 };
 
-if (jQuery('input[name="EqualAddress"]:checked').length > 0) {
+if ($('input[name="EqualAddress"]:checked').length > 0) {
     bindGroups();
     // Hide fields on init
-    jQuery('div[id^="Form_EnrollForm_AccountHolder"]').hide();
+    $('div[id^="Form_EnrollForm_AccountHolder"]').hide();
 }
 
-jQuery('input[name="EqualAddress"]').change(() => {
-    if (jQuery('input[name="EqualAddress"]:checked').length > 0) {
+$('input[name="EqualAddress"]').change(() => {
+    if ($('input[name="EqualAddress"]:checked').length > 0) {
         bindGroups();
-        jQuery('div[id^="Form_EnrollForm_AccountHolder"]').hide();
+        $('div[id^="Form_EnrollForm_AccountHolder"]').hide();
     } else {
         unbindGroups();
-        jQuery('div[id^="Form_EnrollForm_AccountHolder"]').show();
+        $('div[id^="Form_EnrollForm_AccountHolder"]').show();
     }
 });
 
@@ -63,7 +75,7 @@ jQuery.validator.addMethod('maxDate', function md(value, element) {
 });
 
 /* Front-end validation using jquery-validate */
-jQuery('#Form_EnrollForm').validate({
+$('#Form_EnrollForm').validate({
     // TODO: Make this dynamic
     lang: 'de',
     // ignore: '.date',
