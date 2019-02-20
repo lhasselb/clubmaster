@@ -98,7 +98,6 @@ class EnrollPageController extends PageController
             EUNameTextField::create('LastName', _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName'))
                 ->setAttribute('placeholder', 'Nachname'),
             DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
-                ->setHTML5(true)
                 ->setAttribute('placeholder', DBDatetime::now()->Date())
                 ->setMinDate('-100 years')
                 ->setMaxDate('+0 days'),
