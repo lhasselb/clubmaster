@@ -12,32 +12,32 @@ const bindGroups = () => {
     $('#Form_EnrollForm_AccountHolderCity').val($('#Form_EnrollForm_City').val());
     // Then bind fields
     $('#Form_EnrollForm_FirstName').bind('change keyup', () => {
-        if ($('#Form_EnrollForm_AccountHolderFirstName').length) {
+        if ($('#Form_EnrollForm_AccountHolderFirstName').val()) {
             $('#Form_EnrollForm_AccountHolderFirstName').val($(this).val());
         }
     });
     $('#Form_EnrollForm_LastName').bind('change keyup', () => {
-        if ($('#Form_EnrollForm_AccountHolderLastName').length) {
+        if ($('#Form_EnrollForm_AccountHolderLastName').val()) {
             $('#Form_EnrollForm_AccountHolderLastName').val($(this).val());
         }
     });
     $('#Form_EnrollForm_Street').bind('change keyup', () => {
-        if ($('#Form_EnrollForm_AccountHolderStreet').length) {
+        if ($('#Form_EnrollForm_AccountHolderStreet').val()) {
             $('#Form_EnrollForm_AccountHolderStreet').val($(this).val());
         }
     });
     $('#Form_EnrollForm_StreetNumber').bind('change keyup', () => {
-        if ($('#Form_EnrollForm_AccountHolderStreetNumber').length) {
+        if ($('#Form_EnrollForm_AccountHolderStreetNumber').val()) {
             $('#Form_EnrollForm_AccountHolderStreetNumber').val($(this).val());
         }
     });
     $('#Form_EnrollForm_Zip').bind('change keyup', () => {
-        if ($('#Form_EnrollForm_AccountHolderZip').length) {
+        if ($('#Form_EnrollForm_AccountHolderZip').val()) {
             $('#Form_EnrollForm_AccountHolderZip').val($(this).val());
         }
     });
     $('#Form_EnrollForm_City').bind('change keyup', () => {
-        if ($('#Form_EnrollForm_AccountHolderCity').length) {
+        if ($('#Form_EnrollForm_AccountHolderCity').val()) {
             $('#Form_EnrollForm_AccountHolderCity').val($(this).val());
         }
     });
