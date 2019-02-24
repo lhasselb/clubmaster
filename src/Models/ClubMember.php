@@ -200,7 +200,7 @@ class ClubMember extends DataObject
         //Type
         $typename = DropdownField::create('Type', _t('SYBEHA\Clubmaster\Admins\ClubAdmin.TYPE', 'Type'))
             ->setSource(ClubMemberType::get()->map()->toArray())
-            ->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
+            ->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWALL', 'all'));
 
         // Attention: This is also used for the order of fields
         $fields = $this->scaffoldSearchFields([
