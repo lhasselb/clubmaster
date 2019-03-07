@@ -6,6 +6,6 @@
     border-color: red;
     color: red;
 }
-.error .btn.btn-default {
+.error + .btn  {
     border: 1px solid red;
 }
