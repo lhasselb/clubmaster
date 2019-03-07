@@ -68,7 +68,7 @@ class ClubMemberType extends DataObject
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        
+
         /**
          * Temporarily hide all link and file tracking tabs/fields in the CMS UI
          * added in SS 4.2 until 4.3 is available
@@ -113,6 +113,14 @@ class ClubMemberType extends DataObject
     public function getTitle()
     {
         return $this->TypeName;
+    }
+
+    public function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+        if ($this->TypeName == 'Vollverdiener' || $this->TypeName == 'Student / Azubi / Schüler') {
+            $this->ShowInFrontEnd = 1;
+        }
     }
 
     // Only clubadmins are allowed
