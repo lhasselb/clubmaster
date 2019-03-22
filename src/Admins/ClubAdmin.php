@@ -82,9 +82,6 @@ use SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember;
 use SYBEHA\Clubmaster\Loader\ClubMemberCsvBulkLoader;
 use SilverStripe\i18n\i18nEntityProvider;
 
-// TODO: Check for later usage GridFieldAddExistingSearchButton
-use Symbiote\GridFieldExtensions\GridFieldAddExistingSearchButton;
-
 /**
  * ClubMember administration system within the CMS
  * Class ClubAdmin
@@ -319,9 +316,6 @@ class ClubAdmin extends ModelAdmin
             //$gridFieldConfig->addComponent(new GridFieldFilterHeader());
             // Use legacy
             //$gridFieldConfig->getComponentsByType(GridFieldFilterHeader::class)->useLegacyFilterHeader = true;
-
-            // Check out https://github.com/symbiote/silverstripe-gridfieldextensions
-            //$gridFieldConfig->addComponent(new GridFieldAddExistingSearchButton());
 
             //NEW: Added with 4.3
             $gridFieldConfig->addComponent(new GridFieldLazyLoader());

@@ -43,7 +43,7 @@ use SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField;
 use SYBEHA\Clubmaster\Forms\Fields\IbanField;
 use SYBEHA\Clubmaster\Forms\Fields\BicField;
 
-use SYBEHA\Clubmaster\Filters\WithinZipRangeFilter;
+//use SYBEHA\Clubmaster\Filters\WithinZipRangeFilter;
 
 /**
  * Class ClubMember
