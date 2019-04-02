@@ -43,12 +43,15 @@ use SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField;
 use SYBEHA\Clubmaster\Forms\Fields\IbanField;
 use SYBEHA\Clubmaster\Forms\Fields\BicField;
 
-//use SYBEHA\Clubmaster\Filters\WithinZipRangeFilter;
-
 /**
  * Class ClubMember
  *
- * @package SYBEHA\Clubmaster\Models
+ * @package SYBEHA\Clubmaster
+ * @subpackage Model
+ * @author Lars Hasselbach <lars.hasselbach@gmail.com>
+ * @since 15.03.2016
+ * @copyright 2019 [sybeha]
+ * @license see license file in modules root directory
  */
 class ClubMember extends DataObject
 {
