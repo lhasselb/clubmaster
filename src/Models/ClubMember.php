@@ -146,6 +146,12 @@ class ClubMember extends DataObject
     ];
 
     /**
+    * Defines a default sorting (e.g. within gridfield)
+    * @var string
+    */
+   private static $default_sort=''; //e.g. Since ASC orbLastName ASC
+
+    /**
      * Fields Searchable within top Filter
      * empty equals enable all fields
      * and PartialMatchFilter seems to be default
