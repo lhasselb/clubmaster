@@ -52,6 +52,7 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
  * @since 15.03.2016
  * @copyright 2019 [sybeha]
  * @license see license file in modules root directory
+ * TODO: Replace classname with __CLASS__
  */
 class ClubMember extends DataObject
 {
