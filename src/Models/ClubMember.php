@@ -381,18 +381,6 @@ class ClubMember extends DataObject
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-
-        /**
-         * Temporarily hide all link and file tracking tabs/fields in the CMS UI
-         * added in SS 4.2 until 4.3 is available
-         *
-         * Related GitHub issues and PRs:
-         *   - https://github.com/silverstripe/silverstripe-cms/issues/2227
-         *   - https://github.com/silverstripe/silverstripe-cms/issues/2251
-         *   - https://github.com/silverstripe/silverstripe-assets/pull/163
-         * */
-        $fields->removeByName(['FileTracking', 'LinkTracking']);
-
         // The Main tab
         $main = $fields->findOrMakeTab('Root.Main')
             ->setTitle(_t('SYBEHA\Clubmaster\Models\ClubMember.MAINTITLE', 'Main'));
