@@ -55,8 +55,7 @@ use SilverStripe\Core\Config\Config;
 /* Permissions */
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Member;
-/* Locale */
-use SilverStripe\i18n\i18n;
+
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
@@ -67,9 +66,7 @@ use SYBEHA\Clubmaster\Models\ClubMemberType;
 use SYBEHA\Clubmaster\Forms\Fields\ZipField;
 use SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember;
 use SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember;
-
 use SYBEHA\Clubmaster\Loader\ClubMemberCsvBulkLoader;
-use SilverStripe\i18n\i18nEntityProvider;
 
 /**
  * ClubMember administration system within the CMS
