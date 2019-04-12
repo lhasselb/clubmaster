@@ -2,9 +2,6 @@
 
 namespace SYBEHA\Clubmaster\Admins;
 
-//use SilverStripe\Control\Controller;
-//use SilverStripe\Control\HTTPRequest;
-//use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Convert;
 use SilverStripe\Dev\BulkLoader;
 use SilverStripe\Forms\CheckboxField;
@@ -31,7 +28,6 @@ use SilverStripe\ORM\Search\SearchContext;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Security;
 use SilverStripe\View\ArrayData;
-
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Assets\Folder;
 use SilverStripe\Assets\File;
@@ -47,17 +43,11 @@ use SilverStripe\Forms\GridField\GridFieldPageCount;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState;
 use SilverStripe\Forms\GridField\GridState_Component;
-
 //NEW: Added with 4.3
 use SilverStripe\Forms\GridField\GridFieldLazyLoader;
-
-//use SilverStripe\Forms\FieldGroup;
-//use SilverStripe\Forms\HeaderField;
-
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\ListboxField; //Multiple selections not stored!
 use SilverStripe\Forms\CheckboxSetField;
-
 use SilverStripe\View\Requirements;
 use SilverStripe\SiteConfig\SiteConfig;
 /* Configuration */
@@ -67,7 +57,6 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Member;
 /* Locale */
 use SilverStripe\i18n\i18n;
-
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
@@ -86,15 +75,20 @@ use SilverStripe\i18n\i18nEntityProvider;
  * ClubMember administration system within the CMS
  * Class ClubAdmin
  *
- * @package SYBEHA\Clubmaster\Admins
+ * @package SYBEHA\Clubmaster
+ * @subpackage Admins
+ * @author Lars Hasselbach <lars.hasselbach@gmail.com>
+ * @since 15.03.2016
+ * @copyright 2019 [sybeha]
+ * @license see license file in modules root directory
  */
 class ClubAdmin extends ModelAdmin
 {
-    private static $menu_title = 'Clubmanager';
     private static $url_segment = 'clubmanager';
     //private static $menu_icon = 'lhasselb/clubmaster:client/images/clubmaster.png';
     // Set within ModelAdmin to font-icon-database
     private static $menu_icon_class = 'modeladmin-icon-clubmanager';
+    private static $menu_title = 'Clubmanager';
 
     private static $managed_models = [
         ClubMemberPending::class,
@@ -118,76 +112,6 @@ class ClubAdmin extends ModelAdmin
     private static $page_length = 30;
 
     /**
-     * @deprecated 5.0
-     * @return \SilverStripe\ORM\Search\SearchContext
-     */
-    /*
-     public function getSearchContext()
-    {
-        $context = parent::getSearchContext();
-        //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getSearchContext() context = ' .$context);
-
-        if ($this->modelClass === ClubMember::class) {
-            // Postleitzahlen
-            $zipFieldGroup = FieldGroup::create(
-                HeaderField::create('TitleHeader', _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPSEARCH', 'Zip'), 4),
-                new ZipField("q[StartPlz]", _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPSTART', 'zipStart')),
-                new ZipField("q[EndPlz]", _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPEND', 'zipEnd'))
-            );
-            // Alter Bereich
-            $ageRangeFieldGroup = FieldGroup::create(
-                HeaderField::create(_t('ClubAdmin.AGERANGE', 'Age'), 4),
-                new NumericField("q[StartAge]", _t('ClubAdmin.AGESTART', 'ageStart')),
-                new NumericField("q[EndAge]", _t('ClubAdmin.AGEEND', 'ageEnd'))
-            );
-            // Active / Inactive
-            $showInactiveDropDownField = DropdownField::create(
-                'q[State]',
-                _t(
-                    'SYBEHA\Clubmaster\Admins\ClubAdmin.STATE',
-                    'Member state'
-                ),
-                array(
-                    'A' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWACTIVE', 'Show active'),
-                    'I' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWINACTIVE', 'Show inactive')
-                    //'AI' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWALL','Show all')
-                )
-            )->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
-            // Versicherung
-            $insuranceDropDownField = DropdownField::create(
-                'q[Insurance]',
-                _t(
-                    'SYBEHA\Clubmaster\Admins\ClubAdmin.INSURANCE',
-                    'Insurance'
-                ),
-                array(
-                    'UV' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWNOINSURANCE', 'Non insured'),
-                    'V' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWINSURANCE', 'Insured')
-                )
-            )->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
-            // Type
-            //multiple
-            $typeCheckboxSetField = CheckboxSetField::create('q[Type]', _t('ClubMember.TYPE', 'Type'), ClubMemberType::get()->map()->toArray());
-            $typeCheckboxSetField->setTitle('Type (Mehrfachwahl möglich)')->setDescription('Multiple');
-            //$typeListboxField = ListboxField::create('q[Type]', _t('ClubMember.TYPE', 'Type'), ClubMemberType::get()->map()->toArray());
-            //single
-            $typeDropDownField = DropdownField::create('q[Type]', _t('ClubMember.TYPE', 'Type'))
-                ->setSource(ClubMemberType::get()->map()->toArray())
-                ->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SELECTONE', 'Select one'));
-
-            //$context->getFields()->push($ageRangeDropDownField);
-            $context->getFields()->push($ageRangeFieldGroup);
-            $context->getFields()->push($insuranceDropDownField);
-            $context->getFields()->push($typeCheckboxSetField);
-            $context->getFields()->push($showInactiveDropDownField);
-            $context->getFields()->push($zipFieldGroup);
-        }
-
-        return $context;
-    }
-    */
-
-    /**
      * Override getList() from ModelAdmin {@link \SilverStripe\Admin\ModelAdmin::getList()}
      *
      * @return \SilverStripe\ORM\DataList
@@ -204,53 +128,6 @@ class ClubAdmin extends ModelAdmin
             // Limit list to pending members
             $list = $list->filter('Pending', '1')->sort('Since', 'ASC');
         }
-
-        // Obsolete since 4.3! Get parameters
-        /*
-        $params = $this->request->requestVar('q');
-        if ($params && $this->modelClass === ClubMember::class) {
-            // Limit to active or inactive
-            if (isset($params['State']) && $params['State']) {
-                if ($params['State'] == 'A') {
-                    $list = $list->filter('Active', '1');
-                } elseif ($params['State'] =='AI') {
-                    //$list
-                } elseif ($params['State'] == 'I') {
-                    $list = $list->filter('Active', '0');
-                }
-            }
-            // Limit to insurance
-            if (isset($params['Insurance']) && $params['Insurance'] == 'V') {
-                if ($params['Insurance'] == 'V') {
-                    $list = $list->filter('Insurance', '1');
-                } elseif ($params['Insurance'] == 'UV') {
-                    $list = $list->filter('Insurance', '0');
-                }
-            }
-            // Filter by Zip
-            if (isset($params['StartPlz']) && $params['StartPlz']) {
-                $list = $list->exclude('Zip:LessThan', $params['StartPlz']);
-            }
-            if (isset($params['EndPlz']) && $params['EndPlz']) {
-                $list = $list->exclude('Zip:GreaterThan', $params['EndPlz']);
-            }
-            // Filter by Age range
-            if (isset($params['AgeRange']) && $params['AgeRange']) {
-                if ($params['AgeRange'] == 'U16') {
-                    $list = $list->exclude('Age:GreaterThan', '16');
-                } elseif ($params['AgeRange'] == 'U26') {
-                    $list = $list->exclude('Age:GreaterThan', '26');
-                } elseif ($params['AgeRange'] == 'U60') {
-                    $list = $list->exclude('Age:GreaterThan', '60');
-                }
-            }
-            // Filter by Type
-            if (isset($params['Type']) && $params['Type']) {
-                $list = $list->filter('TypeID', $params['Type']);
-            }
-        } else {
-        }
-        */
         return $list;
     }
 
@@ -283,39 +160,11 @@ class ClubAdmin extends ModelAdmin
         $itemsPerPage = Config::inst()->get('ClubAdmin', 'page_length'); // default 25, _config/config.yml
         $itemsPerPage = $siteConfig->MembersDisplayed;
 
-        /*
-        $components = $gridFieldConfig->getComponents();
-        foreach ( $components as $key => $value ) {
-            Injector::inst()->get(LoggerInterface::class)->debug('key =' . $key . ' value = ' . get_class($value));
-        }
-            0 = SilverStripe\Forms\GridField\GridFieldButtonRow
-            1 = SilverStripe\Forms\GridField\GridFieldAddNewButton
-            2 = SilverStripe\Forms\GridField\GridFieldToolbarHeader
-            3 = SilverStripe\Forms\GridField\GridFieldSortableHeader
-            4 = SilverStripe\Forms\GridField\GridFieldDataColumns
-            5 = SilverStripe\Forms\GridField\GridFieldEditButton
-            6 = SilverStripe\Forms\GridField\GridFieldDeleteAction
-            7 = SilverStripe\Forms\GridField\GridFieldPageCount
-            8 = SilverStripe\Forms\GridField\GridFieldPaginator
-            9 = SilverStripe\Forms\GridField\GridFieldDetailForm
-            10 = SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState
-            11 = SilverStripe\Forms\GridField\GridFieldExportButton
-            12 = SilverStripe\Forms\GridField\GridFieldPrintButton
-            13 = SilverStripe\Forms\GridField\GridState_Component
-            14 = SilverStripe\Forms\GridField\GridFieldImportButton
-        */
-
         //if ($gridFieldName == 'ClubMember') {
         if ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMember') {
             //$gridFieldConfig->addComponent(new SYBEHA\Forms\Gridfields\Actions\ShowHideButton('before'));
-
             $gridFieldConfig->getComponentByType(GridFieldPaginator::class)->setItemsPerPage($itemsPerPage);
             //Injector::inst()->get(LoggerInterface::class)->debug('Config: ' . implode(" +  ",$gridFieldConfig));
-
-            // Add Filter header - already added by default since SS v4.3
-            //$gridFieldConfig->addComponent(new GridFieldFilterHeader());
-            // Use legacy
-            //$gridFieldConfig->getComponentsByType(GridFieldFilterHeader::class)->useLegacyFilterHeader = true;
 
             //NEW: Added with 4.3
             $gridFieldConfig->addComponent(new GridFieldLazyLoader());
@@ -392,11 +241,6 @@ class ClubAdmin extends ModelAdmin
             $gridFieldConfig->removeComponentsByType(GridFieldFilterHeader::class);
             //} elseif ($gridFieldName == 'ClubMemberPending') {
         } elseif ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {
-            /*$columns = $gridField->getColumns();
-            foreach ($columns as $column) {
-                Injector::inst()->get(LoggerInterface::class)
-                    ->debug('ClubAdmin - getEditForm()  column = ' . $column);
-            }*/
             $gridFieldConfig->removeComponentsByType(GridFieldPrintButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldExportButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldImportButton::class);
@@ -404,6 +248,7 @@ class ClubAdmin extends ModelAdmin
             $gridFieldConfig->removeComponentsByType(GridFieldAddNewButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldDeleteAction::class);
 
+            // Add ApproveClubMember action
             $gridFieldConfig->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember());
 
             // Add GridFieldBulkManager
@@ -481,12 +326,7 @@ class ClubAdmin extends ModelAdmin
         Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
         //Requirements::add_i18n_javascript('sybeha/clubmaster:client/lang');
 
-        //Injector::inst()->get(LoggerInterface::class)
-        //    ->info('ClubAdmin - Init() using locale = ' . i18n::get_locale());
-        //Injector::inst()->get(LoggerInterface::class)
-        //    ->info('ClubAdmin - Init() class = ' . $this->sanitiseClassName($this->modelClass));
-
-          // Create Pending members from serialized form data
+        // Create Pending members from serialized form data
         if ($this->sanitiseClassName($this->modelClass) === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {
             // Get the SiteConfig
             $siteConfig = SiteConfig::current_site_config();
@@ -507,7 +347,6 @@ class ClubAdmin extends ModelAdmin
                 Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() no files found');
             } else {
                 Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
-                //TODO: Publish them automatically if required
             }
 
             // Iterate the files found
