@@ -50,7 +50,7 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
  * @subpackage Model
  * @author Lars Hasselbach <lars.hasselbach@gmail.com>
  * @since 15.03.2016
- * @copyright 2019 [sybeha]
+ * @copyright 2016 [sybeha]
  * @license see license file in modules root directory
  * TODO: Replace classname with __CLASS__
  */

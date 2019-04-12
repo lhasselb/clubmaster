@@ -79,7 +79,7 @@ use SilverStripe\i18n\i18nEntityProvider;
  * @subpackage Admins
  * @author Lars Hasselbach <lars.hasselbach@gmail.com>
  * @since 15.03.2016
- * @copyright 2019 [sybeha]
+ * @copyright 2016 [sybeha]
  * @license see license file in modules root directory
  */
 class ClubAdmin extends ModelAdmin
