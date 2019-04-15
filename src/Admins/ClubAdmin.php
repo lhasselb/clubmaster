@@ -199,7 +199,7 @@ class ClubAdmin extends ModelAdmin
             );
 
             /* PRINT disabled */
-            $gridFieldConfig->removeComponentsByType('GridFieldPrintButton');
+            $gridFieldConfig->removeComponentsByType(GridFieldPrintButton::class);
             /*$printButton = $gridFieldConfig->getComponentByType('GridFieldPrintButton');
             $printButton->setPrintColumns($print_columns
                 array(

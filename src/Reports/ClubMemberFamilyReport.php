@@ -56,7 +56,7 @@ class ClubMemberFamilyReport extends Report
 
             //Injector::inst()->get(LoggerInterface::class)
             //    ->debug('ClubMemberFamilyReport - sourceRecords() '.$currentList->count().' entries for ' . $member->LastName);
-        
+
             if ($currentList->count() > 1) {
                 $family->push($member);
             }
@@ -111,8 +111,8 @@ class ClubMemberFamilyReport extends Report
 
         $gridConfig->getComponentByType(GridFieldPaginator::class)->setItemsPerPage(500);
 
-        //$gridConfig->removeComponentsByType('GridFieldPrintButton');
-        //$gridConfig->removeComponentsByType('GridFieldExportButton');
+        //$gridConfig->removeComponentsByType(GridFieldPrintButton::class);
+        //$gridConfig->removeComponentsByType(GridFieldExportButton::class);
 
         /*$gridConfig->addComponents (
             new GridFieldPrintAllButton('buttons-after-left'),
