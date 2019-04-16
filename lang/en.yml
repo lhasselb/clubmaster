@@ -31,6 +31,7 @@ en:
   SYBEHA\Clubmaster\Models\ClubMemberPending:
     SINGULARNAME: "Member request"
     PLURALNAME: "Member request"
+    SINCE: "Member from"
 
   SYBEHA\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Clubmember type"

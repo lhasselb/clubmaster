@@ -31,6 +31,7 @@ de:
   SYBEHA\Clubmaster\Models\ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"
     PLURALNAME: "Mitgliedsantrag"
+    SINCE: "Mitglied ab"
 
   SYBEHA\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Mitgliedstyp"

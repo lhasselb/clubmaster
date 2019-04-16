@@ -26,8 +26,6 @@ use SilverStripe\ORM\Filters\PartialMatchFilter;
 use SilverStripe\ORM\Filters\LessThanFilter;
 use SilverStripe\ORM\Filters\GreaterThanFilter;
 use SilverStripe\ORM\Filters\ExactMatchFilter;
-
-use SilverStripe\ORM\Filters\WithinRangeFilter;
 /* Use global namespace for PHP DateTime */
 use \DateTime;
 /* See  https://github.com/dynamic/silverstripe-country-dropdown-field */
@@ -128,8 +126,7 @@ class ClubMember extends DataObject
     }
 
     /**
-     * Fields to be displayed in table head
-     * of GridField
+     * Fields to be displayed in table head of GridField
      *
      * @var array
      */
@@ -139,28 +136,14 @@ class ClubMember extends DataObject
         'Zip' => 'Zip',
         'Age' => 'Age',
         'Sex' => 'Sex',
-        'Since' => 'Since',
-        //'Insurance' => 'Insurance',
-        //'Type.TypeName' => 'Type.TypeName',
-        //'Email' => 'Email',
-        //'Active' => 'Active'
+        'Since' => 'Since'
     ];
 
     /**
     * Defines a default sorting (e.g. within gridfield)
     * @var string
     */
-   private static $default_sort=''; //e.g. Since ASC orbLastName ASC
-
-    /**
-     * Fields Searchable within top Filter
-     * empty equals enable all fields
-     * and PartialMatchFilter seems to be default
-     * NOT USED - instead overwrite getDefaultSearchContext()
-     * @var array
-     */
-    /*private static $searchable_fields = [];*/
-
+    private static $default_sort=''; //e.g. Since ASC or LastName ASC
 
     /**
      * Generates a SearchContext to be used for building and processing
@@ -807,7 +790,6 @@ class ClubMember extends DataObject
         $this->Sex = $this->getSex();
 
         //TODO: Verify/complete address for imported records
-
         $siteConfig = SiteConfig::current_site_config();
         // Set MandateReference for newly added members
         $addMandate = $siteConfig->AddMandate; // see site config
@@ -832,25 +814,45 @@ class ClubMember extends DataObject
         }
     }
 
-    /* Only clubadmins are allowed */
+    /**
+     * Only clubadmins are allowed
+     *
+     * @param  Member $member
+     * @return boolean
+     */
     public function canView($member = null)
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 
-    /* Only clubadmins are allowed */
+    /**
+     * Only clubadmins are allowed
+     *
+     * @param  Member $member
+     * @return boolean
+     */
     public function canEdit($member = null)
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 
-    /* Only admins (Group Administrators) are allowed */
+    /**
+     * Only admins (Group Administrators) are allowed
+     *
+     * @param  Member $member
+     * @return boolean
+     */
     public function canDelete($member = null)
     {
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
 
-    /* Only clubadmins are allowed */
+    /**
+     * Only admins (Group Administrators) are allowed
+     *
+     * @param  Member $member
+     * @return boolean
+     */
     public function canCreate($member = null, $context = [])
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);

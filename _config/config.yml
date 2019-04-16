@@ -5,6 +5,7 @@ Name: clubmaster
 SilverStripe\Admin\LeftAndMain:
   extensions:
     - SYBEHA\Clubmaster\Extensions\ClubAdminLeftAndMain
+
 # Add extension SiteConfig: add folder to store files of type "antraege"
 Silverstripe\SiteConfig\SiteConfig:
   extensions:
@@ -18,7 +19,6 @@ SilverStripe\Assets\File:
 # Number of displayed items
 SYBEHA\Clubmaster\Admins\ClubAdmin:
   page_length: 25
-
   extensions:
     - SYBEHA\Clubmaster\Extensions\ClubAdminImport
 
@@ -26,6 +26,3 @@ SYBEHA\Clubmaster\Admins\ClubAdmin:
 ClubMemberPending:
   better_buttons_enabled: false
 
-# Configure grid field to use legacy search API
-#SilverStripe\Forms\GridField\GridFieldFilterHeader:
-#  force_legacy: true

@@ -33,7 +33,13 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
 /**
  * Class ClubMemberPending
  *
- * @package SYBEHA\Clubmaster\Models
+ * @package SYBEHA\Clubmaster
+ * @subpackage Model
+ * @author Lars Hasselbach <lars.hasselbach@gmail.com>
+ * @since 15.03.2016
+ * @copyright 2016 [sybeha]
+ * @license see license file in modules root directory
+ * TODO: Replace classname with __CLASS__
  */
 class ClubMemberPending extends ClubMember
 {
@@ -56,19 +62,26 @@ class ClubMemberPending extends ClubMember
     ];
 
     /**
-     * Fields to be displayed in Table head (gridfield)
+     * Fields to be displayed in Table head of GridField
      *
      * @var array
      */
     private static $summary_fields = [
-        'Salutation',
-        'FirstName',
-        'LastName',
-        'SerializedFileName',
-        'FormClaimDate'
-        ];
+        'SerializedFileName' => 'SerializedFileName',
+        'FormClaimDate' => 'FormClaimDate'
+    ];
 
-    private static $searchable_fields = [];
+    /**
+     *
+     * @return array labels
+     */
+    public function fieldLabels($includerelations = true)
+    {
+        $labels = parent::fieldLabels($includerelations);
+        $labels['Since'] =
+            _t('SYBEHA\Clubmaster\Models\ClubMemberPending.SINCE', 'From');
+        return $labels;
+    }
 
     /**
      * Add custom validation to the form
@@ -468,7 +481,7 @@ class ClubMemberPending extends ClubMember
      * @param  Member $member
      * @return boolean
      */
-    public function canCreate($member = null, $context = array())
+    public function canCreate($member = null, $context = [])
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }

@@ -1,5 +1,32 @@
-# Added to support unserialize of ClubMemberPending serialized before usin namespaces
+# Clubmaster
 mappings:
- ClubMemberPending: SYBEHA\Clubmaster\Models\ClubMemberPending
- ClubMember: SYBEHA\Clubmaster\Models\ClubMember
- ClubMemberType: SYBEHA\Clubmaster\Models\ClubMemberType
+# Clubmaster - Admins
+  ClubAdmin: SYBEHA\Clubmaster\Admins\ClubAdmin
+# Clubmaster - Extensions
+  ClubAdminImport: SYBEHA\Clubmaster\Extensions\ClubAdminImport
+  ClubAdminLeftAndMain: SYBEHA\Clubmaster\Extensions\ClubAdminLeftAndMain
+  ClubAdminSiteConfig: SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig
+# Clubmaster - Forms
+  BicField: SYBEHA\Clubmaster\Forms\Fields\BicField
+  EUNameTextField: SYBEHA\Clubmaster\Forms\Fields\EUNameTextField
+  IbanField: SYBEHA\Clubmaster\Forms\Fields\IbanField
+  TelephoneNumberField: SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField
+  ZipField: SYBEHA\Clubmaster\Forms\Fields\ZipField
+  ActivateClubMember: SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember
+  ApproveClubMember: SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember
+  ShowHideButton: SYBEHA\Clubmaster\Forms\Gridfields\Actions\ShowHideButton
+  ActivateMemberHandler: SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler
+  ApproveMemberHandler: SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler
+  DeActivateMemberHandler: SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler
+  InsuranceMemberHandler: SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler
+# Clubmaster - Loader
+  ClubMemberCsvBulkLoader: SYBEHA\Clubmaster\Loader\ClubMemberCsvBulkLoader
+# Clubmaster - Models
+  ClubMemberPending: SYBEHA\Clubmaster\Models\ClubMemberPending
+  ClubMember: SYBEHA\Clubmaster\Models\ClubMember
+  ClubMemberType: SYBEHA\Clubmaster\Models\ClubMemberType
+# Clubmaster - Pages
+  EnrollPage: SYBEHA\Clubmaster\Pages\EnrollPage
+  EnrollPageController: SYBEHA\Clubmaster\Pages\EnrollPageController
+  EnrollSuccessPage: SYBEHA\Clubmaster\Pages\EnrollSuccessPage
+  EnrollPageSuccessController: SYBEHA\Clubmaster\Pages\EnrollPageSuccessController
