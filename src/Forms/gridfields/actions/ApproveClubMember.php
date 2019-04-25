@@ -131,7 +131,7 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
             if ($sendApprovalMail) {
                 //Send an E-Mail
                 $email = new Email();
-                $data = $clubMemberPending->toMAp();
+                $data = $clubMemberPending->toMap();
                 //foreach ($data as $key => $value) {
                     //Injector::inst()->get(LoggerInterface::class)
                     //    ->debug('ApproveClubMember - handleAction() key = ' . $key . ' value = ' . $value);
