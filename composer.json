@@ -30,6 +30,8 @@
         },
         "expose": [
             "client/dist",
+            "client/dist/js/main.js",
+            "client/dist/styles/main.css",
             "client/images"
         ]
     },
