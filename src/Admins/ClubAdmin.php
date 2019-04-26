@@ -319,8 +319,8 @@ class ClubAdmin extends ModelAdmin
     public function init()
     {
         parent::init();
-        Requirements::javascript('lhasselb/clubmaster:client/dist/js/main.js');
-        Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
+        //Requirements::javascript('lhasselb/clubmaster:client/dist/js/main.js');
+        //Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
         //Requirements::add_i18n_javascript('sybeha/clubmaster:client/lang');
 
         // Create Pending members from serialized form data

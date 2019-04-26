@@ -22,7 +22,13 @@ SYBEHA\Clubmaster\Admins\ClubAdmin:
   extensions:
     - SYBEHA\Clubmaster\Extensions\ClubAdminImport
 
-# Betterbuttons (unclecheese/silverstripe-gridfield-betterbuttons)
-ClubMemberPending:
-  better_buttons_enabled: false
-
+# Requirements
+---
+After:
+    - 'assetsimage'
+---
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_css:
+    - 'lhasselb/clubmaster: client/dist/styles/main.css'
+  extra_requirements_javascript:
+    - 'lhasselb/clubmaster: client/dist/js/main.js'
