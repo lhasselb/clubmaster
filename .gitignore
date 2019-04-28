@@ -78,7 +78,6 @@ $RECYCLE.BIN/
 /themes/simple/
 /resources/
 /public/resources/
-/client/dist/
 
 .transifexrc
 **/css/bourbon
