@@ -1,0 +1,11 @@
+/**
+ * Enroll styles
+ */
+
+.error, .form-control.error, .error .btn {
+    border-color: red;
+    color: red;
+}
+.error + .btn  {
+    border: 1px solid red;
+}

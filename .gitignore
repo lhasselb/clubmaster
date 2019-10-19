@@ -79,7 +79,6 @@ $RECYCLE.BIN/
 /resources/
 /public/resources/
 
-
 .transifexrc
 **/css/bourbon
 **/.sass-cache

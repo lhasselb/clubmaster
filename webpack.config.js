@@ -13,35 +13,40 @@ const {
 
 const ENV = process.env.NODE_ENV;
 const PATHS = {
+    // the root path, where your webpack.config.js is located.
+    ROOT: Path.resolve(),
     // your node_modules folder name, or full path
     MODULES: 'node_modules',
     // relative path from your css files to your other files, such as images and fonts
     FILES_PATH: '../',
-    // the root path, where your webpack.config.js is located.
-    ROOT: Path.resolve(),
     // the root path to your javascript source files
     SRC: Path.resolve('client/src'),
-    // the root path to your javascript dist files
     DIST: Path.resolve('client/dist'),
-    // thirdparty folder containing copies of packages which wouldn't be available on NPM
-    THIRDPARTY: 'thirdparty',
-
 };
 
-var config = {
-    // TODO: Add common Configuration
-    module: {},
-};
-
-var config1 = Object.assign({}, config,
-    {
+const config = [{
         name: 'js',
-        entry: [
-            `${PATHS.SRC}/js/clubmaster.js`
-        ],
+        entry: {
+            main: `${PATHS.SRC}/js/clubmaster.js`,
+        },
         output: {
             path: PATHS.DIST,
-            filename: 'js/[name].js'
+            filename: 'js/[name].js',
+        },
+        devtool: (ENV !== 'production') ? 'source-map' : '',
+        resolve: resolveJS(ENV, PATHS),
+        externals: externalJS(ENV, PATHS),
+        module: moduleJS(ENV, PATHS),
+        plugins: pluginJS(ENV, PATHS),
+    },
+    {
+        name: 'javascript',
+        entry: {
+            main: `${PATHS.SRC}/javascript/enroll.js`,
+        },
+        output: {
+            path: PATHS.DIST,
+            filename: 'javascript/enroll.js',
         },
         devtool: (ENV !== 'production') ? 'source-map' : '',
         resolve: resolveJS(ENV, PATHS),
@@ -51,39 +56,20 @@ var config1 = Object.assign({}, config,
     },
     {
         name: 'css',
-        entry: [
-            `${PATHS.SRC}/styles/clubmaster.scss`
-        ],
+        entry: {
+            main: `${PATHS.SRC}/main.scss`,
+        },
         output: {
             path: PATHS.DIST,
             filename: 'styles/[name].css'
         },
         devtool: (ENV !== 'production') ? 'source-map' : '',
         module: moduleCSS(ENV, PATHS),
-        plugins: pluginCSS(ENV, PATHS),
+        plugins: pluginCSS(ENV, PATHS)
     }
+];
 
-);
-
-var config2 = Object.assign({}, config,
-    {
-        name: 'js2',
-        entry: [
-            `${PATHS.MODULES}/jquery-validation/dist/jquery.validate.js`,
-            `${PATHS.MODULES}/jquery-validation/dist/additional-methods.js`,
-            `${PATHS.MODULES}/jquery-validation/dist/localization/messages_de.js`,
-            `${PATHS.SRC}/javascript/enroll.js`
-        ],
-        output: {
-            path: PATHS.DIST,
-            filename: 'javascript/validation.js'
-        },
-        devtool: (ENV !== 'production') ? 'source-map' : '',
-        resolve: resolveJS(ENV, PATHS),
-        externals: externalJS(ENV, PATHS),
-        module: moduleJS(ENV, PATHS),
-        plugins: pluginJS(ENV, PATHS),
-    }
-)
-
-module.exports = [config1, config2];
+// Use WEBPACK_CHILD=js or WEBPACK_CHILD=css env var to run a single config
+module.exports = (process.env.WEBPACK_CHILD) ?
+    config.find((entry) => entry.name === process.env.WEBPACK_CHILD) :
+    module.exports = config;

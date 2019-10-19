@@ -2,44 +2,51 @@
   "name": "clubmaster",
   "version": "4.0.0",
   "description": "Manager for club members",
-  "main": "clubmaster.js",
-  "license": "BSD-3-Clause",
+  "engines": {
+    "node": "^10.x"
+  },
+  "bin": {
+    "webpack": "./node_modules/.bin/webpack",
+    "sass-lint": "./node_modules/.bin/sass-lint"
+  },
+  "scripts": {
+    "build": "yarn && yarn lint && NODE_ENV=production webpack -p --bail --progress",
+    "dev": "NODE_ENV=development webpack --progress",
+    "watch": "NODE_ENV=development webpack --watch --progress",
+    "css": "WEBPACK_CHILD=css npm run build",
+    "tx": "tx push --source && tx pull --all && node transifex.js",
+    "lint": "eslint client/src && sass-lint client/src",
+    "lint-js": "eslint client/src",
+    "lint-js-fix": "eslint client/src --fix",
+    "lint-sass": "sass-lint client/src"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lhasselb/clubmaster.git"
   },
-  "homepage": "https://github.com/lhasselb/clubmaster",
-  "bugs": {
-    "url": "https://github.com/lhasselb/clubmaster/issues"
-  },
+  "keywords": [
+    "manager",
+    "clubmembers"
+  ],
   "author": "lhasselb",
-  "engines": {
-    "node": "^6.x"
-  },
-  "scripts": {
-    "build": "cross-env NODE_ENV=production webpack -p --bail --progress",
-    "watch": "cross-env NODE_ENV=development webpack --watch --progress",
-    "tx": "tx push --source && tx pull --all && node transifex.js",
-    "dist": "npm run tx && npm run build"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "jquery-validation": "^1.19.0"
   },
   "devDependencies": {
-    "@silverstripe/eslint-config": "^0.0.4",
-    "@silverstripe/webpack-config": "^0.7",
-    "babel-jest": "^19.0.0",
-    "cross-env": "^5.2.0",
-    "jest-cli": "^19.0.2"
-  },
-  "dependencies": {
-    "hoek": "^5.0.3",
-    "webpack": "^3.10"
+    "@silverstripe/eslint-config": "^0.0.5",
+    "@silverstripe/webpack-config": "^0.4.1",
+    "expose-loader": "^0.7.4",
+    "sass-loader": "^6.0.7"
   },
   "babel": {
-    "presets": [
-      "env",
-      "react"
-    ],
     "plugins": [
       "transform-object-rest-spread"
     ]
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
 }

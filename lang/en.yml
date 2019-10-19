@@ -4,17 +4,19 @@ en:
     #Filter
     SELECTONE: "Select one"
     AGERANGE: "Age Range"
+    AGESTART: "Age from"
+    AGEEND: "Age to"
     LESSTHAN16: "Less/equal 16"
     LESSTHAN26: "Less/equal 26"
     LESSTHAN60: "Less/equal 60"
     STATE: "Member state"
     SHOWACTIVE: "Show active"
     SHOWINACTIVE: "Show inactive"
-    SHOWALL: "Show all"
+    SHOWALL: "(all)"
     INSURANCE: "BLSV"
     SHOWNOINSURANCE: "Non insured"
     SHOWINSURANCE: "Insured"
-    ZIPSEARCH: "Zip"
+    ZIPRANGE: "Zip"
     ZIPSTART: "Zip from"
     ZIPEND: "Zip to"
     FILE: "File"
@@ -29,6 +31,7 @@ en:
   SYBEHA\Clubmaster\Models\ClubMemberPending:
     SINGULARNAME: "Member request"
     PLURALNAME: "Member request"
+    SINCE: "Member from"
 
   SYBEHA\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Clubmember type"
@@ -89,7 +92,7 @@ en:
     IBANHINT: "IBAN, like DE21301204000000015228"
     BICHINT: "BIC, like VOBADEXX"
     MANDATEREFERENCEHINT: "Will be created automatically after approving"
-  
+
   # Check!
   # SilverStripe\Forms\GridField\GridField:
   #   NewRecord: 'New %s'
@@ -113,15 +116,15 @@ en:
   SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_APPROVE: "Approve multiple"
     GRIDFIELD_BULK_DROPDOWN_APPROVED: "%s member requests approved."
-  
+
   SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_ACTIVATE: "Activate members"
     GRIDFIELD_BULK_DROPDOWN_ACTIVATED: "%s members activated."
-  
+
   SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_DEACTIVATE: "Deactivate members"
     GRIDFIELD_BULK_DROPDOWN_DEACTIVATED: "%s members deactivated."
-  
+
   SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_INSURANCE: "Add insurance"
     GRIDFIELD_BULK_DROPDOWN_INSURANCE_DONE: "%s members done"

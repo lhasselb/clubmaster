@@ -5,6 +5,7 @@ Name: clubmaster
 SilverStripe\Admin\LeftAndMain:
   extensions:
     - SYBEHA\Clubmaster\Extensions\ClubAdminLeftAndMain
+
 # Add extension SiteConfig: add folder to store files of type "antraege"
 Silverstripe\SiteConfig\SiteConfig:
   extensions:
@@ -17,10 +18,17 @@ SilverStripe\Assets\File:
 
 # Number of displayed items
 SYBEHA\Clubmaster\Admins\ClubAdmin:
-  items_per_page: 25
+  page_length: 25
   extensions:
     - SYBEHA\Clubmaster\Extensions\ClubAdminImport
 
-# Betterbuttons (unclecheese/silverstripe-gridfield-betterbuttons)
-ClubMemberPending:
-  better_buttons_enabled: false
+# Requirements
+---
+After:
+    - 'assetsimage'
+---
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_css:
+    - 'lhasselb/clubmaster: client/dist/styles/main.css'
+  extra_requirements_javascript:
+    - 'lhasselb/clubmaster: client/dist/js/main.js'

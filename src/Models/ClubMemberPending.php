@@ -33,7 +33,13 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
 /**
  * Class ClubMemberPending
  *
- * @package SYBEHA\Clubmaster\Models
+ * @package SYBEHA\Clubmaster
+ * @subpackage Model
+ * @author Lars Hasselbach <lars.hasselbach@gmail.com>
+ * @since 15.03.2016
+ * @copyright 2016 [sybeha]
+ * @license see license file in modules root directory
+ * TODO: Replace classname with __CLASS__
  */
 class ClubMemberPending extends ClubMember
 {
@@ -44,7 +50,7 @@ class ClubMemberPending extends ClubMember
      * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
      */
     private static $table_name = 'ClubMemberPending';
-    
+
     /**
      * Set defaults
      *
@@ -56,19 +62,26 @@ class ClubMemberPending extends ClubMember
     ];
 
     /**
-     * Fields to be displayed in Table head (gridfield)
+     * Fields to be displayed in Table head of GridField
      *
      * @var array
      */
     private static $summary_fields = [
-        'Salutation',
-        'FirstName',
-        'LastName',
-        'SerializedFileName',
-        'FormClaimDate'
-        ];
+        'SerializedFileName' => 'SerializedFileName',
+        'FormClaimDate' => 'FormClaimDate'
+    ];
 
-    private static $searchable_fields = [];
+    /**
+     *
+     * @return array labels
+     */
+    public function fieldLabels($includerelations = true)
+    {
+        $labels = parent::fieldLabels($includerelations);
+        $labels['Since'] =
+            _t('SYBEHA\Clubmaster\Models\ClubMemberPending.SINCE', 'From');
+        return $labels;
+    }
 
     /**
      * Add custom validation to the form
@@ -115,18 +128,6 @@ class ClubMemberPending extends ClubMember
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        
-        /**
-         * Temporarily hide all link and file tracking tabs/fields in the CMS UI
-         * added in SS 4.2 until 4.3 is available
-         *
-         * Related GitHub issues and PRs:
-         *   - https://github.com/silverstripe/silverstripe-cms/issues/2227
-         *   - https://github.com/silverstripe/silverstripe-cms/issues/2251
-         *   - https://github.com/silverstripe/silverstripe-assets/pull/163
-         * */
-        $fields->removeByName(['FileTracking', 'LinkTracking']);
-
         $fields->addFieldToTab(
             'Root.Main',
             DropdownField::create(
@@ -348,14 +349,10 @@ class ClubMemberPending extends ClubMember
             $birthday_year = strtok($this->Birthday, '-');
             if ($this->Birthday > $current_year.'-12-31') {
                 $this->Birthday = strval((int)$birthday_year - 100) . '-' .strtok("-") . '-' . strtok("-");
-                Injector::inst()->get(LoggerInterface::class)
-                    ->info('ClubMemberPending - fillWith()' . ' replace birthday ' . $this->Birthday . ' to ' .
-                    $this->Birthday . ' current = ' . $current_year);
+                Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - cleanNewClubMember()' . ' replace birthday ' . $this->Birthday . ' to ' . $this->Birthday . ' current = ' . $current_year);
             }
         } else {
-            Injector::inst()->get(LoggerInterface::class)
-                ->info('ClubMemberPending - fillWith()' . ' regular birthday given ' . $this->Birthday .
-                ' current year = ' . $current_year);
+            //Injector::inst()->get(LoggerInterface::class)->info('ClubMemberPending - cleanNewClubMember()' . ' regular birthday given ' . $this->Birthday . ' current year = ' . $current_year);
             $this->Birthday = $this->Birthday;
         }
         // Lowercase required
@@ -484,7 +481,7 @@ class ClubMemberPending extends ClubMember
      * @param  Member $member
      * @return boolean
      */
-    public function canCreate($member = null, $context = array())
+    public function canCreate($member = null, $context = [])
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }

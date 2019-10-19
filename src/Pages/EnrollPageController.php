@@ -38,6 +38,7 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
 /* See  https://github.com/dynamic/silverstripe-country-dropdown-field */
 use Dynamic\CountryDropdownField\Fields\CountryDropdownField;
 
+/* Used for setting min and max values for Birthday (-Field) */
 //use \DateTime;
 
 
@@ -73,8 +74,7 @@ class EnrollPageController extends PageController
      */
     public function EnrollForm()
     {
-        $today = DBDatetime::now();//->FormatI18N("%d.%m.%Y");
-
+        //Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale() . ' today = ' . DBDatetime::now());
         // @todo: Clarify if we should add an additional flag to the backend to hide them from the list
         // Check for types before using
         if (ClubMemberType::get()->exists()) {
@@ -98,7 +98,10 @@ class EnrollPageController extends PageController
             EUNameTextField::create('LastName', _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName'))
                 ->setAttribute('placeholder', 'Nachname'),
             DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
-                ->setAttribute('placeholder', $today),
+                ->setAttribute('placeholder', DBDatetime::now()->Date())
+                ->setMinDate('-100 years')
+                ->setMaxDate('+0 days'),
+
             CountryDropdownField::create(
                 'Nationality',
                 _t('SYBEHA\Clubmaster\Models\ClubMember.NATIONALITY', 'Nationality')
@@ -118,11 +121,14 @@ class EnrollPageController extends PageController
                 ->setAttribute('placeholder', 'name@domain.de'),
             TelephoneNumberField::create('Mobil', _t('SYBEHA\Clubmaster\Models\ClubMember.MOBIL', 'Mobil'))
                 ->setAttribute('placeholder', 'Handynummer'),
-            TelephoneNumberField::create('Phone', _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
+            TelephoneNumberField::create('Phone', 'oder ' . _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
                 ->setAttribute('placeholder', 'Telefonnummer'),
             DropdownField::create('TypeID', 'Mitgliedstyp', $clubMemberTypesMap)
                 ->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            DateField::create('Since', 'Mitglied ab')->setValue(DBDatetime::now()),
+            DateField::create('Since', 'Mitglied ab')
+                ->setValue(DBDatetime::now())
+                ->setMinDate('-2 years')
+                ->setMaxDate('+0 days'),
             CheckboxField::create(
                 'EqualAddress',
                 _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress')
@@ -289,16 +295,14 @@ class EnrollPageController extends PageController
     {
         parent::init();
         $theme = $this->themeDir();
- /*
-        //Add javascript here
-        Requirements::block(THIRDPARTY_DIR . '/jquery/jquery.js');
-        Requirements::block('framework/javascript/DateField.js');
-        Requirements::block('framework/thirdparty/jquery-ui/jquery-ui.js');
-        Requirements::block('framework/thirdparty/jquery-ui/datepicker/i18n/jquery.ui.datepicker-de.js');
-        Requirements::block(THIRDPARTY_DIR . '/jquery-ui-themes/smoothness/jquery-ui.css');
-*/
-        Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
+        // Same as Theme TODO: Make configurable
+        Requirements::javascript('//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js');
+        //Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
+        // Same as Theme TODO: Make configurable
         //Front-End validation
-        Requirements::javascript('lhasselb/clubmaster:client/dist/javascript/validation.js');
+        Requirements::javascript('//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js');
+        Requirements::javascript('//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/localization/messages_de.min.js');
+        Requirements::javascript('lhasselb/clubmaster:client/dist/javascript/enroll.js');
+        Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
     } //init
 } //eof

@@ -4,17 +4,19 @@ de:
     #Filter
     SELECTONE: "Bitte wählen"
     AGERANGE: "Altersbereich"
+    AGESTART: "Alter von"
+    AGEEND: "Alter bis"
     LESSTHAN16: "Bis 16 Jahre (einschließlich)"
     LESSTHAN26: "Bis 26 Jahre (einschließlich)"
     LESSTHAN60: "Bis 60 Jahre (einschließlich)"
     STATE: "Mitgliedsstatus"
     SHOWACTIVE: "Zeige nur aktive Mitglieder"
     SHOWINACTIVE: "Zeige nur inaktive Mitglieder"
-    SHOWALL: "Zeige alle (aktive und inaktive) Mitglieder"
+    SHOWALL: "(alle)"
     INSURANCE: "BLSV Sportversicherung"
     SHOWNOINSURANCE: "Zeige unversicherte Mitglieder"
     SHOWINSURANCE: "Zeige versicherte Mitglieder"
-    ZIPSEARCH: "Postleitzahlen"
+    ZIPRANGE: "Postleitzahlen"
     ZIPSTART: "Postleitzahlen von"
     ZIPEND: "Postleitzahlen bis"
     FILE: "Datei"
@@ -29,6 +31,7 @@ de:
   SYBEHA\Clubmaster\Models\ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"
     PLURALNAME: "Mitgliedsantrag"
+    SINCE: "Mitglied ab"
 
   SYBEHA\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Mitgliedstyp"
@@ -89,7 +92,7 @@ de:
     IBANHINT: "IBAN, z.B. DE21301204000000015228"
     BICHINT: "BIC, z.B. VOBADEXX"
     MANDATEREFERENCEHINT: "Wird bei der Zustimmung automatisch angelegt."
-  
+
   # Check!
   # SilverStripe\Forms\GridField\GridField:
   #   NewRecord: "Neues %s"
@@ -104,7 +107,7 @@ de:
   SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember:
     APPROVE_MEMBER: "Mitgliedsantrag zustimmen"
     APPROVE_MEMBER_DONE: "Mitglied angelegt."
-  
+
   SYBEHA\Clubmaster\Forms\Gridfields\Actions\GridFieldShowHideButton:
     SHOW: "Zeige auch inaktive Mitglieder"
     HIDE: "Zeige nur aktive Mitglieder"
@@ -113,15 +116,15 @@ de:
   SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_APPROVE: "Anträgen zustimmen"
     GRIDFIELD_BULK_DROPDOWN_APPROVED: "%s Anträgen zugestimmt."
-  
+
   SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_ACTIVATE: "Mitglieder aktivieren"
     GRIDFIELD_BULK_DROPDOWN_ACTIVATED: "%s Mitglieder aktiviert."
-  
+
   SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_DEACTIVATE: "Mitglieder deaktivieren"
     GRIDFIELD_BULK_DROPDOWN_DEACTIVATED: "%s Mitglieder deaktiviert."
-  
+
   SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_INSURANCE: "BLSV gemeldet setzen"
     GRIDFIELD_BULK_DROPDOWN_INSURANCE_DONE: "%s Mitglieder gesetzt."
@@ -148,7 +151,26 @@ de:
     REQUESTSFOLDER: "Verzeichnis für Anträge:"
     REQUESTSFOLDERDESCRIPTION: "Verzeichnis zum speichern der Antragsdateien (generiert vom Formular)"
     CONTENT_LABEL: "Das Formular wird im PHP-Code gepflegt."
-  
+
   SYBEHA\Clubmaster\Pages\EnrollSuccessPage:
     SINGULARNAME: "Erfolgreicher Mitgliedsantrag"
     MESSAGE_LABEL: "Danke-Meldung"
+
+#Add for Silverstripe Admin missing translation
+  SilverStripe\Admin\LeftAndMain:
+    DropdownBatchActionsDefault: 'Aktion wählen...'
+
+# BulkManager
+  Colymba\GRIDFIELD_BULK_MANAGER:
+    COMPONENT_TITLE: Einen oder mehrere Einträge gleichzeitig bearbeiten
+    EDIT_SELECT_LABEL: Bearbeiten
+    UNLINK_SELECT_LABEL: Verbindung entfernen
+    DELETE_SELECT_LABEL: Löschen
+    ACTION_BTN_LABEL: Los
+    SELECT_ALL_LABEL: Alle auswählen
+  Colymba\GRIDFIELD_BULKMANAGER_EDIT_HANDLER:
+    HEADER_TEXT: Bearbeite {count} {class}
+    TOGGLE_ALL_LINK: Alle Anzeigen/Verbergen
+    SAVE_BTN_LABEL: Alle speichern
+    CANCEL_BTN_LABEL: Abbrechen
+    SAVE_RESULT_TEXT: '{count} {class} erfolgreich gespeichert.'

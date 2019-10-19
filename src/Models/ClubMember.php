@@ -6,6 +6,7 @@ use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Forms\Tab;
@@ -17,6 +18,14 @@ use SilverStripe\Forms\EMailField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\FieldGroup;
+use SilverStripe\Forms\HeaderField;
+/* NEW Search */
+use SilverStripe\ORM\Search\SearchContext;
+use SilverStripe\ORM\Filters\PartialMatchFilter;
+use SilverStripe\ORM\Filters\LessThanFilter;
+use SilverStripe\ORM\Filters\GreaterThanFilter;
+use SilverStripe\ORM\Filters\ExactMatchFilter;
 /* Use global namespace for PHP DateTime */
 use \DateTime;
 /* See  https://github.com/dynamic/silverstripe-country-dropdown-field */
@@ -35,7 +44,13 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
 /**
  * Class ClubMember
  *
- * @package SYBEHA\Clubmaster\Models
+ * @package SYBEHA\Clubmaster
+ * @subpackage Model
+ * @author Lars Hasselbach <lars.hasselbach@gmail.com>
+ * @since 15.03.2016
+ * @copyright 2016 [sybeha]
+ * @license see license file in modules root directory
+ * TODO: Replace classname with __CLASS__
  */
 class ClubMember extends DataObject
 {
@@ -111,53 +126,115 @@ class ClubMember extends DataObject
     }
 
     /**
-     * Fields to be displayed in table head
-     * of GridField
+     * Fields to be displayed in table head of GridField
      *
      * @var array
      */
     private static $summary_fields = [
-        'FirstName' => 'FirstName',
         'LastName' => 'LastName',
+        'FirstName' => 'FirstName',
         'Zip' => 'Zip',
         'Age' => 'Age',
         'Sex' => 'Sex',
-        'Since' => 'Since',
-        //'Insurance' => 'Insurance',
-        //'Type.TypeName' => 'Type.TypeName'
-        'Email' => 'Email'
+        'Since' => 'Since'
     ];
 
     /**
-     * Fields Searchable within top Filter
-     * empty equals enable all fields
-     * and PartialMatchFilter seems to be default
+    * Defines a default sorting (e.g. within gridfield)
+    * @var string
+    */
+    private static $default_sort=''; //e.g. Since ASC or LastName ASC
+
+    /**
+     * Generates a SearchContext to be used for building and processing
+     * a generic search form for properties on this object.
+     * Use {@link SilverStripe\ORM\Search\SearchContext::getQuery()} for debugging;
      *
-     * @var array
+     * @return SearchContext
      */
-    private static $searchable_fields = [
-        /*
-        'FirstName' => [
-            'field' => TextField::class,
-            'filter' => 'PartialMatchFilter',
-        ],
-        'LastName' => [
-            'field' => TextField::class,
-            'filter' => 'PartialMatchFilter',
-        ],
-        'Zip' => [
-            'field' => NumericField::class,
-            'filter' => 'PartialMatchFilter',
-        ],
-        'Age' => [
-            'field' => NumericField::class,
-            'filter' => 'PartialMatchFilter',
-        ],
-        'Sex',
-        'Since',
-        'Email'
-        */
-    ];
+    public function getDefaultSearchContext()
+    {
+        // Postleitzahlen - Group the ZipFields
+        $zipFieldGroup = FieldGroup::create(
+            _t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPRANGE', 'Zip range'),
+            [ZipField::create('Search__ZipFrom',_t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPSTART', 'From')),
+            ZipField::create('Search__ZipTo',_t('SYBEHA\Clubmaster\Admins\ClubAdmin.ZIPEND', 'To'))]
+        )->setName('Search__ZipRange')
+        ->addExtraClass('fieldgroup--fill-width');
+
+        //Active
+        $active = DropdownField::create(
+            'Active', _t('SYBEHA\Clubmaster\Admins\ClubAdmin.STATE', 'Member state'),
+            [
+                '' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWALL', '(all)'),
+                1 => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWACTIVE', 'Show active'),
+                0 => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWINACTIVE', 'Show inactive')
+            ]
+        );
+
+        //Age
+        $ageFieldGroup = FieldGroup::create(
+            _t('SYBEHA\Clubmaster\Admins\ClubAdmin.AGERANGE', 'Age range'),
+            [NumericField::create('Search__AgeFrom',_t('SYBEHA\Clubmaster\Admins\ClubAdmin.AGESTART', 'From')),
+            NumericField::create('Search__AgeTo',_t('SYBEHA\Clubmaster\Admins\ClubAdmin.AGEEND', 'To'))]
+        )->setName('Search__AgeRange')
+        ->addExtraClass('fieldgroup--fill-width');
+
+        //Insurance
+        $insurance = DropdownField::create(
+            'Insurance', _t('SYBEHA\Clubmaster\Admins\ClubAdmin.INSURANCE', 'Insurance'),
+            [
+                '' => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWALL', '(all)'),
+                1 => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWINSURANCE', 'Insured'),
+                0 => _t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWNOINSURANCE', 'Non insured')
+            ]
+        );
+
+        //Type
+        $typename = DropdownField::create('Type', _t('SYBEHA\Clubmaster\Admins\ClubAdmin.TYPE', 'Type'))
+            ->setSource(ClubMemberType::get()->map()->toArray())
+            ->setEmptyString(_t('SYBEHA\Clubmaster\Admins\ClubAdmin.SHOWALL', 'all'));
+
+        // Attention: This is also used for the order of fields
+        $fields = $this->scaffoldSearchFields([
+            'restrictFields' => ['LastName','FirstName'/*,'Zip','Age'*/,'Sex','Since'/*,'Insurance'*/,'Type.TypeName','Email',/*'Active'*/]
+        ]);
+
+        $fields->push($typename);
+        $fields->push($active);
+        $fields->push($insurance);
+        $fields->push($zipFieldGroup);
+        $fields->push($ageFieldGroup);
+
+        /*foreach ($fields as $key => $value) {
+            Injector::inst()
+            ->get(LoggerInterface::class)
+            ->debug('ClubMember - getDefaultSearchContext() key = ' . $key . ' value = ' . $value );
+        }*/
+
+        $filters = [
+            'LastName' => new PartialMatchFilter('LastName'),
+            'FirstName' => new PartialMatchFilter('FirstName'),
+            //Zip -> see $fields->push($zipFieldGroup),
+            'ZipFrom' => new GreaterThanFilter('Zip'),
+            'ZipTo' => new LessThanFilter('Zip'),
+            //Age -> see $fields->push($ageFieldGroup),
+            'AgeFrom' => new GreaterThanFilter('Age'),
+            'AgeTo' => new LessThanFilter('Age'),
+            'Sex' => new ExactMatchFilter('Sex'),
+            'Since'  => new GreaterThanFilter('Since'),
+            'Insurance' => new ExactMatchFilter('Insurance'),
+            'Type' => new ExactMatchFilter('TypeID'),
+            'Email' => new PartialMatchFilter('Email'),
+            'Active' => new ExactMatchFilter('Active')
+        ];
+
+        return new SearchContext(
+            $this->ClassName, //$this->class
+            $fields,
+            $filters
+        );
+    }
 
     /**
      *
@@ -287,18 +364,6 @@ class ClubMember extends DataObject
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-
-        /**
-         * Temporarily hide all link and file tracking tabs/fields in the CMS UI
-         * added in SS 4.2 until 4.3 is available
-         *
-         * Related GitHub issues and PRs:
-         *   - https://github.com/silverstripe/silverstripe-cms/issues/2227
-         *   - https://github.com/silverstripe/silverstripe-cms/issues/2251
-         *   - https://github.com/silverstripe/silverstripe-assets/pull/163
-         * */
-        $fields->removeByName(['FileTracking', 'LinkTracking']);
-
         // The Main tab
         $main = $fields->findOrMakeTab('Root.Main')
             ->setTitle(_t('SYBEHA\Clubmaster\Models\ClubMember.MAINTITLE', 'Main'));
@@ -354,6 +419,8 @@ class ClubMember extends DataObject
         $fields->addFieldToTab(
             'Root.Main',
             DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
+            //->setMinDate('-100 years')
+            //->setMaxDate('+0 days')
         );
         $fields->addFieldToTab(
             'Root.Main',
@@ -388,8 +455,9 @@ class ClubMember extends DataObject
             CheckboxField::create(
                 'EqualAddress',
                 _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress')
-            )
+            )//->performReadonlyTransformation()
         );
+
         $fields->addFieldToTab(
             'Root.Main',
             EmailField::create('Email', _t('SYBEHA\Clubmaster\Models\ClubMember.EMAIL', 'Email'))
@@ -625,7 +693,7 @@ class ClubMember extends DataObject
      *
      * @return int
      */
-    public function getAge()
+    public function getCalculatedAge()
     {
         //if (!$this->dbObject('Birthday')->value) {
         if (!$this->dbObject('Birthday')->value) {
@@ -636,11 +704,11 @@ class ClubMember extends DataObject
         $birthday = new DateTime($this->dbObject('Birthday')->value);
         $age = $birthday->diff($today)->format('%y');
         //Injector::inst()->get(LoggerInterface::class)
-        //->debug('ClubMember - getAge()' . ' today = '.$today->format(DateTime::RFC1123));
+        //->debug('ClubMember - getCalculatedAge()' . ' today = '.$today->format(DateTime::RFC1123));
         //Injector::inst()->get(LoggerInterface::class)
-        //->debug('ClubMember - getAge()' . ' birthday = '.$birthday->format(DateTime::RFC1123));
+        //->debug('ClubMember - getCalculatedAge()' . ' birthday = '.$birthday->format(DateTime::RFC1123));
         //Injector::inst()->get(LoggerInterface::class)
-        //->debug('ClubMember - getAge()' . ' age = '.$age);
+        //->debug('ClubMember - getCalculatedAge()' . ' age = '.$age);
         return $age;
     }
 
@@ -717,12 +785,11 @@ class ClubMember extends DataObject
         parent::onBeforeWrite();
         //Injector::inst()->get(LoggerInterface::class)->debug('ClubMember - onBeforeWrite()' . ' "" ');
         // Set Age
-        $this->Age = $this->getAge();
+        $this->Age = $this->getCalculatedAge();
         // Set Sex
         $this->Sex = $this->getSex();
 
         //TODO: Verify/complete address for imported records
-        
         $siteConfig = SiteConfig::current_site_config();
         // Set MandateReference for newly added members
         $addMandate = $siteConfig->AddMandate; // see site config
@@ -747,25 +814,45 @@ class ClubMember extends DataObject
         }
     }
 
-    /* Only clubadmins are allowed */
+    /**
+     * Only clubadmins are allowed
+     *
+     * @param  Member $member
+     * @return boolean
+     */
     public function canView($member = null)
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 
-    /* Only clubadmins are allowed */
+    /**
+     * Only clubadmins are allowed
+     *
+     * @param  Member $member
+     * @return boolean
+     */
     public function canEdit($member = null)
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 
-    /* Only admins (Group Administrators) are allowed */
+    /**
+     * Only admins (Group Administrators) are allowed
+     *
+     * @param  Member $member
+     * @return boolean
+     */
     public function canDelete($member = null)
     {
         return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
     }
 
-    /* Only clubadmins are allowed */
+    /**
+     * Only admins (Group Administrators) are allowed
+     *
+     * @param  Member $member
+     * @return boolean
+     */
     public function canCreate($member = null, $context = [])
     {
         return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
