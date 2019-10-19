@@ -5,6 +5,7 @@ namespace SYBEHA\Clubmaster\Forms\Gridfields\Actions;
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
 use SilverStripe\Forms\GridField\GridField_FormAction;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Control\Controller;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -104,7 +105,7 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
         return ['approvemember'];
     }
 
-    public function handleAction($gridField, $actionName, $arguments, $data)
+    public function handleAction(GridField $gridField, $actionName, $arguments, $data)
     {
         if ($actionName == 'approvemember') {
             $clubMemberPending = ClubMemberPending::get()->byId($arguments['RecordID']);

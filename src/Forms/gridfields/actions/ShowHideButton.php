@@ -4,6 +4,7 @@ namespace SYBEHA\Clubmaster\Forms\Gridfields\Actions;
 
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
+use SilverStripe\Forms\GridField\GridField;
 
 /**
  * CURRENTLY NOT USED - KEEP AS SAMPLE
@@ -90,7 +91,7 @@ class ShowHideButton implements GridField_HTMLProvider, GridField_ActionProvider
      * @param array
      * @param array
      */
-    public function handleAction($gridField, $actionName, $arguments, $data)
+    public function handleAction(GridField $gridField, $actionName, $arguments, $data)
     {
         if ($actionName == 'show') {
             $this->setState('SHOW');

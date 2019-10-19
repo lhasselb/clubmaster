@@ -5,6 +5,7 @@ namespace SYBEHA\Clubmaster\Forms\Gridfields\Actions;
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
 use SilverStripe\Forms\GridField\GridField_FormAction;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Control\Controller;
 
 /* Use Model */
@@ -129,7 +130,7 @@ class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionPr
         return ['activatemember', 'deactivatemember'];
     }
 
-    public function handleAction($gridField, $actionName, $arguments, $data)
+    public function handleAction(GridField $gridField, $actionName, $arguments, $data)
     {
 
         if ($actionName == 'activatemember') {
