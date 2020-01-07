@@ -43,7 +43,8 @@ class ClubMember extends DataObject
         'SerializedFileName' => 'Varchar(255)', // File created by Webform
         'CreationType' => 'Enum("Formular,Import,Händisch","Händisch")', // Distinguish Formular,Import,Händisch
         'Pending' => 'Boolean(0)',
-        'MandateReference' => 'Varchar(35)' // max 35 char. (A-z0-9) TODO: has_one? (Multiple members might share one)
+        'MandateReference' => 'Varchar(35)', // max 35 char. (A-z0-9) TODO: has_one? (Multiple members might share one)
+		'Comment' => 'Text'
     );
 
     /* Relation to ClubMemberType */
@@ -111,6 +112,7 @@ class ClubMember extends DataObject
         $labels['Phone'] = _t('ClubMember.PHONE', 'Phone');
         $labels['Type'] = _t('ClubMember.TYPE', 'Type');
         $labels['Since'] = _t('ClubMember.SINCE', 'Since');
+		$labels['Comment'] = _t('ClubMember.COMMENT', 'Comment');
         $labels['EqualAddress'] = _t('ClubMember.EQUALADDRESS', 'EqualAddress');
         $labels['AccountHolderTitle'] = _t('ClubMember.NAMETITLE', 'Title');
         $labels['AccountHolderFirstName'] = _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName');
@@ -241,6 +243,11 @@ class ClubMember extends DataObject
             'Root.Main',
             DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true)
         );
+		//EN:Comment - DE:Kommentar
+        $fields->addFieldToTab(
+            'Root.Main',
+            DateField::create('Comment', _t('ClubMember.COMMENT', 'Comment'))
+        );		
         //Account tab
         //$fields->addFieldToTab('Root.Account',
         //    CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));
