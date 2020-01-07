@@ -92,6 +92,7 @@ de:
     IBANHINT: "IBAN, z.B. DE21301204000000015228"
     BICHINT: "BIC, z.B. VOBADEXX"
     MANDATEREFERENCEHINT: "Wird bei der Zustimmung automatisch angelegt."
+    COMMENT: "Kommentar"
 
   GridField:
     NewRecord: 'Neues %s'

@@ -92,6 +92,7 @@ en:
     IBANHINT: "IBAN, like DE21301204000000015228"
     BICHINT: "BIC, like VOBADEXX"
     MANDATEREFERENCEHINT: "Will be created automatically after approving"
+    COMMENT: "Comment"
 
 #  GridField:
 #    NewRecord: 'New %s'

@@ -112,7 +112,7 @@ class ClubMember extends DataObject
         $labels['Phone'] = _t('ClubMember.PHONE', 'Phone');
         $labels['Type'] = _t('ClubMember.TYPE', 'Type');
         $labels['Since'] = _t('ClubMember.SINCE', 'Since');
-		$labels['Comment'] = _t('ClubMember.COMMENT', 'Comment');
+        $labels['Comment'] = _t('ClubMember.COMMENT', 'Comment');
         $labels['EqualAddress'] = _t('ClubMember.EQUALADDRESS', 'EqualAddress');
         $labels['AccountHolderTitle'] = _t('ClubMember.NAMETITLE', 'Title');
         $labels['AccountHolderFirstName'] = _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName');
@@ -243,11 +243,11 @@ class ClubMember extends DataObject
             'Root.Main',
             DateField::create('Since', _t('ClubMember.SINCE', 'Since'))->setConfig('showcalendar', true)
         );
-		//EN:Comment - DE:Kommentar
+        //EN:Comment - DE:Kommentar
         $fields->addFieldToTab(
             'Root.Main',
             DateField::create('Comment', _t('ClubMember.COMMENT', 'Comment'))
-        );		
+        );
         //Account tab
         //$fields->addFieldToTab('Root.Account',
         //    CheckboxField::create('EqualAddress', _t('ClubMember.EQUALADDRESS', 'EqualAddress')));

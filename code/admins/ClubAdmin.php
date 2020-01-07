@@ -340,7 +340,7 @@ class ClubAdmin extends ModelAdmin
             'AccountHolderCity',
             'Iban',
             'Bic',
-			'Comment',
+            'Comment',
             //Special
             'Active',
             'Insurance',
