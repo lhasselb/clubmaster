@@ -98,6 +98,7 @@ class ClubMember extends DataObject
         'CreationType' => 'Enum("Formular,Import,Händisch","Händisch")', // Distinguish Formular,Import,Händisch
         'Pending' => 'Boolean(0)',  // Only for Formular
         'MandateReference' => 'Varchar(35)' // max 35 char. (A-z0-9) TODO: has_one? (Multiple members might share one)
+		'Comment' => 'Text'
     ];
 
     /* Relation to ClubMemberType */
@@ -283,6 +284,8 @@ class ClubMember extends DataObject
             _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type');
         $labels['Since'] =
             _t('SYBEHA\Clubmaster\Models\ClubMember.SINCE', 'Since');
+        $labels['Comment'] =
+            _t('SYBEHA\Clubmaster\Models\ClubMember.COMMENT', 'Comment');			
         $labels['EqualAddress'] =
             _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress');
         $labels['AccountHolderTitle'] =
@@ -487,7 +490,12 @@ class ClubMember extends DataObject
             'Root.Main',
             DateField::create('Since', _t('SYBEHA\Clubmaster\Models\ClubMember.SINCE', 'Since'))
         );
-
+        //EN:Comment - DE:Kommentar
+        $fields->addFieldToTab(
+            'Root.Main',
+            TextField::create('Comment', _t('ClubMember.COMMENT', 'Comment'))
+        );
+		
         // Account tab
         $fields->addFieldToTab(
             'Root.Account',
