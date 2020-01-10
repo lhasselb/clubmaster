@@ -79,7 +79,8 @@ class ClubMember extends DataObject
         'Since' => 'Since', //Since.FormatFromSettings
         //'Insurance' => 'Insurance',
         //'Type.TypeName' => 'Type.TypeName'
-        'Email' => 'Email'
+        'Email' => 'Email',
+        'Comment' => 'Comment'
     );
 
     /**
@@ -246,7 +247,7 @@ class ClubMember extends DataObject
         //EN:Comment - DE:Kommentar
         $fields->addFieldToTab(
             'Root.Main',
-            DateField::create('Comment', _t('ClubMember.COMMENT', 'Comment'))
+            TextField::create('Comment', _t('ClubMember.COMMENT', 'Comment'))
         );
         //Account tab
         //$fields->addFieldToTab('Root.Account',
