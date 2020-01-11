@@ -109,11 +109,11 @@ class ClubMember extends DataObject
         $labels['Zip'] = _t('ClubMember.ZIP', 'Zip');
         $labels['City'] = _t('ClubMember.CITY', 'City');
         $labels['Email'] = _t('ClubMember.EMAIL', 'Email');
+        $labels['Comment'] = _t('ClubMember.COMMENT', 'Comment');
         $labels['Mobil'] = _t('ClubMember.MOBIL', 'Mobil');
         $labels['Phone'] = _t('ClubMember.PHONE', 'Phone');
         $labels['Type'] = _t('ClubMember.TYPE', 'Type');
         $labels['Since'] = _t('ClubMember.SINCE', 'Since');
-        $labels['Comment'] = _t('ClubMember.COMMENT', 'Comment');
         $labels['EqualAddress'] = _t('ClubMember.EQUALADDRESS', 'EqualAddress');
         $labels['AccountHolderTitle'] = _t('ClubMember.NAMETITLE', 'Title');
         $labels['AccountHolderFirstName'] = _t('ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName');

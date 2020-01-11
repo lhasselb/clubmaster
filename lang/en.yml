@@ -64,6 +64,7 @@ en:
     CITY: "City"
     EQUALADDRESS: "Member is Accountholder"
     EMAIL: "E-Mail"
+    COMMENT: "Comment"
     MOBIL: "Cellphone"
     PHONE: "Phone"
     TYPE: "Type"
@@ -92,7 +93,6 @@ en:
     IBANHINT: "IBAN, like DE21301204000000015228"
     BICHINT: "BIC, like VOBADEXX"
     MANDATEREFERENCEHINT: "Will be created automatically after approving"
-    COMMENT: "Comment"
 
 #  GridField:
 #    NewRecord: 'New %s'

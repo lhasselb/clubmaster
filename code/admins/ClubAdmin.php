@@ -327,6 +327,7 @@ class ClubAdmin extends ModelAdmin
             'Zip',
             'City',
             'Email',
+            'Comment',
             'Mobil',
             'Phone',
             'ExportType' => 'Type',
@@ -340,7 +341,6 @@ class ClubAdmin extends ModelAdmin
             'AccountHolderCity',
             'Iban',
             'Bic',
-            'Comment',
             //Special
             'Active',
             'Insurance',

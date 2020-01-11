@@ -64,6 +64,7 @@ de:
     CITY: "Wohnort"
     EQUALADDRESS: "Mitgliedsadresse ist Kontoadresse"
     EMAIL: "E-Mail"
+    COMMENT: "Kommentar"
     MOBIL: "Mobiltelefon"
     PHONE: "Telefon"
     TYPE: "Mitgliedstyp"
@@ -92,7 +93,6 @@ de:
     IBANHINT: "IBAN, z.B. DE21301204000000015228"
     BICHINT: "BIC, z.B. VOBADEXX"
     MANDATEREFERENCEHINT: "Wird bei der Zustimmung automatisch angelegt."
-    COMMENT: "Kommentar"
 
   GridField:
     NewRecord: 'Neues %s'
