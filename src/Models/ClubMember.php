@@ -97,7 +97,7 @@ class ClubMember extends DataObject
         'SerializedFileName' => 'Varchar(255)', // File created by Webform
         'CreationType' => 'Enum("Formular,Import,Händisch","Händisch")', // Distinguish Formular,Import,Händisch
         'Pending' => 'Boolean(0)',  // Only for Formular
-        'MandateReference' => 'Varchar(35)' // max 35 char. (A-z0-9) TODO: has_one? (Multiple members might share one)
+        'MandateReference' => 'Varchar(35)', // max 35 char. (A-z0-9) TODO: has_one? (Multiple members might share one)
 		'Comment' => 'Text'
     ];
 
