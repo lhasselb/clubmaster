@@ -137,7 +137,8 @@ class ClubMember extends DataObject
         'Zip' => 'Zip',
         'Age' => 'Age',
         'Sex' => 'Sex',
-        'Since' => 'Since'
+        'Since' => 'Since',
+        'Comment' => 'Comment'
     ];
 
     /**
