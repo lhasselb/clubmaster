@@ -78,13 +78,51 @@ class ClubMemberPending extends ClubMember
      */
     public function summaryFields()
     {
-        $fields = [];
         $rawFields = $this->config()->get('summary_fields');
+
+        // Merge associative / numeric keys
+        $fields = [];
         foreach ($rawFields as $key => $value) {
             if ($key != "Comment") {
+                if (is_int($key)) {
+                    $key = $value;
+                }
                 $fields[$key] = $value;
             }
         }
+
+        if (!$fields) {
+            $fields = array();
+            // try to scaffold a couple of usual suspects
+            if ($this->hasField('Name')) {
+                $fields['Name'] = 'Name';
+            }
+            if (static::getSchema()->fieldSpec($this, 'Title')) {
+                $fields['Title'] = 'Title';
+            }
+            if ($this->hasField('Description')) {
+                $fields['Description'] = 'Description';
+            }
+            if ($this->hasField('FirstName')) {
+                $fields['FirstName'] = 'First Name';
+            }
+        }
+        $this->extend("updateSummaryFields", $fields);
+
+        // Final fail-over, just list ID field
+        if (!$fields) {
+            $fields['ID'] = 'ID';
+        }
+
+        // Localize fields (if possible)
+        foreach ($this->fieldLabels(false) as $name => $label) {
+            // only attempt to localize if the label definition is the same as the field name.
+            // this will preserve any custom labels set in the summary_fields configuration
+            if (isset($fields[$name]) && $name === $fields[$name]) {
+                $fields[$name] = $label;
+            }
+        }
+
         return $fields;
     }
 
