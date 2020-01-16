@@ -62,7 +62,7 @@ class ClubMemberPending extends ClubMember
     ];
 
     /**
-     * Fields to be displayed in Table head of GridField
+     * Fields to be displayed in table head of GridField
      *
      * @var array
      */
@@ -70,6 +70,23 @@ class ClubMemberPending extends ClubMember
         'SerializedFileName' => 'SerializedFileName',
         'FormClaimDate' => 'FormClaimDate'
     ];
+
+    /**
+     * Override the default summary fields for this object.
+     * and hide "Comment" fields
+     * @return array fields
+     */
+    public function summaryFields()
+    {
+        $fields = [];
+        $rawFields = $this->config()->get('summary_fields');
+        foreach ($rawFields as $key => $value) {
+            if ($key != "Comment") {
+                $fields[$key] = $value;
+            }
+        }
+        return $fields;
+    }
 
     /**
      *
