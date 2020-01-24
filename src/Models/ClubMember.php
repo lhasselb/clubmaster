@@ -494,7 +494,7 @@ class ClubMember extends DataObject
         //EN:Comment - DE:Kommentar
         $fields->addFieldToTab(
             'Root.Main',
-            TextField::create('Comment', _t('ClubMember.COMMENT', 'Comment'))
+            TextField::create('Comment', _t('SYBEHA\Clubmaster\Models\ClubMember.COMMENT', 'Comment'))
         );
 		
         // Account tab
