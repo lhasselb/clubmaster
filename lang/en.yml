@@ -22,7 +22,7 @@ en:
     FILE: "File"
 
   SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig:
-    MENUTITLE: "Clubmaster settings"
+    MENUTITLE: "Clubmaster"
     PENDINGFOLDER: "Pending folder"
     MEMBERSDISPLAYED: "Members displayed per page"
     ADDMANDATE: "Automatic addition of mandate reference"
