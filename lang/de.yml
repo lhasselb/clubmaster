@@ -22,7 +22,7 @@ de:
     FILE: "Datei"
 
   SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig:
-    MENUTITLE: "Einstellungen Mitgliederverwaltung"
+    MENUTITLE: "Mitgliederverwaltung"
     PENDINGFOLDER: "Verzeichnis für Anträge"
     MEMBERSDISPLAYED: "Anzahl der Mitglieder pro Seite"
     ADDMANDATE: "Mandatsreferenz automatisch generieren"
