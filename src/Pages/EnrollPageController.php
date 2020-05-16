@@ -233,7 +233,18 @@ class EnrollPageController extends PageController
         $dbDate = $clubMemberPending->dbObject('Birthday');
         // Use strftime to utilize locale
         $birthday = strftime('%d.%m.%Y', $dbDate->getTimestamp());
+        //TODO replace special characters
+/*
+        // Replace special characters
+        setlocale( LC_ALL, "de_DE.utf8");
+        $fn = iconv('utf-8', 'ascii//TRANSLIT', $clubMember->FirstName);
+        $ln = iconv('utf-8', 'ascii//TRANSLIT', $clubMember->LastName);
 
+        // Get the path for the folder and add a filename
+        $path = $folder->getFullPath() . $fn[0] . $ln[0] . '_' . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
+
+
+*/               
         // Get the path for the folder and add a filename
         // like LH_03.01.1970_dd.mm.YYYY_HH_MM_SS.antrag
         $name = $data['FirstName'][0] . $data['LastName'][0] . '_'
