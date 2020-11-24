@@ -9,3 +9,7 @@
 .error + .btn  {
     border: 1px solid red;
 }
+
+form .date.text.width_100 .middleColumn input {
+    width: 100%;
+}

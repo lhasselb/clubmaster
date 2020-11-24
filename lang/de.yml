@@ -65,6 +65,7 @@ de:
     EQUALADDRESS: "Mitgliedsadresse ist Kontoadresse"
     EMAIL: "E-Mail"
     MOBIL: "Mobiltelefon"
+    OR: "oder"
     PHONE: "Telefon"
     TYPE: "Mitgliedstyp"
     SINCE: "Mitglied seit"
@@ -93,7 +94,7 @@ de:
     BICHINT: "BIC, z.B. VOBADEXX"
     MANDATEREFERENCEHINT: "Wird bei der Zustimmung automatisch angelegt."
     COMMENT: "Kommentar"
-    
+
   # Check!
   # SilverStripe\Forms\GridField\GridField:
   #   NewRecord: "Neues %s"

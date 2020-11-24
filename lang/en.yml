@@ -65,6 +65,7 @@ en:
     EQUALADDRESS: "Member is Accountholder"
     EMAIL: "E-Mail"
     MOBIL: "Cellphone"
+    OR: "or"
     PHONE: "Phone"
     TYPE: "Type"
     SINCE: "Member since"
@@ -93,7 +94,7 @@ en:
     BICHINT: "BIC, like VOBADEXX"
     MANDATEREFERENCEHINT: "Will be created automatically after approving"
     COMMENT: "Comment"
-    
+
   # Check!
   # SilverStripe\Forms\GridField\GridField:
   #   NewRecord: 'New %s'

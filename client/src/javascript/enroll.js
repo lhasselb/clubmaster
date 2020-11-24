@@ -69,13 +69,13 @@ $('input[name="EqualAddress"]').change(() => {
 
 $('input[name="Mobil"]').change(() => {
     if ($('#Form_EnrollForm_Mobil').valid()) {
-        $('#Form_EnrollForm_Phone_Holder').hide();
+        $('input[name="Phone"]').removeAttr('required');
     }
 });
 
 $('input[name="Phone"]').change(() => {
     if ($('#Form_EnrollForm_Phone').valid()) {
-        $('#Form_EnrollForm_Mobil_Holder').hide();
+        $('input[name="Mobil"]').removeAttr('required');
     }
 });
 
