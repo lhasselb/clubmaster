@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "description": "Manager for club members",
   "engines": {
-    "node": "^10.x"
+    "node": "^15.x"
   },
   "bin": {
     "webpack": "./node_modules/.bin/webpack",
