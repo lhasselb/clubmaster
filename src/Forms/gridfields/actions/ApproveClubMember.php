@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Gridfields\Actions;
+namespace Sybeha\Clubmaster\Forms\Gridfields\Actions;
 
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
@@ -10,8 +10,8 @@ use SilverStripe\Control\Controller;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\SiteConfig\SiteConfig;
 /* Use Model */
-use SYBEHA\Clubmaster\Models\ClubMemberPending;
-use SYBEHA\Clubmaster\Models\ClubMember;
+use Sybeha\Clubmaster\Models\ClubMemberPending;
+use Sybeha\Clubmaster\Models\ClubMember;
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
  * Gridfield action handler for approving records.
  * Class ApproveClubMember
  *
- * @package SYBEHA\Clubmaster\Forms\Gridfields\Actions;
+ * @package Sybeha\Clubmaster\Forms\Gridfields\Actions;
  */
 class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionProvider
 {
@@ -75,7 +75,7 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
                 $gridField,
                 'ApproveMember' . $record->ID,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER',
+                    'Sybeha\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER',
                     'Approve member'
                 ),
                 'approvemember',
@@ -85,14 +85,14 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
                 ->setAttribute(
                     'title',
                     _t(
-                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER',
+                        'Sybeha\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER',
                         'Approve Member request'
                     )
                 )
                 ->setAttribute('data-icon', 'accept')
                 ->setDescription(
                     _t(
-                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER',
+                        'Sybeha\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER',
                         'Approve Member request'
                     )
                 );
@@ -117,7 +117,7 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
             $clubMemberPending->Pending = 0;
             $clubMemberPending->Active = 1;
             $clubMember = new ClubMember();
-            // Add namespaced classname 'SYBEHA\Clubmaster\Models\ClubMember';
+            // Add namespaced classname 'Sybeha\Clubmaster\Models\ClubMember';
             $clubMemberPending->ClassName = $clubMember->getClassName();
             // Add date only if missing !
             if (empty($clubMemberPending->Pending)) {
@@ -147,7 +147,7 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
             Controller::curr()->getResponse()->setStatusCode(
                 200,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER_DONE',
+                    'Sybeha\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember.APPROVE_MEMBER_DONE',
                     'Member approved.'
                 )
             );

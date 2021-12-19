@@ -1,5 +1,5 @@
 en:
-  SYBEHA\Clubmaster\Admins\ClubAdmin\ClubAdmin:
+  Sybeha\Clubmaster\Admins\ClubAdmin\ClubAdmin:
     MENUTITLE: "Clubmanager"
     #Filter
     SELECTONE: "Select one"
@@ -21,19 +21,19 @@ en:
     ZIPEND: "Zip to"
     FILE: "File"
 
-  SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig:
+  Sybeha\Clubmaster\Extensions\ClubAdminSiteConfig:
     MENUTITLE: "Clubmaster"
     PENDINGFOLDER: "Pending folder"
     MEMBERSDISPLAYED: "Members displayed per page"
     ADDMANDATE: "Automatic addition of mandate reference"
     SENDAPPROVEMAIL: "Send E-Mail  after approval"
 
-  SYBEHA\Clubmaster\Models\ClubMemberPending:
+  Sybeha\Clubmaster\Models\ClubMemberPending:
     SINGULARNAME: "Member request"
     PLURALNAME: "Member request"
     SINCE: "Member from"
 
-  SYBEHA\Clubmaster\Models\ClubMemberType:
+  Sybeha\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Clubmember type"
     PLURALNAME: "Clubmember type"
     #DESCRIPTION: "Manage your types"
@@ -41,16 +41,26 @@ en:
     CLUBMEMBERS: "Club members"
     SHOW_IN_FRONTEND: "Show in form"
 
-  SYBEHA\Clubmaster\Models\ClubMember:
+  Sybeha\Clubmaster\Models\ClubMemberSalutation:
+    SINGULARNAME: "Salutation type"
+    PLURALNAME: "Salutations type"
+    SALUTATIONNAME: "Salutation"
+    CLUBMEMBERS: "Club members"
+    SHOW_IN_FRONTEND: "Show in form"
+    GENDER: "Gender"
+
+  Sybeha\Clubmaster\Models\ClubMember:
     SINGULARNAME: "Club member"
     PLURALNAME: "Club members"
     DESCRIPTION: "Manage your member"
     MAINTITLE: "Main"
     BANKINGACCOUNT: "Account data"
     META: "Aditional"
+    HISTORY: "History"
     TYPES: "Types"
     SELECTONE: "(Select one)"
     SALUTATION: "Salutation"
+    SALUTATIONNAMEHINT: "Salutation changes gender"
     NAMETITLE: "Title"
     NAMETITLEHINT: "e.g. Ph.D"
     FIRSTNAME: "First name"
@@ -62,7 +72,7 @@ en:
     STREETNUMBER: "Streetnumber"
     ZIP: "Postal code"
     CITY: "City"
-    EQUALADDRESS: "Member is Accountholder"
+    EQUALADDRESS: "Member is Accountholder (duplicates address)"
     EMAIL: "E-Mail"
     MOBIL: "Cellphone"
     OR: "or"
@@ -83,7 +93,7 @@ en:
     INACTIVE: "Inactive"
     INSURANCE: "Insurance"
     AGE: "Age"
-    SEX: "Sex"
+    SEX: "Gender"
     SERIALIZEDFILENAME: "Filename"
     FORMCLAIMDATE: "Date (Form)"
     CREATIONTYPE: "Created by"
@@ -100,53 +110,53 @@ en:
   #   NewRecord: 'New %s'
 
   # Gridfield-Actions
-  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember:
+  Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember:
     ACTIVATE_MEMBER: "Activate member"
     DE_ACTIVATE_MEMBER: "Deactivate member"
     ACTIVATE_MEMBER_DONE: "Member activated."
     DE_ACTIVATE_MEMBER_DONE: "Member de-activated."
 
-  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember:
+  Sybeha\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember:
     APPROVE_MEMBER: "Approve member request"
     APPROVE_MEMBER_DONE: "Member approved."
 
-  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ShowHideButton:
+  Sybeha\Clubmaster\Forms\Gridfields\Actions\ShowHideButton:
     SHOW: "Show inactive"
     HIDE: "Hide inactive"
 
   # Gridfield-Bulk-Actions
-  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler:
+  Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_APPROVE: "Approve multiple"
     GRIDFIELD_BULK_DROPDOWN_APPROVED: "%s member requests approved."
 
-  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler:
+  Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_ACTIVATE: "Activate members"
     GRIDFIELD_BULK_DROPDOWN_ACTIVATED: "%s members activated."
 
-  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler:
+  Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_DEACTIVATE: "Deactivate members"
     GRIDFIELD_BULK_DROPDOWN_DEACTIVATED: "%s members deactivated."
 
-  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler:
+  Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_INSURANCE: "Add insurance"
     GRIDFIELD_BULK_DROPDOWN_INSURANCE_DONE: "%s members done"
 
-  SYBEHA\Clubmaster\Forms\Fields\BicField:
+  Sybeha\Clubmaster\Forms\Fields\BicField:
     VALIDATION_BICNUMBER: "Problem with \"{number}\".Please ensure you have entered the BIC number correctly"
 
-  SYBEHA\Clubmaster\Forms\Fields\IbanField:
+  Sybeha\Clubmaster\Forms\Fields\IbanField:
     VALIDATION_IBANNUMBER: "Problem with \"{number}\".Please ensure you have entered the IBAN number correctly"
 
-  SYBEHA\Clubmaster\Forms\Fields\ZipField:
+  Sybeha\Clubmaster\Forms\Fields\ZipField:
     VALIDATION_ZIP: "\"{value}\" is not a zip number, only zip numbers can be accepted for this field"
 
-  SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField:
+  Sybeha\Clubmaster\Forms\Fields\TelephoneNumberField:
     VALIDATION_PHONE: "\"{value}\" is not valid Phone numer, special charcters cannot be accepted for this field"
 
-  SYBEHA\Clubmaster\Forms\Fields\EUNameTextField:
+  Sybeha\Clubmaster\Forms\Fields\EUNameTextField:
     VALIDATION_NAME: "\"{value}\" is not valid, special charcters cannot be accepted for this field"
 
-  SYBEHA\Clubmaster\Pages\EnrollPage:
+  Sybeha\Clubmaster\Pages\EnrollPage:
     SINGULARNAME: "Enroll"
     DESCRIPTION: "Page with form to enroll"
     ENROLL: "Enroll"
@@ -154,6 +164,6 @@ en:
     REQUESTSFOLDERDESCRIPTION: "Folder to store files created by form"
     CONTENT_LABEL: "Form data is maintained within PHP code."
 
-  SYBEHA\Clubmaster\Pages\EnrollSuccessPage:
+  Sybeha\Clubmaster\Pages\EnrollSuccessPage:
     SINGULARNAME: "Succes"
     MESSAGE_LABEL: "Thank you message"

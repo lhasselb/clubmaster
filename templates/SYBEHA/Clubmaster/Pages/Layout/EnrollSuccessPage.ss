@@ -29,13 +29,13 @@
                                 <div data-height="height">
                                     <h3 class=" c-margin-b-20 c-font-uppercase c-font-22 c-font-bold">Kontaktdaten</h3>
                                     <ul class="list-unstyled">
-                                        <li>Name: $Salutation $FirstName $LastName</li>
+                                        <li>Name: $SalutationName $FirstName $LastName</li>
                                         <li>Geburtstag: $Birthday.Format('dd.MM.y')</li>
                                         <li>Adressse: $Street $StreetNumber <br />$Nationality - $Zip $City</li>
                                         <li>E-Mail: $Email</li>
                                         <li>Mobil: $Mobil</li>
                                         <li>Telefon: $Phone</li>
-                                        <li>Typ: $TypeName</li>
+                                        <li>Typ: $TypeName </li>
                                         <li>Mitgliedschaft startet am $Since.Format('dd.MM.y')</li>
                                     </ul>
                                 </div>

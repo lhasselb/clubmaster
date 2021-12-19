@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Loader;
+namespace Sybeha\Clubmaster\Loader;
 
 use SilverStripe\Core\Environment;
 use SilverStripe\ORM\DataObject;
@@ -8,8 +8,8 @@ use SilverStripe\View\ViewableData;
 
 use SilverStripe\Dev\CsvBulkLoader;
 
-use SYBEHA\Clubmaster\Models\ClubMember;
-use SYBEHA\Clubmaster\Models\ClubMemberType;
+use Sybeha\Clubmaster\Models\ClubMember;
+use Sybeha\Clubmaster\Models\ClubMemberType;
 
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
  * To reset index on table use ALTER TABLE clubmember AUTO_INCREMENT = 1
  * Class ClubMemberCsvBulkLoader
  *
- * @package SYBEHA\Clubmaster\Loader
+ * @package Sybeha\Clubmaster\Loader
  */
 class ClubMemberCsvBulkLoader extends CsvBulkLoader
 {

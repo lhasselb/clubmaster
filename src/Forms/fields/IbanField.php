@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Fields;
+namespace Sybeha\Clubmaster\Forms\Fields;
 
 use SilverStripe\Forms\TextField;
 
@@ -11,7 +11,7 @@ use SilverStripe\Forms\TextField;
  *
  * Class IbanField
  *
- * @package SYBEHA\Clubmaster\Forms\Fields
+ * @package Sybeha\Clubmaster\Forms\Fields
  */
 class IbanField extends TextField
 {
@@ -54,7 +54,7 @@ class IbanField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Fields\IbanField.VALIDATION_IBANNUMBER',
+                    'Sybeha\Clubmaster\Forms\Fields\IbanField.VALIDATION_IBANNUMBER',
                     'Please ensure you have entered the {number} IBAN number correctly',
                     ['number' => $this->value]
                 ),

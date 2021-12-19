@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Fields;
+namespace Sybeha\Clubmaster\Forms\Fields;
 
 use SilverStripe\Forms\TextField;
 
@@ -11,7 +11,7 @@ use SilverStripe\Forms\TextField;
  *
  * Class BicField
  *
- * @package SYBEHA\Clubmaster\Forms\Fields
+ * @package Sybeha\Clubmaster\Forms\Fields
  */
 class BicField extends TextField
 {
@@ -53,7 +53,7 @@ class BicField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Fields\BicField.VALIDATION_BICNUMBER',
+                    'Sybeha\Clubmaster\Forms\Fields\BicField.VALIDATION_BICNUMBER',
                     'Please ensure you have entered the {number} BIC number correctly',
                     ['number' => $this->value]
                 ),

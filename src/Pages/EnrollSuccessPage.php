@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Pages;
+namespace Sybeha\Clubmaster\Pages;
 
 use Page;
 
@@ -10,8 +10,9 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\View\ArrayData;
 use SilverStripe\ORM\ArrayList;
 
-use SYBEHA\Clubmaster\Models\ClubMemberType;
-use SYBEHA\Clubmaster\Models\ClubMemberPending;
+use Sybeha\Clubmaster\Models\ClubMemberType;
+use Sybeha\Clubmaster\Models\ClubMemberSalutation;
+use Sybeha\Clubmaster\Models\ClubMemberPending;
 
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
@@ -21,7 +22,7 @@ use Psr\Log\LoggerInterface;
  * Enroll success page template
  * Class EnrollSuccessPage
  *
- * @package SYBEHA\Clubmaster\Pages
+ * @package Sybeha\Clubmaster\Pages
  */
 class EnrollSuccessPage extends Page
 {
@@ -62,13 +63,14 @@ class EnrollSuccessPage extends Page
             //@todo: Add i18n
             TextAreaField::create(
                 'Content',
-                _t('SYBEHA\Clubmaster\Pages\EnrollSuccessPage.MESSAGE_LABEL', 'Thank you messag'),
+                _t('Sybeha\Clubmaster\Pages\EnrollSuccessPage.MESSAGE_LABEL', 'Thank you messag'),
                 $this->Content
             ),
             'Metadata'
         );
         return $fields;
     }
+
 
     /**
      * Get form data
@@ -83,14 +85,21 @@ class EnrollSuccessPage extends Page
 
         if ($session->get('ClubMemberPending')) {
             $serialized = $session->get('ClubMemberPending');
+            $pendingMember = new ClubMemberPending();
             $pendingMember = unserialize(base64_decode($serialized));
             $list = $pendingMember->data();
-            //  @todo: Initially there are no ClubMemberType's
             // We need to replace the String TypeID from the form with a database entry for the appropriate TypeID
-            $typeName = ClubMemberType::get()->byID($pendingMember->TypeID)->TypeName;
+            $memberType = new ClubMemberType();
+            $memberType = ClubMemberType::get()->byID($pendingMember->MemberTypeID);
             //Injector::inst()->get(LoggerInterface::class)
-            //    ->debug('EnrolSuccessPage - FormData()  type = ' . $typeName);
-            $list->setField('TypeName', $typeName);
+            //    ->debug('EnrolSuccessPage - FormData()  type = ' . $memberType->TypeName);
+            $list->setField('TypeName', $memberType->TypeName);
+            // Same for SalutationID
+            $memberSalutation = new ClubMemberSalutation();
+            $memberSalutation = ClubMemberSalutation::get()->byID($pendingMember->MemberSalutationID);
+            //Injector::inst()->get(LoggerInterface::class)
+            //    ->debug('EnrolSuccessPage - FormData()  salutation = ' . $memberSalutation->SalutationName);
+            $list->setField('SalutationName',$memberSalutation->SalutationName);
         }
 
         return $list;

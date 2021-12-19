@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Fields;
+namespace Sybeha\Clubmaster\Forms\Fields;
 
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\ValidationResult;
@@ -11,7 +11,7 @@ use SilverStripe\ORM\ValidationResult;
  *
  * Class ZipField
  *
- * @package SYBEHA\Clubmaster\Forms\Fields
+ * @package Sybeha\Clubmaster\Forms\Fields
  */
 class ZipField extends TextField
 {
@@ -54,7 +54,7 @@ class ZipField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Fields\ZipField.VALIDATION_ZIP',
+                    'Sybeha\Clubmaster\Forms\Fields\ZipField.VALIDATION_ZIP',
                     '{value} is not a zip number, only zip numbers can be accepted for this field',
                     ['value' => $this->value]
                 ),

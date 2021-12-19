@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Fields;
+namespace Sybeha\Clubmaster\Forms\Fields;
 
 use SilverStripe\Forms\TextField;
 
@@ -10,7 +10,7 @@ use SilverStripe\Forms\TextField;
  *
  * Class TelephoneNumberField
  *
- * @package SYBEHA\Clubmaster\Forms\Fields;
+ * @package Sybeha\Clubmaster\Forms\Fields;
  */
 class TelephoneNumberField extends TextField
 {
@@ -31,7 +31,7 @@ class TelephoneNumberField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField.VALIDATION_PHONE',
+                    'Sybeha\Clubmaster\Forms\Fields\TelephoneNumberField.VALIDATION_PHONE',
                     '{value} is not valid Phone numer, special charcters cannot be accepted for this field',
                     ['value' => $this->value]
                 ),

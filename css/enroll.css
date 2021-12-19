@@ -3,13 +3,13 @@
  */
 
 .error, .form-control.error, .error .btn {
-    border-color: red;
-    color: red;
+  border-color: red;
+  color: red;
 }
 .error + .btn  {
-    border: 1px solid red;
+  border: 1px solid red;
 }
 
 form .date.text.width_100 .middleColumn input {
-    width: 100%;
+  width: 100%;
 }

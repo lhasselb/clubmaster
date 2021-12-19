@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Fields;
+namespace Sybeha\Clubmaster\Forms\Fields;
 
 use SilverStripe\Forms\TextField;
 
@@ -10,7 +10,7 @@ use SilverStripe\Forms\TextField;
  *
  * Class EUNameTextField
  *
- * @package SYBEHA\Clubmaster\Forms\Fields
+ * @package Sybeha\Clubmaster\Forms\Fields
  */
 class EUNameTextField extends TextField
 {
@@ -30,7 +30,7 @@ class EUNameTextField extends TextField
             $validator->validationError(
                 $this->name,
                 _t(
-                    'SYBEHA\Clubmaster\Forms\Fields\EUNameTextField.VALIDATION_NAME',
+                    'Sybeha\Clubmaster\Forms\Fields\EUNameTextField.VALIDATION_NAME',
                     '{value} is not valid, special charcters cannot be accepted for this field',
                     ['value' => $this->value]
                 ),

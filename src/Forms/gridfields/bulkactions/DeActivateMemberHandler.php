@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
+namespace Sybeha\Clubmaster\Forms\Gridfields\Bulkactions;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -13,7 +13,7 @@ use Exception;
  * Bulk action handler for deactivating records.
  * Class DeActivateMemberHandler
  *
- * @package SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions
+ * @package Sybeha\Clubmaster\Forms\Gridfields\Bulkactions
  */
 class DeActivateMemberHandler extends Handler
 {
@@ -82,7 +82,7 @@ class DeActivateMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_DEACTIVATE', $this->getLabel());
+        return _t('Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_DEACTIVATE', $this->getLabel());
     }
 
     /**
@@ -109,7 +109,7 @@ class DeActivateMemberHandler extends Handler
             }
             $doneCount = count($response->getSuccessRecords());
             $message = sprintf(
-                _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_DEACTIVATED', '%s members deactivated'),
+                _t('Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_DEACTIVATED', '%s members deactivated'),
                 $doneCount
             );
             $response->setMessage($message);

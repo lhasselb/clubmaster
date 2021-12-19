@@ -1,6 +1,6 @@
 <?php
 
-namespace SYBEHA\Clubmaster\Extensions;
+namespace Sybeha\Clubmaster\Extensions;
 
 use SilverStripe\Core\Extension;
 use SilverStripe\Security\Permission;
@@ -9,7 +9,7 @@ use SilverStripe\Security\Member;
 /**
  * Class ClubAdminImport
  *
- * @package  SYBEHA\Clubmaster\Extensions
+ * @package  Sybeha\Clubmaster\Extensions
  * @property \SilverStripe\Admin\ModelAdmin $owner
  */
 class ClubAdminImport extends Extension
