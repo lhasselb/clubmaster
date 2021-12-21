@@ -26,7 +26,8 @@
     "babel-polyfill": "6.7.4",
     "react": "^16.8.3",
     "jquery": "^3.3.1",
-    "jquery-validation": "^1.19.0"
+    "jquery-validation": "^1.19.0",
+    "silverstripe-admin": "file:../../silverstripe/admin/client/src"
   },
   "devDependencies": {
     "@silverstripe/eslint-config": "^0.0.5",
@@ -35,7 +36,6 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.10.0",
     "jest-cli": "^23.6.0",
-    "silverstripe-admin": "file:../../silverstripe/admin/client/src",
   },
   "babel": {
     "presets": [
