@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\Clubmaster\Forms\Gridfields\Actions;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Actions;
 
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
@@ -9,8 +9,8 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Control\Controller;
 
 /* Use Model */
-use Sybeha\Clubmaster\Models\ClubMemberPending;
-use Sybeha\Clubmaster\Models\ClubMember;
+use SYBEHA\Clubmaster\Models\ClubMemberPending;
+use SYBEHA\Clubmaster\Models\ClubMember;
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
  * Gridfield action handler for activating/deactivating records.
  * Class ActivateClubmemberAction
  *
- * @package Sybeha\Clubmaster\Forms\Gridfields\Actions;
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Actions;
  */
 class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionProvider
 {
@@ -74,7 +74,7 @@ class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionPr
                 $gridField,
                 'ActivateMember' . $record->ID,
                 _t(
-                    'Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER',
+                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER',
                     'Activate member'
                 ),
                 'activatemember',
@@ -84,14 +84,14 @@ class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionPr
                 ->setAttribute(
                     'title',
                     _t(
-                        'Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER',
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER',
                         'Activate member'
                     )
                 )
                 ->setAttribute('data-icon', 'decline')
                 ->setDescription(
                     _t(
-                        'Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER',
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER',
                         'Activate member'
                     )
                 );
@@ -100,7 +100,7 @@ class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionPr
                 $gridField,
                 'DeActivateMember' . $record->ID,
                 _t(
-                    'Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.DE_ACTIVATE_MEMBER',
+                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.DE_ACTIVATE_MEMBER',
                     'Deactivate member'
                 ),
                 'deactivatemember',
@@ -110,14 +110,14 @@ class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionPr
                 ->setAttribute(
                     'title',
                     _t(
-                        'Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.DE_ACTIVATE_MEMBER',
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.DE_ACTIVATE_MEMBER',
                         'Deactivate member'
                     )
                 )
                 ->setAttribute('data-icon', 'accept')
                 ->setDescription(
                     _t(
-                        'Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.DE_ACTIVATE_MEMBER',
+                        'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.DE_ACTIVATE_MEMBER',
                         'Deactivate member'
                     )
                 );
@@ -145,7 +145,7 @@ class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionPr
             Controller::curr()->getResponse()->setStatusCode(
                 200,
                 _t(
-                    'Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER_DONE',
+                    'SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember.ACTIVATE_MEMBER_DONE',
                     'Member activated.'
                 )
             );
@@ -162,7 +162,7 @@ class ActivateClubMember implements GridField_ColumnProvider, GridField_ActionPr
             Controller::curr()->getResponse()->setStatusCode(
                 200,
                 _t(
-                    'Sybeha\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DE_ACTIVATE_MEMBER_DONE',
+                    'SYBEHA\Clubmaster\Forms\Gridfield\GridFieldActivateClubMemberAction.DE_ACTIVATE_MEMBER_DONE',
                     'Member deactivated.'
                 )
             );

@@ -2,7 +2,4 @@
 /**
  * Clubmaster configuration
  */
-
-/*
-define('CLUBMASTER_DIR', basename(dirname(__FILE__)));
-*/
+//define('CLUBMASTER_DIR', basename(dirname(__FILE__)));

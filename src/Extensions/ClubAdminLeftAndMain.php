@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\Clubmaster\Extensions;
+namespace SYBEHA\Clubmaster\Extensions;
 
 use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\Admin\CMSMenu;
@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class ClubAdminLeftAndMain
  *
- * @package  Sybeha\Clubmaster\Extensions
+ * @package  SYBEHA\Clubmaster\Extensions
  * @property \SilverStripe\Admin\LeftAndMain $owner
  */
 class ClubAdminLeftAndMain extends LeftAndMainExtension

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\Clubmaster\Pages;
+namespace SYBEHA\Clubmaster\Pages;
 
 use Page;
 
@@ -18,7 +18,7 @@ use SilverStripe\Core\Config\Config;
  * Enroll page template
  * Class EnrollPage
  *
- * @package Sybeha\Clubmaster\Pages
+ * @package SYBEHA\Clubmaster\Pages
  */
 class EnrollPage extends Page
 {
@@ -33,7 +33,7 @@ class EnrollPage extends Page
     private static $singular_name = 'Mitgliedsantrag';
     private static $description = 'Seite für den Mitgliedsantrag';
     private static $can_be_root = false;
-    private static $allowed_children = ['Sybeha\Clubmaster\Pages\EnrollSuccessPage'];
+    private static $allowed_children = ['SYBEHA\Clubmaster\Pages\EnrollSuccessPage'];
 
     private static $db = [];
 
@@ -59,7 +59,7 @@ class EnrollPage extends Page
         $fields->addFieldToTab(
             'Root.Main',
             LabelField::create(
-                _t('Sybeha\Clubmaster\Pages\EnrollPage.CONTENT_LABEL', 'Form data is maintained within PHP code.')
+                _t('SYBEHA\Clubmaster\Pages\EnrollPage.CONTENT_LABEL', 'Form data is maintained within PHP code.')
             ),
             'Content'
         );
@@ -105,12 +105,12 @@ class EnrollPage extends Page
             // Add folder to be selectable from settings (Root.Settings)
             $requestFolderTreeDropDown = TreeDropdownField::create(
                 'FolderID',
-                _t('Sybeha\Clubmaster\Pages\EnrollPage.REQUESTSFOLDER', 'Folder:'),
+                _t('SYBEHA\Clubmaster\Pages\EnrollPage.REQUESTSFOLDER', 'Folder:'),
                 Folder::class
             )
                 ->setDescription(
                     _t(
-                        'Sybeha\Clubmaster\Pages\EnrollPage.REQUESTSFOLDERDESCRIPTION',
+                        'SYBEHA\Clubmaster\Pages\EnrollPage.REQUESTSFOLDERDESCRIPTION',
                         'Folder to store files created by form'
                     ),
                     'Folder to store files created by form'

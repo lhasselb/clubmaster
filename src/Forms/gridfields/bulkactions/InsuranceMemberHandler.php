@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\Clubmaster\Forms\Gridfields\Bulkactions;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -13,7 +13,7 @@ use Exception;
  * Bulk action handler for adding insurance flag to member records.
  * Class GridFieldBulkActionInsuranceMemberHandler
  *
- * @package Sybeha\Clubmaster\Forms\Gridfields\Bulkactions
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions
  */
 class InsuranceMemberHandler extends Handler
 {
@@ -80,7 +80,7 @@ class InsuranceMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler.GRIDFIELD_BULK_DROPDOWN_INSURANCE', $this->getLabel());
+        return _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler.GRIDFIELD_BULK_DROPDOWN_INSURANCE', $this->getLabel());
     }
 
     /**
@@ -107,7 +107,7 @@ class InsuranceMemberHandler extends Handler
             }
             $doneCount = count($response->getSuccessRecords());
             $message = sprintf(
-                _t('Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler.GRIDFIELD_BULK_DROPDOWN_INSURANCE_DONE', '%s members set'),
+                _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler.GRIDFIELD_BULK_DROPDOWN_INSURANCE_DONE', '%s members set'),
                 $doneCount
             );
             $response->setMessage($message);

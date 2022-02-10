@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\Clubmaster\Extensions;
+namespace SYBEHA\Clubmaster\Extensions;
 
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Assets\Folder;
@@ -13,7 +13,7 @@ use SilverStripe\Forms\TreeDropdownField;
  * Add clubmaster specific behaviour to SiteConfig
  * Class ClubAdminSiteConfig
  *
- * @package  Sybeha\Clubmaster\Extensions
+ * @package  SYBEHA\Clubmaster\Extensions
  * @property \SilverStripe\SiteConfig\SiteConfig $owner
  */
 class ClubAdminSiteConfig extends DataExtension
@@ -49,7 +49,7 @@ class ClubAdminSiteConfig extends DataExtension
     public function updateCMSFields(FieldList $fields)
     {
 
-        $clubAdminTabTitle = _t('Sybeha\Clubmaster\Extensions\ClubAdminSiteConfig.MENUTITLE', 'ClubAdmin');
+        $clubAdminTabTitle = _t('SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.MENUTITLE', 'ClubAdmin');
 
         // Create a configuration variable to store pending member files
         $fields->addFieldToTab(
@@ -57,7 +57,7 @@ class ClubAdminSiteConfig extends DataExtension
             TreeDropdownField::create(
                 'PendingFolderID',
                 _t(
-                    'Sybeha\Clubmaster\Extensions\ClubAdminSiteConfig.PENDINGFOLDER',
+                    'SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.PENDINGFOLDER',
                     'PendingFolder'
                 ),
                 Folder::class
@@ -70,7 +70,7 @@ class ClubAdminSiteConfig extends DataExtension
             NumericField::create(
                 'MembersDisplayed',
                 _t(
-                    'Sybeha\Clubmaster\Extensions\ClubAdminSiteConfig.MEMBERSDISPLAYED',
+                    'SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.MEMBERSDISPLAYED',
                     'Amount of members displayed'
                 )
             )
@@ -82,7 +82,7 @@ class ClubAdminSiteConfig extends DataExtension
             CheckboxField::create(
                 'AddMandate',
                 _t(
-                    'Sybeha\Clubmaster\Extensions\ClubAdminSiteConfig.ADDMANDATE',
+                    'SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.ADDMANDATE',
                     'Automatic addition of mandate reference'
                 )
             )
@@ -94,7 +94,7 @@ class ClubAdminSiteConfig extends DataExtension
             CheckboxField::create(
                 'SendApprovalMail',
                 _t(
-                    'Sybeha\Clubmaster\Extensions\ClubAdminSiteConfig.SENDAPPROVEMAIL',
+                    'SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig.SENDAPPROVEMAIL',
                     'Send E-Mail  after approval'
                 )
             )

@@ -1,13 +1,12 @@
 <?php
 
-namespace Sybeha\Clubmaster\Pages;
+namespace SYBEHA\Clubmaster\Pages;
 
 use PageController;
 
 use SilverStripe\Control\Director;
 use SilverStripe\Assets\File;
 use SilverStripe\Assets\Folder;
-use SilverStripe\Assets\Storage\AssetStore;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Control\Session;
 use SilverStripe\Forms\LabelField;
@@ -25,23 +24,25 @@ use SilverStripe\Forms\TextField;
 use SilverStripe\View\ArrayData;
 
 /* Locale */
+
 use SilverStripe\i18n\i18n;
 
 /* Logging */
+
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
 
-use Sybeha\Clubmaster\Models\ClubMember;
-use Sybeha\Clubmaster\Models\ClubMemberPending;
-use Sybeha\Clubmaster\Models\ClubMemberSalutation;
-use Sybeha\Clubmaster\Models\ClubMemberType;
-use Sybeha\Clubmaster\Forms\Fields\EUNameTextField;
-use Sybeha\Clubmaster\Forms\Fields\ZipField;
-use Sybeha\Clubmaster\Forms\Fields\TelephoneNumberField;
-use Sybeha\Clubmaster\Forms\Fields\IbanField;
-use Sybeha\Clubmaster\Forms\Fields\BicField;
+use SYBEHA\Clubmaster\Models\ClubMember;
+use SYBEHA\Clubmaster\Models\ClubMemberPending;
+use SYBEHA\Clubmaster\Models\ClubMemberType;
+use SYBEHA\Clubmaster\Forms\Fields\EUNameTextField;
+use SYBEHA\Clubmaster\Forms\Fields\ZipField;
+use SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField;
+use SYBEHA\Clubmaster\Forms\Fields\IbanField;
+use SYBEHA\Clubmaster\Forms\Fields\BicField;
 
 /* See  https://github.com/dynamic/silverstripe-country-dropdown-field */
+
 use Dynamic\CountryDropdownField\Fields\CountryDropdownField;
 
 /* Used for setting min and max values for Birthday (-Field) */
@@ -52,7 +53,7 @@ use Dynamic\CountryDropdownField\Fields\CountryDropdownField;
  * Enroll page template controller
  * Class EnrollPageController
  *
- * @package Sybeha\Clubmaster\Pages
+ * @package SYBEHA\Clubmaster\Pages
  */
 class EnrollPageController extends PageController
 {
@@ -73,8 +74,6 @@ class EnrollPageController extends PageController
      */
     private static $allowed_actions = ['EnrollForm'];
 
-    private static $url_segment = 'EnrollPageController';
-
     /**
      * Create the enroll form
      *
@@ -83,76 +82,63 @@ class EnrollPageController extends PageController
     public function EnrollForm()
     {
         //Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale() . ' today = ' . DBDatetime::now());
+        // @todo: Clarify if we should add an additional flag to the backend to hide them from the list
         // Check for types before using
         if (ClubMemberType::get()->exists()) {
             $clubMemberTypesMap = ClubMemberType::get()->exclude('ShowInFrontEnd', '0')->map('ID', 'Title');
         } else {
             $clubMemberTypesMap = [
-                'Vollzahlend' => 'Vollzahlend',
-                'Ermäßigt' => 'Ermäßigt'
+                'Vollverdiener' => 'Vollverdiener',
+                'Student / Azubi / Schüler' => 'Student / Azubi / Schüler'
             ];
         }
-        // Check for salutation before using
-        if (ClubMemberSalutation::get()->exists()) {
-            $clubMemberSalutationMap = ClubMemberSalutation::get()->exclude('ShowInFrontEnd', '0')->map('ID', 'Title');
-        } else {
-            $clubMemberSalutationMap = [
-                'Divers' => 'Divers',
-                'Frau' => 'Frau',
-                'Herr' => 'Herr',
-                'Schülerin' => 'Schülerin',
-                'Schüler' => 'Schüler'
-            ];
-        }
-        // Prepare todays date
-        $today = DBDatetime::now()->Date();
 
         // List of form fields
+        $today = DBDatetime::now()->Date();//
         $fields = FieldList::create(
-            // Use dot notation for Salutation
-            DropdownField::create('MemberSalutationID', _t('Sybeha\Clubmaster\Models\ClubMember.SALUTATION', 'Salutation'), $clubMemberSalutationMap)
-                ->setEmptyString(_t('Sybeha\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            EUNameTextField::create('FirstName', _t('Sybeha\Clubmaster\Models\ClubMember.FIRSTNAME', 'FirstName'))
-                ->setAttribute('placeholder', _t('Sybeha\Clubmaster\Models\ClubMember.FIRSTNAME', 'FirstName')),
-            EUNameTextField::create('LastName', _t('Sybeha\Clubmaster\Models\ClubMember.LASTNAME', 'LastName'))
-                ->setAttribute('placeholder', _t('Sybeha\Clubmaster\Models\ClubMember.LASTNAME', 'LastName')),
-            DateField::create('Birthday', _t('Sybeha\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
+            DropdownField::create('Salutation', _t('SYBEHA\Clubmaster\Models\ClubMember.SALUTATION', 'Salutation'),
+                singleton(ClubMember::class)->dbObject('Salutation')->enumValues())
+                ->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
+            EUNameTextField::create('FirstName', _t('SYBEHA\Clubmaster\Models\ClubMember.FIRSTNAME', 'FirstName'))
+                ->setAttribute('placeholder', _t('SYBEHA\Clubmaster\Models\ClubMember.FIRSTNAME', 'FirstName')),
+            EUNameTextField::create('LastName', _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName'))
+                ->setAttribute('placeholder', _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName')),
+            DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
                 ->addExtraClass('width_100')->setAttribute('placeholder', $today )->setMinDate('-100 years')->setMaxDate('+0 days'),
-            CountryDropdownField::create('Nationality', _t('Sybeha\Clubmaster\Models\ClubMember.NATIONALITY', 'Nationality')
-            )->setEmptyString(_t('Sybeha\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            EUNameTextField::create('Street', _t('Sybeha\Clubmaster\Models\ClubMember.STREET', 'Street'))
-                ->setAttribute('placeholder', _t('Sybeha\Clubmaster\Models\ClubMember.STREET', 'Street')),
-            EUNameTextField::create('StreetNumber', _t('Sybeha\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber'))
-                ->setAttribute('placeholder', _t('Sybeha\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber')),
-            ZipField::create('Zip', _t('Sybeha\Clubmaster\Models\ClubMember.ZIP', 'Zip'))
+            CountryDropdownField::create('Nationality', _t('SYBEHA\Clubmaster\Models\ClubMember.NATIONALITY', 'Nationality')
+            )->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
+            EUNameTextField::create('Street', _t('SYBEHA\Clubmaster\Models\ClubMember.STREET', 'Street'))
+                ->setAttribute('placeholder', _t('SYBEHA\Clubmaster\Models\ClubMember.STREET', 'Street')),
+            EUNameTextField::create('StreetNumber', _t('SYBEHA\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber'))
+                ->setAttribute('placeholder', _t('SYBEHA\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber')),
+            ZipField::create('Zip', _t('SYBEHA\Clubmaster\Models\ClubMember.ZIP', 'Zip'))
                 ->setAttribute('placeholder', '12345'),
-            EUNameTextField::create('City', _t('Sybeha\Clubmaster\Models\ClubMember.CITY', 'City'))
-                ->setAttribute('placeholder', _t('Sybeha\Clubmaster\Models\ClubMember.CITY', 'City')),
-            EmailField::create('Email', _t('Sybeha\Clubmaster\Models\ClubMember.EMAIL', 'Email'))
+            EUNameTextField::create('City', _t('SYBEHA\Clubmaster\Models\ClubMember.CITY', 'City'))
+                ->setAttribute('placeholder', _t('SYBEHA\Clubmaster\Models\ClubMember.CITY', 'City')),
+            EmailField::create('Email', _t('SYBEHA\Clubmaster\Models\ClubMember.EMAIL', 'Email'))
                 ->setAttribute('placeholder', 'name@domain.de'),
-            TelephoneNumberField::create('Mobil', _t('Sybeha\Clubmaster\Models\ClubMember.MOBIL', 'Mobile'))
-                ->setAttribute('placeholder', _t('Sybeha\Clubmaster\Models\ClubMember.MOBIL', 'Mobile'))
+            TelephoneNumberField::create('Mobil', _t('SYBEHA\Clubmaster\Models\ClubMember.MOBIL', 'Mobile'))
+                ->setAttribute('placeholder', _t('SYBEHA\Clubmaster\Models\ClubMember.MOBIL', 'Mobile'))
                 ->setAttribute('required',"required"),
-            TelephoneNumberField::create('Phone', _t('Sybeha\Clubmaster\Models\ClubMember.OR', 'or') . ' ' . _t('Sybeha\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
-                ->setAttribute('placeholder', _t('Sybeha\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
+            TelephoneNumberField::create('Phone', _t('SYBEHA\Clubmaster\Models\ClubMember.OR', 'or') . ' ' . _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
+                ->setAttribute('placeholder', _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
                 ->setAttribute('required',"required"),
-            DropdownField::create('MemberTypeID', _t('Sybeha\Clubmaster\Models\ClubMember.TYPE', 'Type'), $clubMemberTypesMap)
-                ->setEmptyString(_t('Sybeha\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            DateField::create('Since', _t('Sybeha\Clubmaster\Models\ClubMember.FROM', 'Member from'))
+            DropdownField::create('TypeID', _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type'), $clubMemberTypesMap)
+                ->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
+            DateField::create('Since', _t('SYBEHA\Clubmaster\Models\ClubMember.SINCE', 'Member since'))
                 ->addExtraClass('width_100')->setValue($today)->setMinDate('-2 years')->setMaxDate('+0 days'),
-            // Check box is used to copy content of fields - DO NOT use ->setValue(true) here !
-            CheckboxField::create('EqualAddress', _t('Sybeha\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress')),
-            EUNameTextField::create('AccountHolderFirstName', _t('Sybeha\Clubmaster\Models\ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')),
-            EUNameTextField::create('AccountHolderLastName', _t('Sybeha\Clubmaster\Models\ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')),
-            EUNameTextField::create('AccountHolderStreet', _t('Sybeha\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')),
-            EUNameTextField::create('AccountHolderStreetNumber', _t('Sybeha\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')),
-            ZipField::create('AccountHolderZip',_t('Sybeha\Clubmaster\Models\ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
-            EUNameTextField::create('AccountHolderCity',_t('Sybeha\Clubmaster\Models\ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
-            IbanField::create('Iban', _t('Sybeha\Clubmaster\Models\ClubMember.IBAN', 'Iban'))
+            CheckboxField::create('EqualAddress', _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress'))->setValue(true),
+            EUNameTextField::create('AccountHolderFirstName', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')),
+            EUNameTextField::create('AccountHolderLastName', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')),
+            EUNameTextField::create('AccountHolderStreet', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')),
+            EUNameTextField::create('AccountHolderStreetNumber', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')),
+            ZipField::create('AccountHolderZip',_t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')),
+            EUNameTextField::create('AccountHolderCity',_t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')),
+            IbanField::create('Iban', _t('SYBEHA\Clubmaster\Models\ClubMember.IBAN', 'Iban'))
                 ->setAttribute('placeholder', 'DE12500105170648489890'),
                 //->setAttribute('data-rule-iban','true')
                 //->addExtraClass("text"),
-            BicField::create('Bic', _t('Sybeha\Clubmaster\Models\ClubMember.BIC', 'Bic'))
+            BicField::create('Bic', _t('SYBEHA\Clubmaster\Models\ClubMember.BIC', 'Bic'))
                 ->setAttribute('placeholder', "VOBADEXX")
                 //->addExtraClass("text")
         );
@@ -160,13 +146,14 @@ class EnrollPageController extends PageController
         // List of action fields
         $actions = new FieldList(
             FormAction::create('doEnroll')
-                ->setTitle(_t('Sybeha\Clubmaster\Pages\EnrollPage.ENROLL', 'Enroll'))
+                ->setTitle(_t('SYBEHA\Clubmaster\Pages\EnrollPage.ENROLL', 'Enroll'))
                 ->setUseButtonTag(true)
         );
 
         // List of required fields for the form
-        $required = new RequiredFields([
-            //'MemberSalutationID',
+        // TODO: No solution found for Mobil OR phone
+        $required = new RequiredFields(
+            'Salutation',
             'FirstName',
             'LastName',
             'Birthday',
@@ -178,7 +165,7 @@ class EnrollPageController extends PageController
             'Email',
             //'Mobil',
             //'Phone',
-            //'MemberTypeID',
+            'TypeID',
             'Since',
             'AccountHolderFirstName',
             'AccountHolderLastName',
@@ -188,11 +175,9 @@ class EnrollPageController extends PageController
             'AccountHolderCity',
             'Iban',
             'Bic'
-            ]);
-
-        // Be careful validation might fail if the frontend JavaScript does not copy all required fields
-        $form = new Form($this, 'EnrollForm', $fields, $actions, $required);
-        // Add a template
+        );
+        // controller, functionname(__FUNCTION__ = 'EnrollForm'), formfields, actionfields, requirdfields
+        $form = new Form($this, __FUNCTION__, $fields, $actions, $required);
         $form->setTemplate('EnrollForm');
         $form->setFormMethod('POST', true);
 
@@ -206,31 +191,43 @@ class EnrollPageController extends PageController
      * @param Form $form
      * @return void
      */
-    public function doEnroll($data, $form)
+    public function doEnroll($data, Form $form)
     {
-        Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale());
-        Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - doEnroll() data Birthday = ' . $data['Birthday']);
+        Injector::inst()->get(LoggerInterface::class)
+            ->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale());
 
-        // Create a ClubMemberPending DataObject
+        Injector::inst()->get(LoggerInterface::class)
+            ->info('EnrollPageController - doEnroll() data Birthday = ' . $data['Birthday']);
+
+        // Create a ClubMember object
         $clubMemberPending = new ClubMemberPending();
 
-        // Init the ClubMemberPending with form data
+        // Save data into object
         $form->saveInto($clubMemberPending);
 
-        // Create a DBDate object to transform given form birthday date (string) got the wrong format 1970-01-03
+        // Attention: given form birthday date (string) got the wrong format 1970-01-03
+
+        // Create a DBDate object
         $dbDate = $clubMemberPending->dbObject('Birthday');
         // Use strftime to utilize locale
         $birthday = strftime('%d.%m.%Y', $dbDate->getTimestamp());
+        //TODO replace special characters
+        /*
+                // Replace special characters
+                setlocale( LC_ALL, "de_DE.utf8");
+                $fn = iconv('utf-8', 'ascii//TRANSLIT', $clubMember->FirstName);
+                $ln = iconv('utf-8', 'ascii//TRANSLIT', $clubMember->LastName);
 
-        // Replace special characters to avoid filename issues
-        setlocale( LC_ALL, "de_DE.utf8");
-        $fn = iconv('utf-8', 'ascii//TRANSLIT', $clubMemberPending->FirstName);
-        $ln = iconv('utf-8', 'ascii//TRANSLIT', $clubMemberPending->LastName);
-        Injector::inst()->get(LoggerInterface::class)->debug('EnrolPageController - doEnroll()  special characters first name = ' . $fn . ' last name ' . $ln);
+                // Get the path for the folder and add a filename
+                $path = $folder->getFullPath() . $fn[0] . $ln[0] . '_' . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
 
-        // Get the path for the folder and add a filename like LH_03.01.1970_dd.mm.YYYY_HH_MM_SS.antrag
-        // uppercase first and last name (first 2 characters only - they should be but you never know)
-        $name = strtoupper($data['FirstName'][0]) . strtoupper($data['LastName'][0]) . '_' . $birthday . '_' . date('d.m.Y_H_i_s') . '.antrag';
+
+        */
+        // Get the path for the folder and add a filename
+        // like LH_03.01.1970_dd.mm.YYYY_HH_MM_SS.antrag
+        $name = $data['FirstName'][0] . $data['LastName'][0] . '_' . $birthday . '_' . date('d.m.Y_H_i_s') . '.antrag';
+        // Uppercase name (first 2 characters - it should already be but you never know)
+        $name =  strtoupper($name);
 
         // Get the desired folder to store the serialized object
         $folder = $this->Folder();
@@ -238,7 +235,8 @@ class EnrollPageController extends PageController
         // Files property Filename contains (optional) preceding folder
         $filename = $folder->Name . DIRECTORY_SEPARATOR . $name;
 
-        Injector::inst()->get(LoggerInterface::class)->debug('EnrolPageController - doEnroll()  path = ' . $filename);
+        Injector::inst()->get(LoggerInterface::class)
+            ->debug('EnrolPageController - doEnroll()  path = ' . $filename);
 
         // Add path to object
         $clubMemberPending->SerializedFileName = $filename;
@@ -246,25 +244,23 @@ class EnrollPageController extends PageController
         // Serialize object safely
         $serialized = base64_encode(serialize($clubMemberPending));
 
-        $file = new File();
         // Store the serialized file
+        $file = new File();
         $file->setFromString($serialized, $filename);
-        $fileId = $file->write();
-        // Unpublish to hide from outside world
-        $file->doUnpublish();
+        $id = $file->write();
 
-        if ($fileId) {
-            $typeName = ClubMemberType::get()->byID($clubMemberPending->MemberTypeID)->TypeName;
-            $salutationName = ClubMemberSalutation::get()->byID($clubMemberPending->MemberSalutationID)->SalutationName;
-            //Injector::inst()->get(LoggerInterface::class)->debug('EnrollPageController - doEnroll()  type name = ' . $typeName . ' salutation = ' . $salutationName);
+        Injector::inst()->get(LoggerInterface::class)
+            ->debug('EnrollPageController - doEnroll()  file id = ' . $id . ' filename = ' . $file->Filename);
 
+        if ($id) {
+            $typeName = ClubMemberType::get()->byID($clubMemberPending->TypeID)->TypeName;
             // Send an E-Mail
+            // $email = new Email($from, $to, $subject, $body);
             $email = Email::create()
                 //setFrom('JIM .e.V')
                 ->setTo($data['Email'])
                 ->setData($clubMemberPending)
                 ->addData('TypeName', $typeName)
-                ->addData('SalutationName',$salutationName)
                 ->setSubject('Anmeldung bei Jim e.V.')
                 ->setHTMLTemplate('EMail\EnrollMail');
 
@@ -274,17 +270,14 @@ class EnrollPageController extends PageController
             $session->set('ClubMemberPending', $serialized);
 
             // @todo: Meaningful E-Mail validation
-            /*if ($email->send()) {
+            if ($email->send()) {
                 // Nothing
             } else {
                 // there may have been 1 or more failures
                 $session->set('Error', 'Fehler');
-            }*/
+            }
         }
         //return $this->redirectBack();
-        Injector::inst()->get(LoggerInterface::class)
-            ->debug('EnrollPageController - doEnroll()  redirect to = ' . EnrollSuccessPage::get()->First()->Link());
-
         return $this->redirect(EnrollSuccessPage::get()->First()->Link());
     }
 
@@ -292,15 +285,15 @@ class EnrollPageController extends PageController
     {
         parent::init();
         $theme = $this->themeDir();
-        // Use Theme TODO: Make configurable
+        // Same as Theme TODO: Make configurable
         Requirements::javascript('//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js');
         //Requirements::javascript('silverstripe/admin:thirdparty/jquery/jquery.js');
-        // Use Theme TODO: Make configurable
+        // Same as Theme TODO: Make configurable
         //Front-End validation
         Requirements::javascript('//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js');
         Requirements::javascript('//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.min.js');
         Requirements::javascript('//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/localization/messages_de.min.js');
-        Requirements::javascript('lhasselb/clubmaster:javascript/enroll.js');
-        Requirements::css('lhasselb/clubmaster:css/enroll.css');
+        Requirements::javascript('lhasselb/clubmaster:client/dist/javascript/enroll.js');
+        Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
     } //init
 } //eof

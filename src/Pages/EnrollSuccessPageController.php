@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\Clubmaster\Pages;
+namespace SYBEHA\Clubmaster\Pages;
 
 use PageController;
 
@@ -8,7 +8,7 @@ use PageController;
  * Enroll success page template controller
  * Class EnrollPageSuccessController
  *
- * @package Sybeha\Clubmaster\Pages
+ * @package SYBEHA\Clubmaster\Pages
  */
 class EnrollPageSuccessController extends PageController
 {

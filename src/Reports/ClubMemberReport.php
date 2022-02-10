@@ -1,10 +1,10 @@
 <?php
 
-namespace Sybeha\Clubmaster\Reports;
+namespace SYBEHA\Clubmaster\Reports;
 
 use SilverStripe\Reports\Report;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
-use Sybeha\Clubmaster\Models\ClubMember;
+use SYBEHA\Clubmaster\Models\ClubMember;
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class ClubMemberReport
  *
- * @package Sybeha\Clubmaster\Reports
+ * @package SYBEHA\Clubmaster\Reports
  */
 class ClubMemberReport extends Report
 {

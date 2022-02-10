@@ -1,5 +1,5 @@
 de:
-  Sybeha\Clubmaster\Admins\ClubAdmin:
+  SYBEHA\Clubmaster\Admins\ClubAdmin:
     MENUTITLE: "Mitgliederverwaltung"
     #Filter
     SELECTONE: "Bitte wählen"
@@ -21,19 +21,19 @@ de:
     ZIPEND: "Postleitzahlen bis"
     FILE: "Datei"
 
-  Sybeha\Clubmaster\Extensions\ClubAdminSiteConfig:
+  SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig:
     MENUTITLE: "Mitgliederverwaltung"
     PENDINGFOLDER: "Verzeichnis für Anträge"
     MEMBERSDISPLAYED: "Anzahl der Mitglieder pro Seite"
     ADDMANDATE: "Mandatsreferenz automatisch generieren"
     SENDAPPROVEMAIL: "Sende eine E-Mail nach der Zustimmung zum Antrag"
 
-  Sybeha\Clubmaster\Models\ClubMemberPending:
+  SYBEHA\Clubmaster\Models\ClubMemberPending:
     SINGULARNAME: "Mitgliedsantrag"
     PLURALNAME: "Mitgliedsantrag"
     SINCE: "Mitglied ab"
 
-  Sybeha\Clubmaster\Models\ClubMemberType:
+  SYBEHA\Clubmaster\Models\ClubMemberType:
     SINGULARNAME: "Mitgliedstyp"
     PLURALNAME: "Mitgliedstypen"
     #DESCRIPTION: "Verwalte Mitgliedstypen"
@@ -41,26 +41,16 @@ de:
     CLUBMEMBERS: "Mitglieder"
     SHOW_IN_FRONTEND: "Zeige im Formular"
 
-  Sybeha\Clubmaster\Models\ClubMemberSalutation:
-    SINGULARNAME: "Anredetyp"
-    PLURALNAME: "Anredetypen"
-    SALUTATIONNAME: "Anrede Bezeichnung"
-    CLUBMEMBERS: "Mitglieder"
-    SHOW_IN_FRONTEND: "Zeige im Formular"
-    GENDER: "Geschlecht"
-
-  Sybeha\Clubmaster\Models\ClubMember:
+  SYBEHA\Clubmaster\Models\ClubMember:
     SINGULARNAME: "Mitglied"
     PLURALNAME: "Mitglieder"
     DESCRIPTION: "Verwalte Mitglieder"
     MAINTITLE: "Stammdaten"
     BANKINGACCOUNT: "Bankverbindung"
     META: "Weitere Informationen"
-    HISTORY: "Verlauf"
     TYPES: "Mitgliedstypen"
     SELECTONE: "(Bitte wählen)"
     SALUTATION: "Anrede"
-    SALUTATIONNAMEHINT: "Anrede ändert Geschlecht"
     NAMETITLE: "Titel"
     NAMETITLEHINT: "z.B. Dr."
     FIRSTNAME: "Vorname"
@@ -72,7 +62,7 @@ de:
     STREETNUMBER: "Hausnummer"
     ZIP: "Postleitzahl"
     CITY: "Wohnort"
-    EQUALADDRESS: "Mitgliedsadresse ist Kontoadresse (kopiert Adressdaten)"
+    EQUALADDRESS: "Mitgliedsadresse ist Kontoadresse"
     EMAIL: "E-Mail"
     MOBIL: "Mobiltelefon"
     OR: "oder"
@@ -110,53 +100,53 @@ de:
   #   NewRecord: "Neues %s"
 
   # Gridfield-Actions
-  Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember:
+  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember:
     ACTIVATE_MEMBER: "Aktiviere Mitglied"
     DE_ACTIVATE_MEMBER: "Deaktiviere Mitglied"
     ACTIVATE_MEMBER_DONE: "Mitglied aktiviert."
     DEACTIVATE_MEMBER_DONE: "Mitglied deaktiviert."
 
-  Sybeha\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember:
+  SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember:
     APPROVE_MEMBER: "Mitgliedsantrag zustimmen"
     APPROVE_MEMBER_DONE: "Mitglied angelegt."
 
-  Sybeha\Clubmaster\Forms\Gridfields\Actions\GridFieldShowHideButton:
+  SYBEHA\Clubmaster\Forms\Gridfields\Actions\GridFieldShowHideButton:
     SHOW: "Zeige auch inaktive Mitglieder"
     HIDE: "Zeige nur aktive Mitglieder"
 
   # Gridfield-Bulk-Actions
-  Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler:
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_APPROVE: "Anträgen zustimmen"
     GRIDFIELD_BULK_DROPDOWN_APPROVED: "%s Anträgen zugestimmt."
 
-  Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler:
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_ACTIVATE: "Mitglieder aktivieren"
     GRIDFIELD_BULK_DROPDOWN_ACTIVATED: "%s Mitglieder aktiviert."
 
-  Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler:
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\DeActivateMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_DEACTIVATE: "Mitglieder deaktivieren"
     GRIDFIELD_BULK_DROPDOWN_DEACTIVATED: "%s Mitglieder deaktiviert."
 
-  Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler:
+  SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\InsuranceMemberHandler:
     GRIDFIELD_BULK_DROPDOWN_INSURANCE: "BLSV gemeldet setzen"
     GRIDFIELD_BULK_DROPDOWN_INSURANCE_DONE: "%s Mitglieder gesetzt."
 
-  Sybeha\Clubmaster\Forms\Fields\BicField:
+  SYBEHA\Clubmaster\Forms\Fields\BicField:
     VALIDATION_BICNUMBER: "Bitte prüfen Sie die korrekte Eingabe BIC \"{number}\"."
 
-  Sybeha\Clubmaster\Forms\Fields\IbanField:
+  SYBEHA\Clubmaster\Forms\Fields\IbanField:
     VALIDATION_IBANNUMBER: "Bitte prüfen Sie die korrekte Eingabe IBAN \"{number}\"."
 
-  Sybeha\Clubmaster\Forms\Fields\ZipField:
+  SYBEHA\Clubmaster\Forms\Fields\ZipField:
     VALIDATION_ZIP: "\"{value}\" ist keine Postleitzahl, nur Postleitzahlen sind zulässig für dieses Feld."
 
-  Sybeha\Clubmaster\Forms\Fields\TelephoneNumberField:
+  SYBEHA\Clubmaster\Forms\Fields\TelephoneNumberField:
     VALIDATION_PHONE: "\"{value}\" ist keine zulässige Telefonnummer."
 
-  Sybeha\Clubmaster\Forms\Fields\EUNameTextField:
+  SYBEHA\Clubmaster\Forms\Fields\EUNameTextField:
     VALIDATION_NAME: "\"{value}\" ist keine zulässige Eingabe, Sonderzeichen sind nicht zulässig."
 
-  Sybeha\Clubmaster\Pages\EnrollPage:
+  SYBEHA\Clubmaster\Pages\EnrollPage:
     SINGULARNAME: "Mitgliedsantrag"
     DESCRIPTION: "Seite für den Mitgliedsantrag"
     ENROLL: "Antrag absenden"
@@ -164,7 +154,7 @@ de:
     REQUESTSFOLDERDESCRIPTION: "Verzeichnis zum speichern der Antragsdateien (generiert vom Formular)"
     CONTENT_LABEL: "Das Formular wird im PHP-Code gepflegt."
 
-  Sybeha\Clubmaster\Pages\EnrollSuccessPage:
+  SYBEHA\Clubmaster\Pages\EnrollSuccessPage:
     SINGULARNAME: "Erfolgreicher Mitgliedsantrag"
     MESSAGE_LABEL: "Danke-Meldung"
 

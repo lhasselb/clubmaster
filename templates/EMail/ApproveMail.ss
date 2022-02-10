@@ -1,6 +1,6 @@
 <h1>Hallo $FirstName $LastName,</h1>
 <p>dein Mitgliedsantrag wurde bearbeitet. Du bist als Mitglied mit folgenden Daten registriert:</p>
-<p>$FirstName $LastName</p>
+<p>$Salutation $FirstName $LastName</p>
 <p>$Birthday</p>
 <p>$Nationality</p>
 <p>$Street $StreetNumber, $Zip $City</p>
@@ -18,4 +18,4 @@ Die JIM e.V. Satzung findest du <a href="https://www.jimev.de/assets/formulare/S
 
 Viele Grüsse
 
-JIM e.V.
+JIM e.V. 

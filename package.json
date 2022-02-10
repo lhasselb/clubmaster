@@ -2,11 +2,12 @@
   "name": "clubmaster",
   "version": "4.0.0",
   "description": "Manager for club members",
-  "main": "./client/src/boot/index.js",
-  "author": "lhasselb",
-  "license": "UNLICENSED",
   "engines": {
-    "node": ">=10.x"
+    "node": "^15.x"
+  },
+  "bin": {
+    "webpack": "./node_modules/.bin/webpack",
+    "sass-lint": "./node_modules/.bin/sass-lint"
   },
   "scripts": {
     "build": "yarn && yarn lint && NODE_ENV=production webpack -p --bail --progress",
@@ -14,66 +15,38 @@
     "watch": "NODE_ENV=development webpack --watch --progress",
     "css": "WEBPACK_CHILD=css npm run build",
     "tx": "tx push --source && tx pull --all && node transifex.js",
-    "test": "jest",
-    "coverage": "jest --coverage",
-    "lock": "npm-shrinkwrap --dev",
     "lint": "eslint client/src && sass-lint client/src",
     "lint-js": "eslint client/src",
     "lint-js-fix": "eslint client/src --fix",
     "lint-sass": "sass-lint client/src"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lhasselb/clubmaster.git"
+  },
+  "keywords": [
+    "manager",
+    "clubmembers"
+  ],
+  "author": "lhasselb",
+  "license": "UNLICENSED",
   "dependencies": {
-    "babel-polyfill": "6.7.4",
-    "react": "^16.8.3",
-    "silverstripe-admin": "file:../../silverstripe/admin/client/src",
     "jquery": "^3.3.1",
     "jquery-validation": "^1.19.0"
   },
   "devDependencies": {
     "@silverstripe/eslint-config": "^0.0.5",
-    "@silverstripe/webpack-config": "^1.0.0",
-    "babel-jest": "^23.6.0",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.10.0",
-    "jest-cli": "^23.6.0"
+    "@silverstripe/webpack-config": "^0.4.1",
+    "expose-loader": "^0.7.4",
+    "sass-loader": "^6.0.7"
   },
   "babel": {
-    "presets": [
-      "env",
-      "react"
-    ],
     "plugins": [
       "transform-object-rest-spread"
     ]
   },
-  "jest": {
-    "roots": [
-      "client/src"
-    ],
-    "modulePaths": [
-      "client/src",
-      "../admin/client/src",
-      "../admin/node_modules",
-      "../silverstripe/admin/client/src",
-      "../silverstripe/admin/node_modules",
-      "../../silverstripe/admin/client/src",
-      "../../silverstripe/admin/node_modules"
-    ],
-    "collectCoverageFrom": [
-      "**/*.{js,jsx}",
-      "!**/node_modules/**",
-      "!**/boot/**",
-      "!**/bundles/**",
-      "!**/legacy/**",
-      "!**/vendor/**",
-      "!**/*-test.{js,jsx}",
-      "!**/*-story.{js,jsx}"
-    ],
-    "testMatch": [
-      "**/tests/**/*-test.js?(x)"
-    ],
-    "transform": {
-      ".*": "babel-jest"
-    }
-  }
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\Clubmaster\Forms\Gridfields\Bulkactions;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -13,7 +13,7 @@ use Exception;
  * Bulk action handler for activating records.
  * Class ActivateMemberHandler
  *
- * @package Sybeha\Clubmaster\Forms\Gridfields\Bulkactions;
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
  */
 class ActivateMemberHandler extends Handler
 {
@@ -82,7 +82,7 @@ class ActivateMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_ACTIVATE', $this->getLabel());
+        return _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_ACTIVATE', $this->getLabel());
     }
 
     /**
@@ -109,7 +109,7 @@ class ActivateMemberHandler extends Handler
             }
             $doneCount = count($response->getSuccessRecords());
             $message = sprintf(
-                _t('Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_ACTIVATED', '%s members activated'),
+                _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ActivateMemberHandler.GRIDFIELD_BULK_DROPDOWN_ACTIVATED', '%s members activated'),
                 $doneCount
             );
             $response->setMessage($message);

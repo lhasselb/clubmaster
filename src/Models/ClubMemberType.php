@@ -1,19 +1,20 @@
 <?php
 
-namespace Sybeha\Clubmaster\Models;
+namespace SYBEHA\Clubmaster\Models;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 
-use Sybeha\Clubmaster\Models\ClubMember;
+use SYBEHA\Clubmaster\Models\ClubMember;
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
+
 /**
  * Class ClubMemberType
  *
- * @package Sybeha\Clubmaster\Models
+ * @package SYBEHA\Clubmaster\Models
  */
 class ClubMemberType extends DataObject
 {
@@ -50,14 +51,12 @@ class ClubMemberType extends DataObject
 
     private static $searchable_fields = [];
 
-    private static $default_sort = 'TypeName ASC';
-
     public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels($includerelations);
-        $labels['TypeName'] = _t('Sybeha\Clubmaster\Models\ClubMemberType.TYPENAME', 'Type name');
-        $labels['ClubMembers'] = _t('Sybeha\Clubmaster\Models\ClubMemberType.CLUBMEMBERS', 'Club members');
-        $labels['ShowInFrontEnd'] = _t('Sybeha\Clubmaster\Models\ClubMemberType.SHOW_IN_FRONTEND', 'Show in frontend');
+        $labels['TypeName'] = _t('SYBEHA\Clubmaster\Models\ClubMemberType.TYPENAME', 'type name');
+        $labels['ClubMembers'] = _t('SYBEHA\Clubmaster\Models\ClubMemberType.CLUBMEMBERS', 'ClubMembers');
+        $labels['ShowInFrontEnd'] = _t('SYBEHA\Clubmaster\Models\ClubMemberType.SHOW_IN_FRONTEND', 'Show in frontend');
         return $labels;
     }
 
@@ -83,16 +82,13 @@ class ClubMemberType extends DataObject
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
-        // Map of default records to be created
-        $defaultTypes = ['Vollzahlend','Ermäßigt'];
+
+        $defaultTypes = ['Vollverdiener','Student / Azubi / Schüler'];
         foreach ($defaultTypes as $currentType) {
-            // Does it exist ?
             if (!$type = ClubMemberType::get()->filter('TypeName', $currentType)->first()) {
-                // No: Add db row
                 $type = ClubMemberType::create(["TypeName" => $currentType,"ShowInFrontEnd" => "1"])->write();
                 Injector::inst()->get(LoggerInterface::class)
-                    ->debug('ClubMemberType - requireDefaultRecords()' . ' created type  = ' .
-                        ClubMemberType::get()->byID($type)->TypeName);
+                    ->debug('ClubMemberType - requireDefaultRecords()' . ' created type  = ' . ClubMemberType::get()->byID($type)->TypeName);
             }
         }
     }
@@ -110,12 +106,7 @@ class ClubMemberType extends DataObject
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-        $clubMemberTypes = array_fill(0,sizeof(ClubMemberType::get()),ClubMemberType::get());
-        /*foreach (ClubMemberType::get() as $clubMemberType) {
-           Injector::inst()->get(LoggerInterface::class)
-               ->debug('ClubMemberType - onBeforeWrite()' . ' type  = ' . $clubMemberType->TypeName);
-        }*/
-        if(in_array($this->TypeName, $clubMemberTypes)) {
+        if ($this->TypeName == 'Vollverdiener' || $this->TypeName == 'Student / Azubi / Schüler') {
             $this->ShowInFrontEnd = 1;
         }
     }

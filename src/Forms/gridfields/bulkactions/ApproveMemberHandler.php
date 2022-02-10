@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\Clubmaster\Forms\Gridfields\Bulkactions;
+namespace SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions;
 
 use Colymba\BulkManager\BulkAction\Handler;
 use Colymba\BulkTools\HTTPBulkToolsResponse;
@@ -11,8 +11,8 @@ use Exception;
 
 use SilverStripe\ORM\FieldType\DBDatetime;
 
-use Sybeha\Clubmaster\Models\ClubMemberPending;
-use Sybeha\Clubmaster\Models\ClubMember;
+use SYBEHA\Clubmaster\Models\ClubMemberPending;
+use SYBEHA\Clubmaster\Models\ClubMember;
 
 /* Logging */
 use SilverStripe\Core\Injector\Injector;
@@ -23,7 +23,7 @@ use Psr\Log\LoggerInterface;
  * Member class will be changed from ClubMemberPending to ClubMember.
  * Class ApproveMemberHandler
  *
- * @package Sybeha\Clubmaster\Forms\Gridfields\Bulkactions
+ * @package SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions
  */
 class ApproveMemberHandler extends Handler
 {
@@ -93,7 +93,7 @@ class ApproveMemberHandler extends Handler
      */
     public function getI18nLabel()
     {
-        return _t('Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler.GRIDFIELD_BULK_DROPDOWN_APPROVE', $this->getLabel());
+        return _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler.GRIDFIELD_BULK_DROPDOWN_APPROVE', $this->getLabel());
     }
 
     /**
@@ -114,7 +114,7 @@ class ApproveMemberHandler extends Handler
                 $record->Pending = 0;
                 $record->Active = 1;
                 $clubMember = new ClubMember();
-                // Add namespaced classname 'Sybeha\Clubmaster\Models\ClubMember';
+                // Add namespaced classname 'SYBEHA\Clubmaster\Models\ClubMember';
                 $record->ClassName = $clubMember->getClassName();
                 // Add date only if missing !
                 if (empty($record->Since)) {
@@ -131,7 +131,7 @@ class ApproveMemberHandler extends Handler
             //Injector::inst()->get(LoggerInterface::class)
                 //->debug('ApproveMemberHandler - approveMember() doneCount = ' . $doneCount);
             $message = sprintf(
-                _t('Sybeha\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler.GRIDFIELD_BULK_DROPDOWN_APPROVED', '%s member requests approved'),
+                _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler.GRIDFIELD_BULK_DROPDOWN_APPROVED', '%s member requests approved'),
                 $doneCount
             );
             $response->setMessage($message);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sybeha\Clubmaster\Admins;
+namespace SYBEHA\Clubmaster\Admins;
 
 use SilverStripe\Core\Convert;
 use SilverStripe\Dev\BulkLoader;
@@ -60,24 +60,23 @@ use SilverStripe\Security\Member;
 use SilverStripe\Core\Injector\Injector;
 use Psr\Log\LoggerInterface;
 
-use Sybeha\Clubmaster\Models\ClubMember;
-use Sybeha\Clubmaster\Models\ClubMemberPending;
-use Sybeha\Clubmaster\Models\ClubMemberSalutation;
-use Sybeha\Clubmaster\Models\ClubMemberType;
-use Sybeha\Clubmaster\Forms\Fields\ZipField;
-use Sybeha\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember;
-use Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember;
-use Sybeha\Clubmaster\Loader\ClubMemberCsvBulkLoader;
+use SYBEHA\Clubmaster\Models\ClubMember;
+use SYBEHA\Clubmaster\Models\ClubMemberPending;
+use SYBEHA\Clubmaster\Models\ClubMemberType;
+use SYBEHA\Clubmaster\Forms\Fields\ZipField;
+use SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember;
+use SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember;
+use SYBEHA\Clubmaster\Loader\ClubMemberCsvBulkLoader;
 
 /**
  * ClubMember administration system within the CMS
  * Class ClubAdmin
  *
- * @package Sybeha\Clubmaster
+ * @package SYBEHA\Clubmaster
  * @subpackage Admins
  * @author Lars Hasselbach <lars.hasselbach@gmail.com>
  * @since 15.03.2016
- * @copyright 2016 [Sybeha]
+ * @copyright 2016 [sybeha]
  * @license see license file in modules root directory
  */
 class ClubAdmin extends ModelAdmin
@@ -91,8 +90,7 @@ class ClubAdmin extends ModelAdmin
     private static $managed_models = [
         ClubMemberPending::class,
         ClubMember::class,
-        ClubMemberType::class,
-        ClubMemberSalutation::class
+        ClubMemberType::class
     ];
 
     // Specific importer implementation
@@ -142,8 +140,9 @@ class ClubAdmin extends ModelAdmin
 
         $form = parent::getEditForm($id, $fields);
         // $gridFieldName is generated from the ModelClass, eg if the Class 'ClubMember'
-        // is managed by this ModelAdmin, the GridField for it will be named
-        // Sybeha-Clubmaster-Models-ClubMember and Sybeha-Clubmaster-Models-ClubMemberPending
+        // is managed by this ModelAdmin, the GridField for it will also be named
+        // 'ClubMember'  NEW :  SYBEHA-Clubmaster-Models-ClubMember
+        // and SYBEHA-Clubmaster-Models-ClubMemberPending
         $gridFieldName = $this->sanitiseClassName($this->modelClass);
         //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - getEditForm() gridFieldName= ' . $gridFieldName);
         $gridField = $form->Fields()->fieldByName($gridFieldName);
@@ -158,32 +157,47 @@ class ClubAdmin extends ModelAdmin
         $itemsPerPage = Config::inst()->get('ClubAdmin', 'page_length'); // default 25, _config/config.yml
         $itemsPerPage = $siteConfig->MembersDisplayed;
 
-        if ($gridFieldName === 'Sybeha-Clubmaster-Models-ClubMember') {
-            //$gridFieldConfig->addComponent(new Sybeha\Forms\Gridfields\Actions\ShowHideButton('before'));
+        //if ($gridFieldName == 'ClubMember') {
+        if ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMember') {
+            //$gridFieldConfig->addComponent(new SYBEHA\Forms\Gridfields\Actions\ShowHideButton('before'));
             $gridFieldConfig->getComponentByType(GridFieldPaginator::class)->setItemsPerPage($itemsPerPage);
             //Injector::inst()->get(LoggerInterface::class)->debug('Config: ' . implode(" +  ",$gridFieldConfig));
 
-            //Add lazyloader for (many) ClubMembers - NEW: Added with 4.3
+            //NEW: Added with 4.3
             $gridFieldConfig->addComponent(new GridFieldLazyLoader());
 
             // Add GridFieldBulkManager
             $gridFieldConfig->addComponent(new \Colymba\BulkManager\BulkManager());
-            // Remove BulkManager actions
-            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
-            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
-            // Remove BulkManager delete action from non Administrators
+            // Remove bulk actions
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
+                ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
+                ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
+            //$gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            //->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
+            // Remove bulk delete action from non Administrators
             if (!$this->canDeleteClubmember()) {
-                $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
+                $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
+                    ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
             }
 
-            // Add custom gridfield action activate/deactivateMember
-            $gridFieldConfig->addComponent(new \Sybeha\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember());
+            // Add action activate/deactivateMember
+            $gridFieldConfig->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ActivateClubMember());
+
             // Add BULK action activateMember
-            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction('Sybeha\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\ActivateMemberHandler');
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
+                'SYBEHA\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\ActivateMemberHandler'
+            );
             // Add BULK action deactivateMember
-            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction('Sybeha\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\DeActivateMemberHandler');
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
+                'SYBEHA\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\DeActivateMemberHandler'
+            );
+
             // Add BULK action insureMember
-            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction('Sybeha\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\InsuranceMemberHandler');
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->addBulkAction(
+                'SYBEHA\\Clubmaster\\Forms\\Gridfields\\Bulkactions\\InsuranceMemberHandler'
+            );
+
             /* PRINT disabled */
             $gridFieldConfig->removeComponentsByType(GridFieldPrintButton::class);
             /*$printButton = $gridFieldConfig->getComponentByType('GridFieldPrintButton');
@@ -216,37 +230,37 @@ class ClubAdmin extends ModelAdmin
                     'Age'  => _t('ClubMember.AGE', 'Age')
                 )
             );*/
-        } elseif ($gridFieldName === 'Sybeha-Clubmaster-Models-ClubMemberType') {
+            //} elseif ($gridFieldName == 'ClubMemberType') {
+        } elseif ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMemberType') {
             $gridFieldConfig->removeComponentsByType(GridFieldPrintButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldExportButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldImportButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldFilterHeader::class);
-        } elseif ($gridFieldName === 'Sybeha-Clubmaster-Models-ClubMemberSalutation') {
-            $gridFieldConfig->removeComponentsByType(GridFieldPrintButton::class);
-            $gridFieldConfig->removeComponentsByType(GridFieldExportButton::class);
-            $gridFieldConfig->removeComponentsByType(GridFieldImportButton::class);
-            $gridFieldConfig->removeComponentsByType(GridFieldFilterHeader::class);
-        } elseif ($gridFieldName === 'Sybeha-Clubmaster-Models-ClubMemberPending') {
+            //} elseif ($gridFieldName == 'ClubMemberPending') {
+        } elseif ($gridFieldName === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {
             $gridFieldConfig->removeComponentsByType(GridFieldPrintButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldExportButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldImportButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldFilterHeader::class);
             $gridFieldConfig->removeComponentsByType(GridFieldAddNewButton::class);
-            //$gridFieldConfig->removeComponentsByType(SilverStripe\Forms\GridField\GridFieldDeleteAction::class);
-            $gridFieldConfig->removeComponentsByType(GridFieldAddNewButton::class);
+            $gridFieldConfig->removeComponentsByType(GridFieldDeleteAction::class);
+
             // Add ApproveClubMember action
-            $gridFieldConfig->addComponent(new \Sybeha\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember());
+            $gridFieldConfig->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember());
+
             // Add GridFieldBulkManager
             $gridFieldConfig->addComponent(new \Colymba\BulkManager\BulkManager());
-            // Add custom gridfield action approve ClubMemberPending -> ClubMember
-            $gridFieldConfig->getComponentByType('Colymba\BulkManager\BulkManager')->addBulkAction('Sybeha\\clubmaster\\forms\\gridfields\\Bulkactions\\ApproveMemberHandler');
-            // Remove BulkManager unlink, edit action
-            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
-            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
-            // Remove BulkManager delete action from non Administrators
-            if (!$this->canDeleteClubmember()) {
-                $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
-            }
+            // Add action
+            $gridFieldConfig->getComponentByType('Colymba\BulkManager\BulkManager')->addBulkAction(
+                'SYBEHA\\clubmaster\\forms\\gridfields\\Bulkactions\\ApproveMemberHandler'
+            );
+            // Remove action
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
+                ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
+                ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
+            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
+                ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
         }
         return $form;
     }
@@ -306,16 +320,18 @@ class ClubAdmin extends ModelAdmin
     public function init()
     {
         parent::init();
-        //Requirements::javascript('Sybeha/clubmaster:client/dist/js/main.js');
-        //Requirements::css('Sybeha/clubmaster:client/dist/styles/main.css');
-        //Requirements::add_i18n_javascript('Sybeha/clubmaster:client/lang');
+        //Requirements::javascript('lhasselb/clubmaster:client/dist/js/main.js');
+        //Requirements::css('lhasselb/clubmaster:client/dist/styles/main.css');
+        //Requirements::add_i18n_javascript('sybeha/clubmaster:client/lang');
 
         // Create Pending members from serialized form data
-        if ($this->sanitiseClassName($this->modelClass) === 'Sybeha-Clubmaster-Models-ClubMemberPending') {
+        if ($this->sanitiseClassName($this->modelClass) === 'SYBEHA-Clubmaster-Models-ClubMemberPending') {
             // Get the SiteConfig
             $siteConfig = SiteConfig::current_site_config();
             $folder = $siteConfig->PendingFolder();
-            //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() pending folder = ' . $folder->Title . '(ID=' . $folder->ID . ')');
+
+            //Injector::inst()->get(LoggerInterface::class)
+            //->debug('ClubAdmin - Init() pending folder = ' . $folder->Title . '(ID=' . $folder->ID . ')');
             // Check if not configured (FolderID=0)
             if ($folder->ID == '0') {
                 // Create a default within assets/antraege
@@ -323,32 +339,30 @@ class ClubAdmin extends ModelAdmin
                 $siteConfig->PendingFolderID = $folder->ID;
                 $siteConfig->write();
             }
-
             // Check for serialized request forms
             $files = File::get()->filter("ParentID", $folder->ID);
             if (!$files->exists()) {
-                //Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() no files found');
+                Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() no files found');
             } else {
-                //Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
+                Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
             }
 
             // Iterate the files found
             foreach ($files as $file) {
                 // In order to ensure that assets are made public you should check the following:
                 // $file->isPublished(); $file->exists();canView(); CanViewType; */
-                Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' . $file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' . $file->canView() . ' and can view type ? ' . $file->CanViewType);
+                // Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' . $file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' . $file->canView() . ' and can view type ? ' . $file->CanViewType);
                 $extension = $file->getExtension();
                 //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file title = ' . $file->Title . '(' . $file->Filename . ') extension = ' . $extension);
-                if(!$file->isPublished() && strcasecmp($extension,'antrag') == 0)
-                // Do NOT publish the file it should be accessible in draft mode
-                /* {
+                if(!$file->isPublished() && $extension === 'antrag')
+                {
                     $file->publishSingle();
                     $file->write();
-                    Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() file title = ' . $file->Filename . ' has been published ');
-                } */
+                    //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() file title = ' . $file->Filename . ' has been published ');
+                }
                 // Skip all files except those with extension antrag
-                if (!$extension || strcasecmp($extension,'antrag') != 0) {
-                    Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() file with wrong extension = ' . $extension . ' title = ' . $file->Name);
+                if (!$extension || $extension !== 'antrag') {
+                    //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() file with wrong extension = ' . $extension . ' title = ' . $file->Name);
                     continue;
                 }
 
@@ -358,16 +372,20 @@ class ClubAdmin extends ModelAdmin
                     // Find an existing member created with current file
                     $existingClubMember = ClubMember::get()->find('SerializedFileName', $file->Name);
                     if ($existingClubMember) {
-                        Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title . ' (' . $existingClubMember->ID .') for file = ' . $file->Name);
+                        // Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title . ' (' . $existingClubMember->ID .') for file = ' . $file->Name);
                     }
                 }
                 // No member found
                 if (!$existingClubMember) {
-                    Injector::inst()->get(LoggerInterface::class) ->debug( 'ClubAdmin - Init()  - NO member found for file = ' . $file->Title . ' ,name = ' . $file->Filename);
+                    Injector::inst()->get(LoggerInterface::class)
+                        ->debug(
+                            'ClubAdmin - Init()  - No matching member found for file title = ' . $file->Title
+                            . ' ,name = ' . $file->Name . ' (' . $file->Filename . ') extension = ' . $extension
+                        );
 
                     // Create an alias for "old" non-namespaced serialized objects
                     if (!class_exists('ClubMemberPending')) {
-                        class_alias('Sybeha\Clubmaster\Models\ClubMemberPending', 'ClubMemberPending');
+                        class_alias('SYBEHA\Clubmaster\Models\ClubMemberPending', 'ClubMemberPending');
                     }
 
                     // Get the serialized object content
@@ -420,15 +438,16 @@ class ClubAdmin extends ModelAdmin
                         Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() - Serialized ' . get_class($pendingMember) . ' created ');
                     }
 
+
                     // Created by webform
                     $pendingMember->CreationType = 'Formular';
                     // Required to be displayed
                     $pendingMember->Pending = 1;
 
                     $pendingMember->SerializedFileName = $file->Name;
-
                     // Attention php DateTime needs to be ISO 8601 formatted date and time (Y-m-d H:i:s)
-                    $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Name)->format('Y-m-d H:i:s');
+                    $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Name)
+                        ->format('Y-m-d H:i:s');
 
                     // Store ClubMemberPending
                     $pendingMember->write();

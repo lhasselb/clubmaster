@@ -1,39 +1,34 @@
 ---
 Name: clubmaster
 ---
-# ===================
-# Extend LeftAndMain
-# ===================
+# Extend LeftAndMain (Hide Help)
 SilverStripe\Admin\LeftAndMain:
   extensions:
-# (Hide Help)
-    - Sybeha\Clubmaster\Extensions\ClubAdminLeftAndMain
-  extra_requirements_css:
-    - 'lhasselb/clubmaster: client/dist/styles/bundle.css'
-  extra_requirements_javascript:
-      - 'lhasselb/clubmaster: client/dist/js/bundle.js'
-# ===================
-# Extend SiteConfig
-# ===================
+    - SYBEHA\Clubmaster\Extensions\ClubAdminLeftAndMain
+
+# Add extension SiteConfig: add folder to store files of type "antraege"
 Silverstripe\SiteConfig\SiteConfig:
   extensions:
-# Add folder to store files of type "antraege"
-    - Sybeha\Clubmaster\Extensions\ClubAdminSiteConfig
-# ===================
-# Extend File
-# ===================
+    - SYBEHA\Clubmaster\Extensions\ClubAdminSiteConfig
+
+# Add file extension to allowed extensions
 SilverStripe\Assets\File:
   allowed_extensions:
-# Add file extension to allowed extensions
     - antrag
-# ===================
-# Extend ClubAdmin
-# ===================
-Sybeha\Clubmaster\Admins\ClubAdmin:
+
 # Number of displayed items
+SYBEHA\Clubmaster\Admins\ClubAdmin:
   page_length: 25
   extensions:
-    - Sybeha\Clubmaster\Extensions\ClubAdminImport
-# ===================
-# Extend ClubMember
-# ===================
+    - SYBEHA\Clubmaster\Extensions\ClubAdminImport
+
+# Requirements
+---
+After:
+    - 'assetsimage'
+---
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_css:
+    - 'lhasselb/clubmaster: client/dist/styles/main.css'
+  extra_requirements_javascript:
+    - 'lhasselb/clubmaster: client/dist/js/main.js'
