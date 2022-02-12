@@ -64,7 +64,7 @@ class ClubMember extends DataObject
 
     // Form-Fields
     private static $db = [
-        'Salutation' => 'Enum(array("Frau","Herr","Schülerin","Schüler"), "Frau")',
+        'Salutation' => 'Enum(array("Divers","Frau","Herr","Schülerin","Schüler"), "Frau")',
         'NameTitle' => 'Varchar(255)',
         'FirstName' => 'Varchar(255)',
         'LastName' => 'Varchar(255)',
@@ -286,7 +286,7 @@ class ClubMember extends DataObject
         $labels['Since'] =
             _t('SYBEHA\Clubmaster\Models\ClubMember.SINCE', 'Since');
         $labels['Comment'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.COMMENT', 'Comment');			
+            _t('SYBEHA\Clubmaster\Models\ClubMember.COMMENT', 'Comment');
         $labels['EqualAddress'] =
             _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress');
         $labels['AccountHolderTitle'] =
@@ -496,7 +496,7 @@ class ClubMember extends DataObject
             'Root.Main',
             TextField::create('Comment', _t('SYBEHA\Clubmaster\Models\ClubMember.COMMENT', 'Comment'))
         );
-		
+
         // Account tab
         $fields->addFieldToTab(
             'Root.Account',

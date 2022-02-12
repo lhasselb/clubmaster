@@ -83,7 +83,7 @@ class ClubMemberType extends DataObject
     {
         parent::requireDefaultRecords();
 
-        $defaultTypes = ['Vollverdiener','Student / Azubi / Schüler'];
+        $defaultTypes = ['Vollzahlend','Ermäßigt'];
         foreach ($defaultTypes as $currentType) {
             if (!$type = ClubMemberType::get()->filter('TypeName', $currentType)->first()) {
                 $type = ClubMemberType::create(["TypeName" => $currentType,"ShowInFrontEnd" => "1"])->write();

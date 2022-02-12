@@ -82,19 +82,18 @@ class EnrollPageController extends PageController
     public function EnrollForm()
     {
         //Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale() . ' today = ' . DBDatetime::now());
-        // @todo: Clarify if we should add an additional flag to the backend to hide them from the list
         // Check for types before using
         if (ClubMemberType::get()->exists()) {
             $clubMemberTypesMap = ClubMemberType::get()->exclude('ShowInFrontEnd', '0')->map('ID', 'Title');
         } else {
             $clubMemberTypesMap = [
-                'Vollverdiener' => 'Vollverdiener',
-                'Student / Azubi / Schüler' => 'Student / Azubi / Schüler'
+                'Vollzahlend' => 'Vollzahlend',
+                'Ermäßigt' => 'Ermäßigt'
             ];
         }
 
         // List of form fields
-        $today = DBDatetime::now()->Date();//
+        $today = DBDatetime::now()->Date();
         $fields = FieldList::create(
             DropdownField::create('Salutation', _t('SYBEHA\Clubmaster\Models\ClubMember.SALUTATION', 'Salutation'),
                 singleton(ClubMember::class)->dbObject('Salutation')->enumValues())
@@ -125,7 +124,7 @@ class EnrollPageController extends PageController
                 ->setAttribute('required',"required"),
             DropdownField::create('TypeID', _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type'), $clubMemberTypesMap)
                 ->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            DateField::create('Since', _t('SYBEHA\Clubmaster\Models\ClubMember.SINCE', 'Member since'))
+            DateField::create('Since', _t('SYBEHA\Clubmaster\Models\ClubMember.FROM', 'Member since'))
                 ->addExtraClass('width_100')->setValue($today)->setMinDate('-2 years')->setMaxDate('+0 days'),
             CheckboxField::create('EqualAddress', _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress'))->setValue(true),
             EUNameTextField::create('AccountHolderFirstName', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')),
@@ -193,11 +192,9 @@ class EnrollPageController extends PageController
      */
     public function doEnroll($data, Form $form)
     {
-        Injector::inst()->get(LoggerInterface::class)
-            ->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale());
+        Injector::inst()->get(LoggerInterface::class) ->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale());
 
-        Injector::inst()->get(LoggerInterface::class)
-            ->info('EnrollPageController - doEnroll() data Birthday = ' . $data['Birthday']);
+        Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - doEnroll() data Birthday = ' . $data['Birthday']);
 
         // Create a ClubMember object
         $clubMemberPending = new ClubMemberPending();
@@ -205,29 +202,20 @@ class EnrollPageController extends PageController
         // Save data into object
         $form->saveInto($clubMemberPending);
 
-        // Attention: given form birthday date (string) got the wrong format 1970-01-03
-
-        // Create a DBDate object
+        // Create a DBDate object given form birthday date (string) got the wrong format 1970-01-03
         $dbDate = $clubMemberPending->dbObject('Birthday');
         // Use strftime to utilize locale
         $birthday = strftime('%d.%m.%Y', $dbDate->getTimestamp());
-        //TODO replace special characters
-        /*
-                // Replace special characters
-                setlocale( LC_ALL, "de_DE.utf8");
-                $fn = iconv('utf-8', 'ascii//TRANSLIT', $clubMember->FirstName);
-                $ln = iconv('utf-8', 'ascii//TRANSLIT', $clubMember->LastName);
 
-                // Get the path for the folder and add a filename
-                $path = $folder->getFullPath() . $fn[0] . $ln[0] . '_' . $data['Birthday'] . '_' . date('d.m.Y_H_i_s') . '.antrag';
+        // Replace special characters to avoid filename issues
+        setlocale( LC_ALL, "de_DE.utf8");
+        $fn = iconv('utf-8', 'ascii//TRANSLIT', $clubMemberPending->FirstName);
+        $ln = iconv('utf-8', 'ascii//TRANSLIT', $clubMemberPending->LastName);
+        Injector::inst()->get(LoggerInterface::class)->debug('EnrolPageController - doEnroll()  special characters first name = ' . $fn . ' last name ' . $ln);
 
-
-        */
-        // Get the path for the folder and add a filename
-        // like LH_03.01.1970_dd.mm.YYYY_HH_MM_SS.antrag
-        $name = $data['FirstName'][0] . $data['LastName'][0] . '_' . $birthday . '_' . date('d.m.Y_H_i_s') . '.antrag';
-        // Uppercase name (first 2 characters - it should already be but you never know)
-        $name =  strtoupper($name);
+        // Get the path for the folder and add a filename like LH_03.01.1970_dd.mm.YYYY_HH_MM_SS.antrag
+        // and uppercase name (first 2 characters - it should already be but you never know)
+        $name = strtoupper($data['FirstName'][0]) . strtoupper($data['LastName'][0]) . '_' . $birthday . '_' . date('d.m.Y_H_i_s') . '.antrag';
 
         // Get the desired folder to store the serialized object
         $folder = $this->Folder();
@@ -235,8 +223,7 @@ class EnrollPageController extends PageController
         // Files property Filename contains (optional) preceding folder
         $filename = $folder->Name . DIRECTORY_SEPARATOR . $name;
 
-        Injector::inst()->get(LoggerInterface::class)
-            ->debug('EnrolPageController - doEnroll()  path = ' . $filename);
+        Injector::inst()->get(LoggerInterface::class) ->debug('EnrolPageController - doEnroll()  path = ' . $filename);
 
         // Add path to object
         $clubMemberPending->SerializedFileName = $filename;
@@ -274,7 +261,7 @@ class EnrollPageController extends PageController
                 // Nothing
             } else {
                 // there may have been 1 or more failures
-                $session->set('Error', 'Fehler');
+                //$session->set('Error', 'Fehler');
             }
         }
         //return $this->redirectBack();
