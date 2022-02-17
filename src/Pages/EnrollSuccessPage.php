@@ -62,7 +62,7 @@ class EnrollSuccessPage extends Page
             //@todo: Add i18n
             TextAreaField::create(
                 'Content',
-                _t('SYBEHA\Clubmaster\Pages\EnrollSuccessPage.MESSAGE_LABEL', 'Thank you messag'),
+                _t('SYBEHA\Clubmaster\Pages\EnrollSuccessPage.MESSAGE_LABEL', 'Thank you message'),
                 $this->Content
             ),
             'Metadata'
@@ -85,11 +85,9 @@ class EnrollSuccessPage extends Page
             $serialized = $session->get('ClubMemberPending');
             $pendingMember = unserialize(base64_decode($serialized));
             $list = $pendingMember->data();
-            //  @todo: Initially there are no ClubMemberType's
             // We need to replace the String TypeID from the form with a database entry for the appropriate TypeID
             $typeName = ClubMemberType::get()->byID($pendingMember->TypeID)->TypeName;
-            //Injector::inst()->get(LoggerInterface::class)
-            //    ->debug('EnrolSuccessPage - FormData()  type = ' . $typeName);
+            // Add to list for template
             $list->setField('TypeName', $typeName);
         }
 

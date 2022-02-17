@@ -243,7 +243,7 @@ class ClubAdmin extends ModelAdmin
             $gridFieldConfig->removeComponentsByType(GridFieldImportButton::class);
             $gridFieldConfig->removeComponentsByType(GridFieldFilterHeader::class);
             $gridFieldConfig->removeComponentsByType(GridFieldAddNewButton::class);
-            $gridFieldConfig->removeComponentsByType(GridFieldDeleteAction::class);
+            //$gridFieldConfig->removeComponentsByType(GridFieldDeleteAction::class);
 
             // Add ApproveClubMember action
             $gridFieldConfig->addComponent(new \SYBEHA\Clubmaster\Forms\Gridfields\Actions\ApproveClubMember());
@@ -259,8 +259,8 @@ class ClubAdmin extends ModelAdmin
                 ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\UnlinkHandler');
             $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
                 ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\EditHandler');
-            $gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
-                ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
+            //$gridFieldConfig->getComponentByType('Colymba\\BulkManager\\BulkManager')
+            //    ->removeBulkAction('Colymba\\BulkManager\\BulkAction\\DeleteHandler');
         }
         return $form;
     }
@@ -314,7 +314,7 @@ class ClubAdmin extends ModelAdmin
     }
 
     /**
-     * Initialize ClubAdmin ini()
+     * Initialize ClubAdmin init()
      * Fired on every managed model class (by clicking on model tab)
      */
     public function init()
@@ -330,8 +330,6 @@ class ClubAdmin extends ModelAdmin
             $siteConfig = SiteConfig::current_site_config();
             $folder = $siteConfig->PendingFolder();
 
-            //Injector::inst()->get(LoggerInterface::class)
-            //->debug('ClubAdmin - Init() pending folder = ' . $folder->Title . '(ID=' . $folder->ID . ')');
             // Check if not configured (FolderID=0)
             if ($folder->ID == '0') {
                 // Create a default within assets/antraege
@@ -341,17 +339,19 @@ class ClubAdmin extends ModelAdmin
             }
             // Check for serialized request forms
             $files = File::get()->filter("ParentID", $folder->ID);
+                //Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - get files from folder ' . $folder->Title . ' ID=' . $folder->ID);
+
             if (!$files->exists()) {
-                Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() no files found');
+                //Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() no files found');
             } else {
-                Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
+                //Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() found ' . $files->count() . ' files within ' . $folder->Title);
             }
 
             // Iterate the files found
             foreach ($files as $file) {
                 // In order to ensure that assets are made public you should check the following:
                 // $file->isPublished(); $file->exists();canView(); CanViewType; */
-                // Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' . $file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' . $file->canView() . ' and can view type ? ' . $file->CanViewType);
+                //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file ' . $file->Name . ', is published ? ' . $file->isPublished() . ' , exists ? ' . $file->exists() . ', can view ? ' . $file->canView() . ' and can view type ? ' . $file->CanViewType);
                 $extension = $file->getExtension();
                 //Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init() found file title = ' . $file->Title . '(' . $file->Filename . ') extension = ' . $extension);
                 if(!$file->isPublished() && $extension === 'antrag')
@@ -372,83 +372,47 @@ class ClubAdmin extends ModelAdmin
                     // Find an existing member created with current file
                     $existingClubMember = ClubMember::get()->find('SerializedFileName', $file->Name);
                     if ($existingClubMember) {
-                        // Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title . ' (' . $existingClubMember->ID .') for file = ' . $file->Name);
+                        Injector::inst()->get(LoggerInterface::class)->debug('ClubAdmin - Init()  found member ' . $existingClubMember->Title . ' (' . $existingClubMember->ID .') for file = ' . $file->Name);
                     }
                 }
-                // No member found
+                // No existing member found for the given file
                 if (!$existingClubMember) {
                     Injector::inst()->get(LoggerInterface::class)
-                        ->debug(
-                            'ClubAdmin - Init()  - No matching member found for file title = ' . $file->Title
-                            . ' ,name = ' . $file->Name . ' (' . $file->Filename . ') extension = ' . $extension
-                        );
-
-                    // Create an alias for "old" non-namespaced serialized objects
-                    if (!class_exists('ClubMemberPending')) {
-                        class_alias('SYBEHA\Clubmaster\Models\ClubMemberPending', 'ClubMemberPending');
-                    }
-
-                    // Get the serialized object content
-                    $serialized = $file->getString();
-
-                    // Create a new pending member
-                    $pendingMember = unserialize(base64_decode($serialized));
-
-                    /*
-                     *  Attention: Problem with serialzied dataObject
-                     *  Changed since 4.2 - Extension for versioning added:
-                     *  'SilverStripe\Versioned\VersionedStateExtension' => object(SilverStripe\Versioned\VersionedStateExtension)
-                     *  Older object result in "__PHP_Incomplete_Class" on write() :-(
-                     */
-
-                    if(!$pendingMember->getExtensionInstance('SilverStripe\Versioned\VersionedStateExtension')) {
-
-                        Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() - incomplete object found');
-                        $incompleteMember = $pendingMember;
-
-                        // Create a new ClubMemberPending
-                        $pendingMember = ClubMemberPending::create();
-                        Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() - New ' . get_class($pendingMember) . ' created ');
-
-                        $pendingMember->Since = $incompleteMember->Since;
-                        $pendingMember->EqualAddress = $incompleteMember->EqualAddress;
-                        $pendingMember->Salutation = $incompleteMember->Salutation;
-                        $pendingMember->FirstName = $incompleteMember->FirstName;
-                        $pendingMember->LastName = $incompleteMember->LastName;
-                        $pendingMember->Birthday = $incompleteMember->Birthday;
-                        $pendingMember->Nationality = $incompleteMember->Nationality;
-                        $pendingMember->Street = $incompleteMember->Street;
-                        $pendingMember->StreetNumber = $incompleteMember->StreetNumber;
-                        $pendingMember->Zip = $incompleteMember->Zip;
-                        $pendingMember->City = $incompleteMember->City;
-                        $pendingMember->Email = $incompleteMember->Email;
-                        $pendingMember->Mobil = $incompleteMember->Mobil;
-                        $pendingMember->Phone = $incompleteMember->Phone;
-                        $pendingMember->TypeID = $incompleteMember->TypeID;
-                        $pendingMember->AccountHolderFirstName = $incompleteMember->AccountHolderFirstName;
-                        $pendingMember->AccountHolderLastName = $incompleteMember->AccountHolderLastName;
-                        $pendingMember->AccountHolderStreet = $incompleteMember->AccountHolderStreet;
-                        $pendingMember->AccountHolderStreetNumber = $incompleteMember->AccountHolderStreetNumber;
-                        $pendingMember->AccountHolderZip = $incompleteMember->AccountHolderZip;
-                        $pendingMember->AccountHolderCity = $incompleteMember->AccountHolderCity;
-                        $pendingMember->Iban = $incompleteMember->Iban;
-                        $pendingMember->Bic = $incompleteMember->Bic;
-
-                    } else {
-                        Injector::inst()->get(LoggerInterface::class)->info('ClubAdmin - Init() - Serialized ' . get_class($pendingMember) . ' created ');
-                    }
-
-
+                        ->debug('ClubAdmin - Init()  - No matching member found for file title = ' . $file->Title . ' ,name = ' . $file->Name . ' (' . $file->Filename . ') extension = ' . $extension);
+                    // Create one
+                    $pendingMember = new ClubMemberPending();
                     // Created by webform
                     $pendingMember->CreationType = 'Formular';
                     // Required to be displayed
                     $pendingMember->Pending = 1;
-
                     $pendingMember->SerializedFileName = $file->Name;
                     // Attention php DateTime needs to be ISO 8601 formatted date and time (Y-m-d H:i:s)
-                    $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Name)
-                        ->format('Y-m-d H:i:s');
-
+                    $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Name) ->format('Y-m-d H:i:s');
+                    $serializedData = unserialize(base64_decode($file->getString()));
+                    // Add data
+                    $pendingMember->Since = $serializedData->Since;
+                    $pendingMember->EqualAddress = $serializedData->EqualAddress;
+                    $pendingMember->Salutation = $serializedData->Salutation;
+                    $pendingMember->FirstName = $serializedData->FirstName;
+                    $pendingMember->LastName = $serializedData->LastName;
+                    $pendingMember->Birthday = $serializedData->Birthday;
+                    $pendingMember->Nationality = $serializedData->Nationality;
+                    $pendingMember->Street = $serializedData->Street;
+                    $pendingMember->StreetNumber = $serializedData->StreetNumber;
+                    $pendingMember->Zip = $serializedData->Zip;
+                    $pendingMember->City = $serializedData->City;
+                    $pendingMember->Email = $serializedData->Email;
+                    $pendingMember->Mobil = $serializedData->Mobil;
+                    $pendingMember->Phone = $serializedData->Phone;
+                    $pendingMember->TypeID = $serializedData->TypeID;
+                    $pendingMember->AccountHolderFirstName = $serializedData->AccountHolderFirstName;
+                    $pendingMember->AccountHolderLastName = $serializedData->AccountHolderLastName;
+                    $pendingMember->AccountHolderStreet = $serializedData->AccountHolderStreet;
+                    $pendingMember->AccountHolderStreetNumber = $serializedData->AccountHolderStreetNumber;
+                    $pendingMember->AccountHolderZip = $serializedData->AccountHolderZip;
+                    $pendingMember->AccountHolderCity = $serializedData->AccountHolderCity;
+                    $pendingMember->Iban = $serializedData->Iban;
+                    $pendingMember->Bic = $serializedData->Bic;
                     // Store ClubMemberPending
                     $pendingMember->write();
                 }

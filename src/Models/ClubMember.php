@@ -4,6 +4,7 @@ namespace SYBEHA\Clubmaster\Models;
 
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Assets\File;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
@@ -54,15 +55,17 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
  */
 class ClubMember extends DataObject
 {
-    /*
-     * Important: Please note: It is strongly recommended to define a table_name for all namespaced models.
-     * Not defining a table_name may cause generated table names to be too long
-     * and may not be supported by your current database engine.
-     * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
-     */
+    /**
+      * Important: Please note: It is strongly recommended to define a table_name for all namespaced models.
+      * Not defining a table_name may cause generated table names to be too long
+      * and may not be supported by your current database engine.
+      * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
+      */
     private static $table_name = 'ClubMember';
 
-    // Form-Fields
+    /**
+     * Form-Fields @var string[]
+     */
     private static $db = [
         'Salutation' => 'Enum(array("Divers","Frau","Herr","Schülerin","Schüler"), "Frau")',
         'NameTitle' => 'Varchar(255)',
@@ -101,10 +104,19 @@ class ClubMember extends DataObject
 		'Comment' => 'Text'
     ];
 
-    /* Relation to ClubMemberType */
+    /**
+     * Relation to ClubMemberType
+     */
     private static $has_one = [
-        'Type' => ClubMemberType::class
+        'Type' => ClubMemberType::class,
+        'ApplicationFormFile' => File::class
     ];
+
+    /** Add ownership for publishing */
+    private static $owns = ['ApplicationFormFile'];
+
+    /** Enable cascade delete for file */
+    private static $cascade_deletes = ['ApplicationFormFile'];
 
     /**
      * Set defaults
@@ -117,7 +129,8 @@ class ClubMember extends DataObject
         'EqualAddress' => '1'
     ];
 
-    /* Dynamic defaults for object instance
+    /**
+     * Dynamic defaults for object instance
      * @todo: Check Dates should be stored using ISO 8601 formatted date (y-MM-dd)
      */
     public function populateDefaults()
@@ -132,6 +145,7 @@ class ClubMember extends DataObject
      * @var array
      */
     private static $summary_fields = [
+        //'ID'=> 'ID',
         'LastName' => 'LastName',
         'FirstName' => 'FirstName',
         'Zip' => 'Zip',
@@ -239,7 +253,7 @@ class ClubMember extends DataObject
     }
 
     /**
-     *
+     * Add i18n feature to labels
      * @return array labels
      */
     public function fieldLabels($includerelations = true)
@@ -250,86 +264,53 @@ class ClubMember extends DataObject
         */
         $labels = parent::fieldLabels($includerelations);
         // Relation has_one
-        $labels['Type.ID'] = _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type');
-        $labels['Type.TypeName'] = _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type');
+        $labels['Type.ID'] = _t(__CLASS__ . '.TYPE', 'Type');
+        $labels['Type.TypeName'] = _t(__CLASS__ . '.TYPE', 'Type');
+        $labels['ApplicationFormFile.Title'] = _t(__CLASS__ . '.SERIALIZEDFILENAME', 'SerializedFileName');
         // Properties
-        $labels['Salutation'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.SALUTATION', 'Salutation');
-        $labels['NameTitle'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.NAMETITLE', 'Title');
-        $labels['FirstName'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.FIRSTNAME', 'FirstName');
-        $labels['LastName'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName');
-        $labels['CareOf'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.CAREOF', 'c/o');
-        $labels['Birthday'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday');
-        $labels['Nationality'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.NATIONALITY', 'Nationality');
-        $labels['Street'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.STREET', 'Street');
-        $labels['StreetNumber'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber');
-        $labels['Zip'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.ZIP', 'Zip');
-        $labels['City'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.CITY', 'City');
-        $labels['Email'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.EMAIL', 'Email');
-        $labels['Mobil'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.MOBIL', 'Mobil');
-        $labels['Phone'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone');
-        $labels['Type'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type');
-        $labels['Since'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.SINCE', 'Since');
-        $labels['Comment'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.COMMENT', 'Comment');
-        $labels['EqualAddress'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress');
-        $labels['AccountHolderTitle'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.NAMETITLE', 'Title');
-        $labels['AccountHolderFirstName'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName');
-        $labels['AccountHolderLastName'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName');
-        $labels['AccountHolderStreet'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet');
-        $labels['AccountHolderStreetNumber'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber');
-        $labels['AccountHolderZip'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip');
-        $labels['AccountHolderCity'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity');
-        $labels['Iban'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.IBAN', 'Iban');
-        $labels['Bic'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.BIC', 'Bic');
+        $labels['Salutation'] = _t(__CLASS__ . '.SALUTATION', 'Salutation');
+        $labels['NameTitle'] = _t(__CLASS__ . '.NAMETITLE', 'Title');
+        $labels['FirstName'] = _t(__CLASS__ . '.FIRSTNAME', 'FirstName');
+        $labels['LastName'] = _t(__CLASS__ . '.LASTNAME', 'LastName');
+        $labels['CareOf'] = _t(__CLASS__ . '.CAREOF', 'c/o');
+        $labels['Birthday'] = _t(__CLASS__ . '.BIRTHDAY', 'Birthday');
+        $labels['Nationality'] = _t(__CLASS__ . '.NATIONALITY', 'Nationality');
+        $labels['Street'] = _t(__CLASS__ . '.STREET', 'Street');
+        $labels['StreetNumber'] = _t(__CLASS__ . '.STREETNUMBER', 'StreetNumber');
+        $labels['Zip'] = _t(__CLASS__ . '.ZIP', 'Zip');
+        $labels['City'] = _t(__CLASS__ . '.CITY', 'City');
+        $labels['Email'] = _t(__CLASS__ . '.EMAIL', 'Email');
+        $labels['Mobil'] = _t(__CLASS__ . '.MOBIL', 'Mobil');
+        $labels['Phone'] = _t(__CLASS__ . '.PHONE', 'Phone');
+        $labels['Type'] = _t(__CLASS__ . '.TYPE', 'Type');
+        $labels['Since'] = _t(__CLASS__ . '.SINCE', 'Since');
+        $labels['Comment'] = _t(__CLASS__ . '.COMMENT', 'Comment');
+        $labels['EqualAddress'] = _t(__CLASS__ . '.EQUALADDRESS', 'EqualAddress');
+        $labels['AccountHolderTitle'] = _t(__CLASS__ . '.NAMETITLE', 'Title');
+        $labels['AccountHolderFirstName'] = _t(__CLASS__ . '.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName');
+        $labels['AccountHolderLastName'] = _t(__CLASS__ . '.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName');
+        $labels['AccountHolderStreet'] = _t(__CLASS__ . '.ACCOUNTHOLDERSTREET', 'AccountHolderStreet');
+        $labels['AccountHolderStreetNumber'] = _t(__CLASS__ . '.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber');
+        $labels['AccountHolderZip'] = _t(__CLASS__ . '.ACCOUNTHOLDERZIP', 'AccountHolderZip');
+        $labels['AccountHolderCity'] = _t(__CLASS__ . '.ACCOUNTHOLDERCITY', 'AccountHolderCity');
+        $labels['Iban'] = _t(__CLASS__ . '.IBAN', 'Iban');
+        $labels['Bic'] = _t(__CLASS__ . '.BIC', 'Bic');
         //Special
-        $labels['Active'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.ACTIVE', 'Active');
-        $labels['Insurance'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.INSURANCE', 'Insurance');
-        $labels['Age'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.AGE', 'Age');
-        $labels['Sex'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.SEX', 'Sex');
-        $labels['SerializedFileName'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.SERIALIZEDFILENAME', 'SerializedFileName');
-        $labels['FormClaimDate'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.FORMCLAIMDATE', 'FormClaimDate');
-        $labels['CreationType'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.CREATIONTYPE', 'CreationType');
-        $labels['Pending'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.PENDING', 'Pending');
-        $labels['MandateReference'] =
-            _t('SYBEHA\Clubmaster\Models\ClubMember.MANDATEREFERENCE', 'MandateReference');
+        $labels['Active'] = _t(__CLASS__ . '.ACTIVE', 'Active');
+        $labels['Insurance'] = _t(__CLASS__ . '.INSURANCE', 'Insurance');
+        $labels['Age'] = _t(__CLASS__ . '.AGE', 'Age');
+        $labels['Sex'] = _t(__CLASS__ . '.SEX', 'Sex');
+        $labels['SerializedFileName'] = _t(__CLASS__ . '.SERIALIZEDFILENAME', 'SerializedFileName');
+        $labels['FormClaimDate'] = _t(__CLASS__ . '.FORMCLAIMDATE', 'FormClaimDate');
+        $labels['CreationType'] = _t(__CLASS__ . '.CREATIONTYPE', 'CreationType');
+        $labels['Pending'] = _t(__CLASS__ . '.PENDING', 'Pending');
+        $labels['MandateReference'] = _t(__CLASS__ . '.MANDATEREFERENCE', 'MandateReference');
         return $labels;
     }
 
-    /* List all required fields */
+    /**
+     * List all required fields
+     */
     public function getCMSValidator()
     {
         return new RequiredFields(
@@ -370,24 +351,24 @@ class ClubMember extends DataObject
         $fields = parent::getCMSFields();
         // The Main tab
         $main = $fields->findOrMakeTab('Root.Main')
-            ->setTitle(_t('SYBEHA\Clubmaster\Models\ClubMember.MAINTITLE', 'Main'));
+            ->setTitle(_t(__CLASS__ . '.MAINTITLE', 'Main'));
         // Account tab
         $fields->addFieldToTab(
             'Root',
             new Tab(
                 'Account',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.BANKINGACCOUNT', 'Account data')
+                _t(__CLASS__ . '.BANKINGACCOUNT', 'Account data')
             )
         );
         // The Meta tab
-        $fields->addFieldToTab('Root', new Tab('Meta', _t('SYBEHA\Clubmaster\Models\ClubMember.META', 'Meta')));
+        $fields->addFieldToTab('Root', new Tab('Meta', _t(__CLASS__ . '.META', 'Meta')));
 
         // Main tab
         $fields->addFieldToTab(
             'Root.Main',
             DropdownField::create(
                 'Salutation',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.SALUTATION', 'Salutation'),
+                _t(__CLASS__ . '.SALUTATION', 'Salutation'),
                 singleton(ClubMember::class)->dbObject('Salutation')->enumValues()
             )->setEmptyString('(Select one)')
         );
@@ -395,34 +376,34 @@ class ClubMember extends DataObject
             'Root.Main',
             EUNameTextField::create(
                 'NameTitle',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.NAMETITLE', 'Title')
+                _t(__CLASS__ . '.NAMETITLE', 'Title')
             )->addExtraClass('text')
-                ->setDescription(_t('SYBEHA\Clubmaster\Models\ClubMember.NAMETITLEHINT', 'e.g. Ph.D'))
+                ->setDescription(_t(__CLASS__ . '.NAMETITLEHINT', 'e.g. Ph.D'))
         );
         $fields->addFieldToTab(
             'Root.Main',
             EUNameTextField::create(
                 'FirstName',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.FIRSTNAME', 'FirstName')
+                _t(__CLASS__ . '.FIRSTNAME', 'FirstName')
             )->setAttribute('autofocus', 'autofocus')->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
             EUNameTextField::create(
                 'LastName',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.LASTNAME', 'LastName')
+                _t(__CLASS__ . '.LASTNAME', 'LastName')
             )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
             EUNameTextField::create(
                 'CareOf',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.CAREOF', 'c/o')
+                _t(__CLASS__ . '.CAREOF', 'c/o')
             )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
-            DateField::create('Birthday', _t('SYBEHA\Clubmaster\Models\ClubMember.BIRTHDAY', 'Birthday'))
+            DateField::create('Birthday', _t(__CLASS__ . '.BIRTHDAY', 'Birthday'))
             //->setMinDate('-100 years')
             //->setMaxDate('+0 days')
         );
@@ -430,71 +411,71 @@ class ClubMember extends DataObject
             'Root.Main',
             CountryDropdownField::create(
                 'Nationality',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.NATIONALITY', 'Nationality')
+                _t(__CLASS__ . '.NATIONALITY', 'Nationality')
             )
         );
         $fields->addFieldToTab(
             'Root.Main',
-            EUNameTextField::create('Street', _t('SYBEHA\Clubmaster\Models\ClubMember.STREET', 'Street'))
+            EUNameTextField::create('Street', _t(__CLASS__ . '.STREET', 'Street'))
                 ->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
             EUNameTextField::create(
                 'StreetNumber',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.STREETNUMBER', 'StreetNumber')
+                _t(__CLASS__ . '.STREETNUMBER', 'StreetNumber')
             )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
-            ZipField::create('Zip', _t('SYBEHA\Clubmaster\Models\ClubMember.ZIP', 'Zip'))
+            ZipField::create('Zip', _t(__CLASS__ . '.ZIP', 'Zip'))
         );
         $fields->addFieldToTab(
             'Root.Main',
-            EUNameTextField::create('City', _t('SYBEHA\Clubmaster\Models\ClubMember.CITY', 'City'))
+            EUNameTextField::create('City', _t(__CLASS__ . '.CITY', 'City'))
                 ->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Main',
             CheckboxField::create(
                 'EqualAddress',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress')
+                _t(__CLASS__ . '.EQUALADDRESS', 'EqualAddress')
             )//->performReadonlyTransformation()
         );
 
         $fields->addFieldToTab(
             'Root.Main',
-            EmailField::create('Email', _t('SYBEHA\Clubmaster\Models\ClubMember.EMAIL', 'Email'))
+            EmailField::create('Email', _t(__CLASS__ . '.EMAIL', 'Email'))
         );
         $fields->addFieldToTab(
             'Root.Main',
             TelephoneNumberField::create(
                 'Mobil',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.MOBIL', 'Mobil')
-            )->addExtraClass('text')->setDescription(_t('SYBEHA\Clubmaster\Models\ClubMember.PHONEHINT', '0-9+-'))
+                _t(__CLASS__ . '.MOBIL', 'Mobil')
+            )->addExtraClass('text')->setDescription(_t(__CLASS__ . '.PHONEHINT', '0-9+-'))
         );
         $fields->addFieldToTab(
             'Root.Main',
             TelephoneNumberField::create(
                 'Phone',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone')
-            )->addExtraClass('text')->setDescription(_t('SYBEHA\Clubmaster\Models\ClubMember.PHONEHINT', '0-9+-'))
+                _t(__CLASS__ . '.PHONE', 'Phone')
+            )->addExtraClass('text')->setDescription(_t(__CLASS__ . '.PHONEHINT', '0-9+-'))
         );
         $fields->addFieldToTab(
             'Root.Main',
             DropdownField::create(
                 'TypeID',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type')
+                _t(__CLASS__ . '.TYPE', 'Type')
             )->setSource(ClubMemberType::get()->map('ID', 'TypeName'))
         );
         $fields->addFieldToTab(
             'Root.Main',
-            DateField::create('Since', _t('SYBEHA\Clubmaster\Models\ClubMember.SINCE', 'Since'))
+            DateField::create('Since', _t(__CLASS__ . '.SINCE', 'Since'))
         );
         //EN:Comment - DE:Kommentar
         $fields->addFieldToTab(
             'Root.Main',
-            TextField::create('Comment', _t('SYBEHA\Clubmaster\Models\ClubMember.COMMENT', 'Comment'))
+            TextField::create('Comment', _t(__CLASS__ . '.COMMENT', 'Comment'))
         );
 
         // Account tab
@@ -502,70 +483,70 @@ class ClubMember extends DataObject
             'Root.Account',
             EUNameTextField::create(
                 'AccountHolderTitle',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERTITLE', 'AccountHolderTitle')
+                _t(__CLASS__ . '.ACCOUNTHOLDERTITLE', 'AccountHolderTitle')
             )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
             EUNameTextField::create(
                 'AccountHolderFirstName',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')
+                _t(__CLASS__ . '.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')
             )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
             EUNameTextField::create(
                 'AccountHolderLastName',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')
+                _t(__CLASS__ . '.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')
             )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
             EUNameTextField::create(
                 'AccountHolderStreet',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')
+                _t(__CLASS__ . '.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')
             )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
             EUNameTextField::create(
                 'AccountHolderStreetNumber',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')
+                _t(__CLASS__ . '.ACCOUNTHOLDERSTREETNUMBER', 'AccountHolderStreetNumber')
             )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
             ZipField::create(
                 'AccountHolderZip',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERZIP', 'AccountHolderZip')
+                _t(__CLASS__ . '.ACCOUNTHOLDERZIP', 'AccountHolderZip')
             )
         );
         $fields->addFieldToTab(
             'Root.Account',
             EUNameTextField::create(
                 'AccountHolderCity',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERCITY', 'AccountHolderCity')
+                _t(__CLASS__ . '.ACCOUNTHOLDERCITY', 'AccountHolderCity')
             )->addExtraClass('text')
         );
         $fields->addFieldToTab(
             'Root.Account',
             IbanField::create(
                 'Iban',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.IBAN', 'Iban')
-            )->addExtraClass('text')->setDescription(_t('SYBEHA\Clubmaster\Models\ClubMember.IBANHINT', 'IBAN hint'))
+                _t(__CLASS__ . '.IBAN', 'Iban')
+            )->addExtraClass('text')->setDescription(_t(__CLASS__ . '.IBANHINT', 'IBAN hint'))
         );
         $fields->addFieldToTab(
             'Root.Account',
             BicField::create(
                 'Bic',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.BIC', 'Bic')
-            )->addExtraClass('text')->setDescription(_t('SYBEHA\Clubmaster\Models\ClubMember.BICHINT', 'BIC hint'))
+                _t(__CLASS__ . '.BIC', 'Bic')
+            )->addExtraClass('text')->setDescription(_t(__CLASS__ . '.BICHINT', 'BIC hint'))
         );
         $fields->addFieldToTab(
             'Root.Account',
             TextField::create(
                 'MandateReference',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.MANDATEREFERENCE', 'Mandate')
+                _t(__CLASS__ . '.MANDATEREFERENCE', 'Mandate')
             )->performReadonlyTransformation()
         );
 
@@ -574,7 +555,7 @@ class ClubMember extends DataObject
             'Root.Meta',
             CheckboxSetField::create(
                 'Active',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.ACTIVE', 'Active'),
+                _t(__CLASS__ . '.ACTIVE', 'Active'),
                 ['1' => 'Mitglied ist aktiv?']
             )
         );
@@ -582,13 +563,13 @@ class ClubMember extends DataObject
             'Root.Meta',
             CheckboxSetField::create(
                 'Insurance',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.INSURANCE', 'Insurance'),
+                _t(__CLASS__ . '.INSURANCE', 'Insurance'),
                 ['1' => 'BLSV gemeldet?']
             )
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            NumericField::create('Age', _t('SYBEHA\Clubmaster\Models\ClubMember.AGE', 'Age'))
+            NumericField::create('Age', _t(__CLASS__ . '.AGE', 'Age'))
                 ->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
@@ -606,19 +587,19 @@ class ClubMember extends DataObject
             'Root.Meta',
             TextField::create(
                 'SerializedFileName',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.SERIALIZEDFILENAME', 'SerializedFileName')
+                _t(__CLASS__ . '.SERIALIZEDFILENAME', 'SerializedFileName')
             )->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
-            DateField::create('FormClaimDate', _t('SYBEHA\Clubmaster\Models\ClubMember.FORMCLAIMDATE', 'FormClaimDate'))
+            DateField::create('FormClaimDate', _t(__CLASS__ . '.FORMCLAIMDATE', 'FormClaimDate'))
             ->performReadonlyTransformation()
         );
         $fields->addFieldToTab(
             'Root.Meta',
             TextField::create(
                 'CreationType',
-                _t('SYBEHA\Clubmaster\Models\ClubMember.CREATIONTYPE', 'CreationType')
+                _t(__CLASS__ . '.CREATIONTYPE', 'CreationType')
             )->performReadonlyTransformation()
         );
 
@@ -631,12 +612,12 @@ class ClubMember extends DataObject
         return $fields;
     }
 
-    /*
-    * The field DBDatetime currently supports New Zealand date format (DD/MM/YYYY),
-    * or an ISO 8601 formatted date and time (Y-m-d H:i:s).
-    * Alternatively you can set a timestamp that is evaluated through PHP's built-in date()
-    *  and strtotime() function according to your system locale.
-    */
+    /**
+     * The field DBDatetime currently supports New Zealand date format (DD/MM/YYYY),
+     * or an ISO 8601 formatted date and time (Y-m-d H:i:s).
+     * Alternatively you can set a timestamp that is evaluated through PHP's built-in date()
+     *  and strtotime() function according to your system locale.
+     */
     private static $casting = [
         'FormClaimDate' => 'Datetime'
     ];
@@ -699,7 +680,7 @@ class ClubMember extends DataObject
     }
 
     /**
-     *
+     * Calculate the current age
      * @return int
      */
     public function getCalculatedAge()
@@ -722,16 +703,21 @@ class ClubMember extends DataObject
     }
 
     /**
-     *
+     * Calculate gender
      * @return string
      */
     public function getSex()
     {
-        return ($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin') ? 'w' : 'm';
+        if ($this->Salutation == 'Frau' || $this->Salutation == 'Schülerin') {
+            return 'w';
+        }
+        else if ($this->Salutation == 'Herr' || $this->Salutation == 'Schüler') {
+            return 'm';
+        } else return '';
     }
 
     /**
-     *
+     * Check if member is active
      * @return bool
      */
     public function isActive()
@@ -787,7 +773,7 @@ class ClubMember extends DataObject
     }
 
     /**
-     *
+     * Event handler called before writing to database
      */
     public function onBeforeWrite()
     {
@@ -853,7 +839,7 @@ class ClubMember extends DataObject
      */
     public function canDelete($member = null)
     {
-        return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
+        return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 
     /**

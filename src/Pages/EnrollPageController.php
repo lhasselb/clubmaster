@@ -81,16 +81,8 @@ class EnrollPageController extends PageController
      */
     public function EnrollForm()
     {
-        //Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale() . ' today = ' . DBDatetime::now());
-        // Check for types before using
-        if (ClubMemberType::get()->exists()) {
-            $clubMemberTypesMap = ClubMemberType::get()->exclude('ShowInFrontEnd', '0')->map('ID', 'Title');
-        } else {
-            $clubMemberTypesMap = [
-                'Vollzahlend' => 'Vollzahlend',
-                'Ermäßigt' => 'Ermäßigt'
-            ];
-        }
+        //Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - EnrollForm() locale = ' . i18n::get_locale() . ' today = ' . DBDatetime::now());
+        $clubMemberTypeList = ClubMemberType::get()->exclude('ShowInFrontEnd', '0')->map()->toArray();
 
         // List of form fields
         $today = DBDatetime::now()->Date();
@@ -122,11 +114,12 @@ class EnrollPageController extends PageController
             TelephoneNumberField::create('Phone', _t('SYBEHA\Clubmaster\Models\ClubMember.OR', 'or') . ' ' . _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
                 ->setAttribute('placeholder', _t('SYBEHA\Clubmaster\Models\ClubMember.PHONE', 'Phone'))
                 ->setAttribute('required',"required"),
-            DropdownField::create('TypeID', _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type'), $clubMemberTypesMap)
+            DropdownField::create('TypeID', _t('SYBEHA\Clubmaster\Models\ClubMember.TYPE', 'Type'))
+                ->setSource($clubMemberTypeList)
                 ->setEmptyString(_t('SYBEHA\Clubmaster\Models\ClubMember.SELECTONE', '(Select one)')),
-            DateField::create('Since', _t('SYBEHA\Clubmaster\Models\ClubMember.FROM', 'Member since'))
+            DateField::create('From', _t('SYBEHA\Clubmaster\Models\ClubMember.FROM', 'Member from'))
                 ->addExtraClass('width_100')->setValue($today)->setMinDate('-2 years')->setMaxDate('+0 days'),
-            CheckboxField::create('EqualAddress', _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress'))->setValue(true),
+            CheckboxField::create('EqualAddress', _t('SYBEHA\Clubmaster\Models\ClubMember.EQUALADDRESS', 'EqualAddress'))->setValue(false), //Careful user needs to click to copy values
             EUNameTextField::create('AccountHolderFirstName', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERFIRSTNAME', 'AccountHolderFirstName')),
             EUNameTextField::create('AccountHolderLastName', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERLASTNAME', 'AccountHolderLastName')),
             EUNameTextField::create('AccountHolderStreet', _t('SYBEHA\Clubmaster\Models\ClubMember.ACCOUNTHOLDERSTREET', 'AccountHolderStreet')),
@@ -162,10 +155,10 @@ class EnrollPageController extends PageController
             'Zip',
             'City',
             'Email',
-            //'Mobil',
+            'Mobil',
             //'Phone',
             'TypeID',
-            'Since',
+            'From',
             'AccountHolderFirstName',
             'AccountHolderLastName',
             'AccountHolderStreet',
@@ -175,8 +168,10 @@ class EnrollPageController extends PageController
             'Iban',
             'Bic'
         );
+
         // controller, functionname(__FUNCTION__ = 'EnrollForm'), formfields, actionfields, requirdfields
-        $form = new Form($this, __FUNCTION__, $fields, $actions, $required);
+        $form = new Form($this, __FUNCTION__, $fields, $actions);
+
         $form->setTemplate('EnrollForm');
         $form->setFormMethod('POST', true);
 
@@ -192,9 +187,13 @@ class EnrollPageController extends PageController
      */
     public function doEnroll($data, Form $form)
     {
+        /*
         Injector::inst()->get(LoggerInterface::class) ->info('EnrollPageController - doEnroll() locale = ' . i18n::get_locale());
-
         Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - doEnroll() data Birthday = ' . $data['Birthday']);
+        foreach ($form->Fields() as $item => $value ) {
+            Injector::inst()->get(LoggerInterface::class)->info('EnrollPageController - field[ ' . $item .']' . $value . ' = '. $value->Value());
+        }
+        */
 
         // Create a ClubMember object
         $clubMemberPending = new ClubMemberPending();
@@ -211,7 +210,7 @@ class EnrollPageController extends PageController
         setlocale( LC_ALL, "de_DE.utf8");
         $fn = iconv('utf-8', 'ascii//TRANSLIT', $clubMemberPending->FirstName);
         $ln = iconv('utf-8', 'ascii//TRANSLIT', $clubMemberPending->LastName);
-        Injector::inst()->get(LoggerInterface::class)->debug('EnrolPageController - doEnroll()  special characters first name = ' . $fn . ' last name ' . $ln);
+        //Injector::inst()->get(LoggerInterface::class)->debug('EnrolPageController - doEnroll()  special characters first name = ' . $fn . ' last name ' . $ln);
 
         // Get the path for the folder and add a filename like LH_03.01.1970_dd.mm.YYYY_HH_MM_SS.antrag
         // and uppercase name (first 2 characters - it should already be but you never know)
@@ -223,7 +222,7 @@ class EnrollPageController extends PageController
         // Files property Filename contains (optional) preceding folder
         $filename = $folder->Name . DIRECTORY_SEPARATOR . $name;
 
-        Injector::inst()->get(LoggerInterface::class) ->debug('EnrolPageController - doEnroll()  path = ' . $filename);
+        //Injector::inst()->get(LoggerInterface::class) ->debug('EnrolPageController - doEnroll()  path = ' . $filename);
 
         // Add path to object
         $clubMemberPending->SerializedFileName = $filename;
@@ -236,8 +235,7 @@ class EnrollPageController extends PageController
         $file->setFromString($serialized, $filename);
         $id = $file->write();
 
-        Injector::inst()->get(LoggerInterface::class)
-            ->debug('EnrollPageController - doEnroll()  file id = ' . $id . ' filename = ' . $file->Filename);
+        //Injector::inst()->get(LoggerInterface::class)->debug('EnrollPageController - doEnroll()  file id = ' . $id . ' filename = ' . $file->Filename);
 
         if ($id) {
             $typeName = ClubMemberType::get()->byID($clubMemberPending->TypeID)->TypeName;
@@ -261,7 +259,7 @@ class EnrollPageController extends PageController
                 // Nothing
             } else {
                 // there may have been 1 or more failures
-                //$session->set('Error', 'Fehler');
+                $session->set('Error', 'Fehler');
             }
         }
         //return $this->redirectBack();

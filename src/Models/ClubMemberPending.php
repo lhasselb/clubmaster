@@ -43,7 +43,7 @@ use SYBEHA\Clubmaster\Forms\Fields\BicField;
  */
 class ClubMemberPending extends ClubMember
 {
-    /*
+    /**
      * Important: Please note: It is strongly recommended to define a table_name for all namespaced models.
      * Not defining a table_name may cause generated table names to be too long
      * and may not be supported by your current database engine.
@@ -127,7 +127,7 @@ class ClubMemberPending extends ClubMember
     }
 
     /**
-     *
+     * Add i18n feature to labels
      * @return array labels
      */
     public function fieldLabels($includerelations = true)
@@ -390,9 +390,9 @@ class ClubMemberPending extends ClubMember
         return $fields;
     }
 
-    /*
-    * Used to "clean" a new ClubmemberPending
-    */
+    /**
+     * Used to "clean" a new ClubmemberPending
+     */
     private function cleanNewClubMember()
     {
         // @todo: Assure correct dates in frontend form (better validation!),
@@ -467,6 +467,7 @@ class ClubMemberPending extends ClubMember
         return $this->Pending;
     }
 
+    /** Event handler called before writing to database */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -482,18 +483,15 @@ class ClubMemberPending extends ClubMember
      */
     public function onBeforeDelete()
     {
-        /* @todo: Should we delete the file ?
+        // Delete files of unapproved (deleted) pending members
         $siteConfig = SiteConfig::current_site_config();
         $folder = $siteConfig->PendingFolder();
         $fileName = $this->SerializedFileName;
-        $file = File::get()->filter(array(
-            'Name' => $fileName,
-            'ParentID' => $folder->ID
-        ))->first();
+        $file = File::get()->filter(array('Name' => $fileName,'ParentID' => $folder->ID))->first();
         if ($file && $file->exists()) {
             $file->delete();
             $file->destroy();
-        } */
+        }
         return parent::onBeforeDelete();
     }
 
@@ -527,7 +525,7 @@ class ClubMemberPending extends ClubMember
      */
     public function canDelete($member = null)
     {
-        return Permission::check('CMS_ACCESS_LeftAndMain', 'any', $member);
+        return Permission::check('CMS_ACCESS_ClubAdmin', 'any', $member);
     }
 
     /**
