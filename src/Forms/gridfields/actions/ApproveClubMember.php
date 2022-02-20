@@ -9,6 +9,7 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Control\Controller;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Control\Email\Email;
 /* Use Model */
 use SYBEHA\Clubmaster\Models\ClubMemberPending;
 use SYBEHA\Clubmaster\Models\ClubMember;
