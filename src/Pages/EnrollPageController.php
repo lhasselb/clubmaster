@@ -240,7 +240,6 @@ class EnrollPageController extends PageController
         if ($id) {
             $typeName = ClubMemberType::get()->byID($clubMemberPending->TypeID)->TypeName;
             // Send an E-Mail
-            // $email = new Email($from, $to, $subject, $body);
             $email = Email::create()
                 //setFrom('JIM .e.V')
                 ->setTo($data['Email'])

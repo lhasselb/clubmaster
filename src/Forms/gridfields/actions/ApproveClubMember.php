@@ -131,7 +131,7 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
             $sendApprovalMail = $siteConfig->SendApprovalMail; // set in site config
             if ($sendApprovalMail) {
                 //Send an E-Mail
-                $email = new Email();
+                $email = SilverStripe\Control\Email\Email::create();
                 $data = $clubMemberPending->toMap();
                 //foreach ($data as $key => $value) {
                     //Injector::inst()->get(LoggerInterface::class)->debug('ApproveClubMember - handleAction() key = ' . $key . ' value = ' . $value);
