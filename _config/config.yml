@@ -34,3 +34,9 @@ SilverStripe\Admin\LeftAndMain:
     - 'lhasselb/clubmaster: client/dist/styles/main.css'
   extra_requirements_javascript:
     - 'lhasselb/clubmaster: client/dist/js/main.js'
+
+# DO NOT FORGET TO CONFIGURE MAIL
+#Example:
+#SilverStripe\Control\Email\Email:
+#  admin_email:
+#    info@jimev.de: 'JIM e.V.'
