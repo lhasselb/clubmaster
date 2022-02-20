@@ -82,7 +82,7 @@ class ClubMemberType extends DataObject
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
-
+        // Add new default values
         $defaultTypes = ['Vollzahlend','Ermäßigt'];
         foreach ($defaultTypes as $currentType) {
             if (!$type = ClubMemberType::get()->filter('TypeName', $currentType)->first()) {
@@ -106,7 +106,8 @@ class ClubMemberType extends DataObject
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-        if ($this->TypeName == 'Vollverdiener' || $this->TypeName == 'Student / Azubi / Schüler') {
+        //if ($this->TypeName == 'Vollverdiener' || $this->TypeName == 'Student / Azubi / Schüler') {
+        if ($this->TypeName == 'Vollzahlend' || $this->TypeName == 'Ermäßigt') {
             $this->ShowInFrontEnd = 1;
         }
     }

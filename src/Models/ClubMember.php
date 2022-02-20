@@ -21,6 +21,7 @@ use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\HeaderField;
+use SilverStripe\Versioned\Versioned;
 /* NEW Search */
 use SilverStripe\ORM\Search\SearchContext;
 use SilverStripe\ORM\Filters\PartialMatchFilter;
@@ -112,11 +113,9 @@ class ClubMember extends DataObject
         'ApplicationFormFile' => File::class
     ];
 
-    /** Add ownership for publishing */
-    private static $owns = ['ApplicationFormFile'];
+    //private static $owns = ['ApplicationFormFile'];
 
-    /** Enable cascade delete for file */
-    private static $cascade_deletes = ['ApplicationFormFile'];
+    //private static $cascade_deletes = ['ApplicationFormFile'];
 
     /**
      * Set defaults
@@ -651,8 +650,7 @@ class ClubMember extends DataObject
      *
      * @return string
      */
-    public function getSince()
-    {
+    public function getSince(){
         // Create a DBDate object
         $dbDate = $this->dbObject('Since');
         // Use strftime to utilize locale
@@ -664,14 +662,11 @@ class ClubMember extends DataObject
      *
      * @return string
      */
-    public function ExportType()
-    {
-        $id = $this->TypeID;
-        if ($id > 0) {
-            $type = ClubMemberType::get()->byID($id);
+    public function ExportType(){
+        $type = ClubMemberType::get()->byID($this->TypeID);
+        if ($type) {
             $title = $type->Title;
-            //Injector::inst()->get(LoggerInterface::class)
-            //->debug('ClubMember - ExportType()' . ' id='.$id.' type='.$type.' title='.$title);
+            //Injector::inst()->get(LoggerInterface::class)->debug('ClubMember - ExportType()' . ' id='.$id.' type='.$type.' title='.$title);
             return ClubMemberType::get()->byID($this->TypeID)->Title;
         } else {
             //TODO: Translate
@@ -783,7 +778,6 @@ class ClubMember extends DataObject
         $this->Age = $this->getCalculatedAge();
         // Set Sex
         $this->Sex = $this->getSex();
-
         //TODO: Verify/complete address for imported records
         $siteConfig = SiteConfig::current_site_config();
         // Set MandateReference for newly added members
@@ -808,6 +802,18 @@ class ClubMember extends DataObject
             };
         }
     }
+
+    /**
+     * Event handler called before deleting from the database.
+     * You can overload this to clean up or otherwise process data before delete this
+     * record.  Don't forget to call parent::onBeforeDelete(), though!
+     *
+     * @uses DataExtension->onBeforeDelete()
+     */
+    /*public function onBeforeDelete()
+    {
+        return parent::onBeforeDelete();
+    }*/
 
     /**
      * Only clubadmins are allowed

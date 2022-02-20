@@ -377,8 +377,6 @@ class ClubAdmin extends ModelAdmin
                 }
                 // No existing member found for the given file
                 if (!$existingClubMember) {
-                    Injector::inst()->get(LoggerInterface::class)
-                        ->debug('ClubAdmin - Init()  - No matching member found for file title = ' . $file->Title . ' ,name = ' . $file->Name . ' (' . $file->Filename . ') extension = ' . $extension);
                     // Create one
                     $pendingMember = new ClubMemberPending();
                     // Created by webform
@@ -386,6 +384,7 @@ class ClubAdmin extends ModelAdmin
                     // Required to be displayed
                     $pendingMember->Pending = 1;
                     $pendingMember->SerializedFileName = $file->Name;
+                    $pendingMember->ApplicationFormFileID = $file->ID;
                     // Attention php DateTime needs to be ISO 8601 formatted date and time (Y-m-d H:i:s)
                     $pendingMember->FormClaimDate = $pendingMember->dateFromFilename($file->Name) ->format('Y-m-d H:i:s');
                     $serializedData = unserialize(base64_decode($file->getString()));
@@ -415,6 +414,9 @@ class ClubAdmin extends ModelAdmin
                     $pendingMember->Bic = $serializedData->Bic;
                     // Store ClubMemberPending
                     $pendingMember->write();
+                    Injector::inst()->get(LoggerInterface::class)
+                        ->info('ClubAdmin - Init() create pending member '
+                        . $pendingMember->FirstName . ' ' .$pendingMember->LastName . ' for ' . $file->Filename );
                 }
             }
         }

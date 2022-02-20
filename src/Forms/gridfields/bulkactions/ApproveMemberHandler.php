@@ -128,8 +128,7 @@ class ApproveMemberHandler extends Handler
                 }
             }
             $doneCount = count($response->getSuccessRecords());
-            //Injector::inst()->get(LoggerInterface::class)
-                //->debug('ApproveMemberHandler - approveMember() doneCount = ' . $doneCount);
+            //Injector::inst()->get(LoggerInterface::class)->debug('ApproveMemberHandler - approveMember() doneCount = ' . $doneCount);
             $message = sprintf(
                 _t('SYBEHA\Clubmaster\Forms\Gridfields\Bulkactions\ApproveMemberHandler.GRIDFIELD_BULK_DROPDOWN_APPROVED', '%s member requests approved'),
                 $doneCount

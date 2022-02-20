@@ -8,6 +8,7 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Assets\File;
+use SilverStripe\Versioned\Versioned;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\DateField;
 use SilverStripe\Forms\CheckboxField;
@@ -50,6 +51,10 @@ class ClubMemberPending extends ClubMember
      * The generated naming scheme will also change when upgrading to SilverStripe 5.0 and potentially break.
      */
     private static $table_name = 'ClubMemberPending';
+
+    private static $owns = ['ApplicationFormFile'];
+
+    private static $cascade_deletes = ['ApplicationFormFile'];
 
     /**
      * Set defaults
@@ -440,14 +445,7 @@ class ClubMemberPending extends ClubMember
         );
         // Uppercase first
         $this->AccountHolderCity = ucfirst($this->AccountHolderCity);
-
-        // We need to replace the String TypeID from the form with a database entry for the appropriate TypeID
-        $type = ClubMemberType::get()->filter('TypeName', $typeString = $this->TypeID)->first();
-        // Initially there are no ClubMemberType's - TODO : Warning ?
-        if ($type) {
-            $this->TypeID = $type->ID;
-        }
-
+        // Check if address is equal
         if ($this->Zip == $this->AccountHolderZip && $this->City == $this->AccountHolderCity
             && $this->Street == $this->AccountHolderStreet && $this->StreetNumber == $this->AccountHolderStreetNumber
         ) {
@@ -458,7 +456,9 @@ class ClubMemberPending extends ClubMember
     }
 
     /**
-     * getter for Pending
+     * Getter for Pending
+     * used in ApproveClubMember::getColumnContent()
+     * $record->isPending()
      *
      * @return boolean
      */
@@ -470,8 +470,21 @@ class ClubMemberPending extends ClubMember
     /** Event handler called before writing to database */
     public function onBeforeWrite()
     {
-        parent::onBeforeWrite();
         $this->cleanNewClubMember();
+        if ( $this->Pending ) {
+            //Injector::inst()->get(LoggerInterface::class)->info($this->ClassName.' - onBeforeWrite() write pending member '. $this->FirstName . ' ' .$this->LastName);
+        } else {
+            Injector::inst()->get(LoggerInterface::class)
+                ->info($this->ClassName.' - onBeforeWrite() create "real" member '. $this->FirstName . ' ' .$this->LastName);
+            $file = File::get_by_id($this->ApplicationFormFileID);
+            if ($file && $file->exists()) {
+                $file->deleteFromStage(Versioned::LIVE);
+                $file->delete();
+                Injector::inst()->get(LoggerInterface::class)
+                    ->info($this->ClassName.' - onBeforeWrite deleted form file = ' . $file->Name . ' (' . $file->Filename . ')');
+            }
+        }
+        parent::onBeforeWrite();
     }
 
     /**
@@ -483,16 +496,14 @@ class ClubMemberPending extends ClubMember
      */
     public function onBeforeDelete()
     {
-        // Delete files of unapproved (deleted) pending members
-        $siteConfig = SiteConfig::current_site_config();
-        $folder = $siteConfig->PendingFolder();
-        $fileName = $this->SerializedFileName;
-        $file = File::get()->filter(array('Name' => $fileName,'ParentID' => $folder->ID))->first();
-        if ($file && $file->exists()) {
-            $file->delete();
-            $file->destroy();
-        }
         return parent::onBeforeDelete();
+        $file = File::get_by_id($this->ApplicationFormFileID);
+        if ($file && $file->exists()) {
+            $file->deleteFromStage(Versioned::LIVE);
+            Injector::inst()->get(LoggerInterface::class)
+                ->info($this->ClassName.' - onBeforeDelete() deleted form file = ' . $file->Name . ' (' . $file->Filename . ')');
+        }
+
     }
 
     /**

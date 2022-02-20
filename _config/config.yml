@@ -13,6 +13,8 @@ Silverstripe\SiteConfig\SiteConfig:
 
 # Add file extension to allowed extensions
 SilverStripe\Assets\File:
+  file_types:
+    antrag: 'Jimev Antrag'
   allowed_extensions:
     - antrag
 

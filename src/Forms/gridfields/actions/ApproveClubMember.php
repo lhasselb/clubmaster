@@ -121,8 +121,7 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
             $clubMemberPending->ClassName = $clubMember->getClassName();
             // Add date only if missing !
             if (empty($clubMemberPending->Pending)) {
-                Injector::inst()->get(LoggerInterface::class)
-                    ->debug('ApproveClubMember - handleAction() date = ' . DBDatetime::now());
+                Injector::inst()->get(LoggerInterface::class) ->debug('ApproveClubMember - handleAction() date = ' . DBDatetime::now());
                 $clubMemberPending->Since = DBDatetime::now();
             }
             $clubMemberPending->write();
@@ -134,8 +133,7 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
                 $email = new Email();
                 $data = $clubMemberPending->toMap();
                 //foreach ($data as $key => $value) {
-                    //Injector::inst()->get(LoggerInterface::class)
-                    //    ->debug('ApproveClubMember - handleAction() key = ' . $key . ' value = ' . $value);
+                    //Injector::inst()->get(LoggerInterface::class)->debug('ApproveClubMember - handleAction() key = ' . $key . ' value = ' . $value);
                 //}
                 $email->setTo($clubMemberPending->Email)
                     ->setSubject('Anmeldung bei Jim e.V.')
