@@ -140,8 +140,7 @@ class ApproveClubMember implements GridField_ColumnProvider, GridField_ActionPro
                 $email->setTo($clubMemberPending->Email)
                     ->setData($data)
                     ->setSubject('Anmeldung bei Jim e.V.')
-                    ->setHTMLTemplate()
-                    ->setTemplate('EMail\ApproveMail');
+                    ->setHTMLTemplate('EMail\ApproveMail');
                     //->populateTemplate(new ArrayData($data));
                 $email->send();
             }
